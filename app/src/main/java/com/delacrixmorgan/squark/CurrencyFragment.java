@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TableLayout;
-import android.widget.TextView;
 
 /**
  * Created by Delacrix Morgan on 03/07/2017.
@@ -28,10 +27,6 @@ public class CurrencyFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        for (int i = 1; i <= 10; i++) {
-            View subRow = LayoutInflater.from(getActivity()).inflate(R.layout.view_row, null);
-            ((TextView) subRow.findViewById(R.id.row_quantifier)).setText(String.valueOf(i));
-            mTableLayout.addView(subRow);
-        }
+        SquarkEngine.getInstance().updateTable(getActivity(), mTableLayout, 1);
     }
 }

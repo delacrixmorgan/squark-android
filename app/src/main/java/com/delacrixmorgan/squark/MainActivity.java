@@ -14,6 +14,8 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        SquarkEngine.newInstance(this);
+
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath("fonts/LeagueSpartan-Bold.otf")
                 .setFontAttrId(R.attr.fontPath)
