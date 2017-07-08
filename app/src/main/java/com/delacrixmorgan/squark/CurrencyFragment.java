@@ -27,6 +27,6 @@ public class CurrencyFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        SquarkEngine.getInstance().updateTable(getActivity(), mTableLayout, 1);
+        //SquarkEngine.getInstance().updateTable(getActivity(), mTableLayout, 1);
     }
 }

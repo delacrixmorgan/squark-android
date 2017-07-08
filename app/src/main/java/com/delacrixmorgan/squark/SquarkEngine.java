@@ -34,13 +34,13 @@ public class SquarkEngine {
     }
 
     public void updateTable(Context context, TableLayout tableLayout, int multiplier) {
-        for (int i = 1; i <= 10; i++) {
-            View subRow = LayoutInflater.from(context).inflate(R.layout.view_row, null);
-
-            ((TextView) subRow.findViewById(R.id.row_quantifier)).setText(String.valueOf(i * multiplier));
-            ((TextView) subRow.findViewById(R.id.row_result)).setText(String.valueOf(new BigDecimal(i * multiplier * mConversionRate).setScale(2, BigDecimal.ROUND_HALF_UP)));
-
-            tableLayout.addView(subRow);
-        }
+//        for (int i = 1; i <= 10; i++) {
+//            View subRow = LayoutInflater.from(context).inflate(R.layout.view_row, null);
+//
+//            ((TextView) subRow.findViewById(R.id.row_quantifier)).setText(String.valueOf(i * multiplier));
+//            ((TextView) subRow.findViewById(R.id.row_result)).setText(String.valueOf(new BigDecimal(i * multiplier * mConversionRate).setScale(2, BigDecimal.ROUND_HALF_UP)));
+//
+//            tableLayout.addView(subRow);
+//        }
     }
 }
