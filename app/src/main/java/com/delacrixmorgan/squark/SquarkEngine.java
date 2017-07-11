@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.widget.TextView;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /**
@@ -15,7 +16,7 @@ public class SquarkEngine {
     private static String TAG = "SquarkEngine";
     private static SquarkEngine sSquarkEngine;
 
-    private int mMultiplier;
+    private double mMultiplier;
     private double mConversionRate;
 
     private SquarkEngine(@NonNull Context context) {
@@ -35,9 +36,29 @@ public class SquarkEngine {
     }
 
     public void updateTable(ArrayList<TextView> quantifiers, ArrayList<TextView> results) {
+        DecimalFormat resultFormat = new DecimalFormat("###,##0.00");
+        BigDecimal bigQuantifier, bigResult;
+
         for (int i = 0; i < 10; i++) {
-            quantifiers.get(i).setText(String.valueOf(mMultiplier * (i + 1)));
-            results.get(i).setText(String.valueOf(new BigDecimal((i + 1) * mMultiplier * mConversionRate).setScale(2, BigDecimal.ROUND_HALF_UP)));
+            bigQuantifier = new BigDecimal(mMultiplier * (i + 1)).setScale(2, BigDecimal.ROUND_HALF_UP);
+            bigResult = new BigDecimal((i + 1) * mMultiplier * mConversionRate).setScale(2, BigDecimal.ROUND_HALF_UP);
+
+            quantifiers.get(i).setText(String.valueOf(resultFormat.format(bigQuantifier)));
+            results.get(i).setText(String.valueOf(resultFormat.format(bigResult)));
         }
     }
+
+    public void swipeLeft() {
+        if (mMultiplier < 1000000) {
+            mMultiplier *= 10;
+        }
+    }
+
+    public void swipeRight() {
+        if (mMultiplier > 0.1) {
+            mMultiplier /= 10;
+        }
+    }
+
+
 }

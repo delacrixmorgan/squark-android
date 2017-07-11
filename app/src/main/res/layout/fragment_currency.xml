@@ -29,7 +29,6 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@color/colorBlue"
                     android:gravity="center"
                     android:text="USD"
                     android:textAlignment="center" />
@@ -39,7 +38,6 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@color/colorRed"
                     android:gravity="center"
                     android:text="MYR"
                     android:textAlignment="center" />
@@ -52,12 +50,11 @@
                 android:layout_centerInParent="true"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
-                android:src="@drawable/triangle"
-                android:tint="@color/colorBlue" />
+                android:src="@mipmap/ic_launcher"
+                android:visibility="gone" />
 
         </RelativeLayout>
-
-
+        
         <TableRow
             android:layout_weight="1"
             android:gravity="center">

@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TableLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -17,7 +16,6 @@ import java.util.ArrayList;
 
 public class CurrencyFragment extends Fragment {
     private static String TAG = "CurrencyFragment";
-    private TableLayout mTableLayout;
 
     private ArrayList<TextView> mQuantifiers, mResult;
 
@@ -26,7 +24,25 @@ public class CurrencyFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_currency, container, false);
 
-        mTableLayout = (TableLayout) rootView.findViewById(R.id.currency_table);
+        rootView.setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
+            public void onSwipeLeft() {
+                SquarkEngine.getInstance().swipeLeft();
+                SquarkEngine.getInstance().updateTable(mQuantifiers, mResult);
+            }
+
+            public void onSwipeRight() {
+                SquarkEngine.getInstance().swipeRight();
+                SquarkEngine.getInstance().updateTable(mQuantifiers, mResult);
+            }
+
+            public void onSwipeTop() {
+                //Toast.makeText(getActivity(), "top", Toast.LENGTH_SHORT).show();
+            }
+
+            public void onSwipeBottom() {
+                //Toast.makeText(getActivity(), "bottom", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         mQuantifiers = new ArrayList<>();
         mResult = new ArrayList<>();
@@ -47,7 +63,5 @@ public class CurrencyFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         SquarkEngine.getInstance().updateTable(mQuantifiers, mResult);
-
-        //SquarkEngine.getInstance().updateTable(getActivity(), mTableLayout, 1);
     }
 }
