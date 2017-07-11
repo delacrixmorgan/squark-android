@@ -1,4 +1,4 @@
-package com.delacrixmorgan.squark;
+package com.delacrixmorgan.squark.listener;
 
 import android.content.Context;
 import android.view.GestureDetector;
@@ -11,15 +11,15 @@ import android.view.View;
 
 public class OnSwipeTouchListener implements View.OnTouchListener {
 
-    private final GestureDetector gestureDetector;
+    private final GestureDetector mGestureDetector;
 
-    public OnSwipeTouchListener(Context ctx) {
-        gestureDetector = new GestureDetector(ctx, new GestureListener());
+    public OnSwipeTouchListener(Context context) {
+        mGestureDetector = new GestureDetector(context, new GestureListener());
     }
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        return gestureDetector.onTouchEvent(event);
+        return mGestureDetector.onTouchEvent(event);
     }
 
     private final class GestureListener extends GestureDetector.SimpleOnGestureListener {

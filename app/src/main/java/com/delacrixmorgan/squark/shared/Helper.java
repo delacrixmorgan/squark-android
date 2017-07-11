@@ -1,4 +1,4 @@
-package com.delacrixmorgan.squark;
+package com.delacrixmorgan.squark.shared;
 
 /**
  * Created by Delacrix Morgan on 08/07/2017.

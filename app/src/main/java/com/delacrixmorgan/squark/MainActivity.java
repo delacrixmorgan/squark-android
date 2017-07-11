@@ -7,6 +7,10 @@ import android.os.Bundle;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+/**
+ * Created by Delacrix Morgan on 03/07/2017.
+ */
+
 public class MainActivity extends Activity {
 
     @Override

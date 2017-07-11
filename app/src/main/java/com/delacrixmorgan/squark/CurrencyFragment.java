@@ -8,6 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.delacrixmorgan.squark.listener.OnSwipeTouchListener;
+import com.delacrixmorgan.squark.shared.Helper;
+
 import java.util.ArrayList;
 
 /**
