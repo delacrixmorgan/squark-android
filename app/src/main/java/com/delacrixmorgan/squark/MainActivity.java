@@ -28,7 +28,7 @@ public class MainActivity extends Activity {
 
         getFragmentManager()
                 .beginTransaction()
-                .replace(R.id.activity_main_vg_fragment, new CurrencyFragment())
+                .replace(R.id.activity_main_vg_fragment, new TableFragment())
                 .commit();
     }
 
