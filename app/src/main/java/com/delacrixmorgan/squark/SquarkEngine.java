@@ -4,9 +4,12 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.widget.TextView;
 
+import com.delacrixmorgan.squark.model.Currency;
+
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Delacrix Morgan on 03/07/2017.

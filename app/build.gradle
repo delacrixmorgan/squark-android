@@ -21,6 +21,7 @@ android {
 
 ext {
     supportLib = '25.3.1'
+    retrofitLib = '2.2.0'
 }
 
 dependencies {
@@ -33,6 +34,9 @@ dependencies {
 
     compile "com.android.support:appcompat-v7:${supportLib}"
     compile "com.android.support:design:${supportLib}"
+
+    compile "com.squareup.retrofit2:retrofit:${retrofitLib}"
+    compile "com.squareup.retrofit2:converter-gson:${retrofitLib}"
 
     compile 'uk.co.chrisjenx:calligraphy:2.2.0'
 }
