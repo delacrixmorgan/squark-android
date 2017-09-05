@@ -16,7 +16,7 @@ public class CurrencyFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_table, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_currency, container, false);
 
         return rootView;
     }

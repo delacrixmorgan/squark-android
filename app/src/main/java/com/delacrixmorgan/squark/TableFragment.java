@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.delacrixmorgan.squark.listener.OnSwipeTouchListener;
 import com.delacrixmorgan.squark.shared.Helper;
@@ -22,11 +21,15 @@ public class TableFragment extends Fragment {
     private static String TAG = "TableFragment";
 
     private ArrayList<TextView> mQuantifiers, mResult;
+    private TextView mBaseCurrency, mQuoteCurrency;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_table, container, false);
+
+        mBaseCurrency = (TextView) rootView.findViewById(R.id.row_base_currency);
+        mQuoteCurrency = (TextView) rootView.findViewById(R.id.row_quote_currency);
 
         rootView.setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
             public void onSwipeLeft() {
@@ -40,11 +43,11 @@ public class TableFragment extends Fragment {
             }
 
             public void onSwipeTop() {
-                //Toast.makeText(getActivity(), "top", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), "top", Toast.LENGTH_SHORT).show();
             }
 
             public void onSwipeBottom() {
-                Toast.makeText(getActivity(), "bottom", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), "bottom", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -65,7 +68,28 @@ public class TableFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         SquarkEngine.getInstance().updateTable(mQuantifiers, mResult);
+
+        mBaseCurrency.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.activity_main_vg_fragment, new CurrencyFragment())
+                        .addToBackStack(TableFragment.TAG)
+                        .commit();
+            }
+        });
+
+        mQuoteCurrency.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.activity_main_vg_fragment, new CurrencyFragment())
+                        .addToBackStack(TableFragment.TAG)
+                        .commit();
+            }
+        });
     }
 }
