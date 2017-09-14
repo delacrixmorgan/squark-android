@@ -3,12 +3,14 @@ package com.delacrixmorgan.squark;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.delacrixmorgan.squark.model.Currency;
+import com.delacrixmorgan.squark.adapter.CurrencyAdapter;
 import com.delacrixmorgan.squark.network.InterfaceAPI;
 import com.delacrixmorgan.squark.network.SquarkAPI;
 import com.delacrixmorgan.squark.wrapper.RestWrapper;
@@ -24,10 +26,15 @@ import retrofit2.Response;
 public class CurrencyFragment extends Fragment {
     private static String TAG = "CurrencyFragment";
 
+    private RecyclerView mCurrencyRecyclerView;
+    private CurrencyAdapter mCurrencyAdapter;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_currency, container, false);
+
+        mCurrencyRecyclerView = (RecyclerView) rootView.findViewById(R.id.fragment_currency_recycler_view);
 
         return rootView;
     }
@@ -44,9 +51,13 @@ public class CurrencyFragment extends Fragment {
                 Log.i(TAG, "onResponse (Base) : " + response.body().getBase());
                 Log.i(TAG, "onResponse (Date) : " + response.body().getDate());
 
-                for (Currency currency : response.body().getCurrencyList()) {
-                    Log.i(TAG, "onResponse (" + currency.getName() + ") : " + currency.getRate());
-                }
+                SquarkEngine.getInstance().setmCurrencyList(response.body().getCurrencyList());
+
+                mCurrencyAdapter = new CurrencyAdapter();
+
+                mCurrencyRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+                mCurrencyRecyclerView.setAdapter(mCurrencyAdapter);
+                mCurrencyRecyclerView.scrollToPosition(0);
             }
 
             @Override
