@@ -5,19 +5,45 @@ package com.delacrixmorgan.squark.model;
  */
 
 public class Currency {
-    private String name;
+    private String code, country, description;
     private double rate;
 
-    public Currency(String name, double rate) {
-        this.name = name;
+    public Currency(String code, String country, String description, double rate) {
+        this.code = code;
+        this.country = country;
+        this.description = description;
         this.rate = rate;
     }
 
-    public String getName() {
-        return name;
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public double getRate() {
         return rate;
+    }
+
+    public void setRate(double rate) {
+        this.rate = rate;
     }
 }

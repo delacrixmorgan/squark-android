@@ -2,7 +2,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_weight="1">
+    android:layout_weight="1"
+    android:background="@color/colorBlack"
+    android:paddingBottom="15dp"
+    android:paddingLeft="25dp"
+    android:paddingTop="15dp">
 
     <ImageView
         android:id="@+id/iv_view_country_flag"
@@ -16,29 +20,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:layout_marginLeft="20dp"
         android:layout_toEndOf="@+id/iv_view_country_flag"
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/tv_country_code"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="MYR"
-            android:textColor="@color/colorBlack" />
+            android:textColor="@color/colorWhite" />
 
         <TextView
+            android:id="@+id/tv_country_description"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:text="Malaysian Ringgit"
-            android:textColor="@color/colorBlack" />
+            android:textColor="@color/colorGrey"
+            android:textSize="14sp" />
 
     </LinearLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:text="RM"
-        android:textColor="@color/colorBlack" />
 
 </RelativeLayout>

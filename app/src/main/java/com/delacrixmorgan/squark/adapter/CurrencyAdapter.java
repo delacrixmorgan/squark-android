@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.delacrixmorgan.squark.R;
 import com.delacrixmorgan.squark.SquarkEngine;
@@ -23,7 +24,8 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
 
     @Override
     public void onBindViewHolder(CurrencyViewHolder holder, int position) {
-
+        holder.countryCode.setText(SquarkEngine.getInstance().getmCurrencyList().get(position).getCode());
+        holder.countryDescription.setText(SquarkEngine.getInstance().getmCurrencyList().get(position).getDescription());
     }
 
     @Override
@@ -32,9 +34,12 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
     }
 
     class CurrencyViewHolder extends RecyclerView.ViewHolder {
+        TextView countryCode, countryDescription;
+
         private CurrencyViewHolder(View itemView) {
             super(itemView);
-
+            countryCode = (TextView) itemView.findViewById(R.id.tv_country_code);
+            countryDescription = (TextView) itemView.findViewById(R.id.tv_country_description);
         }
     }
 }

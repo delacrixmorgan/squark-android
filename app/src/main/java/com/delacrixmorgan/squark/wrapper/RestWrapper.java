@@ -15,43 +15,43 @@ public class RestWrapper {
 
     public List<Currency> getCurrencyList() {
         List<Currency> currencyList = new ArrayList<>();
-        currencyList.add(new Currency("AUD", rates.getAUD()));
-        currencyList.add(new Currency("BGN", rates.getBGN()));
-        currencyList.add(new Currency("BRL", rates.getBRL()));
-        currencyList.add(new Currency("CAD", rates.getCAD()));
-        currencyList.add(new Currency("CHF", rates.getCHF()));
+        currencyList.add(new Currency("AUD", "Australia", "Australian Dollar", rates.getAUD()));
+        currencyList.add(new Currency("BGN", "Bulgaria", "Bulgarian Lev", rates.getBGN()));
+        currencyList.add(new Currency("BRL", "Brazil", "Brazilian Real", rates.getBRL()));
+        currencyList.add(new Currency("CAD", "Canada", "Canadian Dollar", rates.getCAD()));
+        currencyList.add(new Currency("CHF", "Switzerland", "Swiss Franc", rates.getCHF()));
 
-        currencyList.add(new Currency("CNY", rates.getCNY()));
-        currencyList.add(new Currency("CZK", rates.getCZK()));
-        currencyList.add(new Currency("DKK", rates.getDKK()));
-        currencyList.add(new Currency("GBP", rates.getGBP()));
-        currencyList.add(new Currency("HKD", rates.getHKD()));
+        currencyList.add(new Currency("CNY", "China", "Chinese Yuan", rates.getCNY()));
+        currencyList.add(new Currency("CZK", "Czech Republic", "Czech Koruna", rates.getCZK()));
+        currencyList.add(new Currency("DKK", "Denmark", "Danish Krone", rates.getDKK()));
+        currencyList.add(new Currency("GBP", "United Kingdom", "British Pound", rates.getGBP()));
+        currencyList.add(new Currency("HKD", "Hong Kong", "Hong Kong Dollar", rates.getHKD()));
 
-        currencyList.add(new Currency("HRK", rates.getHRK()));
-        currencyList.add(new Currency("HUF", rates.getHUF()));
-        currencyList.add(new Currency("IDR", rates.getIDR()));
-        currencyList.add(new Currency("ILS", rates.getILS()));
-        currencyList.add(new Currency("INR", rates.getINR()));
+        currencyList.add(new Currency("HRK", "Croatia", "Croatian Kuna", rates.getHRK()));
+        currencyList.add(new Currency("HUF", "Hungary", "Hungarian Forint", rates.getHUF()));
+        currencyList.add(new Currency("IDR", "Indonesia", "Indonesian Rupiah", rates.getIDR()));
+        currencyList.add(new Currency("ILS", "Israel", "Israeli New Shekel", rates.getILS()));
+        currencyList.add(new Currency("INR", "India", "Indian Rupee", rates.getINR()));
 
-        currencyList.add(new Currency("JPY", rates.getJPY()));
-        currencyList.add(new Currency("KRW", rates.getKRW()));
-        currencyList.add(new Currency("MXN", rates.getMXN()));
-        currencyList.add(new Currency("MYR", rates.getMYR()));
-        currencyList.add(new Currency("NOK", rates.getNOK()));
+        currencyList.add(new Currency("JPY", "Japan", "Japanese Yen", rates.getJPY()));
+        currencyList.add(new Currency("KRW", "South Korea", "South Korean Won", rates.getKRW()));
+        currencyList.add(new Currency("MXN", "Mexico", "Mexican Peso", rates.getMXN()));
+        currencyList.add(new Currency("MYR", "Malaysia", "Malaysian Ringgit", rates.getMYR()));
+        currencyList.add(new Currency("NOK", "Norway", "Norwegian Krone", rates.getNOK()));
 
-        currencyList.add(new Currency("NZD", rates.getNZD()));
-        currencyList.add(new Currency("PHP", rates.getPHP()));
-        currencyList.add(new Currency("PLN", rates.getPLN()));
-        currencyList.add(new Currency("RON", rates.getRON()));
-        currencyList.add(new Currency("RUB", rates.getRUB()));
+        currencyList.add(new Currency("NZD", "New Zealand", "New Zealand Dollar", rates.getNZD()));
+        currencyList.add(new Currency("PHP", "Philippines", "Philippine Peso", rates.getPHP()));
+        currencyList.add(new Currency("PLN", "Poland", "Polish Zloty", rates.getPLN()));
+        currencyList.add(new Currency("RON", "Romania", "Romanian Leu", rates.getRON()));
+        currencyList.add(new Currency("RUB", "Russia", "Russian Ruble", rates.getRUB()));
 
-        currencyList.add(new Currency("SEK", rates.getSEK()));
-        currencyList.add(new Currency("SGD", rates.getSGD()));
-        currencyList.add(new Currency("THB", rates.getTHB()));
-        currencyList.add(new Currency("TRY", rates.getTRY()));
-        currencyList.add(new Currency("USD", rates.getUSD()));
+        currencyList.add(new Currency("SEK", "Sweden", "Swedish Krona", rates.getSEK()));
+        currencyList.add(new Currency("SGD", "Singapore", "Singaporean Dollar", rates.getSGD()));
+        currencyList.add(new Currency("THB", "Thailand", "Thai Baht", rates.getTHB()));
+        currencyList.add(new Currency("TRY", "Turkey", "Turkish Lira", rates.getTRY()));
+        currencyList.add(new Currency("USD", "United States", "US Dollar", rates.getUSD()));
 
-        currencyList.add(new Currency("ZAR", rates.getZAR()));
+        currencyList.add(new Currency("ZAR", "South African", "South African Rand", rates.getZAR()));
 
         return currencyList;
     }
