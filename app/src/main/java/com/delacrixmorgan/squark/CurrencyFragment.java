@@ -59,7 +59,7 @@ public class CurrencyFragment extends Fragment {
 
                 SquarkEngine.getInstance().setmCurrencyList(response.body().getCurrencyList());
 
-                mCurrencyAdapter = new CurrencyAdapter();
+                mCurrencyAdapter = new CurrencyAdapter(getActivity());
 
                 mCurrencyRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
                 mCurrencyRecyclerView.setAdapter(mCurrencyAdapter);

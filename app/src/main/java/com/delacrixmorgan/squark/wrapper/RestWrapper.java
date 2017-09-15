@@ -22,10 +22,10 @@ public class RestWrapper {
         currencyList.add(new Currency("CHF", "Switzerland", "Swiss Franc", rates.getCHF()));
 
         currencyList.add(new Currency("CNY", "China", "Chinese Yuan", rates.getCNY()));
-        currencyList.add(new Currency("CZK", "Czech Republic", "Czech Koruna", rates.getCZK()));
+        currencyList.add(new Currency("CZK", "Czech_Republic", "Czech Koruna", rates.getCZK()));
         currencyList.add(new Currency("DKK", "Denmark", "Danish Krone", rates.getDKK()));
-        currencyList.add(new Currency("GBP", "United Kingdom", "British Pound", rates.getGBP()));
-        currencyList.add(new Currency("HKD", "Hong Kong", "Hong Kong Dollar", rates.getHKD()));
+        currencyList.add(new Currency("GBP", "United_Kingdom", "British Pound", rates.getGBP()));
+        currencyList.add(new Currency("HKD", "Hong_Kong", "Hong Kong Dollar", rates.getHKD()));
 
         currencyList.add(new Currency("HRK", "Croatia", "Croatian Kuna", rates.getHRK()));
         currencyList.add(new Currency("HUF", "Hungary", "Hungarian Forint", rates.getHUF()));
@@ -34,12 +34,12 @@ public class RestWrapper {
         currencyList.add(new Currency("INR", "India", "Indian Rupee", rates.getINR()));
 
         currencyList.add(new Currency("JPY", "Japan", "Japanese Yen", rates.getJPY()));
-        currencyList.add(new Currency("KRW", "South Korea", "South Korean Won", rates.getKRW()));
+        currencyList.add(new Currency("KRW", "South_Korea", "South Korean Won", rates.getKRW()));
         currencyList.add(new Currency("MXN", "Mexico", "Mexican Peso", rates.getMXN()));
         currencyList.add(new Currency("MYR", "Malaysia", "Malaysian Ringgit", rates.getMYR()));
         currencyList.add(new Currency("NOK", "Norway", "Norwegian Krone", rates.getNOK()));
 
-        currencyList.add(new Currency("NZD", "New Zealand", "New Zealand Dollar", rates.getNZD()));
+        currencyList.add(new Currency("NZD", "New_Zealand", "New Zealand Dollar", rates.getNZD()));
         currencyList.add(new Currency("PHP", "Philippines", "Philippine Peso", rates.getPHP()));
         currencyList.add(new Currency("PLN", "Poland", "Polish Zloty", rates.getPLN()));
         currencyList.add(new Currency("RON", "Romania", "Romanian Leu", rates.getRON()));
@@ -49,9 +49,9 @@ public class RestWrapper {
         currencyList.add(new Currency("SGD", "Singapore", "Singaporean Dollar", rates.getSGD()));
         currencyList.add(new Currency("THB", "Thailand", "Thai Baht", rates.getTHB()));
         currencyList.add(new Currency("TRY", "Turkey", "Turkish Lira", rates.getTRY()));
-        currencyList.add(new Currency("USD", "United States", "US Dollar", rates.getUSD()));
+        currencyList.add(new Currency("USD", "United_States", "United States Dollar", rates.getUSD()));
 
-        currencyList.add(new Currency("ZAR", "South African", "South African Rand", rates.getZAR()));
+        currencyList.add(new Currency("ZAR", "South_Africa", "South African Rand", rates.getZAR()));
 
         return currencyList;
     }
