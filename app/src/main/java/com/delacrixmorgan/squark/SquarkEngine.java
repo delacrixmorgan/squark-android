@@ -2,6 +2,7 @@ package com.delacrixmorgan.squark;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.delacrixmorgan.squark.model.Currency;
@@ -48,7 +49,7 @@ public class SquarkEngine {
         this.mCurrencyList = mCurrencyList;
     }
 
-    public void updateTable(ArrayList<TextView> quantifiers, ArrayList<TextView> results) {
+    public void updateTable(Context context, ArrayList<TextView> quantifiers, ArrayList<TextView> results) {
         DecimalFormat resultFormat = new DecimalFormat("###,##0.00");
         BigDecimal bigQuantifier, bigResult;
 
@@ -58,6 +59,9 @@ public class SquarkEngine {
 
             quantifiers.get(i).setText(String.valueOf(resultFormat.format(bigQuantifier)));
             results.get(i).setText(String.valueOf(resultFormat.format(bigResult)));
+
+            quantifiers.get(i).startAnimation(AnimationUtils.loadAnimation(context, R.anim.wobble));
+            results.get(i).startAnimation(AnimationUtils.loadAnimation(context, R.anim.wobble));
         }
     }
 

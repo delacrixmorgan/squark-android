@@ -34,12 +34,12 @@ public class TableFragment extends Fragment {
         rootView.setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
             public void onSwipeLeft() {
                 SquarkEngine.getInstance().swipeLeft();
-                SquarkEngine.getInstance().updateTable(mQuantifiers, mResult);
+                SquarkEngine.getInstance().updateTable(getActivity(), mQuantifiers, mResult);
             }
 
             public void onSwipeRight() {
                 SquarkEngine.getInstance().swipeRight();
-                SquarkEngine.getInstance().updateTable(mQuantifiers, mResult);
+                SquarkEngine.getInstance().updateTable(getActivity(), mQuantifiers, mResult);
             }
 
             public void onSwipeTop() {
@@ -68,7 +68,7 @@ public class TableFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        SquarkEngine.getInstance().updateTable(mQuantifiers, mResult);
+        SquarkEngine.getInstance().updateTable(getActivity(), mQuantifiers, mResult);
 
         mBaseCurrency.setOnClickListener(new View.OnClickListener() {
             @Override
