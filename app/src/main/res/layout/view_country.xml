@@ -5,7 +5,8 @@
     android:layout_weight="1"
     android:background="@color/colorBlack"
     android:paddingBottom="15dp"
-    android:paddingLeft="25dp"
+    android:paddingStart="25dp"
+    android:paddingEnd="25dp"
     android:paddingTop="15dp">
 
     <ImageView
