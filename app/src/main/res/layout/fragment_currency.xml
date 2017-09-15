@@ -32,16 +32,15 @@
             android:id="@+id/fragment_currency_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="55dp" />
+            android:layout_marginBottom="54dp" />
 
     </LinearLayout>
 
-    <android.support.v7.widget.Toolbar
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="@color/colorPrimary"
-        android:orientation="horizontal"
         android:paddingBottom="15dp"
         android:paddingEnd="25dp"
         android:paddingStart="25dp"
@@ -50,17 +49,18 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
             android:text="Last Updated 15/09/2017 at 12:59pm"
             android:textSize="12sp" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
+            android:layout_alignParentEnd="true"
             android:adjustViewBounds="true"
             android:background="@drawable/ic_replay_white_24dp" />
 
-    </android.support.v7.widget.Toolbar>
+    </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>
