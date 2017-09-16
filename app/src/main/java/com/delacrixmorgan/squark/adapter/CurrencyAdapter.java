@@ -53,9 +53,9 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
         private CurrencyViewHolder(View itemView) {
             super(itemView);
 
-            countryFlag = (ImageView) itemView.findViewById(R.id.iv_view_country_flag);
-            countryCode = (TextView) itemView.findViewById(R.id.tv_country_code);
-            countryDescription = (TextView) itemView.findViewById(R.id.tv_country_description);
+            countryFlag = (ImageView) itemView.findViewById(R.id.view_country_flag);
+            countryCode = (TextView) itemView.findViewById(R.id.view_country_code);
+            countryDescription = (TextView) itemView.findViewById(R.id.view_country_description);
         }
     }
 }

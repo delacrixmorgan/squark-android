@@ -28,7 +28,7 @@ import retrofit2.Response;
 public class CurrencyFragment extends Fragment {
     private static String TAG = "CurrencyFragment";
 
-    private android.widget.Toolbar mToolbar;
+    private Toolbar mToolbar;
     private RecyclerView mCurrencyRecyclerView;
     private CurrencyAdapter mCurrencyAdapter;
 

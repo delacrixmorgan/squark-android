@@ -76,6 +76,4 @@ public class SquarkEngine {
             mMultiplier /= 10;
         }
     }
-
-
 }

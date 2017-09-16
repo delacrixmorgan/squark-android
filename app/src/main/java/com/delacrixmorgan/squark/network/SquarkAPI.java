@@ -11,7 +11,6 @@ public class SquarkAPI {
     private static final String BASE_URL = "http://api.fixer.io/";
     private static Retrofit retrofit = null;
 
-
     public static Retrofit getClient() {
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
