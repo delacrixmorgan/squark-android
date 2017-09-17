@@ -1,9 +1,13 @@
 package com.delacrixmorgan.squark.wrapper;
 
+import android.os.Bundle;
+
 import com.delacrixmorgan.squark.model.Currency;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.RealmResults;
 
 /**
  * Created by Delacrix Morgan on 05/09/2017.
@@ -14,6 +18,8 @@ public class RestWrapper {
     private CurrencyRate rates;
 
     public List<Currency> getCurrencyList() {
+
+
         List<Currency> currencyList = new ArrayList<>();
         currencyList.add(new Currency("AUD", "Australia", "Australian Dollar", rates.getAUD()));
         currencyList.add(new Currency("BGN", "Bulgaria", "Bulgarian Lev", rates.getBGN()));
@@ -55,6 +61,40 @@ public class RestWrapper {
 
         return currencyList;
     }
+
+//    public void addTask() {
+//        mRealm.beginTransaction();
+//
+//        RealmResults<Task> allTasks = mRealm.where(Task.class).findAll();
+//        int newTaskID = (allTasks.isEmpty()) ? 0 : allTasks.last().getId();
+//
+//        Task task = mRealm.createObject(Task.class);
+//
+//        task.setId(++newTaskID);
+//        task.setTitle((mTaskTitle.getText().toString().isEmpty()) ? "Untitled Task" : mTaskTitle.getText().toString());
+//        task.setRemark((mTaskRemark.getText().toString().isEmpty()) ? "Untitled Remark" : mTaskRemark.getText().toString());
+//        task.setCreated_at(TimeInk.getCurrentDateTime());
+//        task.setUpdated_at(TimeInk.getCurrentDateTime());
+//        task.setActive(1);
+//        task.setTotal_time(((TimerApplication) getApplicationContext()).calculateElapsedTime(mChronometer));
+//
+//        if (mLocationSwitch.isChecked()) {
+//            task.setLat(mLocation.getLatitude());
+//            task.setLng(mLocation.getLongitude());
+//        } else {
+//            task.setLat(0);
+//            task.setLng(0);
+//        }
+//
+//        mRealm.copyToRealm(task);
+//        mRealm.commitTransaction();
+//
+//        Bundle bundle = new Bundle();
+//        bundle.putParcelable(TASK_RETURN, Parcels.wrap(task));
+//
+//        mIntent.putExtras(bundle);
+//        mIntent.putExtra(TASK_ADD_SUCCESS, true);
+//    }
 
     public String getBase() {
         return base;

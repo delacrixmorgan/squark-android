@@ -1,10 +1,12 @@
 package com.delacrixmorgan.squark.model;
 
+import io.realm.RealmObject;
+
 /**
  * Created by Delacrix Morgan on 05/09/2017.
  */
 
-public class Currency {
+public class Currency extends RealmObject {
     private String code, country, description;
     private double rate;
 
