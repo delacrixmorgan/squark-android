@@ -1,6 +1,5 @@
 package com.delacrixmorgan.squark.fragment;
 
-import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.os.Build;
 import android.os.Bundle;
@@ -62,7 +61,7 @@ public class CurrencyFragment extends Fragment {
             mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getActivity().onBackPressed();
+                    getActivity().getFragmentManager().popBackStack();
                 }
             });
         }

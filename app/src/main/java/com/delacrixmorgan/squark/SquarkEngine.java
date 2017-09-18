@@ -22,8 +22,6 @@ public class SquarkEngine {
     private static String TAG = "SquarkEngine";
     private static SquarkEngine sSquarkEngine;
 
-    private List<Currency> mCurrencyList;
-
     private double mMultiplier;
     private double mConversionRate;
 
@@ -41,14 +39,6 @@ public class SquarkEngine {
 
     public static synchronized SquarkEngine getInstance() {
         return sSquarkEngine;
-    }
-
-    public List<Currency> getmCurrencyList() {
-        return mCurrencyList;
-    }
-
-    public void setmCurrencyList(List<Currency> mCurrencyList) {
-        this.mCurrencyList = mCurrencyList;
     }
 
     public void updateTable(Context context, ArrayList<TextView> quantifiers, ArrayList<TextView> results) {

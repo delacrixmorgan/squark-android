@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.delacrixmorgan.squark.MainActivity;
 import com.delacrixmorgan.squark.R;
-import com.delacrixmorgan.squark.SquarkEngine;
 import com.delacrixmorgan.squark.model.Currency;
 import com.delacrixmorgan.squark.shared.Helper;
 
@@ -29,12 +28,10 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
 
     private Context mContext;
     private String mTypeConvert;
-    private Realm mRealm;
     private RealmResults<Currency> mRealmResultCurrency;
 
     public CurrencyAdapter(Context context, String typeConvert) {
-        mRealm = Realm.getDefaultInstance();
-        mRealmResultCurrency = mRealm.where(Currency.class).findAll();
+        mRealmResultCurrency = Realm.getDefaultInstance().where(Currency.class).findAll();
 
         mContext = context;
         mTypeConvert = typeConvert;
@@ -49,7 +46,7 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
     }
 
     @Override
-    public void onBindViewHolder(final CurrencyViewHolder holder, final int position) {
+    public void onBindViewHolder(final CurrencyViewHolder holder, int position) {
         Currency currency = mRealmResultCurrency.get(holder.getAdapterPosition());
 
         holder.countryFlag.setBackgroundResource(mContext.getResources().getIdentifier(currency.getCountry().toLowerCase(), "drawable", mContext.getPackageName()));
@@ -62,7 +59,7 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
                 editor.putInt(mTypeConvert.equals("BASE") ? Helper.BASE_CURRENCY_PREFERENCE : Helper.QUOTE_CURRENCY_PREFERENCE, holder.getAdapterPosition());
                 editor.apply();
 
-                ((MainActivity) mContext).onBackPressed();
+                ((MainActivity) mContext).getFragmentManager().popBackStack();
             }
         });
     }
