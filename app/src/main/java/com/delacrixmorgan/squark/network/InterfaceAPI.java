@@ -1,6 +1,6 @@
 package com.delacrixmorgan.squark.network;
 
-import com.delacrixmorgan.squark.wrapper.RestWrapper;
+import com.delacrixmorgan.squark.wrapper.APIWrapper;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -12,7 +12,7 @@ import retrofit2.http.Query;
 
 public interface InterfaceAPI {
     @GET("latest")
-    Call<RestWrapper> updateRates(
+    Call<APIWrapper> updateRates(
             @Query("base") String baseCurrency
     );
 }

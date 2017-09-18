@@ -13,9 +13,11 @@ import android.widget.TextView;
 import com.delacrixmorgan.squark.MainActivity;
 import com.delacrixmorgan.squark.R;
 import com.delacrixmorgan.squark.SquarkEngine;
-import com.delacrixmorgan.squark.fragment.TableFragment;
 import com.delacrixmorgan.squark.model.Currency;
 import com.delacrixmorgan.squark.shared.Helper;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -27,8 +29,13 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
 
     private Context mContext;
     private String mTypeConvert;
+    private Realm mRealm;
+    private RealmResults<Currency> mRealmResultCurrency;
 
     public CurrencyAdapter(Context context, String typeConvert) {
+        mRealm = Realm.getDefaultInstance();
+        mRealmResultCurrency = mRealm.where(Currency.class).findAll();
+
         mContext = context;
         mTypeConvert = typeConvert;
     }
@@ -42,8 +49,8 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
     }
 
     @Override
-    public void onBindViewHolder(CurrencyViewHolder holder, final int position) {
-        Currency currency = SquarkEngine.getInstance().getmCurrencyList().get(position);
+    public void onBindViewHolder(final CurrencyViewHolder holder, final int position) {
+        Currency currency = mRealmResultCurrency.get(holder.getAdapterPosition());
 
         holder.countryFlag.setBackgroundResource(mContext.getResources().getIdentifier(currency.getCountry().toLowerCase(), "drawable", mContext.getPackageName()));
         holder.countryCode.setText(currency.getCode());
@@ -52,7 +59,7 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
             @Override
             public void onClick(View v) {
                 SharedPreferences.Editor editor = mContext.getSharedPreferences(Helper.SHARED_PREFERENCE, MODE_PRIVATE).edit();
-                editor.putInt(mTypeConvert.equals("BASE") ? Helper.BASE_CURRENCY_PREFERENCE : Helper.QUOTE_CURRENCY_PREFERENCE, position);
+                editor.putInt(mTypeConvert.equals("BASE") ? Helper.BASE_CURRENCY_PREFERENCE : Helper.QUOTE_CURRENCY_PREFERENCE, holder.getAdapterPosition());
                 editor.apply();
 
                 ((MainActivity) mContext).onBackPressed();
@@ -62,7 +69,7 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
 
     @Override
     public int getItemCount() {
-        return SquarkEngine.getInstance().getmCurrencyList().size();
+        return mRealmResultCurrency.size();
     }
 
     class CurrencyViewHolder extends RecyclerView.ViewHolder {

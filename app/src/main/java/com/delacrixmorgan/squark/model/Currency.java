@@ -1,14 +1,23 @@
 package com.delacrixmorgan.squark.model;
 
+import io.realm.CurrencyRealmProxy;
 import io.realm.RealmObject;
 
 /**
  * Created by Delacrix Morgan on 05/09/2017.
  */
 
+@org.parceler.Parcel(implementations = {CurrencyRealmProxy.class},
+        value = org.parceler.Parcel.Serialization.BEAN,
+        analyze = {Currency.class})
+
 public class Currency extends RealmObject {
     private String code, country, description;
     private double rate;
+
+    public Currency() {
+
+    }
 
     public Currency(String code, String country, String description, double rate) {
         this.code = code;

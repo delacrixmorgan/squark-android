@@ -16,7 +16,7 @@ import com.delacrixmorgan.squark.model.Currency;
 import com.delacrixmorgan.squark.network.InterfaceAPI;
 import com.delacrixmorgan.squark.network.SquarkAPI;
 import com.delacrixmorgan.squark.shared.Helper;
-import com.delacrixmorgan.squark.wrapper.RestWrapper;
+import com.delacrixmorgan.squark.wrapper.APIWrapper;
 
 import java.util.ArrayList;
 
@@ -36,7 +36,7 @@ public class TableFragment extends Fragment {
     private static String TAG = "TableFragment";
 
     private Realm mRealm;
-    private RealmResults<Currency> mRealmResultsTask;
+    private RealmResults<Currency> mRealmResultsCurrency;
 
     private ArrayList<TextView> mQuantifiers, mResult;
     private TextView mBaseCurrency, mQuoteCurrency;
@@ -47,8 +47,8 @@ public class TableFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_table, container, false);
 
-        mRealm = Realm.getInstance(getActivity());
-        mRealmResultsTask = mRealm.where(Currency.class).findAll();
+        mRealm = Realm.getDefaultInstance();
+        mRealmResultsCurrency = mRealm.where(Currency.class).findAll();
 
         mBaseCurrency = (TextView) rootView.findViewById(R.id.fragment_table_base_currency);
         mQuoteCurrency = (TextView) rootView.findViewById(R.id.fragment_table_quote_currency);
@@ -91,27 +91,23 @@ public class TableFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (mRealmResultsTask.size() == 0) {
-            Call<RestWrapper> call = SquarkAPI.getClient().create(InterfaceAPI.class).updateRates("USD");
-            call.enqueue(new Callback<RestWrapper>() {
-                @Override
-                public void onResponse(Call<RestWrapper> call, Response<RestWrapper> response) {
-                    Log.i(TAG, "onResponse (URL)  : " + call.request().url());
-                    Log.i(TAG, "onResponse (Base) : " + response.body().getBase());
-                    Log.i(TAG, "onResponse (Date) : " + response.body().getDate());
+        Call<APIWrapper> call = SquarkAPI.getClient().create(InterfaceAPI.class).updateRates("USD");
+        call.enqueue(new Callback<APIWrapper>() {
+            @Override
+            public void onResponse(Call<APIWrapper> call, Response<APIWrapper> response) {
+                Log.i(TAG, "onResponse (URL)  : " + call.request().url());
+                Log.i(TAG, "onResponse (Base) : " + response.body().getBase());
+                Log.i(TAG, "onResponse (Date) : " + response.body().getDate());
 
-                    SquarkEngine.getInstance().setmCurrencyList(response.body().getCurrencyList());
+                response.body().updateCurrencyList();
+            }
 
-                    updateCurrency();
-                }
-
-                @Override
-                public void onFailure(Call<RestWrapper> call, Throwable t) {
-                    Log.e(TAG, "onFailure (URL) : " + call.request().url());
-                    Log.e(TAG, "onFailure (Message) : " + t.toString());
-                }
-            });
-        }
+            @Override
+            public void onFailure(Call<APIWrapper> call, Throwable t) {
+                Log.e(TAG, "onFailure (URL) : " + call.request().url());
+                Log.e(TAG, "onFailure (Message) : " + t.toString());
+            }
+        });
 
         mBaseCurrency.setOnClickListener(new View.OnClickListener() {
             @Override

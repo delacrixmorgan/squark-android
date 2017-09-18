@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'realm-android'
 
 android {
     compileSdkVersion 25
@@ -11,6 +12,7 @@ android {
         versionCode 1
         versionName "1.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
     }
     buildTypes {
         release {
@@ -39,11 +41,11 @@ dependencies {
     compile "com.squareup.retrofit2:retrofit:${retrofitLib}"
     compile "com.squareup.retrofit2:converter-gson:${retrofitLib}"
 
-    compile 'io.realm:realm-android:0.82.1'
-    compile 'io.realm:android-adapters:1.4.0'
-
     compile 'uk.co.chrisjenx:calligraphy:2.2.0'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+
+    compile 'org.parceler:parceler-api:1.1.6'
+    annotationProcessor 'org.parceler:parceler:1.1.6'
 }
 repositories {
     mavenCentral()
