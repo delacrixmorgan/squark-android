@@ -1,7 +1,6 @@
 package com.delacrixmorgan.squark.fragment;
 
 import android.app.Fragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -153,7 +152,5 @@ public class TableFragment extends Fragment {
         mQuoteCurrency.setText(quoteCurrency.getCode());
 
         SquarkEngine.getInstance().updateTable(getActivity(), mQuantifiers, mResult);
-
-        Log.i(TAG, "updateCurrency: UPDATED");
     }
 }

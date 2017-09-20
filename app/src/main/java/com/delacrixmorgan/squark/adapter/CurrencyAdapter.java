@@ -48,8 +48,10 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
     @Override
     public void onBindViewHolder(final CurrencyViewHolder holder, int position) {
         Currency currency = mRealmResultCurrency.get(holder.getAdapterPosition());
+        int selectedCurrencyPosition = mContext.getSharedPreferences(Helper.SHARED_PREFERENCE, MODE_PRIVATE).getInt(mTypeConvert.equals("BASE") ? Helper.BASE_CURRENCY_PREFERENCE : Helper.QUOTE_CURRENCY_PREFERENCE, 0);
 
         holder.countryFlag.setBackgroundResource(mContext.getResources().getIdentifier(currency.getCountry().toLowerCase(), "drawable", mContext.getPackageName()));
+        holder.countrySelected.setVisibility(holder.getAdapterPosition() == selectedCurrencyPosition ? View.VISIBLE : View.GONE);
         holder.countryCode.setText(currency.getCode());
         holder.countryDescription.setText(currency.getDescription());
         holder.countryLayout.setOnClickListener(new View.OnClickListener() {
@@ -58,7 +60,6 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
                 SharedPreferences.Editor editor = mContext.getSharedPreferences(Helper.SHARED_PREFERENCE, MODE_PRIVATE).edit();
                 editor.putInt(mTypeConvert.equals("BASE") ? Helper.BASE_CURRENCY_PREFERENCE : Helper.QUOTE_CURRENCY_PREFERENCE, holder.getAdapterPosition());
                 editor.apply();
-
                 ((MainActivity) mContext).getFragmentManager().popBackStack();
             }
         });
@@ -71,7 +72,7 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
 
     class CurrencyViewHolder extends RecyclerView.ViewHolder {
         RelativeLayout countryLayout;
-        ImageView countryFlag;
+        ImageView countryFlag, countrySelected;
         TextView countryCode, countryDescription;
 
         private CurrencyViewHolder(View itemView) {
@@ -79,6 +80,7 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
 
             countryLayout = (RelativeLayout) itemView.findViewById(R.id.view_country_layout);
             countryFlag = (ImageView) itemView.findViewById(R.id.view_country_flag);
+            countrySelected = (ImageView) itemView.findViewById(R.id.view_country_selected);
             countryCode = (TextView) itemView.findViewById(R.id.view_country_code);
             countryDescription = (TextView) itemView.findViewById(R.id.view_country_description);
         }
