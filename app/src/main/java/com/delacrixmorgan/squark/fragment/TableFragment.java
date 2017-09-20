@@ -1,6 +1,7 @@
 package com.delacrixmorgan.squark.fragment;
 
 import android.app.Fragment;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -18,7 +19,10 @@ import com.delacrixmorgan.squark.network.SquarkAPI;
 import com.delacrixmorgan.squark.shared.Helper;
 import com.delacrixmorgan.squark.wrapper.APIWrapper;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -91,23 +95,25 @@ public class TableFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Call<APIWrapper> call = SquarkAPI.getClient().create(InterfaceAPI.class).updateRates("USD");
-        call.enqueue(new Callback<APIWrapper>() {
-            @Override
-            public void onResponse(Call<APIWrapper> call, Response<APIWrapper> response) {
-                Log.i(TAG, "onResponse (URL)  : " + call.request().url());
-                Log.i(TAG, "onResponse (Base) : " + response.body().getBase());
-                Log.i(TAG, "onResponse (Date) : " + response.body().getDate());
+        if (!new SimpleDateFormat("yyyy-mm-dd", Locale.ENGLISH).format(new Date()).equals(getActivity().getSharedPreferences(Helper.SHARED_PREFERENCE, MODE_PRIVATE).getString(Helper.DATE_PREFERENCE, "2000-01-01"))) {
+            Call<APIWrapper> call = SquarkAPI.getClient().create(InterfaceAPI.class).updateRates("USD");
+            call.enqueue(new Callback<APIWrapper>() {
+                @Override
+                public void onResponse(Call<APIWrapper> call, Response<APIWrapper> response) {
+                    SharedPreferences.Editor editor = getActivity().getSharedPreferences(Helper.SHARED_PREFERENCE, MODE_PRIVATE).edit();
+                    editor.putString(Helper.DATE_PREFERENCE, response.body().getDate());
+                    editor.apply();
 
-                response.body().updateCurrencyList();
-            }
+                    response.body().updateCurrencyList();
+                }
 
-            @Override
-            public void onFailure(Call<APIWrapper> call, Throwable t) {
-                Log.e(TAG, "onFailure (URL) : " + call.request().url());
-                Log.e(TAG, "onFailure (Message) : " + t.toString());
-            }
-        });
+                @Override
+                public void onFailure(Call<APIWrapper> call, Throwable t) {
+                    Log.e(TAG, "onFailure (URL) : " + call.request().url());
+                    Log.e(TAG, "onFailure (Message) : " + t.toString());
+                }
+            });
+        }
 
         mBaseCurrency.setOnClickListener(new View.OnClickListener() {
             @Override
