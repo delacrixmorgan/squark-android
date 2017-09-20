@@ -2,6 +2,7 @@ package com.delacrixmorgan.squark;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
@@ -10,9 +11,6 @@ import com.delacrixmorgan.squark.model.Currency;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.List;
-
-import io.realm.Realm;
 
 /**
  * Created by Delacrix Morgan on 03/07/2017.
@@ -39,6 +37,15 @@ public class SquarkEngine {
 
     public static synchronized SquarkEngine getInstance() {
         return sSquarkEngine;
+    }
+
+    public void updateConversionRate(Currency baseCurrency, Currency quoteCurrency) {
+
+        mConversionRate = quoteCurrency.getRate() / baseCurrency.getRate();
+
+        Log.i(TAG, "updateConversionRate (Base) : " + baseCurrency.getRate());
+        Log.i(TAG, "updateConversionRate (Quote): " + quoteCurrency.getRate());
+        Log.i(TAG, "updateConversionRate (Rate) : " + mConversionRate);
     }
 
     public void updateTable(Context context, ArrayList<TextView> quantifiers, ArrayList<TextView> results) {

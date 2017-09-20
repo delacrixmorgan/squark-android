@@ -91,25 +91,23 @@ public class TableFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (mRealmResultsCurrency.isEmpty()) {
-            Call<APIWrapper> call = SquarkAPI.getClient().create(InterfaceAPI.class).updateRates("USD");
-            call.enqueue(new Callback<APIWrapper>() {
-                @Override
-                public void onResponse(Call<APIWrapper> call, Response<APIWrapper> response) {
-                    Log.i(TAG, "onResponse (URL)  : " + call.request().url());
-                    Log.i(TAG, "onResponse (Base) : " + response.body().getBase());
-                    Log.i(TAG, "onResponse (Date) : " + response.body().getDate());
+        Call<APIWrapper> call = SquarkAPI.getClient().create(InterfaceAPI.class).updateRates("USD");
+        call.enqueue(new Callback<APIWrapper>() {
+            @Override
+            public void onResponse(Call<APIWrapper> call, Response<APIWrapper> response) {
+                Log.i(TAG, "onResponse (URL)  : " + call.request().url());
+                Log.i(TAG, "onResponse (Base) : " + response.body().getBase());
+                Log.i(TAG, "onResponse (Date) : " + response.body().getDate());
 
-                    response.body().updateCurrencyList();
-                }
+                response.body().updateCurrencyList();
+            }
 
-                @Override
-                public void onFailure(Call<APIWrapper> call, Throwable t) {
-                    Log.e(TAG, "onFailure (URL) : " + call.request().url());
-                    Log.e(TAG, "onFailure (Message) : " + t.toString());
-                }
-            });
-        }
+            @Override
+            public void onFailure(Call<APIWrapper> call, Throwable t) {
+                Log.e(TAG, "onFailure (URL) : " + call.request().url());
+                Log.e(TAG, "onFailure (Message) : " + t.toString());
+            }
+        });
 
         mBaseCurrency.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,7 +139,9 @@ public class TableFragment extends Fragment {
             }
         });
 
-        updateCurrency();
+        if (!mRealmResultsCurrency.isEmpty()) {
+            updateCurrency();
+        }
     }
 
     public void updateCurrency() {
@@ -151,6 +151,7 @@ public class TableFragment extends Fragment {
         mBaseCurrency.setText(baseCurrency.getCode());
         mQuoteCurrency.setText(quoteCurrency.getCode());
 
+        SquarkEngine.getInstance().updateConversionRate(baseCurrency, quoteCurrency);
         SquarkEngine.getInstance().updateTable(getActivity(), mQuantifiers, mResult);
     }
 }

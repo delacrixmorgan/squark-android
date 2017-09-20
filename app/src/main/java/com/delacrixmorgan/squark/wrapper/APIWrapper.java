@@ -61,7 +61,7 @@ public class APIWrapper {
         addTask(realm, new Currency("SGD", "Singapore", "Singaporean Dollar", rates.getSGD()));
         addTask(realm, new Currency("THB", "Thailand", "Thai Baht", rates.getTHB()));
         addTask(realm, new Currency("TRY", "Turkey", "Turkish Lira", rates.getTRY()));
-        addTask(realm, new Currency("USD", "United_States", "United States Dollar", rates.getUSD()));
+        addTask(realm, new Currency("USD", "United_States", "United States Dollar", 1));
 
         addTask(realm, new Currency("ZAR", "South_Africa", "South African Rand", rates.getZAR()));
     }
