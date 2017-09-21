@@ -64,6 +64,25 @@ public class SquarkEngine {
         }
     }
 
+    public void expandTable(Context context, ArrayList<TextView> quantifiers, ArrayList<TextView> results, int expandQuantifier) {
+        DecimalFormat resultFormat = new DecimalFormat("###,##0.00");
+        BigDecimal bigQuantifier, bigResult;
+
+        for (int i = 0; i < 10; i++) {
+            double m1 = (expandQuantifier * mMultiplier) + ((mMultiplier / 10) * (i + 1));
+            double m2 = (expandQuantifier * mMultiplier) + mConversionRate * (mMultiplier / 10) * (i + 1);
+
+            bigQuantifier = new BigDecimal(m1).setScale(2, BigDecimal.ROUND_HALF_UP);
+            bigResult = new BigDecimal(m2).setScale(2, BigDecimal.ROUND_HALF_UP);
+
+            quantifiers.get(i).setText(String.valueOf(resultFormat.format(bigQuantifier)));
+            results.get(i).setText(String.valueOf(resultFormat.format(bigResult)));
+
+            quantifiers.get(i).startAnimation(AnimationUtils.loadAnimation(context, R.anim.wobble));
+            results.get(i).startAnimation(AnimationUtils.loadAnimation(context, R.anim.wobble));
+        }
+    }
+
     public void swipeLeft() {
         if (mMultiplier < 1000000) {
             mMultiplier *= 10;

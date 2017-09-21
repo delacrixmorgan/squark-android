@@ -39,7 +39,6 @@ import static android.content.Context.MODE_PRIVATE;
 public class TableFragment extends Fragment {
     private static String TAG = "TableFragment";
 
-    private Realm mRealm;
     private RealmResults<Currency> mRealmResultsCurrency;
 
     private ArrayList<TextView> mQuantifiers, mResult;
@@ -51,8 +50,7 @@ public class TableFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_table, container, false);
 
-        mRealm = Realm.getDefaultInstance();
-        mRealmResultsCurrency = mRealm.where(Currency.class).findAll();
+        mRealmResultsCurrency = Realm.getDefaultInstance().where(Currency.class).findAll();
 
         mBaseCurrency = (TextView) rootView.findViewById(R.id.fragment_table_base_currency);
         mQuoteCurrency = (TextView) rootView.findViewById(R.id.fragment_table_quote_currency);
@@ -66,6 +64,14 @@ public class TableFragment extends Fragment {
 
             mQuantifiers.add((TextView) rootView.findViewById(getResources().getIdentifier(rowQuantifierID, "id", getActivity().getPackageName())));
             mResult.add((TextView) rootView.findViewById(getResources().getIdentifier(rowResultID, "id", getActivity().getPackageName())));
+
+            final int expandQuantifier = i + 1;
+            mQuantifiers.get(i).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    SquarkEngine.getInstance().expandTable(getActivity(), mQuantifiers, mResult, expandQuantifier);
+                }
+            });
         }
 
         rootView.setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
