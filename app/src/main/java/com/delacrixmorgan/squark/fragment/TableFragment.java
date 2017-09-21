@@ -95,13 +95,14 @@ public class TableFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (!new SimpleDateFormat("yyyy-mm-dd", Locale.ENGLISH).format(new Date()).equals(getActivity().getSharedPreferences(Helper.SHARED_PREFERENCE, MODE_PRIVATE).getString(Helper.DATE_PREFERENCE, "2000-01-01"))) {
+        if (!new SimpleDateFormat("dd/mm/yyyy", Locale.ENGLISH).format(new Date()).equals(getActivity().getSharedPreferences(Helper.SHARED_PREFERENCE, MODE_PRIVATE).getString(Helper.DATE_PREFERENCE, "01/01/2000"))) {
             Call<APIWrapper> call = SquarkAPI.getClient().create(InterfaceAPI.class).updateRates("USD");
             call.enqueue(new Callback<APIWrapper>() {
                 @Override
                 public void onResponse(Call<APIWrapper> call, Response<APIWrapper> response) {
                     SharedPreferences.Editor editor = getActivity().getSharedPreferences(Helper.SHARED_PREFERENCE, MODE_PRIVATE).edit();
                     editor.putString(Helper.DATE_PREFERENCE, response.body().getDate());
+                    editor.putString(Helper.TIME_PREFERENCE, new SimpleDateFormat("hh:mm a", Locale.ENGLISH).format(new Date()));
                     editor.apply();
 
                     response.body().updateCurrencyList();

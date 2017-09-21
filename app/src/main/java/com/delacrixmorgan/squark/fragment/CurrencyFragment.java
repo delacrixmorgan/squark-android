@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,6 +23,10 @@ import com.delacrixmorgan.squark.network.InterfaceAPI;
 import com.delacrixmorgan.squark.network.SquarkAPI;
 import com.delacrixmorgan.squark.shared.Helper;
 import com.delacrixmorgan.squark.wrapper.APIWrapper;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -64,23 +69,37 @@ public class CurrencyFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        String updateDateText = "Last Updated " + getActivity().getSharedPreferences(Helper.SHARED_PREFERENCE, MODE_PRIVATE).getString(Helper.DATE_PREFERENCE, "2000-01-01");
+        String updateDateText = "Last Updated "
+                + getActivity().getSharedPreferences(Helper.SHARED_PREFERENCE, MODE_PRIVATE).getString(Helper.DATE_PREFERENCE, "2000-01-01") + " at "
+                + getActivity().getSharedPreferences(Helper.SHARED_PREFERENCE, MODE_PRIVATE).getString(Helper.TIME_PREFERENCE, "12:00 am");
 
         mUpdateBarText.setText(updateDateText);
         mUpdateBarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mUpdateBarText.setText("Updating..");
+
                 Call<APIWrapper> call = SquarkAPI.getClient().create(InterfaceAPI.class).updateRates("USD");
                 call.enqueue(new Callback<APIWrapper>() {
                     @Override
                     public void onResponse(Call<APIWrapper> call, Response<APIWrapper> response) {
-                        SharedPreferences.Editor editor = getActivity().getSharedPreferences(Helper.SHARED_PREFERENCE, MODE_PRIVATE).edit();
-                        editor.putString(Helper.DATE_PREFERENCE, response.body().getDate());
-                        editor.apply();
+                        String updatedTime = new SimpleDateFormat("hh:mm a", Locale.ENGLISH).format(new Date());
+                        final String updatedDateTime = "Last Updated " + response.body().getDate() + " at " + updatedTime;
 
                         response.body().updateCurrencyList();
+                        mUpdateBarText.setText("Successfully Updated!");
 
-                        mUpdateBarText.setText("Updated");
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                mUpdateBarText.setText(updatedDateTime);
+                            }
+                        }, 2000);
+
+                        SharedPreferences.Editor editor = getActivity().getSharedPreferences(Helper.SHARED_PREFERENCE, MODE_PRIVATE).edit();
+                        editor.putString(Helper.DATE_PREFERENCE, response.body().getDate());
+                        editor.putString(Helper.TIME_PREFERENCE, updatedTime);
+                        editor.apply();
                     }
 
                     @Override

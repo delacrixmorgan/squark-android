@@ -1,5 +1,7 @@
 package com.delacrixmorgan.squark.wrapper;
 
+import android.util.Log;
+
 import com.delacrixmorgan.squark.model.Currency;
 
 import io.realm.Realm;
@@ -17,6 +19,12 @@ public class APIWrapper {
     }
 
     public String getDate() {
+        String[] splitDate = date.split("-");
+
+        if (date.contains("-")) {
+            date = splitDate[2] + "/" + splitDate[1] + "/" + splitDate[0];
+        }
+
         return date;
     }
 
