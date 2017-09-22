@@ -2,7 +2,6 @@ package com.delacrixmorgan.squark;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
@@ -23,14 +22,14 @@ public class SquarkEngine {
     private double mMultiplier;
     private double mConversionRate;
 
-    private SquarkEngine(@NonNull Context context) {
-        mConversionRate = 4.2;
+    private SquarkEngine() {
+        mConversionRate = 1;
         mMultiplier = 1;
     }
 
-    public static synchronized SquarkEngine newInstance(@NonNull Context context) {
+    public static synchronized SquarkEngine newInstance() {
         if (sSquarkEngine == null) {
-            sSquarkEngine = new SquarkEngine(context);
+            sSquarkEngine = new SquarkEngine();
         }
         return sSquarkEngine;
     }
@@ -40,12 +39,7 @@ public class SquarkEngine {
     }
 
     public void updateConversionRate(Currency baseCurrency, Currency quoteCurrency) {
-
         mConversionRate = quoteCurrency.getRate() / baseCurrency.getRate();
-
-        Log.i(TAG, "updateConversionRate (Base) : " + baseCurrency.getRate());
-        Log.i(TAG, "updateConversionRate (Quote): " + quoteCurrency.getRate());
-        Log.i(TAG, "updateConversionRate (Rate) : " + mConversionRate);
     }
 
     public void updateTable(Context context, ArrayList<TextView> quantifiers, ArrayList<TextView> results) {
@@ -62,10 +56,6 @@ public class SquarkEngine {
             quantifiers.get(i).startAnimation(AnimationUtils.loadAnimation(context, R.anim.wobble));
             results.get(i).startAnimation(AnimationUtils.loadAnimation(context, R.anim.wobble));
         }
-    }
-
-    public void swapCurrency(){
-
     }
 
     public void expandTable(Context context, ArrayList<TextView> quantifiers, ArrayList<TextView> results, int expandQuantifier) {

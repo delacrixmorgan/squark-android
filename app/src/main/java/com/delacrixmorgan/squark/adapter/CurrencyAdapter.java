@@ -26,13 +26,12 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.CurrencyViewHolder> {
 
+    private RealmResults<Currency> mRealmResultCurrency;
     private Context mContext;
     private String mTypeConvert;
-    private RealmResults<Currency> mRealmResultCurrency;
 
     public CurrencyAdapter(Context context, String typeConvert) {
         mRealmResultCurrency = Realm.getDefaultInstance().where(Currency.class).findAll();
-
         mContext = context;
         mTypeConvert = typeConvert;
     }
@@ -48,7 +47,8 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
     @Override
     public void onBindViewHolder(final CurrencyViewHolder holder, int position) {
         Currency currency = mRealmResultCurrency.get(holder.getAdapterPosition());
-        int selectedCurrencyPosition = mContext.getSharedPreferences(Helper.SHARED_PREFERENCE, MODE_PRIVATE).getInt(mTypeConvert.equals("BASE") ? Helper.BASE_CURRENCY_PREFERENCE : Helper.QUOTE_CURRENCY_PREFERENCE, 0);
+        int selectedCurrencyPosition = mContext.getSharedPreferences(Helper.SHARED_PREFERENCE, MODE_PRIVATE)
+                .getInt(mTypeConvert.equals("BASE") ? Helper.BASE_CURRENCY_PREFERENCE : Helper.QUOTE_CURRENCY_PREFERENCE, 0);
 
         holder.countryFlag.setBackgroundResource(mContext.getResources().getIdentifier(currency.getCountry().toLowerCase(), "drawable", mContext.getPackageName()));
         holder.countrySelected.setVisibility(holder.getAdapterPosition() == selectedCurrencyPosition ? View.VISIBLE : View.GONE);

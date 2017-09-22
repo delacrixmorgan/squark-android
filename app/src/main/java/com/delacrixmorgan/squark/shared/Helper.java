@@ -1,5 +1,13 @@
 package com.delacrixmorgan.squark.shared;
 
+import android.content.Context;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+import static android.content.Context.MODE_PRIVATE;
+
 /**
  * Created by Delacrix Morgan on 08/07/2017.
  */
@@ -26,4 +34,16 @@ public class Helper {
             "nine",
             "ten"
     };
+
+    public static String getCurrentDate() {
+        return new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH).format(new Date());
+    }
+
+    public static String getCurrentTime() {
+        return new SimpleDateFormat("hh:mm a", Locale.ENGLISH).format(new Date());
+    }
+
+    public static int getCurrencyPreference(Context context, String typeCurrency) {
+        return context.getSharedPreferences(SHARED_PREFERENCE, MODE_PRIVATE).getInt(typeCurrency, 1);
+    }
 }

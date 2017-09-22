@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.delacrixmorgan.squark.MainActivity;
 import com.delacrixmorgan.squark.R;
 import com.delacrixmorgan.squark.SquarkEngine;
 import com.delacrixmorgan.squark.listener.OnSwipeTouchListener;
@@ -21,10 +20,7 @@ import com.delacrixmorgan.squark.network.SquarkAPI;
 import com.delacrixmorgan.squark.shared.Helper;
 import com.delacrixmorgan.squark.wrapper.APIWrapper;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -92,18 +88,6 @@ public class TableFragment extends Fragment {
 //            });
         }
 
-        mSwapButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferences.Editor editor = getActivity().getSharedPreferences(Helper.SHARED_PREFERENCE, MODE_PRIVATE).edit();
-                editor.putInt(Helper.BASE_CURRENCY_PREFERENCE, getActivity().getSharedPreferences(Helper.SHARED_PREFERENCE, MODE_PRIVATE).getInt(Helper.QUOTE_CURRENCY_PREFERENCE, 18));
-                editor.putInt(Helper.QUOTE_CURRENCY_PREFERENCE, getActivity().getSharedPreferences(Helper.SHARED_PREFERENCE, MODE_PRIVATE).getInt(Helper.BASE_CURRENCY_PREFERENCE, 29));
-                editor.apply();
-
-                updateCurrency();
-            }
-        });
-
         rootView.setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
             public void onSwipeLeft() {
                 if (!mTableExpanded) {
@@ -127,14 +111,14 @@ public class TableFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (!new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH).format(new Date()).equals(getActivity().getSharedPreferences(Helper.SHARED_PREFERENCE, MODE_PRIVATE).getString(Helper.DATE_PREFERENCE, "01/01/2000"))) {
+        if (!Helper.getCurrentDate().equals(getActivity().getSharedPreferences(Helper.SHARED_PREFERENCE, MODE_PRIVATE).getString(Helper.DATE_PREFERENCE, "01/01/2000"))) {
             Call<APIWrapper> call = SquarkAPI.getClient().create(InterfaceAPI.class).updateRates("USD");
             call.enqueue(new Callback<APIWrapper>() {
                 @Override
                 public void onResponse(Call<APIWrapper> call, Response<APIWrapper> response) {
                     SharedPreferences.Editor editor = getActivity().getSharedPreferences(Helper.SHARED_PREFERENCE, MODE_PRIVATE).edit();
-                    editor.putString(Helper.DATE_PREFERENCE, new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH).format(new Date()));
-                    editor.putString(Helper.TIME_PREFERENCE, new SimpleDateFormat("hh:mm a", Locale.ENGLISH).format(new Date()));
+                    editor.putString(Helper.DATE_PREFERENCE, Helper.getCurrentDate());
+                    editor.putString(Helper.TIME_PREFERENCE, Helper.getCurrentTime());
                     editor.apply();
 
                     response.body().updateCurrencyList();
@@ -147,6 +131,18 @@ public class TableFragment extends Fragment {
                 }
             });
         }
+
+        mSwapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences.Editor editor = getActivity().getSharedPreferences(Helper.SHARED_PREFERENCE, MODE_PRIVATE).edit();
+                editor.putInt(Helper.BASE_CURRENCY_PREFERENCE, Helper.getCurrencyPreference(getActivity(), Helper.QUOTE_CURRENCY_PREFERENCE));
+                editor.putInt(Helper.QUOTE_CURRENCY_PREFERENCE, Helper.getCurrencyPreference(getActivity(), Helper.BASE_CURRENCY_PREFERENCE));
+                editor.apply();
+
+                updateCurrency();
+            }
+        });
 
         mBaseCurrency.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -184,13 +180,13 @@ public class TableFragment extends Fragment {
     }
 
     public void updateCurrency() {
-        Currency baseCurrency = mRealmResultsCurrency.get(getActivity().getSharedPreferences(Helper.SHARED_PREFERENCE, MODE_PRIVATE).getInt(Helper.BASE_CURRENCY_PREFERENCE, 29));
-        Currency quoteCurrency = mRealmResultsCurrency.get(getActivity().getSharedPreferences(Helper.SHARED_PREFERENCE, MODE_PRIVATE).getInt(Helper.QUOTE_CURRENCY_PREFERENCE, 18));
-
-        mBaseCurrency.setText(baseCurrency.getCode());
-        mQuoteCurrency.setText(quoteCurrency.getCode());
+        Currency baseCurrency = mRealmResultsCurrency.get(Helper.getCurrencyPreference(getActivity(), Helper.BASE_CURRENCY_PREFERENCE));
+        Currency quoteCurrency = mRealmResultsCurrency.get(Helper.getCurrencyPreference(getActivity(), Helper.QUOTE_CURRENCY_PREFERENCE));
 
         SquarkEngine.getInstance().updateConversionRate(baseCurrency, quoteCurrency);
         SquarkEngine.getInstance().updateTable(getActivity(), mQuantifiers, mResult);
+
+        mBaseCurrency.setText(baseCurrency.getCode());
+        mQuoteCurrency.setText(quoteCurrency.getCode());
     }
 }

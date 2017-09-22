@@ -2,7 +2,6 @@ package com.delacrixmorgan.squark.fragment;
 
 import android.app.Fragment;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -43,7 +42,6 @@ public class CurrencyFragment extends Fragment {
 
     private Toolbar mToolbar;
     private RecyclerView mCurrencyRecyclerView;
-    private CurrencyAdapter mCurrencyAdapter;
     private TextView mUpdateBarText;
     private ImageView mUpdateBarButton;
 
@@ -53,14 +51,11 @@ public class CurrencyFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_currency, container, false);
 
         mToolbar = (Toolbar) rootView.findViewById(R.id.fragment_currency_toolbar);
-        mCurrencyRecyclerView = (RecyclerView) rootView.findViewById(R.id.fragment_currency_recycler_view);
         mUpdateBarText = (TextView) rootView.findViewById(R.id.fragment_currency_update_bar_text);
         mUpdateBarButton = (ImageView) rootView.findViewById(R.id.fragment_currency_update_bar_button);
+        mCurrencyRecyclerView = (RecyclerView) rootView.findViewById(R.id.fragment_currency_recycler_view);
 
-        Bundle bundle = this.getArguments();
-        if (bundle != null) {
-            mCurrencyAdapter = new CurrencyAdapter(getActivity(), bundle.getString(Helper.TYPE_CONVERT, "BASE"));
-        }
+        getActivity().setActionBar(mToolbar);
 
         return rootView;
     }
@@ -83,13 +78,10 @@ public class CurrencyFragment extends Fragment {
                 call.enqueue(new Callback<APIWrapper>() {
                     @Override
                     public void onResponse(Call<APIWrapper> call, Response<APIWrapper> response) {
-                        String updatedDate = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH).format(new Date());
-                        String updatedTime = new SimpleDateFormat("hh:mm a", Locale.ENGLISH).format(new Date());
+                        String updatedDate = Helper.getCurrentDate();
+                        String updatedTime = Helper.getCurrentTime();
 
                         final String updatedDateTime = "Last Updated " + updatedDate + " at " + updatedTime;
-
-                        response.body().updateCurrencyList();
-                        mUpdateBarText.setText("Successfully Updated!");
 
                         new Handler().postDelayed(new Runnable() {
                             @Override
@@ -97,6 +89,9 @@ public class CurrencyFragment extends Fragment {
                                 mUpdateBarText.setText(updatedDateTime);
                             }
                         }, 2000);
+
+                        response.body().updateCurrencyList();
+                        mUpdateBarText.setText("Successfully Updated!");
 
                         SharedPreferences.Editor editor = getActivity().getSharedPreferences(Helper.SHARED_PREFERENCE, MODE_PRIVATE).edit();
                         editor.putString(Helper.DATE_PREFERENCE, updatedDate);
@@ -113,23 +108,22 @@ public class CurrencyFragment extends Fragment {
             }
         });
 
+        CurrencyAdapter currencyAdapter = this.getArguments() != null ? new CurrencyAdapter(getActivity(), this.getArguments().getString(Helper.TYPE_CONVERT, "BASE")) : null;
+
+        if (currencyAdapter == null) {
+            getActivity().onBackPressed();
+        }
+
         mCurrencyRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        mCurrencyRecyclerView.setAdapter(mCurrencyAdapter);
+        mCurrencyRecyclerView.setAdapter(currencyAdapter);
         mCurrencyRecyclerView.scrollToPosition(0);
 
-        setupToolbar();
-    }
-
-    private void setupToolbar() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getActivity().setActionBar(mToolbar);
-            mToolbar.setNavigationIcon(ContextCompat.getDrawable(getActivity(), R.drawable.ic_arrow_back_white_24dp));
-            mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    getActivity().getFragmentManager().popBackStack();
-                }
-            });
-        }
+        mToolbar.setNavigationIcon(ContextCompat.getDrawable(getActivity(), R.drawable.ic_arrow_back_white_24dp));
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getFragmentManager().popBackStack();
+            }
+        });
     }
 }

@@ -23,10 +23,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        SquarkEngine.newInstance(this);
-
         Realm.init(this);
-
         RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
                 .name(Realm.DEFAULT_REALM_NAME)
                 .schemaVersion(0)
@@ -34,6 +31,7 @@ public class MainActivity extends Activity {
                 .build();
 
         Realm.setDefaultConfiguration(realmConfiguration);
+        SquarkEngine.newInstance();
 
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath("fonts/LeagueSpartan-Bold.otf")
