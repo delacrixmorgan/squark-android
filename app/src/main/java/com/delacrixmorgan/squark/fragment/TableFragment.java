@@ -77,8 +77,10 @@ public class TableFragment extends Fragment {
                         mTableExpanded = false;
                         SquarkEngine.getInstance().updateTable(getActivity(), mQuantifiers, mResult);
                     } else {
-                        mTableExpanded = true;
-                        SquarkEngine.getInstance().expandTable(getActivity(), mQuantifiers, mResult, expandQuantifier);
+                        if (!mTableExpanded) {
+                            mTableExpanded = true;
+                            SquarkEngine.getInstance().expandTable(getActivity(), mQuantifiers, mResult, expandQuantifier);
+                        }
                     }
                 }
             });
