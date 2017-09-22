@@ -64,6 +64,10 @@ public class SquarkEngine {
         }
     }
 
+    public void swapCurrency(){
+
+    }
+
     public void expandTable(Context context, ArrayList<TextView> quantifiers, ArrayList<TextView> results, int expandQuantifier) {
         DecimalFormat resultFormat = new DecimalFormat("###,##0.00");
         BigDecimal bigQuantifier, bigResult;

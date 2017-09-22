@@ -4,12 +4,14 @@ import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.delacrixmorgan.squark.MainActivity;
 import com.delacrixmorgan.squark.R;
 import com.delacrixmorgan.squark.SquarkEngine;
 import com.delacrixmorgan.squark.listener.OnSwipeTouchListener;
@@ -43,6 +45,7 @@ public class TableFragment extends Fragment {
 
     private ArrayList<TextView> mQuantifiers, mResult;
     private TextView mBaseCurrency, mQuoteCurrency;
+    private FloatingActionButton mSwapButton;
     private CurrencyFragment currencyFragment;
     private Boolean mTableExpanded;
 
@@ -55,6 +58,7 @@ public class TableFragment extends Fragment {
 
         mBaseCurrency = (TextView) rootView.findViewById(R.id.fragment_table_base_currency);
         mQuoteCurrency = (TextView) rootView.findViewById(R.id.fragment_table_quote_currency);
+        mSwapButton = (FloatingActionButton) rootView.findViewById(R.id.fragment_table_swap_button);
 
         currencyFragment = new CurrencyFragment();
         mQuantifiers = new ArrayList<>();
@@ -70,7 +74,7 @@ public class TableFragment extends Fragment {
             mResult.add((TextView) rootView.findViewById(getResources().getIdentifier(rowResultID, "id", getActivity().getPackageName())));
 
             // Disabled - Until Able to Figure out Overlapping Listeners
-            
+
 //            final int expandQuantifier = i + 1;
 //            mQuantifiers.get(i).setOnClickListener(new View.OnClickListener() {
 //                @Override
@@ -87,6 +91,18 @@ public class TableFragment extends Fragment {
 //                }
 //            });
         }
+
+        mSwapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences.Editor editor = getActivity().getSharedPreferences(Helper.SHARED_PREFERENCE, MODE_PRIVATE).edit();
+                editor.putInt(Helper.BASE_CURRENCY_PREFERENCE, getActivity().getSharedPreferences(Helper.SHARED_PREFERENCE, MODE_PRIVATE).getInt(Helper.QUOTE_CURRENCY_PREFERENCE, 18));
+                editor.putInt(Helper.QUOTE_CURRENCY_PREFERENCE, getActivity().getSharedPreferences(Helper.SHARED_PREFERENCE, MODE_PRIVATE).getInt(Helper.BASE_CURRENCY_PREFERENCE, 29));
+                editor.apply();
+
+                updateCurrency();
+            }
+        });
 
         rootView.setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
             public void onSwipeLeft() {
