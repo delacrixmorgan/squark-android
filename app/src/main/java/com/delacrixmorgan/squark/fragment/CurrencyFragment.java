@@ -83,8 +83,10 @@ public class CurrencyFragment extends Fragment {
                 call.enqueue(new Callback<APIWrapper>() {
                     @Override
                     public void onResponse(Call<APIWrapper> call, Response<APIWrapper> response) {
+                        String updatedDate = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH).format(new Date());
                         String updatedTime = new SimpleDateFormat("hh:mm a", Locale.ENGLISH).format(new Date());
-                        final String updatedDateTime = "Last Updated " + response.body().getDate() + " at " + updatedTime;
+
+                        final String updatedDateTime = "Last Updated " + updatedDate + " at " + updatedTime;
 
                         response.body().updateCurrencyList();
                         mUpdateBarText.setText("Successfully Updated!");
@@ -97,7 +99,7 @@ public class CurrencyFragment extends Fragment {
                         }, 2000);
 
                         SharedPreferences.Editor editor = getActivity().getSharedPreferences(Helper.SHARED_PREFERENCE, MODE_PRIVATE).edit();
-                        editor.putString(Helper.DATE_PREFERENCE, response.body().getDate());
+                        editor.putString(Helper.DATE_PREFERENCE, updatedDate);
                         editor.putString(Helper.TIME_PREFERENCE, updatedTime);
                         editor.apply();
                     }

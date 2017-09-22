@@ -69,21 +69,23 @@ public class TableFragment extends Fragment {
             mQuantifiers.add((TextView) rootView.findViewById(getResources().getIdentifier(rowQuantifierID, "id", getActivity().getPackageName())));
             mResult.add((TextView) rootView.findViewById(getResources().getIdentifier(rowResultID, "id", getActivity().getPackageName())));
 
-            final int expandQuantifier = i + 1;
-            mQuantifiers.get(i).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mTableExpanded && (expandQuantifier == 1 || expandQuantifier == 10)) {
-                        mTableExpanded = false;
-                        SquarkEngine.getInstance().updateTable(getActivity(), mQuantifiers, mResult);
-                    } else {
-                        if (!mTableExpanded) {
-                            mTableExpanded = true;
-                            SquarkEngine.getInstance().expandTable(getActivity(), mQuantifiers, mResult, expandQuantifier);
-                        }
-                    }
-                }
-            });
+            // Disabled - Until Able to Figure out Overlapping Listeners
+            
+//            final int expandQuantifier = i + 1;
+//            mQuantifiers.get(i).setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if (mTableExpanded && (expandQuantifier == 1 || expandQuantifier == 10)) {
+//                        mTableExpanded = false;
+//                        SquarkEngine.getInstance().updateTable(getActivity(), mQuantifiers, mResult);
+//                    } else {
+//                        if (!mTableExpanded) {
+//                            mTableExpanded = true;
+//                            SquarkEngine.getInstance().expandTable(getActivity(), mQuantifiers, mResult, expandQuantifier);
+//                        }
+//                    }
+//                }
+//            });
         }
 
         rootView.setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
@@ -100,14 +102,6 @@ public class TableFragment extends Fragment {
                     SquarkEngine.getInstance().updateTable(getActivity(), mQuantifiers, mResult);
                 }
             }
-
-            public void onSwipeTop() {
-//                Toast.makeText(getActivity(), "top", Toast.LENGTH_SHORT).show();
-            }
-
-            public void onSwipeBottom() {
-//                Toast.makeText(getActivity(), "bottom", Toast.LENGTH_SHORT).show();
-            }
         });
 
         return rootView;
@@ -117,13 +111,13 @@ public class TableFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (!new SimpleDateFormat("dd/mm/yyyy", Locale.ENGLISH).format(new Date()).equals(getActivity().getSharedPreferences(Helper.SHARED_PREFERENCE, MODE_PRIVATE).getString(Helper.DATE_PREFERENCE, "01/01/2000"))) {
+        if (!new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH).format(new Date()).equals(getActivity().getSharedPreferences(Helper.SHARED_PREFERENCE, MODE_PRIVATE).getString(Helper.DATE_PREFERENCE, "01/01/2000"))) {
             Call<APIWrapper> call = SquarkAPI.getClient().create(InterfaceAPI.class).updateRates("USD");
             call.enqueue(new Callback<APIWrapper>() {
                 @Override
                 public void onResponse(Call<APIWrapper> call, Response<APIWrapper> response) {
                     SharedPreferences.Editor editor = getActivity().getSharedPreferences(Helper.SHARED_PREFERENCE, MODE_PRIVATE).edit();
-                    editor.putString(Helper.DATE_PREFERENCE, response.body().getDate());
+                    editor.putString(Helper.DATE_PREFERENCE, new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH).format(new Date()));
                     editor.putString(Helper.TIME_PREFERENCE, new SimpleDateFormat("hh:mm a", Locale.ENGLISH).format(new Date()));
                     editor.apply();
 
