@@ -23,10 +23,6 @@ import com.delacrixmorgan.squark.network.SquarkAPI;
 import com.delacrixmorgan.squark.shared.Helper;
 import com.delacrixmorgan.squark.wrapper.APIWrapper;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -43,7 +39,7 @@ public class CurrencyFragment extends Fragment {
     private Toolbar mToolbar;
     private RecyclerView mCurrencyRecyclerView;
     private TextView mUpdateBarText;
-    private ImageView mUpdateBarButton;
+    private ImageView mUpdateBarButton, mSettingButton;
 
     @Nullable
     @Override
@@ -53,6 +49,7 @@ public class CurrencyFragment extends Fragment {
         mToolbar = (Toolbar) rootView.findViewById(R.id.fragment_currency_toolbar);
         mUpdateBarText = (TextView) rootView.findViewById(R.id.fragment_currency_update_bar_text);
         mUpdateBarButton = (ImageView) rootView.findViewById(R.id.fragment_currency_update_bar_button);
+        mSettingButton = (ImageView) rootView.findViewById(R.id.fragment_currency_toolbar_setting_button);
         mCurrencyRecyclerView = (RecyclerView) rootView.findViewById(R.id.fragment_currency_recycler_view);
 
         getActivity().setActionBar(mToolbar);
@@ -123,6 +120,17 @@ public class CurrencyFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 getActivity().getFragmentManager().popBackStack();
+            }
+        });
+
+        mSettingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.activity_main_vg_fragment, new SettingFragment())
+                        .addToBackStack(CurrencyFragment.TAG)
+                        .commit();
             }
         });
     }
