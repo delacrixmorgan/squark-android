@@ -1,10 +1,14 @@
 package com.delacrixmorgan.squark;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.preference.Preference;
+import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toolbar;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
@@ -14,9 +18,8 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
  * Created by Delacrix Morgan on 07/08/2017.
  */
 
-public class SettingActivity extends FragmentActivity {
-
-    private Toolbar mToolbar;
+public class SettingActivity extends PreferenceActivity {
+    private static String TAG = "SettingActivity";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -28,9 +31,25 @@ public class SettingActivity extends FragmentActivity {
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         );
+    }
 
-        //mToolbar = (Toolbar) findViewById(R.id.view_toolbar);
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
 
+        getLayoutInflater().inflate(R.layout.view_toolbar, (ViewGroup) findViewById(android.R.id.content));
+        findViewById(R.id.view_toolbar_right_button).setVisibility(View.GONE);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.view_toolbar);
+        toolbar.setTitle(R.string.about);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        setActionBar(toolbar);
     }
 
     @Override
@@ -39,29 +58,33 @@ public class SettingActivity extends FragmentActivity {
     }
 
     public static class SettingFragment extends PreferenceFragment {
-
-
-        @Override
-        public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-            super.onActivityCreated(savedInstanceState);
-
-//            mToolbar = (Toolbar) getActivity().findViewById(R.id.view_toolbar);
-//            getActivity().setActionBar(mToolbar);
-//            mToolbar.setTitle("About");
-//            mToolbar.setNavigationIcon(ContextCompat.getDrawable(getActivity(), R.drawable.ic_arrow_back_white_24dp));
-//            mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    getActivity().finish();
-//                }
-//            });
-        }
+        private Preference sCreditsLibrary, sVersion;
 
         @Override
         public void onCreate(final Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.preferences);
 
+            sCreditsLibrary = findPreference("credits_library");
+            sVersion = findPreference("version_number");
+        }
+
+        @Override
+        public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+            super.onViewCreated(view, savedInstanceState);
+
+            sCreditsLibrary.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    return false;
+                }
+            });
+
+            try {
+                sVersion.setSummary(getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0).versionName);
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

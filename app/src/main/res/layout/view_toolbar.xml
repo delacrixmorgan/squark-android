@@ -5,8 +5,7 @@
     android:layout_height="wrap_content"
     android:background="@color/colorPrimary"
     android:navigationIcon="@drawable/ic_arrow_back_white_24dp"
-    android:padding="15dp"
-    android:title="Choose Currency">
+    android:padding="15dp">
 
     <ImageView
         android:id="@+id/view_toolbar_right_button"

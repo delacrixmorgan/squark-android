@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -117,7 +116,7 @@ public class CurrencyFragment extends Fragment {
         mCurrencyRecyclerView.setAdapter(currencyAdapter);
         mCurrencyRecyclerView.scrollToPosition(0);
 
-        mToolbar.setNavigationIcon(ContextCompat.getDrawable(getActivity(), R.drawable.ic_arrow_back_white_24dp));
+        mToolbar.setTitle(R.string.choose_currency);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,6 +124,7 @@ public class CurrencyFragment extends Fragment {
             }
         });
 
+        mSettingButton.setVisibility(View.VISIBLE);
         mSettingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
