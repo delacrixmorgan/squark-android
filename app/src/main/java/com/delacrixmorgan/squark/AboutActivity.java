@@ -18,8 +18,8 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
  * Created by Delacrix Morgan on 07/08/2017.
  */
 
-public class SettingActivity extends PreferenceActivity {
-    private static String TAG = "SettingActivity";
+public class AboutActivity extends PreferenceActivity {
+    private static String TAG = "AboutActivity";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
