@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/view_toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimary"
+    android:navigationIcon="@drawable/ic_arrow_back_white_24dp"
+    android:padding="15dp"
+    android:title="Choose Currency">
+
+    <ImageView
+        android:id="@+id/view_toolbar_right_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginEnd="20dp"
+        android:adjustViewBounds="true"
+        android:background="@drawable/ic_settings_white_24dp" />
+
+</Toolbar>

@@ -1,6 +1,7 @@
 package com.delacrixmorgan.squark.fragment;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toolbar;
 
 import com.delacrixmorgan.squark.R;
+import com.delacrixmorgan.squark.SettingActivity;
 import com.delacrixmorgan.squark.adapter.CurrencyAdapter;
 import com.delacrixmorgan.squark.network.InterfaceAPI;
 import com.delacrixmorgan.squark.network.SquarkAPI;
@@ -46,10 +48,10 @@ public class CurrencyFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_currency, container, false);
 
-        mToolbar = (Toolbar) rootView.findViewById(R.id.fragment_currency_toolbar);
+        mToolbar = (Toolbar) rootView.findViewById(R.id.view_toolbar);
         mUpdateBarText = (TextView) rootView.findViewById(R.id.fragment_currency_update_bar_text);
         mUpdateBarButton = (ImageView) rootView.findViewById(R.id.fragment_currency_update_bar_button);
-        mSettingButton = (ImageView) rootView.findViewById(R.id.fragment_currency_toolbar_setting_button);
+        mSettingButton = (ImageView) rootView.findViewById(R.id.view_toolbar_right_button);
         mCurrencyRecyclerView = (RecyclerView) rootView.findViewById(R.id.fragment_currency_recycler_view);
 
         getActivity().setActionBar(mToolbar);
@@ -126,11 +128,7 @@ public class CurrencyFragment extends Fragment {
         mSettingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().getFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.activity_main_vg_fragment, new SettingFragment())
-                        .addToBackStack(CurrencyFragment.TAG)
-                        .commit();
+                getActivity().startActivity(new Intent(getActivity(), SettingActivity.class));
             }
         });
     }

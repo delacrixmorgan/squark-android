@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Squark</string>
+    <string name="preference_source_code">Source Code</string>
+    <string name="github_sourcecode">https://github.com/delacrixmorgan/squark-android</string>
+    <string name="preference_credits_summary">Hearts and Kisses</string>
+    <string name="preference_credits">Credits</string>
+    <string name="preference_version">Version</string>
 </resources>
