@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_weight="1"
-    android:background="@color/colorBlack"
+    android:background="@color/black"
     android:paddingBottom="15dp"
     android:paddingEnd="25dp"
     android:paddingStart="25dp"
@@ -31,14 +31,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="MYR"
-            android:textColor="@color/colorWhite" />
+            android:textColor="@color/white" />
 
         <TextView
             android:id="@+id/view_country_description"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:text="Malaysian Ringgit"
-            android:textColor="@color/colorGrey"
+            android:textColor="@color/grey"
             android:textSize="14sp" />
 
     </LinearLayout>
@@ -50,6 +50,6 @@
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:background="@drawable/ic_radio_button_checked_white_24dp"
-        android:backgroundTint="@color/colorGreen" />
+        android:backgroundTint="@color/green" />
 
 </RelativeLayout>

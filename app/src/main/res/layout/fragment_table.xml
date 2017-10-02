@@ -4,14 +4,14 @@
     android:id="@+id/fragment_table_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBlack"
+    android:background="@color/black"
     android:stretchColumns="*">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="3"
-        android:background="@color/colorGreen">
+        android:background="@color/green">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -47,14 +47,16 @@
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_swap_horiz_black_24dp"
-            android:tint="@color/colorGreen"
-            app:backgroundTint="@color/colorWhite"
+            android:tint="@color/green"
+            app:backgroundTint="@color/white"
             app:elevation="6dp"
             app:fabSize="normal" />
 
     </RelativeLayout>
 
-    <TableRow android:layout_weight="1">
+    <TableRow
+        android:layout_weight="1"
+        android:background="@drawable/shape_cell">
 
         <TextView
             android:id="@+id/tv_row_one_quantifier"
@@ -71,7 +73,9 @@
             android:text="4.2" />
     </TableRow>
 
-    <TableRow android:layout_weight="1">
+    <TableRow
+        android:layout_weight="1"
+        android:background="@drawable/shape_cell">
 
         <TextView
             android:id="@+id/tv_row_two_quantifier"
@@ -89,7 +93,9 @@
 
     </TableRow>
 
-    <TableRow android:layout_weight="1">
+    <TableRow
+        android:layout_weight="1"
+        android:background="@drawable/shape_cell">
 
         <TextView
             android:id="@+id/tv_row_three_quantifier"
@@ -107,7 +113,9 @@
 
     </TableRow>
 
-    <TableRow android:layout_weight="1">
+    <TableRow
+        android:layout_weight="1"
+        android:background="@drawable/shape_cell">
 
         <TextView
             android:id="@+id/tv_row_four_quantifier"
@@ -125,7 +133,9 @@
 
     </TableRow>
 
-    <TableRow android:layout_weight="1">
+    <TableRow
+        android:layout_weight="1"
+        android:background="@drawable/shape_cell">
 
         <TextView
             android:id="@+id/tv_row_five_quantifier"
@@ -143,7 +153,9 @@
 
     </TableRow>
 
-    <TableRow android:layout_weight="1">
+    <TableRow
+        android:layout_weight="1"
+        android:background="@drawable/shape_cell">
 
         <TextView
             android:id="@+id/tv_row_six_quantifier"
@@ -161,7 +173,9 @@
 
     </TableRow>
 
-    <TableRow android:layout_weight="1">
+    <TableRow
+        android:layout_weight="1"
+        android:background="@drawable/shape_cell">
 
         <TextView
             android:id="@+id/tv_row_seven_quantifier"
@@ -179,7 +193,9 @@
 
     </TableRow>
 
-    <TableRow android:layout_weight="1">
+    <TableRow
+        android:layout_weight="1"
+        android:background="@drawable/shape_cell">
 
         <TextView
             android:id="@+id/tv_row_eight_quantifier"
@@ -197,7 +213,9 @@
 
     </TableRow>
 
-    <TableRow android:layout_weight="1">
+    <TableRow
+        android:layout_weight="1"
+        android:background="@drawable/shape_cell">
 
         <TextView
             android:id="@+id/tv_row_nine_quantifier"

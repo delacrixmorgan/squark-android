@@ -10,4 +10,6 @@
     <color name="green">#4CAF50</color>
     <color name="red">#BF0A30</color>
     <color name="blue">#002868</color>
+
+    <color name="borderGrey">#209E9E9E</color>
 </resources>
