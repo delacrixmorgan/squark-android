@@ -10,7 +10,7 @@ import android.view.View;
  */
 
 public class OnSwipeTouchListener implements View.OnTouchListener {
-
+    private static String TAG = "OnSwipeTouchListener";
     private final GestureDetector mGestureDetector;
 
     public OnSwipeTouchListener(Context context) {
@@ -19,7 +19,11 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
+        v.performClick();
         return mGestureDetector.onTouchEvent(event);
+    }
+
+    public void onSingleTap() {
     }
 
     public void onSwipeRight() {
@@ -37,6 +41,12 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
     private final class GestureListener extends GestureDetector.SimpleOnGestureListener {
         private static final int SWIPE_THRESHOLD = 100;
         private static final int SWIPE_VELOCITY_THRESHOLD = 100;
+
+        @Override
+        public boolean onSingleTapUp(MotionEvent e) {
+            onSingleTap();
+            return true;
+        }
 
         @Override
         public boolean onDown(MotionEvent e) {

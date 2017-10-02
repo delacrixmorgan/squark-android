@@ -38,8 +38,8 @@ public class TableFragment extends Fragment {
     private static String TAG = "TableFragment";
 
     private RealmResults<Currency> mRealmResultsCurrency;
-
     private ArrayList<TextView> mQuantifiers, mResult;
+
     private TextView mBaseCurrency, mQuoteCurrency;
     private FloatingActionButton mSwapButton;
     private CurrencyFragment currencyFragment;
@@ -48,7 +48,7 @@ public class TableFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_table, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_table, container, false);
 
         mRealmResultsCurrency = Realm.getDefaultInstance().where(Currency.class).findAll();
 
@@ -69,40 +69,56 @@ public class TableFragment extends Fragment {
             mQuantifiers.add((TextView) rootView.findViewById(getResources().getIdentifier(rowQuantifierID, "id", getActivity().getPackageName())));
             mResult.add((TextView) rootView.findViewById(getResources().getIdentifier(rowResultID, "id", getActivity().getPackageName())));
 
-            // Disabled - Until Able to Figure out Overlapping Listeners
+            final int expandQuantifier = i + 1;
+            mQuantifiers.get(i).setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
+                @Override
+                public void onSingleTap() {
+                    if (mTableExpanded && (expandQuantifier == 1 || expandQuantifier == 10)) {
+                        mTableExpanded = false;
+                        SquarkEngine.getInstance().updateTable(getActivity(), mQuantifiers, mResult);
+                    } else {
+                        if (!mTableExpanded) {
+                            mTableExpanded = true;
+                            SquarkEngine.getInstance().expandTable(getActivity(), mQuantifiers, mResult, expandQuantifier);
+                        }
+                    }
+                }
 
-//            final int expandQuantifier = i + 1;
-//            mQuantifiers.get(i).setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if (mTableExpanded && (expandQuantifier == 1 || expandQuantifier == 10)) {
-//                        mTableExpanded = false;
-//                        SquarkEngine.getInstance().updateTable(getActivity(), mQuantifiers, mResult);
-//                    } else {
-//                        if (!mTableExpanded) {
-//                            mTableExpanded = true;
-//                            SquarkEngine.getInstance().expandTable(getActivity(), mQuantifiers, mResult, expandQuantifier);
-//                        }
-//                    }
-//                }
-//            });
+                @Override
+                public void onSwipeLeft() {
+                    if (!mTableExpanded) {
+                        SquarkEngine.getInstance().swipeLeft();
+                        SquarkEngine.getInstance().updateTable(getActivity(), mQuantifiers, mResult);
+                    }
+                }
+
+                @Override
+                public void onSwipeRight() {
+                    if (!mTableExpanded) {
+                        SquarkEngine.getInstance().swipeRight();
+                        SquarkEngine.getInstance().updateTable(getActivity(), mQuantifiers, mResult);
+                    }
+                }
+            });
+
+            mResult.get(i).setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
+                @Override
+                public void onSwipeLeft() {
+                    if (!mTableExpanded) {
+                        SquarkEngine.getInstance().swipeLeft();
+                        SquarkEngine.getInstance().updateTable(getActivity(), mQuantifiers, mResult);
+                    }
+                }
+
+                @Override
+                public void onSwipeRight() {
+                    if (!mTableExpanded) {
+                        SquarkEngine.getInstance().swipeRight();
+                        SquarkEngine.getInstance().updateTable(getActivity(), mQuantifiers, mResult);
+                    }
+                }
+            });
         }
-
-        rootView.setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
-            public void onSwipeLeft() {
-                if (!mTableExpanded) {
-                    SquarkEngine.getInstance().swipeLeft();
-                    SquarkEngine.getInstance().updateTable(getActivity(), mQuantifiers, mResult);
-                }
-            }
-
-            public void onSwipeRight() {
-                if (!mTableExpanded) {
-                    SquarkEngine.getInstance().swipeRight();
-                    SquarkEngine.getInstance().updateTable(getActivity(), mQuantifiers, mResult);
-                }
-            }
-        });
 
         return rootView;
     }
