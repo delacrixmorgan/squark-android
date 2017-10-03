@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.delacrixmorgan.squark.R;
@@ -73,12 +74,37 @@ public class TableFragment extends Fragment {
             mQuantifiers.get(i).setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
                 @Override
                 public void onSingleTap() {
-                    if (mTableExpanded && (expandQuantifier == 1 || expandQuantifier == 10)) {
+                    if (mTableExpanded && (expandQuantifier == 1)) {
                         mTableExpanded = false;
+
+                        mQuantifiers.get(0).setBackgroundColor(getResources().getColor(R.color.black));
+                        mQuantifiers.get(9).setBackgroundColor(getResources().getColor(R.color.black));
+                        mResult.get(0).setBackgroundColor(getResources().getColor(R.color.black));
+                        mResult.get(9).setBackgroundColor(getResources().getColor(R.color.black));
+
+                        mQuantifiers.get(0).setTextColor(getResources().getColor(R.color.white));
+                        mQuantifiers.get(9).setTextColor(getResources().getColor(R.color.white));
+                        mResult.get(0).setTextColor(getResources().getColor(R.color.white));
+                        mResult.get(9).setTextColor(getResources().getColor(R.color.white));
+
                         SquarkEngine.getInstance().updateTable(getActivity(), mQuantifiers, mResult);
+
                     } else {
+                        hintButton();
+
                         if (!mTableExpanded) {
                             mTableExpanded = true;
+
+                            mQuantifiers.get(0).setBackgroundColor(getResources().getColor(R.color.amber));
+                            mResult.get(0).setBackgroundColor(getResources().getColor(R.color.amber));
+//                            mQuantifiers.get(9).setBackgroundColor(getResources().getColor(R.color.amber));
+//                            mResult.get(9).setBackgroundColor(getResources().getColor(R.color.amber));
+
+                            mQuantifiers.get(0).setTextColor(getResources().getColor(R.color.black));
+                            mResult.get(0).setTextColor(getResources().getColor(R.color.black));
+//                            mQuantifiers.get(9).setTextColor(getResources().getColor(R.color.black));
+//                            mResult.get(9).setTextColor(getResources().getColor(R.color.black));
+
                             SquarkEngine.getInstance().expandTable(getActivity(), mQuantifiers, mResult, expandQuantifier);
                         }
                     }
@@ -89,6 +115,8 @@ public class TableFragment extends Fragment {
                     if (!mTableExpanded) {
                         SquarkEngine.getInstance().swipeLeft();
                         SquarkEngine.getInstance().updateTable(getActivity(), mQuantifiers, mResult);
+                    } else {
+                        hintButton();
                     }
                 }
 
@@ -97,16 +125,27 @@ public class TableFragment extends Fragment {
                     if (!mTableExpanded) {
                         SquarkEngine.getInstance().swipeRight();
                         SquarkEngine.getInstance().updateTable(getActivity(), mQuantifiers, mResult);
+                    } else {
+                        hintButton();
                     }
                 }
             });
 
             mResult.get(i).setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
                 @Override
+                public void onSingleTap() {
+                    if (mTableExpanded) {
+                        hintButton();
+                    }
+                }
+
+                @Override
                 public void onSwipeLeft() {
                     if (!mTableExpanded) {
                         SquarkEngine.getInstance().swipeLeft();
                         SquarkEngine.getInstance().updateTable(getActivity(), mQuantifiers, mResult);
+                    } else {
+                        hintButton();
                     }
                 }
 
@@ -115,12 +154,19 @@ public class TableFragment extends Fragment {
                     if (!mTableExpanded) {
                         SquarkEngine.getInstance().swipeRight();
                         SquarkEngine.getInstance().updateTable(getActivity(), mQuantifiers, mResult);
+                    } else {
+                        hintButton();
                     }
                 }
             });
         }
 
         return rootView;
+    }
+
+    private void hintButton() {
+        mQuantifiers.get(0).startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.wobble));
+        mResult.get(0).startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.wobble));
     }
 
     @Override
@@ -155,6 +201,18 @@ public class TableFragment extends Fragment {
                 editor.putInt(Helper.BASE_CURRENCY_PREFERENCE, Helper.getCurrencyPreference(getActivity(), Helper.QUOTE_CURRENCY_PREFERENCE));
                 editor.putInt(Helper.QUOTE_CURRENCY_PREFERENCE, Helper.getCurrencyPreference(getActivity(), Helper.BASE_CURRENCY_PREFERENCE));
                 editor.apply();
+
+                mTableExpanded = false;
+
+                mQuantifiers.get(0).setBackgroundColor(getResources().getColor(R.color.black));
+                mQuantifiers.get(9).setBackgroundColor(getResources().getColor(R.color.black));
+                mResult.get(0).setBackgroundColor(getResources().getColor(R.color.black));
+                mResult.get(9).setBackgroundColor(getResources().getColor(R.color.black));
+
+                mQuantifiers.get(0).setTextColor(getResources().getColor(R.color.white));
+                mQuantifiers.get(9).setTextColor(getResources().getColor(R.color.white));
+                mResult.get(0).setTextColor(getResources().getColor(R.color.white));
+                mResult.get(9).setTextColor(getResources().getColor(R.color.white));
 
                 updateCurrency();
             }

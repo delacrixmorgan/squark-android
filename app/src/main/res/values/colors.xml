@@ -11,5 +11,8 @@
     <color name="red">#BF0A30</color>
     <color name="blue">#002868</color>
 
+    <color name="orange">#FF9800</color>
+    <color name="amber">#FFC107</color>
+
     <color name="borderGrey">#209E9E9E</color>
 </resources>
