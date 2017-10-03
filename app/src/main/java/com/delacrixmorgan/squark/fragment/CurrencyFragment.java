@@ -16,7 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
-import com.delacrixmorgan.squark.AboutActivity;
+import com.delacrixmorgan.squark.SettingActivity;
 import com.delacrixmorgan.squark.R;
 import com.delacrixmorgan.squark.adapter.CurrencyAdapter;
 import com.delacrixmorgan.squark.network.InterfaceAPI;
@@ -128,7 +128,7 @@ public class CurrencyFragment extends Fragment {
         mSettingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().startActivity(new Intent(getActivity(), AboutActivity.class));
+                getActivity().startActivity(new Intent(getActivity(), SettingActivity.class));
             }
         });
     }

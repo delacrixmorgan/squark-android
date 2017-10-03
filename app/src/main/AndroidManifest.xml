@@ -21,9 +21,13 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".GuideActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/PreferenceTheme" />
 
         <activity
-            android:name=".AboutActivity"
+            android:name=".SettingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/PreferenceTheme" />
 

@@ -1,6 +1,7 @@
 package com.delacrixmorgan.squark;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -18,8 +19,8 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
  * Created by Delacrix Morgan on 07/08/2017.
  */
 
-public class AboutActivity extends PreferenceActivity {
-    private static String TAG = "AboutActivity";
+public class SettingActivity extends PreferenceActivity {
+    private static String TAG = "SettingActivity";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,7 +42,7 @@ public class AboutActivity extends PreferenceActivity {
         findViewById(R.id.view_toolbar_right_button).setVisibility(View.GONE);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.view_toolbar);
-        toolbar.setTitle(R.string.about);
+        toolbar.setTitle("About");
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,13 +59,14 @@ public class AboutActivity extends PreferenceActivity {
     }
 
     public static class SettingFragment extends PreferenceFragment {
-        private Preference sCreditsLibrary, sVersion;
+        private Preference sQuickGuide, sCreditsLibrary, sVersion;
 
         @Override
         public void onCreate(final Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.preferences);
 
+            sQuickGuide = findPreference("quick_guide");
             sCreditsLibrary = findPreference("credits_library");
             sVersion = findPreference("version_number");
         }
@@ -72,6 +74,14 @@ public class AboutActivity extends PreferenceActivity {
         @Override
         public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
             super.onViewCreated(view, savedInstanceState);
+
+            sQuickGuide.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    getActivity().startActivity(new Intent(getActivity(), GuideActivity.class));
+                    return true;
+                }
+            });
 
             sCreditsLibrary.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override

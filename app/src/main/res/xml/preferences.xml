@@ -3,31 +3,57 @@
 
     <Preference android:layout="@layout/view_toolbar" />
     <Preference android:layout="@layout/preference_header" />
-
-    <Preference
-        android:icon="@mipmap/ic_launcher"
-        android:key=""
-        android:summary="GitHub Repository"
-        android:title="@string/preference_source_code">
-
-        <intent
-            android:action="android.intent.action.VIEW"
-            android:data="@string/github_sourcecode" />
-
-    </Preference>
-
-    <Preference
-        android:icon="@mipmap/ic_launcher"
-        android:key="credits_library"
-        android:summary="@string/preference_credits_summary"
-        android:title="@string/preference_credits" />
-
-    <Preference
-        android:icon="@mipmap/ic_launcher"
-        android:key="version_number"
-        android:summary="1.0.0"
-        android:title="@string/preference_version" />
-
     <Preference android:layout="@layout/preference_footer" />
+
+    <Preference
+        android:icon="@mipmap/ic_launcher"
+        android:key="quick_guide"
+        android:title="Quick Guide" />
+
+    <PreferenceCategory android:title="Creator">
+        <Preference
+            android:icon="@mipmap/ic_launcher"
+            android:key=""
+            android:summary="Delacrix Morgan"
+            android:title="Built and Designed" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="About">
+        <Preference
+            android:icon="@mipmap/ic_launcher"
+            android:key=""
+            android:summary="GitHub Repository"
+            android:title="@string/preference_source_code">
+
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="@string/github_sourcecode" />
+
+        </Preference>
+
+        <Preference
+            android:icon="@mipmap/ic_launcher"
+            android:key=""
+            android:summary="Fixer.io"
+            android:title="Currency Database">
+
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="http://fixer.io/" />
+
+        </Preference>
+
+        <Preference
+            android:icon="@mipmap/ic_launcher"
+            android:key="credits_library"
+            android:summary="@string/preference_credits_summary"
+            android:title="@string/preference_credits" />
+
+        <Preference
+            android:icon="@mipmap/ic_launcher"
+            android:key="version_number"
+            android:summary="1.0.0"
+            android:title="@string/preference_version" />
+    </PreferenceCategory>
 
 </PreferenceScreen>
