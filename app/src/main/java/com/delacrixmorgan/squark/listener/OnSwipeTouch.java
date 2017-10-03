@@ -9,11 +9,11 @@ import android.view.View;
  * Created by Delacrix Morgan on 11/07/2017.
  */
 
-public class OnSwipeTouchListener implements View.OnTouchListener {
+public class OnSwipeTouch implements View.OnTouchListener {
     private static String TAG = "OnSwipeTouchListener";
     private final GestureDetector mGestureDetector;
 
-    public OnSwipeTouchListener(Context context) {
+    public OnSwipeTouch(Context context) {
         mGestureDetector = new GestureDetector(context, new GestureListener());
     }
 
@@ -21,6 +21,10 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
     public boolean onTouch(View v, MotionEvent event) {
         v.performClick();
         return mGestureDetector.onTouchEvent(event);
+    }
+
+    public interface OnSwipeTouchListener {
+
     }
 
     public void onSingleTap() {

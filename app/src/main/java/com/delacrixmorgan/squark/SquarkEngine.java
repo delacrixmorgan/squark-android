@@ -1,7 +1,6 @@
 package com.delacrixmorgan.squark;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
@@ -63,8 +62,8 @@ public class SquarkEngine {
         BigDecimal bigQuantifier, bigResult;
 
         for (int i = 0; i < 10; i++) {
-            double m1 = (expandQuantifier * mMultiplier) + ((mMultiplier / 10) * (i + 1));
-            double m2 = (expandQuantifier * mMultiplier) + mConversionRate * (mMultiplier / 10) * (i + 1);
+            double m1 = (expandQuantifier * mMultiplier) + ((mMultiplier / 10) * i);
+            double m2 = m1 * mConversionRate;
 
             bigQuantifier = new BigDecimal(m1).setScale(2, BigDecimal.ROUND_HALF_UP);
             bigResult = new BigDecimal(m2).setScale(2, BigDecimal.ROUND_HALF_UP);
