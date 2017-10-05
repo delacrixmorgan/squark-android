@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/colorPrimary"
-    android:navigationIcon="@drawable/ic_arrow_back_white_24dp"
-    android:padding="15dp">
+    android:minHeight="100dp"
+    android:navigationIcon="@drawable/ic_arrow_back_white_24dp">
 
     <RelativeLayout
         android:id="@+id/view_toolbar_layout_right_button"

@@ -13,18 +13,26 @@
 
         <TextView
             android:id="@+id/activity_guide_text"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="1"
+            android:textAlignment="center"
             android:textSize="50sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:text="Swipe Right"
             android:textSize="25sp" />
 
     </LinearLayout>
+
+    <TableLayout
+        android:id="@+id/activity_guide_table"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:stretchColumns="*"
+        android:visibility="gone" />
 
 </RelativeLayout>

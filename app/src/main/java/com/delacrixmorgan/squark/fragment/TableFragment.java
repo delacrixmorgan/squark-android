@@ -9,19 +9,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.delacrixmorgan.squark.R;
 import com.delacrixmorgan.squark.SquarkEngine;
-import com.delacrixmorgan.squark.listener.OnSwipeTouch;
 import com.delacrixmorgan.squark.model.Currency;
 import com.delacrixmorgan.squark.network.InterfaceAPI;
 import com.delacrixmorgan.squark.network.SquarkAPI;
 import com.delacrixmorgan.squark.shared.Helper;
 import com.delacrixmorgan.squark.wrapper.APIWrapper;
-
-import java.util.ArrayList;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -38,11 +35,10 @@ import static android.content.Context.MODE_PRIVATE;
 public class TableFragment extends Fragment {
     private static String TAG = "TableFragment";
     private RealmResults<Currency> mRealmResultsCurrency;
-    private ArrayList<TextView> mQuantifiers, mResult;
     private TextView mBaseCurrency, mQuoteCurrency;
     private FloatingActionButton mSwapButton;
     private CurrencyFragment currencyFragment;
-    private Boolean mTableExpanded;
+    private TableLayout mTableLayout;
 
     @Nullable
     @Override
@@ -54,107 +50,7 @@ public class TableFragment extends Fragment {
         mBaseCurrency = (TextView) rootView.findViewById(R.id.fragment_table_base_currency);
         mQuoteCurrency = (TextView) rootView.findViewById(R.id.fragment_table_quote_currency);
         mSwapButton = (FloatingActionButton) rootView.findViewById(R.id.fragment_table_swap_button);
-
-        currencyFragment = new CurrencyFragment();
-        mQuantifiers = new ArrayList<>();
-        mResult = new ArrayList<>();
-
-        mTableExpanded = false;
-
-        for (int i = 0; i < 10; i++) {
-            String rowQuantifierID = "tv_row_" + Helper.numberNames[i] + "_quantifier";
-            String rowResultID = "tv_row_" + Helper.numberNames[i] + "_result";
-
-            mQuantifiers.add((TextView) rootView.findViewById(getResources().getIdentifier(rowQuantifierID, "id", getActivity().getPackageName())));
-            mResult.add((TextView) rootView.findViewById(getResources().getIdentifier(rowResultID, "id", getActivity().getPackageName())));
-
-            final int expandQuantifier = i + 1;
-
-            mQuantifiers.get(i).setOnTouchListener(new OnSwipeTouch(getActivity()) {
-                @Override
-                public void onSingleTap() {
-                    if (mTableExpanded && (expandQuantifier == 1)) {
-                        mTableExpanded = false;
-
-                        mQuantifiers.get(0).setBackgroundColor(getResources().getColor(R.color.black));
-                        mQuantifiers.get(9).setBackgroundColor(getResources().getColor(R.color.black));
-                        mResult.get(0).setBackgroundColor(getResources().getColor(R.color.black));
-                        mResult.get(9).setBackgroundColor(getResources().getColor(R.color.black));
-
-                        mQuantifiers.get(0).setTextColor(getResources().getColor(R.color.white));
-                        mQuantifiers.get(9).setTextColor(getResources().getColor(R.color.white));
-                        mResult.get(0).setTextColor(getResources().getColor(R.color.white));
-                        mResult.get(9).setTextColor(getResources().getColor(R.color.white));
-
-                        SquarkEngine.getInstance().updateTable(getActivity(), mQuantifiers, mResult);
-
-                    } else {
-                        hintButton();
-
-                        if (!mTableExpanded) {
-                            mTableExpanded = true;
-
-                            mQuantifiers.get(0).setBackgroundColor(getResources().getColor(R.color.amber));
-                            mResult.get(0).setBackgroundColor(getResources().getColor(R.color.amber));
-
-                            mQuantifiers.get(0).setTextColor(getResources().getColor(R.color.black));
-                            mResult.get(0).setTextColor(getResources().getColor(R.color.black));
-
-                            SquarkEngine.getInstance().expandTable(getActivity(), mQuantifiers, mResult, expandQuantifier);
-                        }
-                    }
-                }
-
-                @Override
-                public void onSwipeLeft() {
-                    if (!mTableExpanded) {
-                        SquarkEngine.getInstance().swipeLeft();
-                        SquarkEngine.getInstance().updateTable(getActivity(), mQuantifiers, mResult);
-                    } else {
-                        hintButton();
-                    }
-                }
-
-                @Override
-                public void onSwipeRight() {
-                    if (!mTableExpanded) {
-                        SquarkEngine.getInstance().swipeRight();
-                        SquarkEngine.getInstance().updateTable(getActivity(), mQuantifiers, mResult);
-                    } else {
-                        hintButton();
-                    }
-                }
-            });
-
-            mResult.get(i).setOnTouchListener(new OnSwipeTouch(getActivity()) {
-                @Override
-                public void onSingleTap() {
-                    if (mTableExpanded) {
-                        hintButton();
-                    }
-                }
-
-                @Override
-                public void onSwipeLeft() {
-                    if (!mTableExpanded) {
-                        SquarkEngine.getInstance().swipeLeft();
-                        SquarkEngine.getInstance().updateTable(getActivity(), mQuantifiers, mResult);
-                    } else {
-                        hintButton();
-                    }
-                }
-
-                @Override
-                public void onSwipeRight() {
-                    if (!mTableExpanded) {
-                        SquarkEngine.getInstance().swipeRight();
-                        SquarkEngine.getInstance().updateTable(getActivity(), mQuantifiers, mResult);
-                    } else {
-                        hintButton();
-                    }
-                }
-            });
-        }
+        mTableLayout = (TableLayout) rootView.findViewById(R.id.fragment_table_layout);
 
         return rootView;
     }
@@ -162,6 +58,9 @@ public class TableFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        currencyFragment = new CurrencyFragment();
+        SquarkEngine.getInstance().updateTable(getActivity(), mTableLayout);
 
         if (!Helper.getCurrentDate().equals(getActivity().getSharedPreferences(Helper.SHARED_PREFERENCE, MODE_PRIVATE).getString(Helper.DATE_PREFERENCE, "01/01/2000"))) {
             Call<APIWrapper> call = SquarkAPI.getClient().create(InterfaceAPI.class).updateRates("USD");
@@ -191,18 +90,6 @@ public class TableFragment extends Fragment {
                 editor.putInt(Helper.BASE_CURRENCY_PREFERENCE, Helper.getCurrencyPreference(getActivity(), Helper.QUOTE_CURRENCY_PREFERENCE));
                 editor.putInt(Helper.QUOTE_CURRENCY_PREFERENCE, Helper.getCurrencyPreference(getActivity(), Helper.BASE_CURRENCY_PREFERENCE));
                 editor.apply();
-
-                mTableExpanded = false;
-
-                mQuantifiers.get(0).setBackgroundColor(getResources().getColor(R.color.black));
-                mQuantifiers.get(9).setBackgroundColor(getResources().getColor(R.color.black));
-                mResult.get(0).setBackgroundColor(getResources().getColor(R.color.black));
-                mResult.get(9).setBackgroundColor(getResources().getColor(R.color.black));
-
-                mQuantifiers.get(0).setTextColor(getResources().getColor(R.color.white));
-                mQuantifiers.get(9).setTextColor(getResources().getColor(R.color.white));
-                mResult.get(0).setTextColor(getResources().getColor(R.color.white));
-                mResult.get(9).setTextColor(getResources().getColor(R.color.white));
 
                 updateCurrency();
             }
@@ -248,14 +135,9 @@ public class TableFragment extends Fragment {
         Currency quoteCurrency = mRealmResultsCurrency.get(Helper.getCurrencyPreference(getActivity(), Helper.QUOTE_CURRENCY_PREFERENCE));
 
         SquarkEngine.getInstance().updateConversionRate(baseCurrency, quoteCurrency);
-        SquarkEngine.getInstance().updateTable(getActivity(), mQuantifiers, mResult);
+        SquarkEngine.getInstance().updateTable(getActivity(), mTableLayout);
 
         mBaseCurrency.setText(baseCurrency.getCode());
         mQuoteCurrency.setText(quoteCurrency.getCode());
-    }
-
-    private void hintButton() {
-        mQuantifiers.get(0).startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.wobble));
-        mResult.get(0).startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.wobble));
     }
 }

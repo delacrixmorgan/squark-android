@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
-    android:stretchColumns="*">
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3"
+        android:layout_height="100dp"
         android:background="@color/green">
 
         <LinearLayout
@@ -53,200 +51,10 @@
 
     </RelativeLayout>
 
-    <TableRow
-        android:layout_weight="1"
-        android:background="@drawable/shape_cell">
-
-        <TextView
-            android:id="@+id/tv_row_one_quantifier"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="1" />
-
-        <TextView
-            android:id="@+id/tv_row_one_result"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="4.2" />
-    </TableRow>
-
-    <TableRow
-        android:layout_weight="1"
-        android:background="@drawable/shape_cell">
-
-        <TextView
-            android:id="@+id/tv_row_two_quantifier"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="2" />
-
-        <TextView
-            android:id="@+id/tv_row_two_result"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="8.4" />
-
-    </TableRow>
-
-    <TableRow
-        android:layout_weight="1"
-        android:background="@drawable/shape_cell">
-
-        <TextView
-            android:id="@+id/tv_row_three_quantifier"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="3" />
-
-        <TextView
-            android:id="@+id/tv_row_three_result"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="12.6" />
-
-    </TableRow>
-
-    <TableRow
-        android:layout_weight="1"
-        android:background="@drawable/shape_cell">
-
-        <TextView
-            android:id="@+id/tv_row_four_quantifier"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="4" />
-
-        <TextView
-            android:id="@+id/tv_row_four_result"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="16.8" />
-
-    </TableRow>
-
-    <TableRow
-        android:layout_weight="1"
-        android:background="@drawable/shape_cell">
-
-        <TextView
-            android:id="@+id/tv_row_five_quantifier"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="5" />
-
-        <TextView
-            android:id="@+id/tv_row_five_result"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="21.0" />
-
-    </TableRow>
-
-    <TableRow
-        android:layout_weight="1"
-        android:background="@drawable/shape_cell">
-
-        <TextView
-            android:id="@+id/tv_row_six_quantifier"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="6" />
-
-        <TextView
-            android:id="@+id/tv_row_six_result"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="25.2" />
-
-    </TableRow>
-
-    <TableRow
-        android:layout_weight="1"
-        android:background="@drawable/shape_cell">
-
-        <TextView
-            android:id="@+id/tv_row_seven_quantifier"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="7" />
-
-        <TextView
-            android:id="@+id/tv_row_seven_result"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="29.4" />
-
-    </TableRow>
-
-    <TableRow
-        android:layout_weight="1"
-        android:background="@drawable/shape_cell">
-
-        <TextView
-            android:id="@+id/tv_row_eight_quantifier"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="8" />
-
-        <TextView
-            android:id="@+id/tv_row_eight_result"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="33.6" />
-
-    </TableRow>
-
-    <TableRow
-        android:layout_weight="1"
-        android:background="@drawable/shape_cell">
-
-        <TextView
-            android:id="@+id/tv_row_nine_quantifier"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="9" />
-
-        <TextView
-            android:id="@+id/tv_row_nine_result"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="37.8" />
-
-    </TableRow>
-
-    <TableRow android:layout_weight="1">
-
-        <TextView
-            android:id="@+id/tv_row_ten_quantifier"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="10" />
-
-        <TextView
-            android:id="@+id/tv_row_ten_result"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="42.0" />
-
-    </TableRow>
-</TableLayout>
+    <TableLayout
+        android:id="@+id/fragment_table_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black"
+        android:stretchColumns="*" />
+</LinearLayout>

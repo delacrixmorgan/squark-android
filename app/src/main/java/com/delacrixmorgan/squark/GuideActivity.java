@@ -5,9 +5,9 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.animation.AnimationUtils;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
-
-import com.delacrixmorgan.squark.listener.OnSwipeTouch;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -35,26 +35,33 @@ public class GuideActivity extends Activity {
                 .build()
         );
 
-        mGuideText = (TextView) findViewById(R.id.activity_guide_text);
-        mMultiplier = 1;
+        TableLayout tableLayout = (TableLayout) findViewById(R.id.activity_guide_table);
 
-        findViewById(android.R.id.content).setOnTouchListener(new OnSwipeTouch(this) {
-            @Override
-            public void onSwipeLeft() {
-                if (mMultiplier < 1000000) {
-                    mMultiplier *= 10;
-                }
-                wobbleText();
-            }
+        for (int i = 0; i < 10; i++) {
+            TableRow tableRow = (TableRow) getLayoutInflater().inflate(R.layout.view_row, tableLayout, false);
+            tableLayout.addView(tableRow);
+        }
 
-            @Override
-            public void onSwipeRight() {
-                if (mMultiplier > 0.1) {
-                    mMultiplier /= 10;
-                }
-                wobbleText();
-            }
-        });
+//        mGuideText = (TextView) findViewById(R.id.activity_guide_text);
+//        mMultiplier = 1;
+//
+//        findViewById(android.R.id.content).setOnTouchListener(new OnSwipeTouch(this) {
+//            @Override
+//            public void onSwipeLeft() {
+//                if (mMultiplier < 1000000) {
+//                    mMultiplier *= 10;
+//                }
+//                wobbleText();
+//            }
+//
+//            @Override
+//            public void onSwipeRight() {
+//                if (mMultiplier > 1) {
+//                    mMultiplier /= 10;
+//                }
+//                wobbleText();
+//            }
+//        });
     }
 
     @Override
@@ -63,7 +70,7 @@ public class GuideActivity extends Activity {
     }
 
     private void wobbleText() {
-        DecimalFormat resultFormat = new DecimalFormat("###,##0.00");
+        DecimalFormat resultFormat = new DecimalFormat("###,##0");
 
         mGuideText.setText(String.valueOf(resultFormat.format(new BigDecimal(mMultiplier).setScale(2, BigDecimal.ROUND_HALF_UP))));
         mGuideText.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.wobble));

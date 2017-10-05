@@ -22,19 +22,6 @@ public class Helper {
 
     final public static String TYPE_CONVERT = "TYPE_CONVERT";
 
-    public static final String[] numberNames = {
-            "one",
-            "two",
-            "three",
-            "four",
-            "five",
-            "six",
-            "seven",
-            "eight",
-            "nine",
-            "ten"
-    };
-
     public static String getCurrentDate() {
         return new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH).format(new Date());
     }
