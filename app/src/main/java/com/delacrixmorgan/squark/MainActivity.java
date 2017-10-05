@@ -2,7 +2,6 @@ package com.delacrixmorgan.squark;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 
 import com.delacrixmorgan.squark.fragment.TableFragment;
@@ -18,11 +17,13 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends Activity {
     private static String TAG = "MainActivity";
+    private TableFragment mTableFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mTableFragment = new TableFragment();
 
         //startActivity(new Intent(this, GuideActivity.class));
 
@@ -44,12 +45,21 @@ public class MainActivity extends Activity {
 
         getFragmentManager()
                 .beginTransaction()
-                .replace(R.id.activity_main_vg_fragment, new TableFragment())
+                .replace(R.id.activity_main_vg_fragment, mTableFragment)
                 .commit();
     }
 
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (SquarkEngine.getInstance().getmTableExpanded() && getFragmentManager().getBackStackEntryCount() == 0) {
+            mTableFragment.updateCurrency();
+        } else {
+            super.onBackPressed();
+        }
     }
 }

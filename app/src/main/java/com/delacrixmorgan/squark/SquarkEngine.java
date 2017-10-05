@@ -150,4 +150,8 @@ public class SquarkEngine {
         m1.setTextColor(activity.getResources().getColor(R.color.black));
         m2.setTextColor(activity.getResources().getColor(R.color.black));
     }
+
+    public Boolean getmTableExpanded() {
+        return mTableExpanded;
+    }
 }
