@@ -13,11 +13,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
-import com.delacrixmorgan.squark.SettingActivity;
 import com.delacrixmorgan.squark.R;
+import com.delacrixmorgan.squark.SettingActivity;
 import com.delacrixmorgan.squark.adapter.CurrencyAdapter;
 import com.delacrixmorgan.squark.network.InterfaceAPI;
 import com.delacrixmorgan.squark.network.SquarkAPI;
@@ -40,7 +41,8 @@ public class CurrencyFragment extends Fragment {
     private Toolbar mToolbar;
     private RecyclerView mCurrencyRecyclerView;
     private TextView mUpdateBarText;
-    private ImageView mUpdateBarButton, mSettingButton;
+    private ImageView mUpdateBarButton;
+    private RelativeLayout mSettingButton;
 
     @Nullable
     @Override
@@ -50,7 +52,7 @@ public class CurrencyFragment extends Fragment {
         mToolbar = (Toolbar) rootView.findViewById(R.id.view_toolbar);
         mUpdateBarText = (TextView) rootView.findViewById(R.id.fragment_currency_update_bar_text);
         mUpdateBarButton = (ImageView) rootView.findViewById(R.id.fragment_currency_update_bar_button);
-        mSettingButton = (ImageView) rootView.findViewById(R.id.view_toolbar_right_button);
+        mSettingButton = (RelativeLayout) rootView.findViewById(R.id.view_toolbar_layout_right_button);
         mCurrencyRecyclerView = (RecyclerView) rootView.findViewById(R.id.fragment_currency_recycler_view);
 
         getActivity().setActionBar(mToolbar);

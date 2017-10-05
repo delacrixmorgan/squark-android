@@ -39,7 +39,7 @@ public class SettingActivity extends PreferenceActivity {
         super.onPostCreate(savedInstanceState);
 
         getLayoutInflater().inflate(R.layout.view_toolbar, (ViewGroup) findViewById(android.R.id.content));
-        findViewById(R.id.view_toolbar_right_button).setVisibility(View.GONE);
+        findViewById(R.id.view_toolbar_layout_right_button).setVisibility(View.GONE);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.view_toolbar);
         toolbar.setTitle("About");
