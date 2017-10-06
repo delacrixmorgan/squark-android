@@ -127,6 +127,8 @@ public class SquarkEngine {
                 if (!mTableExpanded) {
                     mMultiplier = mMultiplier < 1000000 ? mMultiplier *= 10 : mMultiplier;
                     updateTable(activity, tableLayout);
+                } else {
+                    tableLayout.getChildAt(0).startAnimation(AnimationUtils.loadAnimation(activity, R.anim.wobble));
                 }
             }
 
@@ -135,6 +137,22 @@ public class SquarkEngine {
                 if (!mTableExpanded) {
                     mMultiplier = mMultiplier > 0.1 ? mMultiplier /= 10 : mMultiplier;
                     updateTable(activity, tableLayout);
+                } else {
+                    tableLayout.getChildAt(0).startAnimation(AnimationUtils.loadAnimation(activity, R.anim.wobble));
+                }
+            }
+
+            @Override
+            public void onSwipeTop() {
+                if (mTableExpanded) {
+                    tableLayout.getChildAt(0).startAnimation(AnimationUtils.loadAnimation(activity, R.anim.wobble));
+                }
+            }
+
+            @Override
+            public void onSwipeBottom() {
+                if (mTableExpanded) {
+                    tableLayout.getChildAt(0).startAnimation(AnimationUtils.loadAnimation(activity, R.anim.wobble));
                 }
             }
         });

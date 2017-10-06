@@ -81,7 +81,7 @@ public class GuideActivity extends Activity {
                 mSingleLayout.setVisibility(View.GONE);
                 mExpandedLayout.setVisibility(View.VISIBLE);
                 mStartButton.setVisibility(View.GONE);
-                
+
                 expandTable();
             }
         });
@@ -166,6 +166,16 @@ public class GuideActivity extends Activity {
 
                 @Override
                 public void onSwipeRight() {
+                    mTableLayout.getChildAt(0).startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.wobble));
+                }
+
+                @Override
+                public void onSwipeTop() {
+                    mTableLayout.getChildAt(0).startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.wobble));
+                }
+
+                @Override
+                public void onSwipeBottom() {
                     mTableLayout.getChildAt(0).startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.wobble));
                 }
             });
