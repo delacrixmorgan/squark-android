@@ -26,11 +26,13 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class GuideActivity extends Activity {
     private static String TAG = "GuideActivity";
     private TableLayout mTableLayout;
-    private TextView mGuideText;
+    private TextView mGuideValue, mGuideHint;
     private double mMultiplier;
 
     private LinearLayout mSingleLayout, mExpandedLayout;
     private DecimalFormat mDecimalFormat, mPointFormat;
+
+    private Boolean mSwipeLeft, mSwipeRight, mExpand, mCollapse;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,7 +52,8 @@ public class GuideActivity extends Activity {
         mSingleLayout = (LinearLayout) findViewById(R.id.activity_guide_single_layout);
         mExpandedLayout = (LinearLayout) findViewById(R.id.activity_guide_expanded_layout);
 
-        mGuideText = (TextView) findViewById(R.id.activity_guide_text);
+        mGuideValue = (TextView) findViewById(R.id.activity_guide_value);
+        mGuideHint = (TextView) findViewById(R.id.activity_guide_hint);
         mTableLayout = (TableLayout) findViewById(R.id.activity_guide_table);
 
         for (int i = 0; i < 10; i++) {
@@ -58,7 +61,7 @@ public class GuideActivity extends Activity {
             mTableLayout.addView(tableRow);
         }
 
-        mGuideText.setOnClickListener(new View.OnClickListener() {
+        mGuideValue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mSingleLayout.setVisibility(View.GONE);
@@ -68,11 +71,20 @@ public class GuideActivity extends Activity {
             }
         });
 
+        mGuideHint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                wobbleText();
+            }
+        });
+
         findViewById(android.R.id.content).setOnTouchListener(new OnSwipeTouch(this) {
             @Override
             public void onSwipeLeft() {
                 if (mMultiplier < 1000000) {
                     mMultiplier *= 10;
+                } else {
+
                 }
                 wobbleText();
             }
@@ -117,8 +129,7 @@ public class GuideActivity extends Activity {
                 @Override
                 public void onSingleTap() {
                     if (expandQuantifier == 0) {
-                        mSingleLayout.setVisibility(View.VISIBLE);
-                        mExpandedLayout.setVisibility(View.GONE);
+                        collapseExpandedLayout();
                     } else {
                         mTableLayout.getChildAt(0).startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.wobble));
                     }
@@ -139,18 +150,30 @@ public class GuideActivity extends Activity {
         }
     }
 
-    private void wobbleText() {
-        mGuideText.setText(String.valueOf(mDecimalFormat.format(new BigDecimal(mMultiplier).setScale(2, BigDecimal.ROUND_HALF_UP))));
-        mGuideText.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.wobble));
-    }
-
     @Override
     public void onBackPressed() {
         if (mExpandedLayout.getVisibility() == View.VISIBLE) {
-            mSingleLayout.setVisibility(View.VISIBLE);
-            mExpandedLayout.setVisibility(View.GONE);
+            collapseExpandedLayout();
         } else {
             super.onBackPressed();
         }
     }
+
+    private void cycleHints() {
+        // Good Job
+
+        // Try This
+    }
+
+    private void collapseExpandedLayout() {
+        mSingleLayout.setVisibility(View.VISIBLE);
+        mExpandedLayout.setVisibility(View.GONE);
+    }
+
+    private void wobbleText() {
+        mGuideValue.setText(String.valueOf(mDecimalFormat.format(new BigDecimal(mMultiplier).setScale(2, BigDecimal.ROUND_HALF_UP))));
+        mGuideValue.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.wobble));
+    }
+
+
 }
