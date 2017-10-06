@@ -103,8 +103,8 @@ public class SquarkEngine {
         }
     }
 
-    private void setupRowListener(final Activity activity, final TableLayout tableLayout, TextView quantifier, final int expandQuantifier) {
-        quantifier.setOnTouchListener(new OnSwipeTouch(activity) {
+    private void setupRowListener(final Activity activity, final TableLayout tableLayout, TextView textView, final int expandQuantifier) {
+        textView.setOnTouchListener(new OnSwipeTouch(activity) {
             @Override
             public void onSingleTap() {
                 if (mTableExpanded && (expandQuantifier == 0)) {

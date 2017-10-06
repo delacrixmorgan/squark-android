@@ -13,4 +13,5 @@
     <color name="amber">#FFC107</color>
 
     <color name="borderGrey">#209E9E9E</color>
+    <color name="borderWhite">#20FFFFFF</color>
 </resources>

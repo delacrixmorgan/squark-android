@@ -5,6 +5,7 @@
     android:background="@color/green">
 
     <LinearLayout
+        android:id="@+id/activity_guide_single_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -28,11 +29,20 @@
 
     </LinearLayout>
 
-    <TableLayout
-        android:id="@+id/activity_guide_table"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/activity_guide_expanded_layout"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:stretchColumns="*"
-        android:visibility="gone" />
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TableLayout
+            android:id="@+id/activity_guide_table"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:stretchColumns="*" />
+
+    </LinearLayout>
+
 
 </RelativeLayout>

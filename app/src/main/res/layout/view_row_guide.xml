@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_weight="1"
-    android:background="@drawable/shape_cell">
+    android:background="@drawable/shape_cell_guide">
 
     <TextView
         android:id="@+id/view_row_quantifier"
@@ -9,10 +9,4 @@
         android:layout_height="match_parent"
         android:gravity="center" />
 
-    <TextView
-        android:id="@+id/view_row_result"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center" />
-    
 </TableRow>
