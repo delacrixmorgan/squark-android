@@ -2,7 +2,6 @@ package com.delacrixmorgan.squark;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 
 import com.delacrixmorgan.squark.fragment.TableFragment;
@@ -25,8 +24,6 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mTableFragment = new TableFragment();
-
-        startActivity(new Intent(this, GuideActivity.class));
 
         Realm.init(this);
         RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()

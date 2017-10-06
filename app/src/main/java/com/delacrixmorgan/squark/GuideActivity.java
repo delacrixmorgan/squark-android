@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -26,13 +27,14 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class GuideActivity extends Activity {
     private static String TAG = "GuideActivity";
     private TableLayout mTableLayout;
+    private Button mStartButton;
     private TextView mGuideValue, mGuideHint;
     private double mMultiplier;
 
     private LinearLayout mSingleLayout, mExpandedLayout;
     private DecimalFormat mDecimalFormat, mPointFormat;
 
-    private Boolean mSwipeLeft, mSwipeRight, mExpand, mCollapse;
+    private Boolean mSwipeLeft, mSwipeRight, mExpand;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,6 +47,10 @@ public class GuideActivity extends Activity {
                 .build()
         );
 
+        mSwipeLeft = false;
+        mSwipeRight = false;
+        mExpand = false;
+
         mDecimalFormat = new DecimalFormat("###,##0");
         mPointFormat = new DecimalFormat("###,##0.00");
         mMultiplier = 1;
@@ -54,6 +60,7 @@ public class GuideActivity extends Activity {
 
         mGuideValue = (TextView) findViewById(R.id.activity_guide_value);
         mGuideHint = (TextView) findViewById(R.id.activity_guide_hint);
+        mStartButton = (Button) findViewById(R.id.activity_guide_start_button);
         mTableLayout = (TableLayout) findViewById(R.id.activity_guide_table);
 
         for (int i = 0; i < 10; i++) {
@@ -61,12 +68,20 @@ public class GuideActivity extends Activity {
             mTableLayout.addView(tableRow);
         }
 
+        mStartButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         mGuideValue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mSingleLayout.setVisibility(View.GONE);
                 mExpandedLayout.setVisibility(View.VISIBLE);
-
+                mStartButton.setVisibility(View.GONE);
+                
                 expandTable();
             }
         });
@@ -81,18 +96,26 @@ public class GuideActivity extends Activity {
         findViewById(android.R.id.content).setOnTouchListener(new OnSwipeTouch(this) {
             @Override
             public void onSwipeLeft() {
+                mSwipeLeft = true;
+                cycleHints();
+
                 if (mMultiplier < 1000000) {
                     mMultiplier *= 10;
                 } else {
-
+                    mGuideHint.setText("Okay, Swipe Left");
                 }
                 wobbleText();
             }
 
             @Override
             public void onSwipeRight() {
+                mSwipeRight = true;
+                cycleHints();
+
                 if (mMultiplier > 1) {
                     mMultiplier /= 10;
+                } else {
+                    mGuideHint.setText("Alright, Swipe Right");
                 }
                 wobbleText();
             }
@@ -130,6 +153,7 @@ public class GuideActivity extends Activity {
                 public void onSingleTap() {
                     if (expandQuantifier == 0) {
                         collapseExpandedLayout();
+                        cycleHints();
                     } else {
                         mTableLayout.getChildAt(0).startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.wobble));
                     }
@@ -160,12 +184,21 @@ public class GuideActivity extends Activity {
     }
 
     private void cycleHints() {
-        // Good Job
-
-        // Try This
+        if (!mSwipeLeft) {
+            mGuideHint.setText("Beautiful, Swipe Left");
+        } else if (!mSwipeRight) {
+            mGuideHint.setText("Wonderful, Swipe Right");
+        } else if (!mExpand) {
+            mGuideHint.setText("Neat, Click Number");
+        } else {
+            mGuideHint.setText("You're All Set!");
+            mStartButton.setVisibility(View.VISIBLE);
+        }
     }
 
     private void collapseExpandedLayout() {
+        mExpand = true;
+        cycleHints();
         mSingleLayout.setVisibility(View.VISIBLE);
         mExpandedLayout.setVisibility(View.GONE);
     }
@@ -174,6 +207,4 @@ public class GuideActivity extends Activity {
         mGuideValue.setText(String.valueOf(mDecimalFormat.format(new BigDecimal(mMultiplier).setScale(2, BigDecimal.ROUND_HALF_UP))));
         mGuideValue.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.wobble));
     }
-
-
 }
