@@ -1,6 +1,9 @@
 package com.delacrixmorgan.squark.shared;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -33,5 +36,11 @@ public class Helper {
 
     public static int getCurrencyPreference(Context context, String typeCurrency) {
         return context.getSharedPreferences(SHARED_PREFERENCE, MODE_PRIVATE).getInt(typeCurrency, 0);
+    }
+
+    public static void launchPage(Activity activity, String url) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+        activity.startActivity(intent);
     }
 }
