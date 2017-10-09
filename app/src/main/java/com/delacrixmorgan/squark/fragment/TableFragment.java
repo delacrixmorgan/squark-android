@@ -70,9 +70,18 @@ public class TableFragment extends Fragment {
                     SharedPreferences.Editor editor = getActivity().getSharedPreferences(Helper.SHARED_PREFERENCE, MODE_PRIVATE).edit();
                     editor.putString(Helper.DATE_PREFERENCE, Helper.getCurrentDate());
                     editor.putString(Helper.TIME_PREFERENCE, Helper.getCurrentTime());
-                    editor.apply();
 
                     response.body().updateCurrencyList();
+
+                    Currency m1 = mRealmResultsCurrency.where().equalTo("code", "USD").findFirst();
+                    Currency m2 = mRealmResultsCurrency.where().equalTo("code", "MYR").findFirst();
+
+                    editor.putInt(Helper.BASE_CURRENCY_PREFERENCE, mRealmResultsCurrency.indexOf(m1));
+                    editor.putInt(Helper.QUOTE_CURRENCY_PREFERENCE, mRealmResultsCurrency.indexOf(m2));
+
+                    editor.apply();
+
+                    getActivity().recreate();
                 }
 
                 @Override

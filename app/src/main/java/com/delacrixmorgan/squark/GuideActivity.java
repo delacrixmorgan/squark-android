@@ -2,6 +2,7 @@ package com.delacrixmorgan.squark;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.delacrixmorgan.squark.listener.OnSwipeTouch;
+import com.delacrixmorgan.squark.shared.Helper;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -71,6 +73,10 @@ public class GuideActivity extends Activity {
         mStartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SharedPreferences.Editor editor = getSharedPreferences(Helper.SHARED_PREFERENCE, MODE_PRIVATE).edit();
+                editor.putBoolean(Helper.QUICK_GUIDE_PREFERENCE, true);
+                editor.apply();
+
                 finish();
             }
         });

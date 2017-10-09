@@ -9,10 +9,10 @@
 
     <RelativeLayout
         android:id="@+id/view_toolbar_layout_right_button"
-        android:layout_width="56dp"
+        android:layout_width="76dp"
         android:layout_height="56dp"
         android:layout_gravity="end"
-        android:layout_marginEnd="20dp">
+        android:paddingEnd="20dp">
 
         <ImageView
             android:layout_width="wrap_content"

@@ -17,6 +17,7 @@ public class Helper {
     final public static String SHARED_PREFERENCE = "SHARED_PREFERENCE";
     final public static String DATE_PREFERENCE = "DATE_PREFERENCE";
     final public static String TIME_PREFERENCE = "TIME_PREFERENCE";
+    final public static String QUICK_GUIDE_PREFERENCE = "QUICK_GUIDE_PREFERENCE";
     final public static String BASE_CURRENCY_PREFERENCE = "BASE_CURRENCY_PREFERENCE";
     final public static String QUOTE_CURRENCY_PREFERENCE = "QUOTE_CURRENCY_PREFERENCE";
 
@@ -31,6 +32,6 @@ public class Helper {
     }
 
     public static int getCurrencyPreference(Context context, String typeCurrency) {
-        return context.getSharedPreferences(SHARED_PREFERENCE, MODE_PRIVATE).getInt(typeCurrency, 1);
+        return context.getSharedPreferences(SHARED_PREFERENCE, MODE_PRIVATE).getInt(typeCurrency, 0);
     }
 }

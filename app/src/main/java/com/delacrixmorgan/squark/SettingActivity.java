@@ -9,8 +9,6 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.support.annotation.Nullable;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toolbar;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -32,25 +30,6 @@ public class SettingActivity extends PreferenceActivity {
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         );
-    }
-
-    @Override
-    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-
-        getLayoutInflater().inflate(R.layout.view_toolbar, (ViewGroup) findViewById(android.R.id.content));
-        findViewById(R.id.view_toolbar_layout_right_button).setVisibility(View.GONE);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.view_toolbar);
-        toolbar.setTitle("About");
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-        setActionBar(toolbar);
     }
 
     @Override
