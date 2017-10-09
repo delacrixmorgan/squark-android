@@ -1,8 +1,13 @@
 package com.delacrixmorgan.squark;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.TypedValue;
 
 import com.delacrixmorgan.squark.fragment.TableFragment;
 
@@ -45,6 +50,16 @@ public class MainActivity extends Activity {
                 .beginTransaction()
                 .replace(R.id.activity_main_vg_fragment, mTableFragment)
                 .commit();
+
+        TypedValue typedValue = new TypedValue();
+        Resources.Theme theme = getTheme();
+        theme.resolveAttribute(R.attr.colorPrimary, typedValue, true);
+        int color = typedValue.data;
+
+        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.squark_logo_coin);
+        setTaskDescription(new ActivityManager.TaskDescription(null, bm, color));
+
+        bm.recycle();
     }
 
     @Override
