@@ -30,6 +30,15 @@
 
     </LinearLayout>
 
+    <ImageView
+        android:id="@+id/activity_guide_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/activity_guide_single_layout"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="20dp"
+        android:background="@drawable/ic_keyboard_backspace_white_48dp" />
+
     <LinearLayout
         android:id="@+id/activity_guide_expanded_layout"
         android:layout_width="match_parent"

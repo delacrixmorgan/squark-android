@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -31,6 +32,7 @@ public class GuideActivity extends Activity {
     private TableLayout mTableLayout;
     private Button mStartButton;
     private TextView mGuideValue, mGuideHint;
+    private ImageView mGuideArrow;
     private double mMultiplier;
 
     private LinearLayout mSingleLayout, mExpandedLayout;
@@ -62,6 +64,8 @@ public class GuideActivity extends Activity {
 
         mGuideValue = (TextView) findViewById(R.id.activity_guide_value);
         mGuideHint = (TextView) findViewById(R.id.activity_guide_hint);
+        mGuideArrow = (ImageView) findViewById(R.id.activity_guide_arrow);
+
         mStartButton = (Button) findViewById(R.id.activity_guide_start_button);
         mTableLayout = (TableLayout) findViewById(R.id.activity_guide_table);
 
@@ -103,12 +107,15 @@ public class GuideActivity extends Activity {
             @Override
             public void onSwipeLeft() {
                 mSwipeLeft = true;
+                mGuideArrow.setRotation(180);
                 cycleHints();
 
                 if (mMultiplier < 1000000) {
                     mMultiplier *= 10;
                 } else {
                     mGuideHint.setText("Okay, Swipe Left");
+                    mGuideArrow.setRotation(0);
+                    mGuideArrow.setBackgroundResource(R.drawable.ic_keyboard_backspace_white_48dp);
                 }
                 wobbleText();
             }
@@ -116,12 +123,15 @@ public class GuideActivity extends Activity {
             @Override
             public void onSwipeRight() {
                 mSwipeRight = true;
+                mGuideArrow.setRotation(0);
                 cycleHints();
 
                 if (mMultiplier > 1) {
                     mMultiplier /= 10;
                 } else {
                     mGuideHint.setText("Alright, Swipe Right");
+                    mGuideArrow.setRotation(180);
+                    mGuideArrow.setBackgroundResource(R.drawable.ic_keyboard_backspace_white_48dp);
                 }
                 wobbleText();
             }
@@ -173,6 +183,7 @@ public class GuideActivity extends Activity {
                 @Override
                 public void onSwipeRight() {
                     mTableLayout.getChildAt(0).startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.wobble));
+
                 }
 
                 @Override
@@ -205,9 +216,12 @@ public class GuideActivity extends Activity {
         } else if (!mSwipeRight) {
             mGuideHint.setText("Wonderful, Swipe Right");
         } else if (!mExpand) {
-            mGuideHint.setText("Neat, Click Number");
+            mGuideHint.setText("Sweet, Click Number");
+            mGuideArrow.setRotation(90);
         } else {
             mGuideHint.setText("You're All Set!");
+            mGuideArrow.setRotation(0);
+            mGuideArrow.setBackgroundResource(R.drawable.ic_check_white_48dp);
             mStartButton.setVisibility(View.VISIBLE);
         }
     }
