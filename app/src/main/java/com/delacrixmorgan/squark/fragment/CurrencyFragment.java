@@ -104,7 +104,20 @@ public class CurrencyFragment extends Fragment {
                         Log.e(TAG, "onFailure (URL) : " + call.request().url());
                         Log.e(TAG, "onFailure (Message) : " + t.toString());
 
-                        mUpdateBarText.setText("Try again..");
+                        if (!Helper.isNetworkConnected(getActivity())) {
+                            mUpdateBarText.setText("Unable to connect to the Internet..");
+
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mUpdateBarText.setText("Last Updated "
+                                            + getActivity().getSharedPreferences(Helper.SHARED_PREFERENCE, MODE_PRIVATE).getString(Helper.DATE_PREFERENCE, "2000-01-01") + " at "
+                                            + getActivity().getSharedPreferences(Helper.SHARED_PREFERENCE, MODE_PRIVATE).getString(Helper.TIME_PREFERENCE, "12:00 am"));
+                                }
+                            }, 2000);
+                        } else {
+                            mUpdateBarText.setText("Try again..");
+                        }
                     }
                 });
             }

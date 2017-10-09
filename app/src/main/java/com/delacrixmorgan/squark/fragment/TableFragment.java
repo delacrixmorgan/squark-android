@@ -2,6 +2,7 @@ package com.delacrixmorgan.squark.fragment;
 
 import android.app.Fragment;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+import com.delacrixmorgan.squark.MainActivity;
 import com.delacrixmorgan.squark.R;
 import com.delacrixmorgan.squark.SquarkEngine;
 import com.delacrixmorgan.squark.model.Currency;
@@ -88,24 +90,29 @@ public class TableFragment extends Fragment {
 
                 @Override
                 public void onFailure(Call<APIWrapper> call, Throwable t) {
-                    Log.e(TAG, "onFailure (URL) : " + call.request().url());
-                    Log.e(TAG, "onFailure (Message) : " + t.toString());
+                    if (!Helper.isNetworkConnected(getActivity()) && mRealmResultsCurrency.isEmpty()) {
+                        Log.e(TAG, "onFailure (URL) : " + call.request().url());
+                        Log.e(TAG, "onFailure (Message) : " + t.toString());
 
-                    new AlertDialog.Builder(getActivity())
-                            .setTitle("Message")
-                            .setMessage("Something wrong with the Internet connection.")
-                            .setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    getActivity().recreate();
-                                    dialog.dismiss();
-                                }
-                            })
-                            .setNegativeButton("Quit", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    getActivity().finish();
-                                }
-                            })
-                            .show();
+                        new AlertDialog.Builder(getActivity(), R.style.PreferenceTheme)
+                                .setTitle("Message")
+                                .setMessage("Something wrong with the Internet connection.")
+                                .setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Intent refresh = new Intent(getActivity(), MainActivity.class);
+                                        getActivity().finish();
+                                        startActivity(refresh);
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .setNegativeButton("Quit", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        getActivity().finish();
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .show();
+                    }
                 }
             });
         }
