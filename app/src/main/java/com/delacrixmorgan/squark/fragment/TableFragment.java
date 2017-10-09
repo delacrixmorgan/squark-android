@@ -94,7 +94,7 @@ public class TableFragment extends Fragment {
                         Log.e(TAG, "onFailure (URL) : " + call.request().url());
                         Log.e(TAG, "onFailure (Message) : " + t.toString());
 
-                        new AlertDialog.Builder(getActivity(), R.style.PreferenceTheme)
+                        new AlertDialog.Builder(getActivity(), android.R.style.Theme_Material_Dialog_NoActionBar_MinWidth)
                                 .setTitle("Message")
                                 .setMessage("Something wrong with the Internet connection.")
                                 .setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
