@@ -22,6 +22,4 @@
             android:background="@drawable/ic_settings_white_24dp" />
 
     </RelativeLayout>
-
-
 </Toolbar>
