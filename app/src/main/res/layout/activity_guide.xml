@@ -54,6 +54,5 @@
         android:background="@drawable/btn_rounded_amber"
         android:padding="15dp"
         android:text="Start Squark"
-        android:textColor="@color/black"
         android:visibility="gone" />
 </RelativeLayout>

@@ -3,7 +3,6 @@
     android:id="@+id/view_country_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_weight="1"
     android:background="@color/black"
     android:paddingBottom="15dp"
     android:paddingEnd="25dp"
@@ -51,5 +50,6 @@
         android:layout_centerVertical="true"
         android:background="@drawable/ic_radio_button_checked_white_24dp"
         android:backgroundTint="@color/green" />
+
 
 </RelativeLayout>

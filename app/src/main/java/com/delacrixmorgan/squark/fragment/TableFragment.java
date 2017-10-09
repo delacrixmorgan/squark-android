@@ -1,10 +1,12 @@
 package com.delacrixmorgan.squark.fragment;
 
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -88,6 +90,22 @@ public class TableFragment extends Fragment {
                 public void onFailure(Call<APIWrapper> call, Throwable t) {
                     Log.e(TAG, "onFailure (URL) : " + call.request().url());
                     Log.e(TAG, "onFailure (Message) : " + t.toString());
+
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle("Message")
+                            .setMessage("Something wrong with the Internet connection.")
+                            .setPositiveButton("Try Again", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    getActivity().recreate();
+                                    dialog.dismiss();
+                                }
+                            })
+                            .setNegativeButton("Quit", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    getActivity().finish();
+                                }
+                            })
+                            .show();
                 }
             });
         }

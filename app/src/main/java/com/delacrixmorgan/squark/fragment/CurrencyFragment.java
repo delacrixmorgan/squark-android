@@ -103,6 +103,8 @@ public class CurrencyFragment extends Fragment {
                     public void onFailure(Call<APIWrapper> call, Throwable t) {
                         Log.e(TAG, "onFailure (URL) : " + call.request().url());
                         Log.e(TAG, "onFailure (Message) : " + t.toString());
+
+                        mUpdateBarText.setText("Try again..");
                     }
                 });
             }
