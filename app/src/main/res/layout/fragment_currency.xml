@@ -26,7 +26,6 @@
         android:layout_gravity="bottom"
         android:background="@color/colorPrimary"
         android:paddingBottom="15dp"
-        android:paddingEnd="25dp"
         android:paddingStart="25dp"
         android:paddingTop="15dp">
 
@@ -39,13 +38,24 @@
             android:text="Last Updated 15/09/2017 at 12:59pm"
             android:textSize="12sp" />
 
-        <ImageView
-            android:id="@+id/fragment_currency_update_bar_button"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:id="@+id/fragment_currency_update_bar_layout"
+            android:layout_width="76dp"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:adjustViewBounds="true"
-            android:background="@drawable/ic_replay_white_24dp" />
+            android:layout_gravity="end"
+            android:paddingEnd="20dp"
+            android:paddingStart="20dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:adjustViewBounds="true"
+                android:background="@drawable/ic_replay_white_24dp" />
+
+        </RelativeLayout>
+
 
     </RelativeLayout>
 

@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toolbar;
@@ -41,7 +40,7 @@ public class CurrencyFragment extends Fragment {
     private Toolbar mToolbar;
     private RecyclerView mCurrencyRecyclerView;
     private TextView mUpdateBarText;
-    private ImageView mUpdateBarButton;
+    private RelativeLayout mUpdateBarButton;
     private RelativeLayout mSettingButton;
 
     @Nullable
@@ -51,7 +50,7 @@ public class CurrencyFragment extends Fragment {
 
         mToolbar = (Toolbar) rootView.findViewById(R.id.view_toolbar);
         mUpdateBarText = (TextView) rootView.findViewById(R.id.fragment_currency_update_bar_text);
-        mUpdateBarButton = (ImageView) rootView.findViewById(R.id.fragment_currency_update_bar_button);
+        mUpdateBarButton = (RelativeLayout) rootView.findViewById(R.id.fragment_currency_update_bar_layout);
         mSettingButton = (RelativeLayout) rootView.findViewById(R.id.view_toolbar_layout_right_button);
         mCurrencyRecyclerView = (RecyclerView) rootView.findViewById(R.id.fragment_currency_recycler_view);
 
