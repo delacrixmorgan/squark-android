@@ -1,6 +1,13 @@
 # Squark
+
+![Overview Header](/screenshots/0_header.png?raw=true "Overview Header")
+
 ## Overview
 Travel the world with the ultimate zero clutter currency converter app.
+
+![Interactive](/screenshots/1_interactive.png?raw=true "Interactive")
+![Design](/screenshots/2_design.png?raw=true "Design")
+
 ## Description
 Squark is a currency converter app that lets you interactively convert your money. It’s super fun and easy with just a few swipes and BOOM!
 
