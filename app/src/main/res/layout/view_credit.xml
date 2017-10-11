@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@color/colorPrimary"
+    android:background="@color/black"
     android:minWidth="500dp">
 
     <ScrollView
@@ -45,7 +45,7 @@
                     android:layout_height="wrap_content"
                     android:text="Font Library"
                     android:textAlignment="center"
-                    android:textColor="@color/white"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="12sp" />
 
                 <ImageView
@@ -70,6 +70,7 @@
                     android:layout_height="wrap_content"
                     android:text="Android Library"
                     android:textAlignment="center"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="12sp" />
 
                 <ImageView
@@ -94,6 +95,7 @@
                     android:layout_height="wrap_content"
                     android:text="Android Library"
                     android:textAlignment="center"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="12sp" />
 
                 <ImageView
@@ -118,6 +120,7 @@
                     android:layout_height="wrap_content"
                     android:text="Android Library"
                     android:textAlignment="center"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="12sp" />
 
                 <ImageView
@@ -142,6 +145,7 @@
                     android:layout_height="wrap_content"
                     android:text="Android Library"
                     android:textAlignment="center"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="12sp" />
 
                 <ImageView
@@ -166,6 +170,7 @@
                     android:layout_height="wrap_content"
                     android:text="Flag Collection"
                     android:textAlignment="center"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="12sp" />
 
                 <ImageView
@@ -184,7 +189,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="30dp"
                 android:layout_marginStart="30dp"
-                android:background="@drawable/btn_rounded_amber"
+                android:background="@drawable/btn_rounded_green"
                 android:text="Done"
                 android:textColor="@color/white" />
 
