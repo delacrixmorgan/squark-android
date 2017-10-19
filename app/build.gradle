@@ -3,12 +3,12 @@ apply plugin: 'kotlin-android'
 apply plugin: 'realm-android'
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 26
     buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "com.delacrixmorgan.squark"
         minSdkVersion 22
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -26,7 +26,7 @@ android {
 }
 
 ext {
-    supportLib = '25.4.0'
+    supportLib = '26.1.0'
     retrofitLib = '2.2.0'
     calligraphyLib = '2.2.0'
     parcelerLib = '1.1.6'

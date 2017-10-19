@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.TypedValue;
+import android.view.View;
 
 import com.delacrixmorgan.squark.fragment.TableFragment;
 import com.delacrixmorgan.squark.shared.Helper;
