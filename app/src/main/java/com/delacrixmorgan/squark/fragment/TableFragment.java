@@ -1,6 +1,5 @@
 package com.delacrixmorgan.squark.fragment;
 
-import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,6 +17,7 @@ import android.widget.TextView;
 import com.delacrixmorgan.squark.MainActivity;
 import com.delacrixmorgan.squark.R;
 import com.delacrixmorgan.squark.SquarkEngine;
+import com.delacrixmorgan.squark.common.BaseFragment;
 import com.delacrixmorgan.squark.model.Currency;
 import com.delacrixmorgan.squark.network.InterfaceAPI;
 import com.delacrixmorgan.squark.network.SquarkAPI;
@@ -36,7 +36,7 @@ import static android.content.Context.MODE_PRIVATE;
  * Created by Delacrix Morgan on 03/07/2017.
  */
 
-public class TableFragment extends Fragment {
+public class TableFragment extends BaseFragment {
     private static String TAG = "TableFragment";
     private RealmResults<Currency> mRealmResultsCurrency;
     private TextView mBaseCurrency, mQuoteCurrency;
@@ -138,7 +138,7 @@ public class TableFragment extends Fragment {
 
                 getActivity().getFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.activity_main_vg_fragment, currencyFragment)
+                        .replace(R.id.mainContainer, currencyFragment)
                         .addToBackStack(TableFragment.TAG)
                         .commit();
             }
@@ -153,7 +153,7 @@ public class TableFragment extends Fragment {
 
                 getActivity().getFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.activity_main_vg_fragment, currencyFragment)
+                        .replace(R.id.mainContainer, currencyFragment)
                         .addToBackStack(TableFragment.TAG)
                         .commit();
             }

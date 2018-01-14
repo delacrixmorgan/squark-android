@@ -1,7 +1,6 @@
 package com.delacrixmorgan.squark;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -15,9 +14,6 @@ import android.widget.Button;
 
 import com.delacrixmorgan.squark.shared.Helper;
 
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
-
 /**
  * Created by Delacrix Morgan on 07/08/2017.
  */
@@ -29,17 +25,6 @@ public class SettingActivity extends PreferenceActivity {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getFragmentManager().beginTransaction().replace(android.R.id.content, new SettingFragment()).commit();
-
-        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                .setDefaultFontPath("fonts/LeagueSpartan-Bold.otf")
-                .setFontAttrId(R.attr.fontPath)
-                .build()
-        );
-    }
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
     public static class SettingFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {

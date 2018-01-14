@@ -1,9 +1,10 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
 buildscript {
     ext.kotlinVersion = '1.2.10'
     ext.buildToolsVersion = '3.0.1'
     ext.supportLibraryVersion = '27.0.2'
     ext.retrofitVersion = '2.2.0'
-    ext.calligraphyVersion = '2.3.0'
     ext.parcelerVersion = '1.1.6'
 
     repositories {

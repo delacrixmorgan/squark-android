@@ -36,13 +36,12 @@ dependencies {
     implementation "com.android.support:appcompat-v7:$supportLibraryVersion"
     implementation "com.android.support:design:$supportLibraryVersion"
 
-    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
-
-    implementation "uk.co.chrisjenx:calligraphy:$calligraphyVersion"
-    implementation "org.parceler:parceler-api:$parcelerVersion"
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"
+    implementation "org.parceler:parceler-api:$parcelerVersion"
+
     annotationProcessor "org.parceler:parceler:$parcelerVersion"
 }
 

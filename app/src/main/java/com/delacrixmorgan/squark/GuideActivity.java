@@ -20,9 +20,6 @@ import com.delacrixmorgan.squark.shared.Helper;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
-
 /**
  * Created by Delacrix Morgan on 03/10/2017.
  */
@@ -44,12 +41,6 @@ public class GuideActivity extends Activity {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guide);
-
-        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                .setDefaultFontPath("fonts/LeagueSpartan-Bold.otf")
-                .setFontAttrId(R.attr.fontPath)
-                .build()
-        );
 
         mSwipeLeft = false;
         mSwipeRight = false;
@@ -136,11 +127,6 @@ public class GuideActivity extends Activity {
                 wobbleText();
             }
         });
-    }
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
     private void expandTable() {
