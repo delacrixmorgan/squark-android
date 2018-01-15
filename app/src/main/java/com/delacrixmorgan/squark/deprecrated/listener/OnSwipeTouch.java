@@ -1,4 +1,4 @@
-package com.delacrixmorgan.squark.listener;
+package com.delacrixmorgan.squark.deprecrated.listener;
 
 import android.content.Context;
 import android.view.GestureDetector;

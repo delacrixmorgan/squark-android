@@ -1,8 +1,6 @@
-package com.delacrixmorgan.squark.wrapper;
+package com.delacrixmorgan.squark.deprecrated.wrapper;
 
-import android.util.Log;
-
-import com.delacrixmorgan.squark.model.Currency;
+import com.delacrixmorgan.squark.deprecrated.model.Currency;
 
 import io.realm.Realm;
 

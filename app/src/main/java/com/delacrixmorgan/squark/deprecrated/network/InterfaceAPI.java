@@ -1,6 +1,6 @@
-package com.delacrixmorgan.squark.network;
+package com.delacrixmorgan.squark.deprecrated.network;
 
-import com.delacrixmorgan.squark.wrapper.APIWrapper;
+import com.delacrixmorgan.squark.deprecrated.wrapper.APIWrapper;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

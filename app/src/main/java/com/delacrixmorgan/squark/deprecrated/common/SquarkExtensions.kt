@@ -1,4 +1,4 @@
-package com.delacrixmorgan.squark.common
+package com.delacrixmorgan.squark.deprecrated.common
 
 import android.app.ActivityManager
 import android.content.Context

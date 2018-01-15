@@ -1,4 +1,4 @@
-package com.delacrixmorgan.squark.adapter;
+package com.delacrixmorgan.squark.deprecrated.adapter;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -12,8 +12,8 @@ import android.widget.TextView;
 
 import com.delacrixmorgan.squark.MainActivity;
 import com.delacrixmorgan.squark.R;
-import com.delacrixmorgan.squark.model.Currency;
-import com.delacrixmorgan.squark.shared.Helper;
+import com.delacrixmorgan.squark.deprecrated.model.Currency;
+import com.delacrixmorgan.squark.deprecrated.shared.Helper;
 
 import io.realm.Realm;
 import io.realm.RealmResults;

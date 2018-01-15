@@ -1,4 +1,4 @@
-package com.delacrixmorgan.squark.shared;
+package com.delacrixmorgan.squark.deprecrated.shared;
 
 import android.app.Activity;
 import android.content.Context;

@@ -1,4 +1,4 @@
-package com.delacrixmorgan.squark.fragment;
+package com.delacrixmorgan.squark.deprecrated;
 
 import android.app.Fragment;
 import android.content.Intent;
@@ -17,12 +17,12 @@ import android.widget.TextView;
 import android.widget.Toolbar;
 
 import com.delacrixmorgan.squark.R;
-import com.delacrixmorgan.squark.SettingActivity;
-import com.delacrixmorgan.squark.adapter.CurrencyAdapter;
-import com.delacrixmorgan.squark.network.InterfaceAPI;
-import com.delacrixmorgan.squark.network.SquarkAPI;
-import com.delacrixmorgan.squark.shared.Helper;
-import com.delacrixmorgan.squark.wrapper.APIWrapper;
+import com.delacrixmorgan.squark.deprecrated.SettingActivity;
+import com.delacrixmorgan.squark.deprecrated.adapter.CurrencyAdapter;
+import com.delacrixmorgan.squark.deprecrated.network.InterfaceAPI;
+import com.delacrixmorgan.squark.deprecrated.network.SquarkAPI;
+import com.delacrixmorgan.squark.deprecrated.shared.Helper;
+import com.delacrixmorgan.squark.deprecrated.wrapper.APIWrapper;
 
 import retrofit2.Call;
 import retrofit2.Callback;

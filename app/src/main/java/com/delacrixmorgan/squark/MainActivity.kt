@@ -2,9 +2,8 @@ package com.delacrixmorgan.squark
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import com.delacrixmorgan.squark.common.changeAppOverview
-import com.delacrixmorgan.squark.common.showFragment
-import com.delacrixmorgan.squark.fragment.TableFragment
+import com.delacrixmorgan.squark.deprecrated.common.changeAppOverview
+import com.delacrixmorgan.squark.deprecrated.common.showFragment
 import io.realm.Realm
 import io.realm.RealmConfiguration
 
@@ -25,9 +24,8 @@ class MainActivity : AppCompatActivity() {
                 .deleteRealmIfMigrationNeeded()
                 .build())
 
-        SquarkEngine.newInstance()
-        changeAppOverview(this, theme)
 
-        showFragment(this, TableFragment.newInstance())
+        changeAppOverview(this, theme)
+        showFragment(this, LaunchFragment.newInstance())
     }
 }

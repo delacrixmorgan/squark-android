@@ -1,4 +1,4 @@
-package com.delacrixmorgan.squark.network;
+package com.delacrixmorgan.squark.deprecrated.network;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

@@ -1,4 +1,4 @@
-package com.delacrixmorgan.squark;
+package com.delacrixmorgan.squark.deprecrated;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -12,7 +12,8 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 
-import com.delacrixmorgan.squark.shared.Helper;
+import com.delacrixmorgan.squark.R;
+import com.delacrixmorgan.squark.deprecrated.shared.Helper;
 
 /**
  * Created by Delacrix Morgan on 07/08/2017.

@@ -1,7 +1,6 @@
-package com.delacrixmorgan.squark;
+package com.delacrixmorgan.squark.deprecrated;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,8 +13,9 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import com.delacrixmorgan.squark.listener.OnSwipeTouch;
-import com.delacrixmorgan.squark.shared.Helper;
+import com.delacrixmorgan.squark.R;
+import com.delacrixmorgan.squark.deprecrated.listener.OnSwipeTouch;
+import com.delacrixmorgan.squark.deprecrated.shared.Helper;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;

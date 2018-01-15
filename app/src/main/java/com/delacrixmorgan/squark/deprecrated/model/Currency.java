@@ -1,4 +1,4 @@
-package com.delacrixmorgan.squark.model;
+package com.delacrixmorgan.squark.deprecrated.model;
 
 import io.realm.CurrencyRealmProxy;
 import io.realm.RealmObject;
