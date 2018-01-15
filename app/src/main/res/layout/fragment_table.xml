@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -17,31 +18,31 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/fragment_table_base_currency"
+                android:id="@+id/baseCurrencyTextView"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:focusable="true"
                 android:gravity="center"
-                android:text="USD"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                tools:text="USD" />
 
             <TextView
-                android:id="@+id/fragment_table_quote_currency"
+                android:id="@+id/quoteCurrencyTextView"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:focusable="true"
                 android:gravity="center"
-                android:text="MYR"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                tools:text="MYR" />
 
         </LinearLayout>
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fragment_table_swap_button"
+            android:id="@+id/swapButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -56,7 +57,7 @@
     </RelativeLayout>
 
     <TableLayout
-        android:id="@+id/fragment_table_layout"
+        android:id="@+id/tableLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/black"

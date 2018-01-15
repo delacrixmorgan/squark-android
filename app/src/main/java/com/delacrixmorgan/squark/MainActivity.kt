@@ -28,6 +28,6 @@ class MainActivity : AppCompatActivity() {
         SquarkEngine.newInstance()
         changeAppOverview(this, theme)
 
-        showFragment(this, TableFragment())
+        showFragment(this, TableFragment.newInstance())
     }
 }
