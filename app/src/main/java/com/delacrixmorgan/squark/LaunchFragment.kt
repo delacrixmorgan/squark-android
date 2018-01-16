@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.delacrixmorgan.squark.deprecrated.common.BaseFragment
+import com.delacrixmorgan.squark.common.BaseFragment
 import com.delacrixmorgan.squark.deprecrated.model.Currency
 import io.realm.Realm
 import io.realm.RealmResults

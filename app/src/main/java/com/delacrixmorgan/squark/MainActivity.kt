@@ -2,8 +2,8 @@ package com.delacrixmorgan.squark
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import com.delacrixmorgan.squark.deprecrated.common.changeAppOverview
-import com.delacrixmorgan.squark.deprecrated.common.showFragment
+import com.delacrixmorgan.squark.common.changeAppOverview
+import com.delacrixmorgan.squark.common.showFragment
 import io.realm.Realm
 import io.realm.RealmConfiguration
 

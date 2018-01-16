@@ -1,4 +1,4 @@
-package com.delacrixmorgan.squark.deprecrated.common
+package com.delacrixmorgan.squark.common
 
 import android.content.Context
 import android.support.v4.app.Fragment
