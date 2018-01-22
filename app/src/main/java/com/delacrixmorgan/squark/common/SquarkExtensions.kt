@@ -4,6 +4,7 @@ import android.app.ActivityManager
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.BitmapFactory
+import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
 import android.util.TypedValue
@@ -13,7 +14,7 @@ import com.delacrixmorgan.squark.R
  * Created by Delacrix Morgan on 14/01/2018.
  **/
 
-fun showFragment(context: Context, fragment: BaseFragment) {
+fun showFragment(context: Context, fragment: Fragment) {
     val activity = context as FragmentActivity
 
     activity.supportFragmentManager

@@ -1,45 +1,42 @@
 package com.delacrixmorgan.squark
 
 import android.os.Bundle
+import android.support.v4.app.Fragment
+import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.delacrixmorgan.squark.common.BaseFragment
-import com.delacrixmorgan.squark.deprecrated.model.Currency
-import io.realm.Realm
-import io.realm.RealmResults
+import kotlinx.android.synthetic.main.fragment_launch.*
 
 /**
  * Created by Delacrix Morgan on 03/07/2017.
  **/
 
-class LaunchFragment : BaseFragment() {
+class LaunchFragment : Fragment() {
 
     companion object {
-        private val TAG = "LaunchFragment"
-
         fun newInstance(): LaunchFragment {
             return LaunchFragment()
         }
     }
 
-    private lateinit var mRealmResultsCurrency: RealmResults<Currency>
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        SquarkEngine.newInstance()
-        mRealmResultsCurrency = Realm.getDefaultInstance().where(Currency::class.java).findAll()
-    }
+    lateinit var rowAdapter: MultiplierAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_table, container, false)
+        return inflater.inflate(R.layout.fragment_launch, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupView()
+    }
 
+    private fun setupView() {
+        rowAdapter = MultiplierAdapter()
+
+        recyclerView.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+        recyclerView.adapter = rowAdapter
     }
 
 //    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

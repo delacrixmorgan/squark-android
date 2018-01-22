@@ -134,7 +134,7 @@ public class GuideActivity extends Activity {
 
         for (int i = 0; i < 11; i++) {
             TableRow tableRow = (TableRow) getLayoutInflater().inflate(R.layout.view_row_guide, mTableLayout, false);
-            TextView quantifierTextView = (TextView) tableRow.findViewById(R.id.view_row_quantifier);
+            TextView quantifierTextView = (TextView) tableRow.findViewById(R.id.quantifierTextView);
 
             double m1 = mMultiplier + ((mMultiplier / 10) * i);
 
