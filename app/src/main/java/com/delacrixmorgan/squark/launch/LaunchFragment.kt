@@ -1,4 +1,4 @@
-package com.delacrixmorgan.squark
+package com.delacrixmorgan.squark.launch
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -6,13 +6,14 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.delacrixmorgan.squark.R
 import kotlinx.android.synthetic.main.fragment_launch.*
 
 /**
  * Created by Delacrix Morgan on 03/07/2017.
  **/
 
-class LaunchFragment : Fragment() {
+class LaunchFragment : Fragment(), RowListener {
 
     companion object {
         fun newInstance(): LaunchFragment {
@@ -33,11 +34,13 @@ class LaunchFragment : Fragment() {
     }
 
     private fun setupView() {
-        rowAdapter = MultiplierAdapter()
+        rowAdapter = MultiplierAdapter(this)
 
         recyclerView.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         recyclerView.adapter = rowAdapter
+    }
 
+    override fun onRowSelected(position: Int) {
 
     }
 

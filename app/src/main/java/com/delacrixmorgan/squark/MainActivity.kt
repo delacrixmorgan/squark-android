@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.delacrixmorgan.squark.common.changeAppOverview
 import com.delacrixmorgan.squark.common.showFragment
+import com.delacrixmorgan.squark.launch.LaunchFragment
 
 /**
  * Created by Delacrix Morgan on 03/07/2017.
