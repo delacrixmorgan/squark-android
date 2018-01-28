@@ -37,6 +37,8 @@ class LaunchFragment : Fragment() {
 
         recyclerView.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         recyclerView.adapter = rowAdapter
+
+        
     }
 
 //    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -1,15 +1,5 @@
 package com.delacrixmorgan.squark
 
-import android.app.Activity
-import android.support.v4.content.ContextCompat
-import android.view.animation.AnimationUtils
-import android.widget.TableLayout
-import android.widget.TableRow
-import android.widget.TextView
-
-import com.delacrixmorgan.squark.deprecrated.listener.OnSwipeTouch
-import com.delacrixmorgan.squark.deprecrated.model.Currency
-
 import java.math.BigDecimal
 import java.text.DecimalFormat
 
@@ -20,7 +10,8 @@ import java.text.DecimalFormat
 class SquarkEngine {
 
     companion object {
-        @Volatile private lateinit var SquarkEngineInstance: SquarkEngine
+        @Volatile
+        private lateinit var SquarkEngineInstance: SquarkEngine
 
         fun newInstance(): SquarkEngine {
             SquarkEngineInstance = SquarkEngine()
