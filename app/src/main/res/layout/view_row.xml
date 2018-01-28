@@ -1,18 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_weight="1"
-    android:background="@drawable/shape_cell">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_cell"
+    android:orientation="horizontal">
 
     <TextView
         android:id="@+id/quantifierTextView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center" />
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="1" />
 
     <TextView
         android:id="@+id/resultTextView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center" />
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="4" />
 
-</TableRow>
+</LinearLayout>

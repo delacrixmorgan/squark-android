@@ -20,7 +20,7 @@ class LaunchFragment : Fragment() {
         }
     }
 
-    lateinit var rowAdapter: MultiplierAdapter
+    private lateinit var rowAdapter: MultiplierAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_launch, container, false)
@@ -38,7 +38,7 @@ class LaunchFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         recyclerView.adapter = rowAdapter
 
-        
+
     }
 
 //    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

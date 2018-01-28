@@ -12,12 +12,18 @@ import kotlinx.android.synthetic.main.view_row.view.*
 
 class MultiplierAdapter : RecyclerView.Adapter<MultiplierAdapter.MultiplierViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MultiplierViewHolder {
-        return MultiplierViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.view_row, parent, false))
+        val rootView = LayoutInflater.from(parent.context).inflate(R.layout.view_row, parent, false)
+        val height = parent.measuredHeight / 10
+        val width = parent.measuredWidth
+
+        rootView.layoutParams = RecyclerView.LayoutParams(width, height)
+
+        return MultiplierViewHolder(rootView)
     }
 
     override fun onBindViewHolder(holder: MultiplierViewHolder, position: Int) {
         with(holder.itemView) {
-            quantifierTextView.text = "1"
+            quantifierTextView.text = (position + 1).toString()
             resultTextView.text = "4.0"
         }
     }
