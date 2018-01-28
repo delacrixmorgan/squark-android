@@ -5,5 +5,6 @@ package com.delacrixmorgan.squark.launch
  **/
 
 interface RowListener {
-    fun onRowSelected(position: Int)
+    fun onRowExpand(position: Int)
+    fun onRowCollapse(position: Int)
 }

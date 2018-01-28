@@ -40,8 +40,12 @@ class LaunchFragment : Fragment(), RowListener {
         recyclerView.adapter = rowAdapter
     }
 
-    override fun onRowSelected(position: Int) {
+    override fun onRowExpand(position: Int) {
+        rowAdapter.expandRow(position)
+    }
 
+    override fun onRowCollapse(position: Int) {
+        rowAdapter.collapseRow(position)
     }
 
 //    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

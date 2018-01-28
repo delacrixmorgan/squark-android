@@ -12,8 +12,9 @@ import kotlinx.android.synthetic.main.view_row.view.*
  **/
 
 class MultiplierAdapter(private val rowListener: RowListener) : RecyclerView.Adapter<MultiplierAdapter.MultiplierViewHolder>() {
-    
-    private val totalRows = 10
+
+    private var totalRows = 10
+    private var isRowExpanded = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MultiplierViewHolder {
         val rootView = LayoutInflater.from(parent.context).inflate(R.layout.view_row, parent, false)
@@ -26,18 +27,40 @@ class MultiplierAdapter(private val rowListener: RowListener) : RecyclerView.Ada
     }
 
     override fun onBindViewHolder(holder: MultiplierViewHolder, position: Int) {
-        with(holder.itemView) {
-            quantifierTextView.text = (position + 1).toString()
-            resultTextView.text = "4.0"
+        val itemViewPosition = holder.adapterPosition + 1
 
-            setOnClickListener {
-                rowListener.onRowSelected(position + 1)
+        with(holder) {
+            itemView.quantifierTextView.text = itemViewPosition.toString()
+            itemView.resultTextView.text = (4 * itemViewPosition).toString()
+
+            itemView.setOnClickListener {
+                if (isRowExpanded) {
+                    rowListener.onRowCollapse(itemViewPosition)
+                } else {
+                    rowListener.onRowExpand(itemViewPosition)
+                }
+
+                isRowExpanded = !isRowExpanded
             }
         }
     }
 
     override fun getItemCount(): Int {
         return totalRows
+    }
+
+    fun expandRow(position: Int) {
+        notifyItemRangeRemoved(0, position - 1)
+        notifyItemRangeRemoved(position, 10)
+
+        totalRows = 1
+    }
+
+    fun collapseRow(position: Int) {
+        notifyItemRangeInserted(0, position - 1)
+        notifyItemRangeInserted(position, 10)
+
+        totalRows = 10
     }
 
     class MultiplierViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
