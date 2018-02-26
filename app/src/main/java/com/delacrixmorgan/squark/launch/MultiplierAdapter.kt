@@ -11,14 +11,15 @@ import kotlinx.android.synthetic.main.view_row.view.*
  * Created by Delacrix Morgan on 22/01/2018.
  **/
 
-class MultiplierAdapter(private val rowListener: RowListener) : RecyclerView.Adapter<MultiplierAdapter.MultiplierViewHolder>() {
+class MultiplierAdapter(private val rowListener: RowListener, rowList: ArrayList<Row>) : RecyclerView.Adapter<MultiplierAdapter.MultiplierViewHolder>() {
 
+    private var rowList: ArrayList<Row> = rowList
     private var totalRows = 10
     private var isRowExpanded = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MultiplierViewHolder {
         val rootView = LayoutInflater.from(parent.context).inflate(R.layout.view_row, parent, false)
-        val height = parent.measuredHeight / totalRows
+        val height = parent.measuredHeight / rowList.size
         val width = parent.measuredWidth
 
         rootView.layoutParams = RecyclerView.LayoutParams(width, height)
@@ -27,11 +28,11 @@ class MultiplierAdapter(private val rowListener: RowListener) : RecyclerView.Ada
     }
 
     override fun onBindViewHolder(holder: MultiplierViewHolder, position: Int) {
-        val itemViewPosition = holder.adapterPosition + 1
+        val itemViewPosition = holder.adapterPosition
 
         with(holder) {
-            itemView.quantifierTextView.text = itemViewPosition.toString()
-            itemView.resultTextView.text = (4 * itemViewPosition).toString()
+            itemView.quantifierTextView.text = rowList[itemViewPosition].quantifier.toString()
+            itemView.resultTextView.text = rowList[itemViewPosition].result.toString()
 
             itemView.setOnClickListener {
                 if (isRowExpanded) {
@@ -50,15 +51,15 @@ class MultiplierAdapter(private val rowListener: RowListener) : RecyclerView.Ada
     }
 
     fun expandRow(position: Int) {
-        notifyItemRangeRemoved(0, position - 1)
-        notifyItemRangeRemoved(position, 10)
+        notifyItemRangeRemoved(0, position)
+        notifyItemRangeRemoved(position + 1, 10)
 
         totalRows = 1
     }
 
     fun collapseRow(position: Int) {
-        notifyItemRangeInserted(0, position - 1)
-        notifyItemRangeInserted(position, 10)
+        notifyItemRangeInserted(0, position)
+        notifyItemRangeInserted(position + 1, 10)
 
         totalRows = 10
     }

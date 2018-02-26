@@ -2,12 +2,14 @@ package com.delacrixmorgan.squark.launch
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
+import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TableRow
 import com.delacrixmorgan.squark.R
 import kotlinx.android.synthetic.main.fragment_launch.*
+import kotlinx.android.synthetic.main.view_row.view.*
 
 /**
  * Created by Delacrix Morgan on 03/07/2017.
@@ -23,6 +25,11 @@ class LaunchFragment : Fragment(), RowListener {
 
     private lateinit var rowAdapter: MultiplierAdapter
 
+    private var rowList: ArrayList<TableRow> = ArrayList()
+    private var expandedList: ArrayList<TableRow> = ArrayList()
+
+    private var isExpanded = false
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_launch, container, false)
     }
@@ -30,14 +37,58 @@ class LaunchFragment : Fragment(), RowListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupView()
+        setupTableView(0, 9)
     }
 
-    private fun setupView() {
-        rowAdapter = MultiplierAdapter(this)
+    private fun setupTableView(start: Int, end: Int) {
+        for (index in start..end) {
+            val tableRow = layoutInflater.inflate(R.layout.view_row, this.tableView, false) as TableRow
 
-        recyclerView.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-        recyclerView.adapter = rowAdapter
+            tableRow.quantifierTextView.text = (index + 1).toString()
+            tableRow.resultTextView.text = ((index + 1) * 4).toString()
+
+            if (index == 5 || index == 6) {
+                tableRow.setOnClickListener {
+                    triggerRow()
+                }
+            }
+
+            rowList.add(tableRow)
+            this.tableView.addView(tableRow)
+        }
+    }
+
+    private fun triggerRow() {
+        if (!isExpanded) {
+            rowList.forEachIndexed { index, tableRow ->
+                if (index != 5 && index != 6) {
+                    tableRow.visibility = View.GONE
+                } else {
+                    tableRow.setBackgroundColor(ContextCompat.getColor(this.context!!, R.color.amber))
+                }
+            }
+
+            for (index in 0..9) {
+                val tableRow = layoutInflater.inflate(R.layout.view_row, this.tableView, false) as TableRow
+
+                tableRow.quantifierTextView.text = (index + 1).toString()
+                tableRow.resultTextView.text = ((index + 1) * 4).toString()
+
+                expandedList.add(tableRow)
+                this.tableView.addView(tableRow, 6)
+            }
+        } else {
+            expandedList.map {
+                this.tableView.removeView(it)
+            }
+
+            rowList.map {
+                it.visibility = View.VISIBLE
+                it.setBackgroundColor(ContextCompat.getColor(this.context!!, R.color.black))
+            }
+        }
+
+        isExpanded = !isExpanded
     }
 
     override fun onRowExpand(position: Int) {
@@ -47,101 +98,4 @@ class LaunchFragment : Fragment(), RowListener {
     override fun onRowCollapse(position: Int) {
         rowAdapter.collapseRow(position)
     }
-
-//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        super.onViewCreated(view, savedInstanceState)
-//
-//        currencyFragment = CurrencyFragment()
-//        SquarkEngine.instance.updateTable(activity, mTableLayout)
-//
-//        if (Helper.getCurrentDate() != activity!!.getSharedPreferences(Helper.SHARED_PREFERENCE, MODE_PRIVATE).getString(Helper.DATE_PREFERENCE, "01/01/2000")) {
-//            val call = SquarkAPI.getClient().create(InterfaceAPI::class.java).updateRates("USD")
-//            call.enqueue(object : Callback<APIWrapper> {
-//                override fun onResponse(call: Call<APIWrapper>, response: Response<APIWrapper>) {
-//                    val editor = activity!!.getSharedPreferences(Helper.SHARED_PREFERENCE, MODE_PRIVATE).edit()
-//                    editor.putString(Helper.DATE_PREFERENCE, Helper.getCurrentDate())
-//                    editor.putString(Helper.TIME_PREFERENCE, Helper.getCurrentTime())
-//
-//                    response.body().updateCurrencyList()
-//
-//                    val m1 = mRealmResultsCurrency!!.where().equalTo("code", "USD").findFirst()
-//                    val m2 = mRealmResultsCurrency!!.where().equalTo("code", "MYR").findFirst()
-//
-//                    editor.putInt(Helper.BASE_CURRENCY_PREFERENCE, mRealmResultsCurrency!!.indexOf(m1))
-//                    editor.putInt(Helper.QUOTE_CURRENCY_PREFERENCE, mRealmResultsCurrency!!.indexOf(m2))
-//
-//                    editor.apply()
-//
-//                    activity!!.recreate()
-//                }
-//
-//                override fun onFailure(call: Call<APIWrapper>, t: Throwable) {
-//                    if (!Helper.isNetworkConnected(activity) && mRealmResultsCurrency!!.isEmpty()) {
-//                        AlertDialog.Builder(activity!!, android.R.style.Theme_Material_Dialog_NoActionBar_MinWidth)
-//                                .setTitle("Message")
-//                                .setMessage("Something wrong with the Internet connection.")
-//                                .setPositiveButton("Try Again") { dialog, which ->
-//                                    val refresh = Intent(activity, MainActivity::class.java)
-//                                    activity!!.finish()
-//                                    startActivity(refresh)
-//                                    dialog.dismiss()
-//                                }
-//                                .setNegativeButton("Quit") { dialog, which ->
-//                                    activity!!.finish()
-//                                    dialog.dismiss()
-//                                }
-//                                .show()
-//                    }
-//                }
-//            })
-//        }
-//
-//        mSwapButton!!.setOnClickListener {
-//            val editor = activity!!.getSharedPreferences(Helper.SHARED_PREFERENCE, MODE_PRIVATE).edit()
-//            editor.putInt(Helper.BASE_CURRENCY_PREFERENCE, Helper.getCurrencyPreference(activity, Helper.QUOTE_CURRENCY_PREFERENCE))
-//            editor.putInt(Helper.QUOTE_CURRENCY_PREFERENCE, Helper.getCurrencyPreference(activity, Helper.BASE_CURRENCY_PREFERENCE))
-//            editor.apply()
-//
-//            updateCurrency()
-//        }
-//
-//        mBaseCurrency!!.setOnClickListener {
-//            val bundle = Bundle()
-//            bundle.putString(Helper.TYPE_CONVERT, "BASE")
-//            currencyFragment!!.arguments = bundle
-//
-//            activity!!.fragmentManager
-//                    .beginTransaction()
-//                    .replace(R.id.mainContainer, currencyFragment)
-//                    .addToBackStack(TAG)
-//                    .commit()
-//        }
-//
-//        mQuoteCurrency!!.setOnClickListener {
-//            val bundle = Bundle()
-//            bundle.putString(Helper.TYPE_CONVERT, "QUOTE")
-//            currencyFragment!!.arguments = bundle
-//
-//            activity!!.fragmentManager
-//                    .beginTransaction()
-//                    .replace(R.id.mainContainer, currencyFragment)
-//                    .addToBackStack(TAG)
-//                    .commit()
-//        }
-//
-//        if (!mRealmResultsCurrency!!.isEmpty()) {
-//            updateCurrency()
-//        }
-//    }
-//
-//    fun updateCurrency() {
-//        val baseCurrency = mRealmResultsCurrency!![Helper.getCurrencyPreference(activity, Helper.BASE_CURRENCY_PREFERENCE)]
-//        val quoteCurrency = mRealmResultsCurrency!![Helper.getCurrencyPreference(activity, Helper.QUOTE_CURRENCY_PREFERENCE)]
-//
-//        SquarkEngine.instance.updateConversionRate(baseCurrency, quoteCurrency)
-//        SquarkEngine.instance.updateTable(activity, mTableLayout)
-//
-//        mBaseCurrency!!.text = baseCurrency.code
-//        mQuoteCurrency!!.text = quoteCurrency.code
-//    }
 }
