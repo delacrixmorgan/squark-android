@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TableRow
 import com.delacrixmorgan.squark.R
+import com.delacrixmorgan.squark.SquarkEngine
 import kotlinx.android.synthetic.main.fragment_launch.*
 import kotlinx.android.synthetic.main.view_row.view.*
 
@@ -15,15 +16,13 @@ import kotlinx.android.synthetic.main.view_row.view.*
  * Created by Delacrix Morgan on 03/07/2017.
  **/
 
-class LaunchFragment : Fragment(), RowListener {
+class LaunchFragment : Fragment() {
 
     companion object {
         fun newInstance(): LaunchFragment {
             return LaunchFragment()
         }
     }
-
-    private lateinit var rowAdapter: MultiplierAdapter
 
     private var rowList: ArrayList<TableRow> = ArrayList()
     private var expandedList: ArrayList<TableRow> = ArrayList()
@@ -36,66 +35,56 @@ class LaunchFragment : Fragment(), RowListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setupTableView(0, 9)
     }
 
     private fun setupTableView(start: Int, end: Int) {
         for (index in start..end) {
-            val tableRow = layoutInflater.inflate(R.layout.view_row, this.tableView, false) as TableRow
+            val tableRow = layoutInflater.inflate(R.layout.view_row, this.tableLayout, false) as TableRow
 
             tableRow.quantifierTextView.text = (index + 1).toString()
             tableRow.resultTextView.text = ((index + 1) * 4).toString()
 
-            if (index == 5 || index == 6) {
-                tableRow.setOnClickListener {
-                    triggerRow()
+            tableRow.setOnClickListener {
+                if (isExpanded) {
+                    this@LaunchFragment.onRowCollapse(index)
+                } else {
+                    this@LaunchFragment.onRowExpand(index)
                 }
+                isExpanded = !isExpanded
             }
 
             rowList.add(tableRow)
-            this.tableView.addView(tableRow)
+            tableLayout.addView(tableRow)
         }
     }
 
-    private fun triggerRow() {
-        if (!isExpanded) {
-            rowList.forEachIndexed { index, tableRow ->
-                if (index != 5 && index != 6) {
-                    tableRow.visibility = View.GONE
-                } else {
-                    tableRow.setBackgroundColor(ContextCompat.getColor(this.context!!, R.color.amber))
-                }
-            }
-
-            for (index in 0..9) {
-                val tableRow = layoutInflater.inflate(R.layout.view_row, this.tableView, false) as TableRow
-
-                tableRow.quantifierTextView.text = (index + 1).toString()
-                tableRow.resultTextView.text = ((index + 1) * 4).toString()
-
-                expandedList.add(tableRow)
-                this.tableView.addView(tableRow, 6)
-            }
-        } else {
-            expandedList.map {
-                this.tableView.removeView(it)
-            }
-
-            rowList.map {
-                it.visibility = View.VISIBLE
-                it.setBackgroundColor(ContextCompat.getColor(this.context!!, R.color.black))
+    private fun onRowExpand(selectedRow: Int) {
+        rowList.forEachIndexed { index, tableRow ->
+            if (index != selectedRow && index != (selectedRow + 1)) {
+                tableRow.visibility = View.GONE
+            } else {
+                tableRow.setBackgroundColor(ContextCompat.getColor(context!!, R.color.amber))
             }
         }
 
-        isExpanded = !isExpanded
+        activity?.let {
+            SquarkEngine.expandTable(
+                    activity = it,
+                    tableLayout = tableLayout,
+                    expandQuantifier = selectedRow,
+                    expandedList = expandedList)
+        }
     }
 
-    override fun onRowExpand(position: Int) {
-        rowAdapter.expandRow(position)
-    }
+    private fun onRowCollapse(selectedRow: Int) {
+        expandedList.map {
+            tableLayout.removeView(it)
+        }
 
-    override fun onRowCollapse(position: Int) {
-        rowAdapter.collapseRow(position)
+        rowList.map {
+            it.visibility = View.VISIBLE
+            it.setBackgroundColor(ContextCompat.getColor(context!!, R.color.black))
+        }
     }
 }

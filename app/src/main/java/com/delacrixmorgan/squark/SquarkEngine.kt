@@ -1,5 +1,9 @@
 package com.delacrixmorgan.squark
 
+import android.app.Activity
+import android.widget.TableLayout
+import android.widget.TableRow
+import kotlinx.android.synthetic.main.view_row.view.*
 import java.math.BigDecimal
 import java.text.DecimalFormat
 
@@ -7,38 +11,42 @@ import java.text.DecimalFormat
  * Created by Delacrix Morgan on 03/07/2017.
  **/
 
-class SquarkEngine {
+object SquarkEngine {
 
-    companion object {
-        @Volatile
-        private lateinit var SquarkEngineInstance: SquarkEngine
-
-        fun newInstance(): SquarkEngine {
-            SquarkEngineInstance = SquarkEngine()
-            return SquarkEngineInstance
-        }
-
-        fun getInstance(): SquarkEngine = SquarkEngineInstance
-    }
-
-    private var mMultiplier: Double = 0.toDouble()
-    private var mConversionRate: Double = 0.toDouble()
-    private var mTableExpanded: Boolean? = null
-    private val mDecimalFormat: DecimalFormat
-    private var mBigQuantifier: BigDecimal? = null
-    private var mBigResult: BigDecimal? = null
+    private var multiplier: Double = 0.0
+    private var conversionRate: Double = 0.0
+    private val decimalFormat: DecimalFormat
+    private var bigQuantifier: BigDecimal? = null
+    private var bigResult: BigDecimal? = null
 
     init {
-        mConversionRate = 1.0
-        mMultiplier = 1.0
+        conversionRate = 4.0
+        multiplier = 1.0
 
-        mDecimalFormat = DecimalFormat("###,##0.00")
-        mTableExpanded = false
+        decimalFormat = DecimalFormat("###,##0.00")
     }
 
-//    fun updateConversionRate(baseCurrency: Currency, quoteCurrency: Currency) {
+    fun expandTable(activity: Activity, tableLayout: TableLayout, expandQuantifier: Int, expandedList: ArrayList<TableRow>) {
+        for (index in 1..9) {
+            val tableRow = activity.layoutInflater.inflate(R.layout.view_row, tableLayout, false) as TableRow
+
+            val calculateQuantifier = (expandQuantifier + 1) * multiplier + multiplier / 10 * index
+            val calculateResult = calculateQuantifier * conversionRate
+
+            bigQuantifier = BigDecimal(calculateQuantifier).setScale(2, BigDecimal.ROUND_HALF_UP)
+            bigResult = BigDecimal(calculateResult).setScale(2, BigDecimal.ROUND_HALF_UP)
+
+            tableRow.quantifierTextView.text = decimalFormat.format(bigQuantifier).toString()
+            tableRow.resultTextView.text = decimalFormat.format(bigResult).toString()
+
+            expandedList.add(tableRow)
+            tableLayout.addView(tableRow, (expandQuantifier + index))
+        }
+    }
+
+    //    fun updateConversionRate(baseCurrency: Currency, quoteCurrency: Currency) {
 //        mTableExpanded = false
-//        mConversionRate = quoteCurrency.rate / baseCurrency.rate
+//        conversionRate = quoteCurrency.rate / baseCurrency.rate
 //    }
 //
 //
@@ -51,41 +59,14 @@ class SquarkEngine {
 //            val quantifierTextView = tableRow.findViewById<View>(R.id.view_row_quantifier) as TextView
 //            val resultTextView = tableRow.findViewById<View>(R.id.view_row_result) as TextView
 //
-//            val m1 = mMultiplier * (i + 1)
-//            val m2 = m1 * mConversionRate
+//            val m1 = multiplier * (i + 1)
+//            val m2 = m1 * conversionRate
 //
-//            mBigQuantifier = BigDecimal(m1).setScale(2, BigDecimal.ROUND_HALF_UP)
-//            mBigResult = BigDecimal(m2).setScale(2, BigDecimal.ROUND_HALF_UP)
+//            bigQuantifier = BigDecimal(m1).setScale(2, BigDecimal.ROUND_HALF_UP)
+//            bigResult = BigDecimal(m2).setScale(2, BigDecimal.ROUND_HALF_UP)
 //
-//            quantifierTextView.text = mDecimalFormat.format(mBigQuantifier).toString()
-//            resultTextView.text = mDecimalFormat.format(mBigResult).toString()
-//
-//            quantifierTextView.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.wobble))
-//            resultTextView.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.wobble))
-//
-//            setupRowListener(activity, tableLayout, quantifierTextView, i)
-//            setupRowListener(activity, tableLayout, resultTextView, i)
-//
-//            tableLayout.addView(tableRow)
-//        }
-//    }
-//
-//    private fun expandTable(activity: Activity, tableLayout: TableLayout, expandQuantifier: Int) {
-//        tableLayout.removeAllViews()
-//
-//        for (i in 0..10) {
-//            val tableRow = activity.layoutInflater.inflate(R.layout.view_row, tableLayout, false) as TableRow
-//            val quantifierTextView = tableRow.findViewById<View>(R.id.view_row_quantifier) as TextView
-//            val resultTextView = tableRow.findViewById<View>(R.id.view_row_result) as TextView
-//
-//            val m1 = (expandQuantifier + 1) * mMultiplier + mMultiplier / 10 * i
-//            val m2 = m1 * mConversionRate
-//
-//            mBigQuantifier = BigDecimal(m1).setScale(2, BigDecimal.ROUND_HALF_UP)
-//            mBigResult = BigDecimal(m2).setScale(2, BigDecimal.ROUND_HALF_UP)
-//
-//            quantifierTextView.text = mDecimalFormat.format(mBigQuantifier).toString()
-//            resultTextView.text = mDecimalFormat.format(mBigResult).toString()
+//            quantifierTextView.text = decimalFormat.format(bigQuantifier).toString()
+//            resultTextView.text = decimalFormat.format(bigResult).toString()
 //
 //            quantifierTextView.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.wobble))
 //            resultTextView.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.wobble))
@@ -117,7 +98,7 @@ class SquarkEngine {
 //
 //            override fun onSwipeLeft() {
 //                if ((!mTableExpanded)!!) {
-//                    mMultiplier = if (mMultiplier < 1000000) mMultiplier *= 10.0 else mMultiplier
+//                    multiplier = if (multiplier < 1000000) multiplier *= 10.0 else multiplier
 //                    updateTable(activity, tableLayout)
 //                } else {
 //                    tableLayout.getChildAt(0).startAnimation(AnimationUtils.loadAnimation(activity, R.anim.wobble))
@@ -126,7 +107,7 @@ class SquarkEngine {
 //
 //            override fun onSwipeRight() {
 //                if ((!mTableExpanded)!!) {
-//                    mMultiplier = if (mMultiplier > 0.1) mMultiplier /= 10.0 else mMultiplier
+//                    multiplier = if (multiplier > 0.1) multiplier /= 10.0 else multiplier
 //                    updateTable(activity, tableLayout)
 //                } else {
 //                    tableLayout.getChildAt(0).startAnimation(AnimationUtils.loadAnimation(activity, R.anim.wobble))
