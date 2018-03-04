@@ -23,7 +23,6 @@ class LaunchFragment : Fragment(), RowListener {
         }
     }
 
-
     private var rowList: ArrayList<TableRow> = ArrayList()
     private var expandedList: ArrayList<TableRow> = ArrayList()
 
@@ -45,21 +44,19 @@ class LaunchFragment : Fragment(), RowListener {
     }
 
     override fun onSwipeLeft(position: Int) {
-        rowList.first().setBackgroundColor(ContextCompat.getColor(context!!, R.color.black))
+        SquarkEngine.updateTable(rowList)
     }
 
     override fun onSwipeRight(position: Int) {
-        rowList.last().setBackgroundColor(ContextCompat.getColor(context!!, R.color.black))
+        SquarkEngine.updateTable(rowList)
     }
 
     override fun onSwipingLeft(position: Int) {
-        rowList.first().setBackgroundColor(ContextCompat.getColor(context!!, R.color.amber))
-        rowList.last().setBackgroundColor(ContextCompat.getColor(context!!, R.color.black))
+
     }
 
     override fun onSwipingRight(position: Int) {
-        rowList.first().setBackgroundColor(ContextCompat.getColor(context!!, R.color.black))
-        rowList.last().setBackgroundColor(ContextCompat.getColor(context!!, R.color.amber))
+        
     }
 
     override fun onClick(position: Int) {
