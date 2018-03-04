@@ -3,6 +3,7 @@ package com.delacrixmorgan.squark
 import android.app.Activity
 import android.widget.TableLayout
 import android.widget.TableRow
+import com.delacrixmorgan.squark.launch.RowListener
 import kotlinx.android.synthetic.main.view_row.view.*
 import java.math.BigDecimal
 import java.text.DecimalFormat
@@ -24,6 +25,22 @@ object SquarkEngine {
         multiplier = 1.0
 
         decimalFormat = DecimalFormat("###,##0.00")
+    }
+
+    fun initTable(activity: Activity, tableLayout: TableLayout, rowList: ArrayList<TableRow>, listener: RowListener) {
+        for (index in 0..9) {
+            val tableRow = activity.layoutInflater.inflate(R.layout.view_row, tableLayout, false) as TableRow
+
+            tableRow.quantifierTextView.text = (index + 1).toString()
+            tableRow.resultTextView.text = ((index + 1) * 4).toString()
+
+            tableRow.setOnClickListener {
+                listener.onRowClick(index)
+            }
+
+            rowList.add(tableRow)
+            tableLayout.addView(tableRow)
+        }
     }
 
     fun expandTable(activity: Activity, tableLayout: TableLayout, expandQuantifier: Int, expandedList: ArrayList<TableRow>) {

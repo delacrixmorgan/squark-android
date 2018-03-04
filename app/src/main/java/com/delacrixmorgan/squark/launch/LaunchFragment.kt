@@ -10,13 +10,12 @@ import android.widget.TableRow
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.SquarkEngine
 import kotlinx.android.synthetic.main.fragment_launch.*
-import kotlinx.android.synthetic.main.view_row.view.*
 
 /**
  * Created by Delacrix Morgan on 03/07/2017.
  **/
 
-class LaunchFragment : Fragment() {
+class LaunchFragment : Fragment(), RowListener {
 
     companion object {
         fun newInstance(): LaunchFragment {
@@ -35,28 +34,22 @@ class LaunchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupTableView(0, 9)
+        activity?.let {
+            SquarkEngine.initTable(
+                    activity = it,
+                    tableLayout = tableLayout,
+                    rowList = rowList,
+                    listener = this)
+        }
     }
 
-    private fun setupTableView(start: Int, end: Int) {
-        for (index in start..end) {
-            val tableRow = layoutInflater.inflate(R.layout.view_row, this.tableLayout, false) as TableRow
-
-            tableRow.quantifierTextView.text = (index + 1).toString()
-            tableRow.resultTextView.text = ((index + 1) * 4).toString()
-
-            tableRow.setOnClickListener {
-                if (isExpanded) {
-                    this@LaunchFragment.onRowCollapse(index)
-                } else {
-                    this@LaunchFragment.onRowExpand(index)
-                }
-                isExpanded = !isExpanded
-            }
-
-            rowList.add(tableRow)
-            tableLayout.addView(tableRow)
+    override fun onRowClick(position: Int) {
+        if (isExpanded) {
+            onRowCollapse(position)
+        } else {
+            onRowExpand(position)
         }
+        isExpanded = !isExpanded
     }
 
     private fun onRowExpand(selectedRow: Int) {
