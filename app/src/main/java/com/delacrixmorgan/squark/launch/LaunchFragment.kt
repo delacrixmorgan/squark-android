@@ -23,6 +23,7 @@ class LaunchFragment : Fragment(), RowListener {
         }
     }
 
+
     private var rowList: ArrayList<TableRow> = ArrayList()
     private var expandedList: ArrayList<TableRow> = ArrayList()
 
@@ -43,7 +44,25 @@ class LaunchFragment : Fragment(), RowListener {
         }
     }
 
-    override fun onRowClick(position: Int) {
+    override fun onSwipeLeft(position: Int) {
+        rowList.first().setBackgroundColor(ContextCompat.getColor(context!!, R.color.black))
+    }
+
+    override fun onSwipeRight(position: Int) {
+        rowList.last().setBackgroundColor(ContextCompat.getColor(context!!, R.color.black))
+    }
+
+    override fun onSwipingLeft(position: Int) {
+        rowList.first().setBackgroundColor(ContextCompat.getColor(context!!, R.color.amber))
+        rowList.last().setBackgroundColor(ContextCompat.getColor(context!!, R.color.black))
+    }
+
+    override fun onSwipingRight(position: Int) {
+        rowList.first().setBackgroundColor(ContextCompat.getColor(context!!, R.color.black))
+        rowList.last().setBackgroundColor(ContextCompat.getColor(context!!, R.color.amber))
+    }
+
+    override fun onClick(position: Int) {
         if (isExpanded) {
             onRowCollapse(position)
         } else {

@@ -3,10 +3,12 @@ package com.delacrixmorgan.squark
 import android.app.Activity
 import android.widget.TableLayout
 import android.widget.TableRow
+import com.delacrixmorgan.squark.launch.OnSwipeTouch
 import com.delacrixmorgan.squark.launch.RowListener
 import kotlinx.android.synthetic.main.view_row.view.*
 import java.math.BigDecimal
 import java.text.DecimalFormat
+
 
 /**
  * Created by Delacrix Morgan on 03/07/2017.
@@ -34,9 +36,27 @@ object SquarkEngine {
             tableRow.quantifierTextView.text = (index + 1).toString()
             tableRow.resultTextView.text = ((index + 1) * 4).toString()
 
-            tableRow.setOnClickListener {
-                listener.onRowClick(index)
-            }
+            tableRow.setOnTouchListener(object : OnSwipeTouch(activity) {
+                override fun onSingleTap() {
+                    listener.onClick(index)
+                }
+
+                override fun onSwipeLeft() {
+                    listener.onSwipeLeft(index)
+                }
+
+                override fun onSwipeRight() {
+                    listener.onSwipeRight(index)
+                }
+
+                override fun onSwipingLeft() {
+                    listener.onSwipingLeft(index)
+                }
+
+                override fun onSwipingRight() {
+                    listener.onSwipingRight(index)
+                }
+            })
 
             rowList.add(tableRow)
             tableLayout.addView(tableRow)

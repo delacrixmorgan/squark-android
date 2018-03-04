@@ -5,5 +5,9 @@ package com.delacrixmorgan.squark.launch
  **/
 
 interface RowListener {
-    fun onRowClick(position: Int)
+    fun onClick(position: Int)
+    fun onSwipeLeft(position: Int)
+    fun onSwipeRight(position: Int)
+    fun onSwipingLeft(position: Int)
+    fun onSwipingRight(position: Int)
 }
