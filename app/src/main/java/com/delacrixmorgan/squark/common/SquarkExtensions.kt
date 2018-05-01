@@ -15,7 +15,7 @@ fun showFragment(context: Context, fragment: Fragment) {
 
     activity.supportFragmentManager
             .beginTransaction()
-            .add(R.id.mainContainer, fragment, fragment.javaClass.simpleName)
+            .replace(R.id.mainContainer, fragment, fragment.javaClass.simpleName)
             .addToBackStack(fragment.javaClass.simpleName)
             .commit()
 }

@@ -27,10 +27,10 @@ object SquarkEngine {
     private var bigResult: BigDecimal? = null
 
     init {
-        conversionRate = 4.0
-        multiplier = 1.0
+        this.conversionRate = 4.0
+        this.multiplier = 1.0
 
-        decimalFormat = DecimalFormat("###,##0.00")
+        this.decimalFormat = DecimalFormat("###,##0.00")
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -43,26 +43,26 @@ object SquarkEngine {
         for (index in 0..9) {
             val tableRow = activity.layoutInflater.inflate(R.layout.view_row, tableLayout, false) as TableRow
 
-            val calculateQuantifier = (multiplier * (index + 1))
-            val calculateResult = calculateQuantifier * conversionRate
+            val calculateQuantifier = (this.multiplier * (index + 1))
+            val calculateResult = calculateQuantifier * this.conversionRate
 
-            bigQuantifier = BigDecimal(calculateQuantifier).setScale(2, BigDecimal.ROUND_HALF_UP)
-            bigResult = BigDecimal(calculateResult).setScale(2, BigDecimal.ROUND_HALF_UP)
+            this.bigQuantifier = BigDecimal(calculateQuantifier).setScale(2, BigDecimal.ROUND_HALF_UP)
+            this.bigResult = BigDecimal(calculateResult).setScale(2, BigDecimal.ROUND_HALF_UP)
 
-            tableRow.quantifierTextView.text = decimalFormat.format(bigQuantifier).toString()
-            tableRow.resultTextView.text = decimalFormat.format(bigResult).toString()
+            tableRow.quantifierTextView.text = this.decimalFormat.format(this.bigQuantifier).toString()
+            tableRow.resultTextView.text = this.decimalFormat.format(this.bigResult).toString()
 
             tableRow.setOnTouchListener(object : OnSwipeTouch(activity) {
                 override fun onSwipeLeft() {
-                    if (multiplier < 1000000) {
-                        multiplier *= 10
+                    if (this@SquarkEngine.multiplier < 1000000) {
+                        this@SquarkEngine.multiplier *= 10
                     }
                     listener.onSwipeLeft(index)
                 }
 
                 override fun onSwipeRight() {
-                    if (multiplier > 0.1) {
-                        multiplier /= 10
+                    if (this@SquarkEngine.multiplier > 0.1) {
+                        this@SquarkEngine.multiplier /= 10
                     }
                     listener.onSwipeRight(index)
                 }
@@ -87,14 +87,14 @@ object SquarkEngine {
 
     fun updateTable(rowList: ArrayList<TableRow>) {
         rowList.forEachIndexed { index, tableRow ->
-            val calculateQuantifier = (multiplier * (index + 1))
-            val calculateResult = calculateQuantifier * conversionRate
+            val calculateQuantifier = (this.multiplier * (index + 1))
+            val calculateResult = calculateQuantifier * this.conversionRate
 
-            bigQuantifier = BigDecimal(calculateQuantifier).setScale(2, BigDecimal.ROUND_HALF_UP)
-            bigResult = BigDecimal(calculateResult).setScale(2, BigDecimal.ROUND_HALF_UP)
+            this.bigQuantifier = BigDecimal(calculateQuantifier).setScale(2, BigDecimal.ROUND_HALF_UP)
+            this.bigResult = BigDecimal(calculateResult).setScale(2, BigDecimal.ROUND_HALF_UP)
 
-            tableRow.quantifierTextView.text = decimalFormat.format(bigQuantifier).toString()
-            tableRow.resultTextView.text = decimalFormat.format(bigResult).toString()
+            tableRow.quantifierTextView.text = this.decimalFormat.format(this.bigQuantifier).toString()
+            tableRow.resultTextView.text = this.decimalFormat.format(this.bigResult).toString()
         }
     }
 
@@ -109,14 +109,14 @@ object SquarkEngine {
         for (index in 1..9) {
             val tableRow = activity.layoutInflater.inflate(R.layout.view_row, tableLayout, false) as TableRow
 
-            val calculateQuantifier = (expandQuantifier + 1) * multiplier + (multiplier / 10 * index)
-            val calculateResult = calculateQuantifier * conversionRate
+            val calculateQuantifier = (expandQuantifier + 1) * this.multiplier + (this.multiplier / 10 * index)
+            val calculateResult = calculateQuantifier * this.conversionRate
 
-            bigQuantifier = BigDecimal(calculateQuantifier).setScale(2, BigDecimal.ROUND_HALF_UP)
-            bigResult = BigDecimal(calculateResult).setScale(2, BigDecimal.ROUND_HALF_UP)
+            this.bigQuantifier = BigDecimal(calculateQuantifier).setScale(2, BigDecimal.ROUND_HALF_UP)
+            this.bigResult = BigDecimal(calculateResult).setScale(2, BigDecimal.ROUND_HALF_UP)
 
-            tableRow.quantifierTextView.text = decimalFormat.format(bigQuantifier).toString()
-            tableRow.resultTextView.text = decimalFormat.format(bigResult).toString()
+            tableRow.quantifierTextView.text = this.decimalFormat.format(this.bigQuantifier).toString()
+            tableRow.resultTextView.text = this.decimalFormat.format(this.bigResult).toString()
 
             tableRow.setOnClickListener {
                 listener.onClick(index)

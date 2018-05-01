@@ -29,6 +29,7 @@
             android:name=".deprecrated.SettingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/PreferenceTheme" />
+        <activity android:name=".currency.CurrencyActivity" />
     </application>
 
 </manifest>
