@@ -1,8 +1,12 @@
 package com.delacrixmorgan.squark.launch
 
 /**
- * Created by Delacrix Morgan on 04/03/2018.
- **/
+ * RowListener
+ * squark-android
+ *
+ * Created by Delacrix Morgan on 01/05/2018.
+ * Copyright (c) 2018 licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
+ */
 
 interface RowListener {
     fun onClick(position: Int)

@@ -7,8 +7,12 @@ import com.delacrixmorgan.squark.common.showFragment
 import com.delacrixmorgan.squark.launch.LaunchFragment
 
 /**
- * Created by Delacrix Morgan on 03/07/2017.
- **/
+ * MainActivity
+ * squark-android
+ *
+ * Created by Delacrix Morgan on 01/05/2018.
+ * Copyright (c) 2018 licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
+ */
 
 class MainActivity : AppCompatActivity() {
 

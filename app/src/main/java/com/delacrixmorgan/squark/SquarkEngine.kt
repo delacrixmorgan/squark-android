@@ -9,10 +9,13 @@ import kotlinx.android.synthetic.main.view_row.view.*
 import java.math.BigDecimal
 import java.text.DecimalFormat
 
-
 /**
- * Created by Delacrix Morgan on 03/07/2017.
- **/
+ * SquarkEngine
+ * squark-android
+ *
+ * Created by Delacrix Morgan on 01/05/2018.
+ * Copyright (c) 2018 licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
+ */
 
 object SquarkEngine {
 

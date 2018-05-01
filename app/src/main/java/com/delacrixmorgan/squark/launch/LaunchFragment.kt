@@ -12,8 +12,12 @@ import com.delacrixmorgan.squark.SquarkEngine
 import kotlinx.android.synthetic.main.fragment_launch.*
 
 /**
- * Created by Delacrix Morgan on 03/07/2017.
- **/
+ * LaunchFragment
+ * squark-android
+ *
+ * Created by Delacrix Morgan on 01/05/2018.
+ * Copyright (c) 2018 licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
+ */
 
 class LaunchFragment : Fragment(), RowListener {
 
@@ -51,13 +55,9 @@ class LaunchFragment : Fragment(), RowListener {
         SquarkEngine.updateTable(rowList)
     }
 
-    override fun onSwipingLeft(position: Int) {
+    override fun onSwipingLeft(position: Int) = Unit
 
-    }
-
-    override fun onSwipingRight(position: Int) {
-        
-    }
+    override fun onSwipingRight(position: Int) = Unit
 
     override fun onClick(position: Int) {
         if (isExpanded) {

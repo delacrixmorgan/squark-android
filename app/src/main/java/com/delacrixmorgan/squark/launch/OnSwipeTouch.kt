@@ -6,8 +6,12 @@ import android.view.MotionEvent
 import android.view.View
 
 /**
- * Created by Delacrix Morgan on 04/03/2017.
- **/
+ * OnSwipeTouch
+ * squark-android
+ *
+ * Created by Delacrix Morgan on 01/05/2018.
+ * Copyright (c) 2018 licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
+ */
 
 open class OnSwipeTouch(context: Context) : View.OnTouchListener {
     private val mGestureDetector: GestureDetector
