@@ -1,9 +1,9 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.kotlinVersion = '1.2.30'
-    ext.buildToolsVersion = '3.0.1'
-    ext.supportLibraryVersion = '27.0.2'
+    ext.kotlinVersion = '1.2.31'
+    ext.androidStudioVersion = '3.1.2'
+    ext.supportLibraryVersion = '27.1.1'
     ext.retrofitVersion = '2.2.0'
     ext.parcelerVersion = '1.1.6'
 
@@ -12,9 +12,8 @@ buildscript {
         google()
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:$buildToolsVersion"
+        classpath "com.android.tools.build:gradle:$androidStudioVersion"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-        classpath "io.realm:realm-gradle-plugin:3.7.2"
     }
 }
 
