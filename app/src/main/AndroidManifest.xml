@@ -22,14 +22,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".deprecrated.GuideActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name=".deprecrated.SettingActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/PreferenceTheme" />
-        <activity android:name=".currency.CurrencyActivity" />
+            android:name=".currency.CurrencyActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
