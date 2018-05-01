@@ -39,33 +39,12 @@ class LaunchFragment : Fragment(), RowListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.let {
-            SquarkEngine.initTable(
+            SquarkEngine.setupTable(
                     activity = it,
                     tableLayout = tableLayout,
                     rowList = rowList,
                     listener = this)
         }
-    }
-
-    override fun onSwipeLeft(position: Int) {
-        SquarkEngine.updateTable(rowList)
-    }
-
-    override fun onSwipeRight(position: Int) {
-        SquarkEngine.updateTable(rowList)
-    }
-
-    override fun onSwipingLeft(position: Int) = Unit
-
-    override fun onSwipingRight(position: Int) = Unit
-
-    override fun onClick(position: Int) {
-        if (isExpanded) {
-            onRowCollapse(position)
-        } else {
-            onRowExpand(position)
-        }
-        isExpanded = !isExpanded
     }
 
     private fun onRowExpand(selectedRow: Int) {
@@ -82,7 +61,8 @@ class LaunchFragment : Fragment(), RowListener {
                     activity = it,
                     tableLayout = tableLayout,
                     expandQuantifier = selectedRow,
-                    expandedList = expandedList)
+                    expandedList = expandedList,
+                    listener = this)
         }
     }
 
@@ -96,4 +76,29 @@ class LaunchFragment : Fragment(), RowListener {
             it.setBackgroundColor(ContextCompat.getColor(context!!, R.color.black))
         }
     }
+
+    override fun onSwipeLeft(position: Int) {
+        if (!isExpanded) {
+            SquarkEngine.updateTable(rowList)
+        }
+    }
+
+    override fun onSwipeRight(position: Int) {
+        if (!isExpanded) {
+            SquarkEngine.updateTable(rowList)
+        }
+    }
+
+    override fun onClick(position: Int) {
+        if (isExpanded) {
+            onRowCollapse(position)
+        } else {
+            onRowExpand(position)
+        }
+        isExpanded = !isExpanded
+    }
+
+    override fun onSwipingLeft(position: Int) = Unit
+
+    override fun onSwipingRight(position: Int) = Unit
 }

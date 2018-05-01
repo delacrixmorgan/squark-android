@@ -1,5 +1,6 @@
 package com.delacrixmorgan.squark
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.widget.TableLayout
 import android.widget.TableRow
@@ -32,7 +33,13 @@ object SquarkEngine {
         decimalFormat = DecimalFormat("###,##0.00")
     }
 
-    fun initTable(activity: Activity, tableLayout: TableLayout, rowList: ArrayList<TableRow>, listener: RowListener) {
+    @SuppressLint("ClickableViewAccessibility")
+    fun setupTable(
+            activity: Activity,
+            tableLayout: TableLayout,
+            rowList: ArrayList<TableRow>,
+            listener: RowListener
+    ) {
         for (index in 0..9) {
             val tableRow = activity.layoutInflater.inflate(R.layout.view_row, tableLayout, false) as TableRow
 
@@ -91,7 +98,14 @@ object SquarkEngine {
         }
     }
 
-    fun expandTable(activity: Activity, tableLayout: TableLayout, expandQuantifier: Int, expandedList: ArrayList<TableRow>) {
+    @SuppressLint("ClickableViewAccessibility")
+    fun expandTable(
+            activity: Activity,
+            tableLayout: TableLayout,
+            expandQuantifier: Int,
+            expandedList: ArrayList<TableRow>,
+            listener: RowListener
+    ) {
         for (index in 1..9) {
             val tableRow = activity.layoutInflater.inflate(R.layout.view_row, tableLayout, false) as TableRow
 
@@ -103,6 +117,10 @@ object SquarkEngine {
 
             tableRow.quantifierTextView.text = decimalFormat.format(bigQuantifier).toString()
             tableRow.resultTextView.text = decimalFormat.format(bigResult).toString()
+
+            tableRow.setOnClickListener {
+                listener.onClick(index)
+            }
 
             expandedList.add(tableRow)
             tableLayout.addView(tableRow, (expandQuantifier + index))
