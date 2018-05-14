@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.delacrixmorgan.squark.common.changeAppOverview
 import com.delacrixmorgan.squark.common.showFragment
+import com.delacrixmorgan.squark.data.api.SquarkApiService
 import com.delacrixmorgan.squark.launch.LaunchFragment
 
 /**
@@ -21,6 +22,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         changeAppOverview(this, theme)
+
+        SquarkApiService
+                .create(this)
+                .updateRate()
+
         showFragment(this, LaunchFragment.newInstance())
     }
 }
