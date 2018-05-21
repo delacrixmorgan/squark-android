@@ -23,7 +23,7 @@ interface SquarkApiService {
     fun updateRate(
             @Query("access_key") accessKey: String? = ACCESS_KEY,
             @Query("source") source: String? = SOURCE
-    ): Observable<SquarkResult>
+    ): Observable<SquarkModel.Result>
 
     companion object {
         private const val BASE_URL = "http://apilayer.net/api/"

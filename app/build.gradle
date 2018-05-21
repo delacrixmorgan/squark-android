@@ -41,6 +41,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     implementation "org.parceler:parceler-api:$parcelerVersion"
 
+    implementation "io.reactivex.rxjava2:rxandroid:$rxJavaVersion"
+
     annotationProcessor "org.parceler:parceler:$parcelerVersion"
 }
 
