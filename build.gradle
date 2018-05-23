@@ -2,6 +2,7 @@
 
 buildscript {
     ext {
+        roomVersion = '1.1.0'
         rxJavaVersion = '2.0.1'
         kotlinVersion = '1.2.41'
         retrofitVersion = '2.3.0'
