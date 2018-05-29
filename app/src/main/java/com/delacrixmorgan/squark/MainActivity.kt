@@ -2,10 +2,11 @@ package com.delacrixmorgan.squark
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import com.delacrixmorgan.squark.common.changeAppOverview
 import com.delacrixmorgan.squark.common.showFragment
 import com.delacrixmorgan.squark.data.api.SquarkApiService
+import com.delacrixmorgan.squark.data.controller.CurrencyDatabase
+import com.delacrixmorgan.squark.data.model.Currency
 import com.delacrixmorgan.squark.launch.LaunchFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -29,6 +30,8 @@ class MainActivity : AppCompatActivity() {
 
         changeAppOverview(this, theme)
 
+        val database = CurrencyDatabase.getInstance(this)
+
         this.disposable = SquarkApiService
                 .create(this)
                 .updateRate()
@@ -36,14 +39,24 @@ class MainActivity : AppCompatActivity() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         { result ->
-                            Log.i("MainActivity", "Result: ${result.success}")
+                            result.quotes?.map {
+                                val currency = Currency(
+                                        code = it.key,
+                                        rate = it.value
+                                )
+
+                                database?.apply {
+                                    currencyDataDao().insertCurrency(currency)
+                                }
+                            }
                             showFragment(this, LaunchFragment.newInstance())
                         },
                         { error ->
-                            Log.i("MainActivity", "Error: $error")
+                            // TODO - Handle Error
                         }
                 )
     }
+
 
     override fun onPause() {
         super.onPause()

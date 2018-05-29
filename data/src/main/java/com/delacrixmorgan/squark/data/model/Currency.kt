@@ -14,9 +14,7 @@ import android.arch.persistence.room.PrimaryKey
 
 @Entity(tableName = "Currency")
 data class Currency(
-        @PrimaryKey(autoGenerate = true) val id: Long,
+        @PrimaryKey(autoGenerate = true) val id: Int = 0,
         @ColumnInfo(name = "code") val code: String,
-        @ColumnInfo(name = "country") val country: String,
-        @ColumnInfo(name = "description") val description: String,
         @ColumnInfo(name = "rate") var rate: Double
 )
