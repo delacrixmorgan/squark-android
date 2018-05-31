@@ -2,6 +2,7 @@ package com.delacrixmorgan.squark
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import com.delacrixmorgan.squark.common.changeAppOverview
 import com.delacrixmorgan.squark.common.showFragment
 import com.delacrixmorgan.squark.data.api.SquarkApiService
@@ -22,44 +23,54 @@ import io.reactivex.schedulers.Schedulers
 
 class MainActivity : AppCompatActivity() {
 
+    private var database: CurrencyDatabase? = null
     private var disposable: Disposable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
+        setContentView(R.layout.activity_main)
         changeAppOverview(this, theme)
 
-        val database = CurrencyDatabase.getInstance(this)
+        this.database = CurrencyDatabase.getInstance(this)
+        val currencySize = database?.currencyDataDao()?.getCurrencies()?.size ?: 0
 
+        if (currencySize < 0) {
+            initCurrencies()
+        } else {
+            startLaunchFragment()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        this.disposable?.dispose()
+    }
+
+    private fun startLaunchFragment() {
+        showFragment(this, LaunchFragment.newInstance())
+    }
+
+    private fun initCurrencies() {
         this.disposable = SquarkApiService
                 .create(this)
                 .updateRate()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        { result ->
-                            result.quotes?.map {
-                                val currency = Currency(
-                                        code = it.key,
-                                        rate = it.value
-                                )
-
-                                database?.apply {
-                                    currencyDataDao().insertCurrency(currency)
-                                }
-                            }
-                            showFragment(this, LaunchFragment.newInstance())
-                        },
-                        { error ->
-                            // TODO - Handle Error
+                .subscribe({ result ->
+                    result.quotes?.map {
+                        val currency = Currency(
+                                code = it.key,
+                                rate = it.value
+                        )
+                        database?.apply {
+                            currencyDataDao().insertCurrency(currency)
                         }
-                )
-    }
-
-
-    override fun onPause() {
-        super.onPause()
-        this.disposable?.dispose()
+                    }
+                    startLaunchFragment()
+                }, { error ->
+                    // TODO - Handle Error
+                    Log.e("Error", "$error")
+                })
     }
 }
