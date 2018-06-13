@@ -17,7 +17,7 @@ import com.delacrixmorgan.squark.data.model.Currency
 @Dao
 interface CurrencyDataDao {
     @Query("SELECT * from Currency")
-    fun getCurrencies(): ArrayList<Currency>
+    fun getCurrencies(): List<Currency>
 
     @Insert(onConflict = REPLACE)
     fun insertCurrency(currency: Currency)

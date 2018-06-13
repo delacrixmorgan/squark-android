@@ -14,27 +14,27 @@ import com.delacrixmorgan.squark.data.model.Currency
  * Copyright (c) 2018 licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
  */
 
-@Database(entities = arrayOf(Currency::class), version = 1)
+@Database(entities = [(Currency::class)], version = 1)
 abstract class CurrencyDatabase : RoomDatabase() {
     abstract fun currencyDataDao(): CurrencyDataDao
 
     companion object {
-        private var currencyDatabaseInstance: CurrencyDatabase? = null
+        private var INSTANCE: CurrencyDatabase? = null
 
         fun getInstance(context: Context): CurrencyDatabase? {
-            if (this.currencyDatabaseInstance == null) {
+            if (this.INSTANCE == null) {
                 synchronized(CurrencyDatabase::class) {
-                    this.currencyDatabaseInstance = Room.databaseBuilder(context.applicationContext,
+                    this.INSTANCE = Room.databaseBuilder(context.applicationContext,
                             CurrencyDatabase::class.java,
                             "currency.db")
                             .build()
                 }
             }
-            return this.currencyDatabaseInstance
+            return this.INSTANCE
         }
 
         fun destroyInstance() {
-            this.currencyDatabaseInstance = null
+            this.INSTANCE = null
         }
     }
 }
