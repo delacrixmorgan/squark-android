@@ -32,14 +32,16 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         changeAppOverview(this, theme)
 
-        this.database = CurrencyDatabase.getInstance(this)
-        val currencySize = database?.currencyDataDao()?.getCurrencies()?.size ?: 0
+        startLaunchFragment()
 
-        if (currencySize < 0) {
-            initCurrencies()
-        } else {
-            startLaunchFragment()
-        }
+//        this.database = CurrencyDatabase.getInstance(this)
+//        val currencySize = database?.currencyDataDao()?.getCurrencies()?.size ?: 0
+//
+//        if (currencySize < 0) {
+//            initCurrencies()
+//        } else {
+//            startLaunchFragment()
+//        }
     }
 
     override fun onPause() {
