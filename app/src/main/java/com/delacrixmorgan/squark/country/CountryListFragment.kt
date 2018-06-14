@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.delacrixmorgan.squark.R
+import kotlinx.android.synthetic.main.fragment_currency_list.*
 
 /**
  * CountryListFragment
@@ -55,5 +56,6 @@ class CountryListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         this.countryAdapter = CountryRecyclerViewAdapter()
+        this.countryRecyclerView.adapter = this.countryAdapter
     }
 }

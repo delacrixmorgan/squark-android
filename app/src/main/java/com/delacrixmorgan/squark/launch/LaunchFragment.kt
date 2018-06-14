@@ -43,7 +43,7 @@ class LaunchFragment : Fragment(), RowListener {
         this.activity?.let {
             SquarkEngine.setupTable(
                     activity = it,
-                    tableLayout = tableLayout,
+                    tableLayout = currencyTableLayout,
                     rowList = rowList,
                     listener = this)
         }
@@ -77,7 +77,7 @@ class LaunchFragment : Fragment(), RowListener {
 
         SquarkEngine.expandTable(
                 activity = requireActivity(),
-                tableLayout = tableLayout,
+                tableLayout = currencyTableLayout,
                 expandQuantifier = selectedRow,
                 expandedList = expandedList,
                 listener = this)
@@ -85,7 +85,7 @@ class LaunchFragment : Fragment(), RowListener {
 
     private fun onRowCollapse(selectedRow: Int) {
         this.expandedList.map {
-            tableLayout.removeView(it)
+            currencyTableLayout.removeView(it)
         }
 
         this.rowList.map {

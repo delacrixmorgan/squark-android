@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/view_country_layout"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/black"
-    android:paddingBottom="15dp"
-    android:paddingEnd="25dp"
-    android:paddingStart="25dp"
-    android:paddingTop="15dp">
+    android:background="@android:color/black"
+    android:paddingBottom="12dp"
+    android:paddingEnd="24dp"
+    android:paddingStart="24dp"
+    android:paddingTop="12dp">
 
     <ImageView
-        android:id="@+id/view_country_flag"
+        android:id="@+id/flagImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:background="@drawable/malaysia" />
+        android:background="@drawable/malaysia"/>
 
     <LinearLayout
         android:id="@+id/ll_view_country_column"
@@ -22,23 +23,24 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginStart="20dp"
-        android:layout_toEndOf="@+id/view_country_flag"
+        android:layout_toEndOf="@+id/flagImageView"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/view_country_code"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="MYR"
-            android:textColor="@color/white" />
+            android:textColor="@android:color/white"
+            tools:text="MYR"/>
 
         <TextView
             android:id="@+id/view_country_description"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:text="Malaysian Ringgit"
             android:textColor="@color/grey"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            app:autoSizeTextType="uniform"
+            tools:text="Malaysian Ringgit"/>
 
     </LinearLayout>
 
@@ -49,7 +51,6 @@
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:background="@drawable/ic_radio_button_checked_white_24dp"
-        android:backgroundTint="@color/green" />
-
+        android:backgroundTint="@color/green"/>
 
 </RelativeLayout>

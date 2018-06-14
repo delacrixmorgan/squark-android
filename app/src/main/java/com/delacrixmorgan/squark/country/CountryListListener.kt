@@ -1,6 +1,6 @@
 package com.delacrixmorgan.squark.country
 
-import com.delacrixmorgan.squark.data.model.Currency
+import com.delacrixmorgan.squark.data.model.Country
 
 /**
  * CountryListListener
@@ -11,5 +11,5 @@ import com.delacrixmorgan.squark.data.model.Currency
  */
 
 interface CountryListListener {
-    fun onCurrencyClick(currency: Currency)
+    fun onCountryClick(country: Country)
 }

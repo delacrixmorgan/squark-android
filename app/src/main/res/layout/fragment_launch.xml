@@ -24,7 +24,7 @@
                 android:focusable="true"
                 android:gravity="center"
                 android:text="USD"
-                android:textAlignment="center" />
+                android:textAlignment="center"/>
 
             <TextView
                 android:id="@+id/quoteCurrencyTextView"
@@ -34,7 +34,7 @@
                 android:focusable="true"
                 android:gravity="center"
                 android:text="MYR"
-                android:textAlignment="center" />
+                android:textAlignment="center"/>
 
         </LinearLayout>
 
@@ -49,24 +49,16 @@
             android:tint="@color/green"
             app:backgroundTint="@color/white"
             app:elevation="6dp"
-            app:fabSize="normal" />
+            app:fabSize="normal"/>
 
     </RelativeLayout>
 
     <TableLayout
-        android:id="@+id/tableLayout"
+        android:id="@+id/currencyTableLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:animateLayoutChanges="true"
-        android:background="@color/black"
-        android:stretchColumns="*" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/black"
-        android:nestedScrollingEnabled="false"
-        android:visibility="gone" />
+        android:background="@android:color/black"
+        android:stretchColumns="*"/>
 
 </LinearLayout>
