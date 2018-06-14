@@ -38,6 +38,8 @@ class CountryListFragment : Fragment() {
     private var baseCurrencyCode: String? = null
     private var quoteCurrencyCode: String? = null
 
+    private lateinit var countryAdapter: CountryRecyclerViewAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -52,6 +54,6 @@ class CountryListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
+        this.countryAdapter = CountryRecyclerViewAdapter()
     }
 }

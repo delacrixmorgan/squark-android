@@ -5,24 +5,34 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.delacrixmorgan.squark.R
+import com.delacrixmorgan.squark.data.model.Country
 
 open class CountryRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    private var countries: ArrayList<Country> = ArrayList()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return CountryViewHolder(
                 LayoutInflater.from(parent.context).inflate(R.layout.cell_country, parent, false)
         )
     }
 
-    override fun getItemCount(): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val country = countries[position]
+
+        if (holder is CountryViewHolder) {
+            holder.updateData(country)
+        }
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun getItemCount() = countries.count()
 
     open class CountryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         init {
+            this.itemView.setOnClickListener { }
+        }
+
+        fun updateData(country: Country) {
 
         }
     }
