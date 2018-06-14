@@ -15,5 +15,6 @@ import android.arch.persistence.room.PrimaryKey
 @Entity(tableName = "Country")
 data class Country(
         @PrimaryKey(autoGenerate = true) val id: Int = 0,
-        @ColumnInfo(name = "name") val code: String
+        @ColumnInfo(name = "code") val code: String,
+        @ColumnInfo(name = "name") val name: String
 )
