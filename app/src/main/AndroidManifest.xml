@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".currency.CurrencyActivity"
+            android:name=".country.CountryActivity"
             android:screenOrientation="portrait" />
     </application>
 

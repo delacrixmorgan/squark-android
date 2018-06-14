@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import android.widget.TableRow
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.SquarkEngine
-import com.delacrixmorgan.squark.currency.CurrencyActivity
+import com.delacrixmorgan.squark.country.CountryActivity
 import kotlinx.android.synthetic.main.fragment_launch.*
 
 /**
@@ -48,22 +48,17 @@ class LaunchFragment : Fragment(), RowListener {
                     listener = this)
         }
 
+        // TODO - Remove When Currency List is Done
+        startActivity(CountryActivity.newLaunchIntent(requireContext(), baseCurrencyCode = "USD"))
+
         this.baseCurrencyTextView.setOnClickListener {
-            this.context?.let {
-                val currencyIntent = CurrencyActivity.newLaunchIntent(
-                        it,
-                        baseCurrencyCode = "USD")
-                this.startActivity(currencyIntent)
-            }
+            val currencyIntent = CountryActivity.newLaunchIntent(requireContext(), baseCurrencyCode = "USD")
+            startActivity(currencyIntent)
         }
 
         this.quoteCurrencyTextView.setOnClickListener {
-            this.context?.let {
-                val currencyIntent = CurrencyActivity.newLaunchIntent(
-                        it,
-                        baseCurrencyCode = "MYR")
-                this.startActivity(currencyIntent)
-            }
+            val currencyIntent = CountryActivity.newLaunchIntent(requireContext(), quoteCurrencyCode = "MYR")
+            startActivity(currencyIntent)
         }
     }
 
@@ -76,18 +71,16 @@ class LaunchFragment : Fragment(), RowListener {
             if (index != selectedRow && index != (selectedRow + 1)) {
                 tableRow.visibility = View.GONE
             } else {
-                tableRow.setBackgroundColor(ContextCompat.getColor(context!!, R.color.amber))
+                tableRow.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.amber))
             }
         }
 
-        this.activity?.let {
-            SquarkEngine.expandTable(
-                    activity = it,
-                    tableLayout = tableLayout,
-                    expandQuantifier = selectedRow,
-                    expandedList = expandedList,
-                    listener = this)
-        }
+        SquarkEngine.expandTable(
+                activity = requireActivity(),
+                tableLayout = tableLayout,
+                expandQuantifier = selectedRow,
+                expandedList = expandedList,
+                listener = this)
     }
 
     private fun onRowCollapse(selectedRow: Int) {
