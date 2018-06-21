@@ -6,15 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.data.model.Country
+import kotlinx.android.synthetic.main.cell_country.view.*
 
-open class CountryRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class CountryRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var countries: ArrayList<Country> = ArrayList()
+    private var countries: List<Country> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return CountryViewHolder(
-                LayoutInflater.from(parent.context).inflate(R.layout.cell_country, parent, false)
-        )
+        return CountryViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.cell_country, parent, false))
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -25,15 +24,24 @@ open class CountryRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHo
         }
     }
 
-    override fun getItemCount() = countries.count()
+    override fun getItemCount(): Int {
+        return this.countries.size
+    }
 
-    open class CountryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    fun updateDataSet(countries: List<Country>) {
+        this.countries = countries
+        notifyDataSetChanged()
+    }
+
+    class CountryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         init {
-            this.itemView.setOnClickListener { }
+            this.itemView.setOnClickListener {
+            }
         }
 
         fun updateData(country: Country) {
-
+            this.itemView.codeTextView.text = country.code
+            this.itemView.descriptionTextView.text = country.name
         }
     }
 }

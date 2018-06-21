@@ -1,5 +1,7 @@
 package com.delacrixmorgan.squark.data.controller
 
+import com.delacrixmorgan.squark.data.model.Country
+
 /**
  * CountryDataController
  * squark-android
@@ -9,4 +11,11 @@ package com.delacrixmorgan.squark.data.controller
  */
 
 object CountryDataController {
+    private var countries: List<Country> = ArrayList()
+
+    fun getCountries() = countries
+
+    fun updateDataSet(countries: List<Country>) {
+        this.countries = countries
+    }
 }

@@ -9,6 +9,7 @@ import com.delacrixmorgan.squark.common.changeAppOverview
 import com.delacrixmorgan.squark.common.showFragment
 import com.delacrixmorgan.squark.data.api.SquarkApiService
 import com.delacrixmorgan.squark.data.SquarkWorkerThread
+import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.controller.CountryDatabase
 import com.delacrixmorgan.squark.data.model.Country
 import com.delacrixmorgan.squark.data.model.Currency
@@ -74,8 +75,9 @@ class MainActivity : AppCompatActivity() {
                 if (countryData == null || countryData.isEmpty()) {
                     initCountries()
                 } else {
-                    Snackbar.make(this.mainContainer, "Populate Countries", Snackbar.LENGTH_SHORT).show()
                     startLaunchFragment()
+                    CountryDataController.updateDataSet(countryData)
+                    Snackbar.make(this.mainContainer, "Populate Countries", Snackbar.LENGTH_SHORT).show()
                 }
             }
         })
@@ -140,8 +142,11 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            startLaunchFragment()
-            Snackbar.make(this.mainContainer, "Request API", Snackbar.LENGTH_SHORT).show()
+            this.countries?.let {
+                CountryDataController.updateDataSet(it)
+                startLaunchFragment()
+                Snackbar.make(this.mainContainer, "Request API", Snackbar.LENGTH_SHORT).show()
+            }
         })
     }
 }

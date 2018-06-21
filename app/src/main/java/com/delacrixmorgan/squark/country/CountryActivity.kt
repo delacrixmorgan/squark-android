@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.delacrixmorgan.squark.R
-import kotlinx.android.synthetic.main.activity_currency.*
+import kotlinx.android.synthetic.main.activity_country.*
 
 /**
  * CountryActivity
@@ -44,7 +44,7 @@ class CountryActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        this.setContentView(R.layout.activity_currency)
+        this.setContentView(R.layout.activity_country)
 
         if (this.intent.extras != null) {
             this.baseCurrencyCode = this.intent.extras.getString(EXTRA_BASE_CURRENCY_CODE)

@@ -49,7 +49,7 @@ class LaunchFragment : Fragment(), RowListener {
         }
 
         // TODO - Remove When Currency List is Done
-//        startActivity(CountryActivity.newLaunchIntent(requireContext(), baseCurrencyCode = "USD"))
+        startActivity(CountryActivity.newLaunchIntent(requireContext(), baseCurrencyCode = "USD"))
 
         this.baseCurrencyTextView.setOnClickListener {
             val currencyIntent = CountryActivity.newLaunchIntent(requireContext(), baseCurrencyCode = "USD")
@@ -59,6 +59,10 @@ class LaunchFragment : Fragment(), RowListener {
         this.quoteCurrencyTextView.setOnClickListener {
             val currencyIntent = CountryActivity.newLaunchIntent(requireContext(), quoteCurrencyCode = "MYR")
             startActivity(currencyIntent)
+        }
+
+        this.swapButton.setOnClickListener {
+            
         }
     }
 
