@@ -8,8 +8,9 @@ import android.util.Log
 import com.delacrixmorgan.squark.common.changeAppOverview
 import com.delacrixmorgan.squark.common.showFragment
 import com.delacrixmorgan.squark.data.api.SquarkApiService
-import com.delacrixmorgan.squark.data.controller.CurrencyDatabase
-import com.delacrixmorgan.squark.data.controller.CurrencyWorkerThread
+import com.delacrixmorgan.squark.data.SquarkWorkerThread
+import com.delacrixmorgan.squark.data.controller.CountryDatabase
+import com.delacrixmorgan.squark.data.model.Country
 import com.delacrixmorgan.squark.data.model.Currency
 import com.delacrixmorgan.squark.launch.LaunchFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -27,10 +28,13 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    private var database: CurrencyDatabase? = null
+    private var database: CountryDatabase? = null
     private var disposable: Disposable? = null
 
-    private lateinit var workerThread: CurrencyWorkerThread
+    private var countries: List<Country>? = ArrayList()
+    private var currencies: List<Currency>? = ArrayList()
+
+    private lateinit var workerThread: SquarkWorkerThread
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,10 +42,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         changeAppOverview(this, theme)
 
-        this.workerThread = CurrencyWorkerThread(CurrencyWorkerThread::class.java.simpleName)
+        this.workerThread = SquarkWorkerThread(SquarkWorkerThread::class.java.simpleName)
         this.workerThread.start()
 
-        this.database = CurrencyDatabase.getInstance(this)
+        this.database = CountryDatabase.getInstance(this)
+
         fetchCurrencyData()
     }
 
@@ -51,7 +56,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        CurrencyDatabase.destroyInstance()
+        CountryDatabase.destroyInstance()
         this.workerThread.quit()
 
         super.onDestroy()
@@ -63,53 +68,80 @@ class MainActivity : AppCompatActivity() {
 
     private fun fetchCurrencyData() {
         this.workerThread.postTask(Runnable {
-            val currencyData = this.database?.currencyDataDao()?.getCurrencies()
+            val countryData = this.database?.countryDataDao()?.getCountries()
 
             Handler().post {
-                if (currencyData == null || currencyData.isEmpty()) {
-                    initCurrencies()
+                if (countryData == null || countryData.isEmpty()) {
+                    initCountries()
                 } else {
-                    Snackbar.make(this.mainContainer, "Populate Currencies", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(this.mainContainer, "Populate Countries", Snackbar.LENGTH_SHORT).show()
                     startLaunchFragment()
                 }
             }
         })
     }
 
-    private fun initCurrencies() {
+    private fun initCountries() {
         this.disposable = SquarkApiService
                 .create(this)
-                .updateRate()
+                .getCountries()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ result ->
-                    val currencies = result.quotes?.map {
+                    this.countries = result.quotes?.map {
+                        Country(
+                                code = it.key,
+                                name = it.value
+                        )
+                    }
+
+                    initCurrencies()
+                }, { error ->
+                    Snackbar.make(this.mainContainer, "Error API Countries", Snackbar.LENGTH_SHORT).show()
+                    Log.e("Error", "$error")
+                })
+
+
+    }
+
+    private fun initCurrencies() {
+        this.disposable = SquarkApiService
+                .create(this)
+                .getCurrencies()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ result ->
+                    this.currencies = result.quotes?.map {
                         Currency(
                                 code = it.key,
                                 rate = it.value
                         )
                     }
 
-                    if (currencies != null) {
-                        insertCurrencies(currencies)
+                    if (this.countries != null && this.currencies != null) {
+                        insertCountries()
                     } else {
-                        Snackbar.make(this.mainContainer, "Empty API Currencies", Snackbar.LENGTH_SHORT).show()
+                        Snackbar.make(this.mainContainer, "Empty API Countries", Snackbar.LENGTH_SHORT).show()
                     }
                 }, { error ->
-                    Snackbar.make(this.mainContainer, "Error API Currencies", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(this.mainContainer, "Error API Countries", Snackbar.LENGTH_SHORT).show()
                     Log.e("Error", "$error")
                 })
     }
 
-    private fun insertCurrencies(currencies: List<Currency>) {
+    private fun insertCountries() {
         this.workerThread.postTask(Runnable {
-            this.database?.apply {
-                currencies.map {
-                    currencyDataDao().insertCurrency(it)
+            this.database?.let { database ->
+                this.countries?.forEachIndexed { index, country ->
+                    this.currencies?.get(index).let {
+                        country.currency = it
+                        database.countryDataDao().insertCountry(country)
+                    }
                 }
             }
-            Snackbar.make(this.mainContainer, "Request API", Snackbar.LENGTH_SHORT).show()
+
             startLaunchFragment()
+            Snackbar.make(this.mainContainer, "Request API", Snackbar.LENGTH_SHORT).show()
         })
     }
 }

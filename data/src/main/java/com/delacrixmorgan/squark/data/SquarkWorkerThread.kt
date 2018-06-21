@@ -1,9 +1,9 @@
-package com.delacrixmorgan.squark.data.controller
+package com.delacrixmorgan.squark.data
 
 import android.os.Handler
 import android.os.HandlerThread
 
-class CurrencyWorkerThread(threadName: String) : HandlerThread(threadName) {
+class SquarkWorkerThread(threadName: String) : HandlerThread(threadName) {
     private lateinit var workerHandler: Handler
 
     override fun onLooperPrepared() {

@@ -19,11 +19,17 @@ import retrofit2.http.Query
 
 interface SquarkApiService {
 
-    @GET("live")
-    fun updateRate(
+    @GET("list")
+    fun getCountries(
             @Query("access_key") accessKey: String? = ACCESS_KEY,
             @Query("source") source: String? = SOURCE
-    ): Observable<QuoteModel.Result>
+    ): Observable<CountryModel.Result>
+
+    @GET("live")
+    fun getCurrencies(
+            @Query("access_key") accessKey: String? = ACCESS_KEY,
+            @Query("source") source: String? = SOURCE
+    ): Observable<CurrencyModel.Result>
 
     companion object {
         private const val BASE_URL = "http://apilayer.net/api/"
