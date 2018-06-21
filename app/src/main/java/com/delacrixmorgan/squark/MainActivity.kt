@@ -1,12 +1,15 @@
 package com.delacrixmorgan.squark
 
+import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
+import android.util.AttributeSet
 import android.util.Log
+import android.view.View
 import com.delacrixmorgan.squark.common.changeAppOverview
-import com.delacrixmorgan.squark.common.showFragment
+import com.delacrixmorgan.squark.common.startFragment
 import com.delacrixmorgan.squark.data.api.SquarkApiService
 import com.delacrixmorgan.squark.data.SquarkWorkerThread
 import com.delacrixmorgan.squark.data.controller.CountryDataController
@@ -51,6 +54,21 @@ class MainActivity : AppCompatActivity() {
         fetchCurrencyData()
     }
 
+    private fun fetchCurrencyData() {
+        this.workerThread.postTask(Runnable {
+            val countryData = this.database?.countryDataDao()?.getCountries()
+
+            Handler().post {
+                if (countryData == null || countryData.isEmpty()) {
+                    initCountries()
+                } else {
+                    startFragment(this, LaunchFragment.newInstance())
+                    CountryDataController.updateDataSet(countryData)
+                }
+            }
+        })
+    }
+
     override fun onPause() {
         super.onPause()
         this.disposable?.dispose()
@@ -61,26 +79,6 @@ class MainActivity : AppCompatActivity() {
         this.workerThread.quit()
 
         super.onDestroy()
-    }
-
-    private fun startLaunchFragment() {
-        showFragment(this, LaunchFragment.newInstance())
-    }
-
-    private fun fetchCurrencyData() {
-        this.workerThread.postTask(Runnable {
-            val countryData = this.database?.countryDataDao()?.getCountries()
-
-            Handler().post {
-                if (countryData == null || countryData.isEmpty()) {
-                    initCountries()
-                } else {
-                    startLaunchFragment()
-                    CountryDataController.updateDataSet(countryData)
-                    Snackbar.make(this.mainContainer, "Populate Countries", Snackbar.LENGTH_SHORT).show()
-                }
-            }
-        })
     }
 
     private fun initCountries() {
@@ -144,8 +142,7 @@ class MainActivity : AppCompatActivity() {
 
             this.countries?.let {
                 CountryDataController.updateDataSet(it)
-                startLaunchFragment()
-                Snackbar.make(this.mainContainer, "Request API", Snackbar.LENGTH_SHORT).show()
+                startFragment(this, LaunchFragment.newInstance())
             }
         })
     }
