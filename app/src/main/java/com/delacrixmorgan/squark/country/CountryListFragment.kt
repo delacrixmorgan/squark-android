@@ -2,10 +2,10 @@ package com.delacrixmorgan.squark.country
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.app.NavUtils
 import android.support.v7.widget.LinearLayoutManager
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.support.v7.widget.SearchView
+import android.view.*
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.data.SquarkWorkerThread
 import com.delacrixmorgan.squark.data.controller.CountryDataController
@@ -44,6 +44,8 @@ class CountryListFragment : Fragment() {
     private var database: CountryDatabase? = null
     private var disposable: Disposable? = null
 
+    private var searchView: SearchView? = null
+    private var searchMenuItem: MenuItem? = null
     private var baseCurrencyCode: String? = null
     private var quoteCurrencyCode: String? = null
 
@@ -52,6 +54,7 @@ class CountryListFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
 
         this.baseCurrencyCode = this.arguments?.getString(ARG_BELONGS_TO_BASE_CURRENCY_CODE)
         this.quoteCurrencyCode = this.arguments?.getString(ARG_BELONGS_TO_QUOTE_CURRENCY_CODE)
@@ -73,6 +76,48 @@ class CountryListFragment : Fragment() {
         this.countryRecyclerView.adapter = this.countryAdapter
 
 //        fetchCurrencyData()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                this.activity?.onBackPressed()
+                true
+            }
+            else -> {
+                super.onOptionsItemSelected(item)
+            }
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater?.inflate(R.menu.menu_search, menu)
+
+        menu?.findItem(R.id.actionSearch)?.let { searchMenuItem ->
+            (searchMenuItem.actionView as? SearchView)?.let {
+                this@CountryListFragment.searchMenuItem = searchMenuItem
+
+                searchMenuItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+                    override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
+                        this@CountryListFragment.searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                            override fun onQueryTextSubmit(query: String): Boolean {
+                                return true
+                            }
+
+                            override fun onQueryTextChange(newText: String): Boolean {
+                                return true
+                            }
+                        })
+                        return true
+                    }
+
+                    override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
+                        return true
+                    }
+                })
+            }
+        }
     }
 
 //    override fun onPause() {

@@ -46,6 +46,13 @@ class CountryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         this.setContentView(R.layout.activity_country)
 
+        setSupportActionBar(this.toolbar)
+        this.supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setHomeButtonEnabled(true)
+            title = ""
+        }
+        
         if (this.intent.extras != null) {
             this.baseCurrencyCode = this.intent.extras.getString(EXTRA_BASE_CURRENCY_CODE)
             this.quoteCurrencyCode = this.intent.extras.getString(EXTRA_QUOTE_CURRENCY_CODE)
