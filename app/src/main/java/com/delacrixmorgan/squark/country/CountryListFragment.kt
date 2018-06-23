@@ -82,12 +82,12 @@ class CountryListFragment : Fragment() {
         val filterCountries = if (searchText.isNullOrBlank()) {
             CountryDataController.getCountries()
         } else {
+            val text: String = searchText?.toLowerCase() ?: ""
             CountryDataController.getCountries().filter {
-                it.name.contains(searchText.toString()) || it.code.contains(searchText.toString())
+                it.name.toLowerCase().contains(text) || it.code.toLowerCase().contains(text)
             }
         }
-
-        this.countryAdapter.updateDataSet(filterCountries ?: arrayListOf())
+        this.countryAdapter.updateDataSet(filterCountries)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
