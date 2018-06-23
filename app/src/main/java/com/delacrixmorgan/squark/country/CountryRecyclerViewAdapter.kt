@@ -8,19 +8,21 @@ import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.data.model.Country
 import kotlinx.android.synthetic.main.cell_country.view.*
 
-class CountryRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
+class CountryRecyclerViewAdapter(
+        private val listener: CountryListListener,
+        private val countryCode: String
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var countries: List<Country> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return CountryViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.cell_country, parent, false))
+        return CountryViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.cell_country, parent, false), listener)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val country = countries[position]
 
         if (holder is CountryViewHolder) {
-            holder.updateData(country)
+            holder.updateData(country, countryCode)
         }
     }
 
@@ -33,15 +35,25 @@ class CountryRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>
         notifyDataSetChanged()
     }
 
-    class CountryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class CountryViewHolder(itemView: View, private val listener: CountryListListener) : RecyclerView.ViewHolder(itemView) {
+        private lateinit var country: Country
+
         init {
             this.itemView.setOnClickListener {
+                this.listener.onCountrySelected(this.country)
             }
         }
 
-        fun updateData(country: Country) {
-            this.itemView.codeTextView.text = country.code
-            this.itemView.descriptionTextView.text = country.name
+        fun updateData(country: Country, countryCode: String) {
+            this.country = country
+
+            this.itemView.codeTextView.text = this.country.code
+            this.itemView.descriptionTextView.text = this.country.name
+            this.itemView.selectedCountryImageView.visibility = if (this.country.code == countryCode) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
         }
     }
 }

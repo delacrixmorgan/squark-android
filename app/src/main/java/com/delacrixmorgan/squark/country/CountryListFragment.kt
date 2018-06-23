@@ -2,7 +2,6 @@ package com.delacrixmorgan.squark.country
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.app.NavUtils
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SearchView
 import android.view.*
@@ -10,6 +9,7 @@ import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.data.SquarkWorkerThread
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.controller.CountryDatabase
+import com.delacrixmorgan.squark.data.model.Country
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.fragment_country_list.*
 
@@ -21,21 +21,17 @@ import kotlinx.android.synthetic.main.fragment_country_list.*
  * Copyright (c) 2018 licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
  */
 
-class CountryListFragment : Fragment() {
-
+class CountryListFragment : Fragment(), CountryListListener {
     companion object {
-        private const val ARG_BELONGS_TO_BASE_CURRENCY_CODE = "Currency.baseCode"
-        private const val ARG_BELONGS_TO_QUOTE_CURRENCY_CODE = "Currency.quoteCode"
+        private const val ARG_BELONGS_TO_COUNTRY_CODE = "Country.countryCode"
 
         fun newInstance(
-                baseCurrencyCode: String? = null,
-                quoteCurrencyCode: String? = null
+                countryCode: String? = null
         ): CountryListFragment {
             val fragment = CountryListFragment()
             val args = Bundle()
 
-            args.putString(ARG_BELONGS_TO_BASE_CURRENCY_CODE, baseCurrencyCode)
-            args.putString(ARG_BELONGS_TO_QUOTE_CURRENCY_CODE, quoteCurrencyCode)
+            args.putString(ARG_BELONGS_TO_COUNTRY_CODE, countryCode)
 
             return fragment
         }
@@ -46,9 +42,8 @@ class CountryListFragment : Fragment() {
 
     private var searchView: SearchView? = null
     private var searchMenuItem: MenuItem? = null
-    private var baseCurrencyCode: String? = null
-    private var quoteCurrencyCode: String? = null
 
+    private lateinit var countryCode: String
     private lateinit var workerThread: SquarkWorkerThread
     private lateinit var countryAdapter: CountryRecyclerViewAdapter
 
@@ -56,8 +51,7 @@ class CountryListFragment : Fragment() {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
 
-        this.baseCurrencyCode = this.arguments?.getString(ARG_BELONGS_TO_BASE_CURRENCY_CODE)
-        this.quoteCurrencyCode = this.arguments?.getString(ARG_BELONGS_TO_QUOTE_CURRENCY_CODE)
+        this.countryCode = this.arguments?.getString(ARG_BELONGS_TO_COUNTRY_CODE) ?: "USD"
 
 //        this.database = CountryDatabase.getInstance(requireContext())
     }
@@ -69,13 +63,17 @@ class CountryListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        this.countryAdapter = CountryRecyclerViewAdapter()
+        this.countryAdapter = CountryRecyclerViewAdapter(listener = this, countryCode = this.countryCode)
         this.countryAdapter.updateDataSet(CountryDataController.getCountries())
 
         this.countryRecyclerView.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         this.countryRecyclerView.adapter = this.countryAdapter
 
 //        fetchCurrencyData()
+    }
+
+    override fun onCountrySelected(country: Country) {
+
     }
 
     private fun updateDataSet(searchText: String? = null) {

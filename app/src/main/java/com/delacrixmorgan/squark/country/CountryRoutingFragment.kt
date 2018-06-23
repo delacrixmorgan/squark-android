@@ -18,22 +18,16 @@ import kotlinx.android.synthetic.main.fragment_base_routing.*
 
 class CountryRoutingFragment : Fragment() {
     companion object {
-        private const val ARG_BASE_CURRENCY_CODE = "Currency.baseCode"
-        private const val ARG_QUOTE_CURRENCY_CODE = "Currency.quoteCode"
+        private const val ARG_COUNTRY_CODE = "Country.countryCode"
 
         fun newInstance(
-                baseCurrencyCode: String? = null,
-                quoteCurrencyCode: String? = null
+                countryCode: String? = null
         ): CountryRoutingFragment {
             val fragment = CountryRoutingFragment()
             val args = Bundle()
 
-            baseCurrencyCode?.let {
-                args.putString(ARG_BASE_CURRENCY_CODE, it)
-            }
-
-            quoteCurrencyCode?.let {
-                args.putString(ARG_QUOTE_CURRENCY_CODE, it)
+            countryCode?.let {
+                args.putString(ARG_COUNTRY_CODE, it)
             }
 
             fragment.arguments = args
@@ -41,14 +35,11 @@ class CountryRoutingFragment : Fragment() {
         }
     }
 
-    private var baseCurrencyCode: String? = null
-    private var quoteCurrencyCode: String? = null
+    private var countryCode: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        this.baseCurrencyCode = this.arguments?.getString(ARG_BASE_CURRENCY_CODE)
-        this.quoteCurrencyCode = this.arguments?.getString(ARG_QUOTE_CURRENCY_CODE)
+        this.countryCode = this.arguments?.getString(ARG_COUNTRY_CODE)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -59,8 +50,7 @@ class CountryRoutingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val fragment = when {
-            this.baseCurrencyCode != null -> CountryListFragment.newInstance(baseCurrencyCode = this.baseCurrencyCode)
-            this.quoteCurrencyCode != null -> CountryListFragment.newInstance(quoteCurrencyCode = this.quoteCurrencyCode)
+            this.countryCode != null -> CountryListFragment.newInstance(countryCode = this.countryCode)
             else -> CountryListFragment()
         }
 

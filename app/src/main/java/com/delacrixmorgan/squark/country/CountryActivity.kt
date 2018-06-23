@@ -17,50 +17,41 @@ import kotlinx.android.synthetic.main.activity_country.*
 
 class CountryActivity : AppCompatActivity() {
     companion object {
-        private const val EXTRA_BASE_CURRENCY_CODE = "Currency.baseCode"
-        private const val EXTRA_QUOTE_CURRENCY_CODE = "Currency.quoteCode"
+        private const val EXTRA_COUNTRY_CODE = "Country.countryCode"
 
         fun newLaunchIntent(
                 context: Context,
-                baseCurrencyCode: String? = null,
-                quoteCurrencyCode: String? = null
+                countryCode: String? = null
         ): Intent {
             val launchIntent = Intent(context, CountryActivity::class.java)
 
-            baseCurrencyCode?.let {
-                launchIntent.putExtra(EXTRA_BASE_CURRENCY_CODE, it)
-            }
-
-            quoteCurrencyCode?.let {
-                launchIntent.putExtra(EXTRA_QUOTE_CURRENCY_CODE, it)
+            countryCode?.let {
+                launchIntent.putExtra(EXTRA_COUNTRY_CODE, it)
             }
 
             return launchIntent
         }
     }
 
-    private var baseCurrencyCode: String? = null
-    private var quoteCurrencyCode: String? = null
+    private var countryCode: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        this.setContentView(R.layout.activity_country)
 
+        if (this.intent.extras != null) {
+            this.countryCode = this.intent.extras.getString(EXTRA_COUNTRY_CODE)
+        }
+
+        this.setContentView(R.layout.activity_country)
         setSupportActionBar(this.toolbar)
         this.supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
             setHomeButtonEnabled(true)
             title = ""
         }
-        
-        if (this.intent.extras != null) {
-            this.baseCurrencyCode = this.intent.extras.getString(EXTRA_BASE_CURRENCY_CODE)
-            this.quoteCurrencyCode = this.intent.extras.getString(EXTRA_QUOTE_CURRENCY_CODE)
-        }
 
         val routingFragment = CountryRoutingFragment.newInstance(
-                baseCurrencyCode = this.baseCurrencyCode,
-                quoteCurrencyCode = this.quoteCurrencyCode
+                countryCode = this.countryCode
         )
 
         if (savedInstanceState == null) {

@@ -58,12 +58,12 @@ class LaunchFragment : Fragment(), RowListener {
         }
 
         this.baseCurrencyTextView.setOnClickListener {
-            val currencyIntent = CountryActivity.newLaunchIntent(requireContext(), baseCurrencyCode = this.baseCurrency?.code)
+            val currencyIntent = CountryActivity.newLaunchIntent(requireContext(), countryCode = this.baseCurrency?.code)
             startActivity(currencyIntent)
         }
 
         this.quoteCurrencyTextView.setOnClickListener {
-            val currencyIntent = CountryActivity.newLaunchIntent(requireContext(), quoteCurrencyCode = this.quoteCurrency?.code)
+            val currencyIntent = CountryActivity.newLaunchIntent(requireContext(), countryCode = this.quoteCurrency?.code)
             startActivity(currencyIntent)
         }
 

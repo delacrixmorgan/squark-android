@@ -11,5 +11,5 @@ import com.delacrixmorgan.squark.data.model.Country
  */
 
 interface CountryListListener {
-    fun onCountryClick(country: Country)
+    fun onCountrySelected(country: Country)
 }
