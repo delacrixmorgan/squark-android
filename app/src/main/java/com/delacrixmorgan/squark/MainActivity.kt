@@ -18,6 +18,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
+import java.math.RoundingMode
 
 /**
  * MainActivity
@@ -111,7 +112,7 @@ class MainActivity : AppCompatActivity() {
                     this.currencies = result.quotes?.map {
                         Currency(
                                 code = it.key,
-                                rate = it.value
+                                rate = it.value.toBigDecimal().setScale(2, RoundingMode.UP).toDouble()
                         )
                     }
 
@@ -131,6 +132,8 @@ class MainActivity : AppCompatActivity() {
             this.database?.let { database ->
                 this.countries?.forEachIndexed { index, country ->
                     this.currencies?.get(index).let {
+                        it?.code = country.code
+
                         country.currency = it
                         database.countryDataDao().insertCountry(country)
                     }

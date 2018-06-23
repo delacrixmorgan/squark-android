@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.widget.TableLayout
 import android.widget.TableRow
+import com.delacrixmorgan.squark.data.model.Currency
 import com.delacrixmorgan.squark.launch.OnSwipeTouch
 import com.delacrixmorgan.squark.launch.RowListener
 import kotlinx.android.synthetic.main.view_row.view.*
@@ -20,17 +21,14 @@ import java.text.DecimalFormat
 
 object SquarkEngine {
 
-    private var multiplier: Double = 0.0
-    private var conversionRate: Double = 0.0
-    private val decimalFormat: DecimalFormat
-    private var bigQuantifier: BigDecimal? = null
+    private var multiplier: Double = 1.0
+    private var conversionRate: Double = 1.0
     private var bigResult: BigDecimal? = null
+    private var bigQuantifier: BigDecimal? = null
+    private val decimalFormat: DecimalFormat = DecimalFormat("###,##0.00")
 
-    init {
-        this.conversionRate = 4.0
-        this.multiplier = 1.0
-
-        this.decimalFormat = DecimalFormat("###,##0.00")
+    fun updateConversionRate(baseCurrency: Currency, quoteCurrency: Currency) {
+        conversionRate = quoteCurrency.rate / baseCurrency.rate
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -126,10 +124,4 @@ object SquarkEngine {
             tableLayout.addView(tableRow, (expandQuantifier + index))
         }
     }
-
-    //    fun updateConversionRate(baseCurrency: Currency, quoteCurrency: Currency) {
-//        mTableExpanded = false
-//        conversionRate = quoteCurrency.rate / baseCurrency.rate
-//    }
-//
 }
