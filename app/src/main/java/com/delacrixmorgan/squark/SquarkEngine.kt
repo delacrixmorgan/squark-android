@@ -5,8 +5,8 @@ import android.app.Activity
 import android.widget.TableLayout
 import android.widget.TableRow
 import com.delacrixmorgan.squark.data.model.Currency
-import com.delacrixmorgan.squark.launch.OnSwipeTouch
-import com.delacrixmorgan.squark.launch.RowListener
+import com.delacrixmorgan.squark.common.OnSwipeTouch
+import com.delacrixmorgan.squark.common.RowListener
 import kotlinx.android.synthetic.main.view_row.view.*
 import java.math.BigDecimal
 import java.text.DecimalFormat

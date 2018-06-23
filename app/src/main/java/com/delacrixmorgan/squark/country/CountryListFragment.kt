@@ -11,7 +11,7 @@ import com.delacrixmorgan.squark.data.SquarkWorkerThread
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.controller.CountryDatabase
 import com.delacrixmorgan.squark.data.model.Country
-import com.delacrixmorgan.squark.launch.LaunchFragment
+import com.delacrixmorgan.squark.LaunchFragment
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.fragment_country_list.*
 

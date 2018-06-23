@@ -1,4 +1,4 @@
-package com.delacrixmorgan.squark.launch
+package com.delacrixmorgan.squark.common
 
 import android.content.Context
 import android.view.GestureDetector
