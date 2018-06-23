@@ -7,12 +7,14 @@
         android:id="@+id/quantifierTextView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center" />
+        android:gravity="center"
+        android:textSize="18sp"/>
 
     <TextView
         android:id="@+id/resultTextView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center" />
+        android:gravity="center"
+        android:textSize="18sp"/>
 
 </TableRow>

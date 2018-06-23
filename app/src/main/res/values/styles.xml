@@ -7,7 +7,6 @@
         <item name="android:fontFamily">@font/league_spartan</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textColorPrimary">@color/white</item>
-        <item name="android:textSize">18sp</item>
         <item name="actionBarTheme">@style/SquarkAppbar</item>
     </style>
 

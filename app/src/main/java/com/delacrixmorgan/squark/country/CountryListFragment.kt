@@ -2,6 +2,7 @@ package com.delacrixmorgan.squark.country
 
 import android.app.Activity
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SearchView
@@ -71,6 +72,8 @@ class CountryListFragment : Fragment(), CountryListListener {
 
         this.countryRecyclerView.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         this.countryRecyclerView.adapter = this.countryAdapter
+
+        Snackbar.make(view, "Last Updated: 22/04/2019 at 10:00 AM", Snackbar.LENGTH_SHORT).show()
 
         updateDataSet(null)
 //        fetchCurrencyData()

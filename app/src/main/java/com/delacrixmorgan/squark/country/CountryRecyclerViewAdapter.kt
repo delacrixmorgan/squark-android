@@ -47,6 +47,11 @@ class CountryRecyclerViewAdapter(
         fun updateData(country: Country, countryCode: String) {
             this.country = country
 
+            this.itemView.context.let {
+                val flagResource = it.resources.getIdentifier("ic_flag_myr", "drawable", it.packageName)
+                this.itemView.flagImageView.setImageResource(flagResource)
+            }
+
             this.itemView.codeTextView.text = this.country.code
             this.itemView.descriptionTextView.text = this.country.name
             this.itemView.selectedCountryImageView.visibility = if (this.country.code == countryCode) {

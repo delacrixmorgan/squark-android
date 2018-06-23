@@ -23,7 +23,7 @@
                 android:text="@string/preference_credits_summary"
                 android:textAlignment="center"
                 android:textColor="@color/amber"
-                android:textSize="22sp" />
+                android:textSize="22sp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -38,7 +38,7 @@
                     android:padding="2dp"
                     android:text="The League Of, League Spartan"
                     android:textAlignment="center"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -46,7 +46,7 @@
                     android:text="Font Library"
                     android:textAlignment="center"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"/>
 
                 <ImageView
                     android:id="@+id/iv_spartan_github"
@@ -54,7 +54,7 @@
                     android:layout_height="100dp"
                     android:layout_gravity="center"
                     android:layout_margin="5dp"
-                    android:src="@drawable/github" />
+                    android:src="@drawable/github"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -63,7 +63,7 @@
                     android:padding="2dp"
                     android:text="Christopher Jenkins, Calligraphy"
                     android:textAlignment="center"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -71,7 +71,7 @@
                     android:text="Android Library"
                     android:textAlignment="center"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"/>
 
                 <ImageView
                     android:id="@+id/iv_jenkins_github"
@@ -79,7 +79,7 @@
                     android:layout_height="100dp"
                     android:layout_gravity="center"
                     android:layout_margin="5dp"
-                    android:src="@drawable/github" />
+                    android:src="@drawable/github"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -88,7 +88,7 @@
                     android:padding="2dp"
                     android:text="Realm, Realm Android"
                     android:textAlignment="center"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -96,15 +96,14 @@
                     android:text="Android Library"
                     android:textAlignment="center"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"/>
 
                 <ImageView
                     android:id="@+id/iv_realm_github"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_gravity="center"
-                    android:layout_margin="5dp"
-                    android:src="@drawable/realm_logo" />
+                    android:layout_margin="5dp"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -113,7 +112,7 @@
                     android:padding="2dp"
                     android:text="Square, Retrofit"
                     android:textAlignment="center"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -121,7 +120,7 @@
                     android:text="Android Library"
                     android:textAlignment="center"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"/>
 
                 <ImageView
                     android:id="@+id/iv_retrofit_github"
@@ -129,7 +128,7 @@
                     android:layout_height="60dp"
                     android:layout_gravity="center"
                     android:layout_margin="5dp"
-                    android:src="@drawable/retrofit_square_logo" />
+                    android:src="@drawable/retrofit_square_logo"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -138,7 +137,7 @@
                     android:padding="2dp"
                     android:text="John Ericksen, Parceler"
                     android:textAlignment="center"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -146,7 +145,7 @@
                     android:text="Android Library"
                     android:textAlignment="center"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"/>
 
                 <ImageView
                     android:id="@+id/iv_parceler_github"
@@ -154,7 +153,7 @@
                     android:layout_height="100dp"
                     android:layout_gravity="center"
                     android:layout_margin="5dp"
-                    android:src="@drawable/github" />
+                    android:src="@drawable/github"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -163,7 +162,7 @@
                     android:padding="2dp"
                     android:text="GoSquared, Flag Icon Set"
                     android:textAlignment="center"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -171,7 +170,7 @@
                     android:text="Flag Collection"
                     android:textAlignment="center"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"/>
 
                 <ImageView
                     android:id="@+id/iv_gosquared_github"
@@ -179,7 +178,7 @@
                     android:layout_height="100dp"
                     android:layout_gravity="center"
                     android:layout_margin="5dp"
-                    android:src="@drawable/github" />
+                    android:src="@drawable/github"/>
 
             </LinearLayout>
 
@@ -191,7 +190,7 @@
                 android:layout_marginStart="30dp"
                 android:background="@drawable/btn_rounded_green"
                 android:text="Done"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"/>
 
         </LinearLayout>
 
