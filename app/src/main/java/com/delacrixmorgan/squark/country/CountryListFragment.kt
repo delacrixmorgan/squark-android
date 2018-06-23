@@ -78,6 +78,18 @@ class CountryListFragment : Fragment() {
 //        fetchCurrencyData()
     }
 
+    private fun updateDataSet(searchText: String? = null) {
+        val filterCountries = if (searchText.isNullOrBlank()) {
+            CountryDataController.getCountries()
+        } else {
+            CountryDataController.getCountries().filter {
+                it.name.contains(searchText.toString()) || it.code.contains(searchText.toString())
+            }
+        }
+
+        this.countryAdapter.updateDataSet(filterCountries ?: arrayListOf())
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
@@ -96,16 +108,19 @@ class CountryListFragment : Fragment() {
 
         menu?.findItem(R.id.actionSearch)?.let { searchMenuItem ->
             (searchMenuItem.actionView as? SearchView)?.let {
+                this@CountryListFragment.searchView = it
                 this@CountryListFragment.searchMenuItem = searchMenuItem
 
                 searchMenuItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
                     override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
                         this@CountryListFragment.searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                             override fun onQueryTextSubmit(query: String): Boolean {
+                                updateDataSet(query)
                                 return true
                             }
 
                             override fun onQueryTextChange(newText: String): Boolean {
+                                updateDataSet(newText)
                                 return true
                             }
                         })
@@ -113,6 +128,7 @@ class CountryListFragment : Fragment() {
                     }
 
                     override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
+                        this@CountryListFragment.searchView?.setQuery("", false)
                         return true
                     }
                 })
