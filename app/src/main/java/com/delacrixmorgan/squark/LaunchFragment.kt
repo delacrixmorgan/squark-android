@@ -72,7 +72,12 @@ class LaunchFragment : Fragment(), RowListener {
         }
 
         this.swapButton.setOnClickListener {
+            val preference = PreferenceHelper.getPreference(requireContext())
 
+            preference[PreferenceHelper.BASE_CURRENCY_CODE] = this.quoteCountry?.code
+            preference[PreferenceHelper.QUOTE_CURRENCY_CODE] = this.baseCountry?.code
+
+            updateTable()
         }
 
         updateTable()
