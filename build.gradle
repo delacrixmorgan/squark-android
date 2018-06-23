@@ -4,7 +4,7 @@ buildscript {
     ext {
         roomVersion = '1.1.0'
         rxJavaVersion = '2.0.1'
-        kotlinVersion = '1.2.30'
+        kotlinVersion = '1.2.50'
         retrofitVersion = '2.3.0'
         parcelerVersion = '1.1.6'
         androidStudioVersion = '3.1.3'
