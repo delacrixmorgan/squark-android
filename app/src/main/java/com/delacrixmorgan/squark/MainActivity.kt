@@ -66,6 +66,14 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    override fun onBackPressed() {
+        if (this.fragmentManager.backStackEntryCount == 0) {
+            finish()
+        } else {
+            this.fragmentManager.popBackStack()
+        }
+    }
+
     override fun onPause() {
         super.onPause()
         this.disposable?.dispose()

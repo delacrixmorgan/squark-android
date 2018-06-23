@@ -75,16 +75,16 @@ class LaunchFragment : Fragment(), RowListener {
 
         }
 
-        this.baseCountry = CountryDataController.getPreferenceCountry(requireContext(), preferenceCurrency = PreferenceHelper.BASE_CURRENCY_CODE)
-        this.quoteCountry = CountryDataController.getPreferenceCountry(requireContext(), preferenceCurrency = PreferenceHelper.QUOTE_CURRENCY_CODE)
-
         updateTable()
     }
 
     private fun updateTable() {
+        this.baseCountry = CountryDataController.getPreferenceCountry(requireContext(), preferenceCurrency = PreferenceHelper.BASE_CURRENCY_CODE)
+        this.quoteCountry = CountryDataController.getPreferenceCountry(requireContext(), preferenceCurrency = PreferenceHelper.QUOTE_CURRENCY_CODE)
+
         this.baseCurrencyTextView.text = this.baseCountry?.code
         this.quoteCurrencyTextView.text = this.quoteCountry?.code
-        
+
         if (this.baseCountry?.currency != null && this.quoteCountry?.currency != null) {
             SquarkEngine.updateConversionRate(this.baseCountry!!.currency!!, this.quoteCountry!!.currency!!)
             SquarkEngine.updateTable(this.rowList)

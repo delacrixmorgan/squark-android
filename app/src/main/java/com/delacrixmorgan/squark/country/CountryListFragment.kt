@@ -72,7 +72,33 @@ class CountryListFragment : Fragment(), CountryListListener {
         this.countryRecyclerView.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         this.countryRecyclerView.adapter = this.countryAdapter
 
+        updateDataSet(null)
 //        fetchCurrencyData()
+    }
+
+    private fun updateDataSet(searchText: String? = null) {
+        val filterCountries: MutableList<Country> = if (searchText.isNullOrBlank()) {
+            CountryDataController.getCountries()
+        } else {
+            val text: String = searchText?.toLowerCase() ?: ""
+            CountryDataController.getCountries().filter {
+                it.name.toLowerCase().contains(text) || it.code.toLowerCase().contains(text)
+            }
+        } as MutableList<Country>
+
+        val selectedCountry = filterCountries.firstOrNull {
+            it.code == this.countryCode
+        }
+
+        selectedCountry?.let {
+            filterCountries.remove(it)
+            filterCountries.sortBy {
+                it.code
+            }
+            filterCountries.add(0, it)
+        }
+
+        this.countryAdapter.updateDataSet(filterCountries)
     }
 
     override fun onCountrySelected(country: Country) {
@@ -83,18 +109,6 @@ class CountryListFragment : Fragment(), CountryListListener {
             it.setResult(Activity.RESULT_OK, intent)
             it.finish()
         }
-    }
-
-    private fun updateDataSet(searchText: String? = null) {
-        val filterCountries = if (searchText.isNullOrBlank()) {
-            CountryDataController.getCountries()
-        } else {
-            val text: String = searchText?.toLowerCase() ?: ""
-            CountryDataController.getCountries().filter {
-                it.name.toLowerCase().contains(text) || it.code.toLowerCase().contains(text)
-            }
-        }
-        this.countryAdapter.updateDataSet(filterCountries)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
