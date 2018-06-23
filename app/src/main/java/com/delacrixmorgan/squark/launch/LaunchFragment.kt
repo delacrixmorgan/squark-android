@@ -14,6 +14,7 @@ import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.SquarkEngine
 import com.delacrixmorgan.squark.common.PreferenceHelper
 import com.delacrixmorgan.squark.common.PreferenceHelper.get
+import com.delacrixmorgan.squark.common.PreferenceHelper.set
 import com.delacrixmorgan.squark.country.CountryActivity
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.model.Currency
@@ -31,7 +32,10 @@ import java.util.*
 class LaunchFragment : Fragment(), RowListener {
 
     companion object {
-        private const val REQUEST_COUNTRY: Int = 1
+        private const val REQUEST_BASE_COUNTRY: Int = 1
+        private const val REQUEST_QUOTE_COUNTRY: Int = 2
+
+        const val EXTRA_COUNTRY_CODE = "LaunchFragment.countryCode"
 
         fun newInstance(): LaunchFragment = LaunchFragment()
     }
@@ -60,12 +64,12 @@ class LaunchFragment : Fragment(), RowListener {
 
         this.baseCurrencyTextView.setOnClickListener {
             val currencyIntent = CountryActivity.newLaunchIntent(requireContext(), countryCode = this.baseCurrency?.code)
-            startActivityForResult(currencyIntent, REQUEST_COUNTRY)
+            startActivityForResult(currencyIntent, REQUEST_BASE_COUNTRY)
         }
 
         this.quoteCurrencyTextView.setOnClickListener {
             val currencyIntent = CountryActivity.newLaunchIntent(requireContext(), countryCode = this.quoteCurrency?.code)
-            startActivityForResult(currencyIntent, REQUEST_COUNTRY)
+            startActivityForResult(currencyIntent, REQUEST_QUOTE_COUNTRY)
         }
 
         this.swapButton.setOnClickListener {
@@ -100,11 +104,24 @@ class LaunchFragment : Fragment(), RowListener {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        val preference = PreferenceHelper.getPreference(requireContext())
 
         when (requestCode) {
-            REQUEST_COUNTRY -> {
+            REQUEST_BASE_COUNTRY -> {
                 if (resultCode == Activity.RESULT_OK) {
-                    
+                    data?.getStringExtra(EXTRA_COUNTRY_CODE)?.let {
+                        preference[PreferenceHelper.BASE_CURRENCY_CODE] = it
+                        setupTable()
+                    }
+                }
+            }
+
+            REQUEST_QUOTE_COUNTRY -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    data?.getStringExtra(EXTRA_COUNTRY_CODE)?.let {
+                        preference[PreferenceHelper.QUOTE_CURRENCY_CODE] = it
+                        setupTable()
+                    }
                 }
             }
         }

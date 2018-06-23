@@ -1,5 +1,6 @@
 package com.delacrixmorgan.squark.country
 
+import android.app.Activity
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -10,6 +11,7 @@ import com.delacrixmorgan.squark.data.SquarkWorkerThread
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.controller.CountryDatabase
 import com.delacrixmorgan.squark.data.model.Country
+import com.delacrixmorgan.squark.launch.LaunchFragment
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.fragment_country_list.*
 
@@ -74,7 +76,13 @@ class CountryListFragment : Fragment(), CountryListListener {
     }
 
     override fun onCountrySelected(country: Country) {
+        requireActivity().let {
+            val intent = it.intent
+            intent.putExtra(LaunchFragment.EXTRA_COUNTRY_CODE, country.code)
 
+            it.setResult(Activity.RESULT_OK, intent)
+            it.finish()
+        }
     }
 
     private fun updateDataSet(searchText: String? = null) {
