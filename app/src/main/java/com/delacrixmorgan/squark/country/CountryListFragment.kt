@@ -32,6 +32,7 @@ class CountryListFragment : Fragment(), CountryListListener {
             val args = Bundle()
 
             args.putString(ARG_BELONGS_TO_COUNTRY_CODE, countryCode)
+            fragment.arguments = args
 
             return fragment
         }

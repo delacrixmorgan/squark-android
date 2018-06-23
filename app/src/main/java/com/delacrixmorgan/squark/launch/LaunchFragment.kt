@@ -1,5 +1,6 @@
 package com.delacrixmorgan.squark.launch
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
@@ -30,9 +31,9 @@ import java.util.*
 class LaunchFragment : Fragment(), RowListener {
 
     companion object {
-        fun newInstance(): LaunchFragment {
-            return LaunchFragment()
-        }
+        private const val REQUEST_COUNTRY: Int = 1
+
+        fun newInstance(): LaunchFragment = LaunchFragment()
     }
 
     private var baseCurrency: Currency? = null
@@ -59,12 +60,12 @@ class LaunchFragment : Fragment(), RowListener {
 
         this.baseCurrencyTextView.setOnClickListener {
             val currencyIntent = CountryActivity.newLaunchIntent(requireContext(), countryCode = this.baseCurrency?.code)
-            startActivity(currencyIntent)
+            startActivityForResult(currencyIntent, REQUEST_COUNTRY)
         }
 
         this.quoteCurrencyTextView.setOnClickListener {
             val currencyIntent = CountryActivity.newLaunchIntent(requireContext(), countryCode = this.quoteCurrency?.code)
-            startActivity(currencyIntent)
+            startActivityForResult(currencyIntent, REQUEST_COUNTRY)
         }
 
         this.swapButton.setOnClickListener {
@@ -99,6 +100,14 @@ class LaunchFragment : Fragment(), RowListener {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+
+        when (requestCode) {
+            REQUEST_COUNTRY -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    
+                }
+            }
+        }
     }
 
     private fun onRowExpand(selectedRow: Int) {
