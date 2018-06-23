@@ -1,13 +1,10 @@
 package com.delacrixmorgan.squark
 
-import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
-import android.util.AttributeSet
 import android.util.Log
-import android.view.View
 import com.delacrixmorgan.squark.common.changeAppOverview
 import com.delacrixmorgan.squark.common.startFragment
 import com.delacrixmorgan.squark.data.api.SquarkApiService
