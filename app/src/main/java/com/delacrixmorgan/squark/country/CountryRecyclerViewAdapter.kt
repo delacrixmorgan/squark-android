@@ -48,8 +48,14 @@ class CountryRecyclerViewAdapter(
             this.country = country
 
             this.itemView.context.let {
-                val flagResource = it.resources.getIdentifier("ic_flag_myr", "drawable", it.packageName)
-                this.itemView.flagImageView.setImageResource(flagResource)
+                val flagResource = it.resources.getIdentifier("ic_flag_${this.country.code.toLowerCase()}", "drawable", it.packageName)
+                val fallbackFlagResource = it.resources.getIdentifier("ic_flag_un", "drawable", it.packageName)
+
+                if (flagResource != 0) {
+                    this.itemView.flagImageView.setImageResource(flagResource)
+                } else {
+                    this.itemView.flagImageView.setImageResource(fallbackFlagResource)
+                }
             }
 
             this.itemView.codeTextView.text = this.country.code
