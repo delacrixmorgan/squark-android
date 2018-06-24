@@ -130,7 +130,7 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
             if (index != selectedRow && index != (selectedRow + 1)) {
                 tableRow.visibility = View.GONE
             } else {
-                tableRow.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.amber))
+                tableRow.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.colorAccent))
             }
         }
 
@@ -149,7 +149,7 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
 
         this.rowList.map {
             it.visibility = View.VISIBLE
-            it.setBackgroundColor(ContextCompat.getColor(context!!, R.color.black))
+            it.setBackgroundColor(ContextCompat.getColor(requireContext(), android.R.color.black))
         }
     }
 

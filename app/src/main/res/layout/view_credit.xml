@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@color/black"
     android:minWidth="500dp">
 
     <ScrollView
@@ -22,7 +21,6 @@
                 android:padding="5dp"
                 android:text="@string/preference_credits_summary"
                 android:textAlignment="center"
-                android:textColor="@color/amber"
                 android:textSize="22sp"/>
 
             <LinearLayout
@@ -37,8 +35,7 @@
                     android:layout_marginTop="5dp"
                     android:padding="2dp"
                     android:text="The League Of, League Spartan"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"/>
+                    android:textAlignment="center"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -62,8 +59,7 @@
                     android:layout_marginTop="5dp"
                     android:padding="2dp"
                     android:text="Christopher Jenkins, Calligraphy"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"/>
+                    android:textAlignment="center"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -87,8 +83,7 @@
                     android:layout_marginTop="5dp"
                     android:padding="2dp"
                     android:text="Realm, Realm Android"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"/>
+                    android:textAlignment="center"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -111,8 +106,7 @@
                     android:layout_marginTop="5dp"
                     android:padding="2dp"
                     android:text="Square, Retrofit"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"/>
+                    android:textAlignment="center"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -136,8 +130,7 @@
                     android:layout_marginTop="5dp"
                     android:padding="2dp"
                     android:text="John Ericksen, Parceler"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"/>
+                    android:textAlignment="center"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -161,8 +154,7 @@
                     android:layout_marginTop="5dp"
                     android:padding="2dp"
                     android:text="GoSquared, Flag Icon Set"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"/>
+                    android:textAlignment="center"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -189,8 +181,7 @@
                 android:layout_marginEnd="30dp"
                 android:layout_marginStart="30dp"
                 android:background="@drawable/btn_rounded_green"
-                android:text="Done"
-                android:textColor="@color/white"/>
+                android:text="Done"/>
 
         </LinearLayout>
 

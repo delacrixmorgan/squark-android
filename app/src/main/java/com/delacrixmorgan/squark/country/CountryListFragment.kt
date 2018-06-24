@@ -101,6 +101,12 @@ class CountryListFragment : Fragment(), CountryListListener {
             filterCountries.add(0, it)
         }
 
+        this.emptyStateViewGroup.visibility = if (filterCountries.isEmpty()) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
+
         this.countryAdapter.updateDataSet(filterCountries)
     }
 
