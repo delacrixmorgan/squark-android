@@ -12,7 +12,7 @@ import com.delacrixmorgan.squark.data.SquarkWorkerThread
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.controller.CountryDatabase
 import com.delacrixmorgan.squark.data.model.Country
-import com.delacrixmorgan.squark.LaunchFragment
+import com.delacrixmorgan.squark.CurrencyNavigationFragment
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.fragment_country_list.*
 
@@ -107,7 +107,7 @@ class CountryListFragment : Fragment(), CountryListListener {
     override fun onCountrySelected(country: Country) {
         requireActivity().let {
             val intent = it.intent
-            intent.putExtra(LaunchFragment.EXTRA_COUNTRY_CODE, country.code)
+            intent.putExtra(CurrencyNavigationFragment.EXTRA_COUNTRY_CODE, country.code)
 
             it.setResult(Activity.RESULT_OK, intent)
             it.finish()

@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
                 if (countryData == null || countryData.isEmpty()) {
                     initCountries()
                 } else {
-                    startFragment(this, LaunchFragment.newInstance())
+                    startFragment(this, CurrencyNavigationFragment.newInstance())
                     CountryDataController.updateDataSet(countryData)
                 }
             }
@@ -149,7 +149,7 @@ class MainActivity : AppCompatActivity() {
 
             this.countries?.let {
                 CountryDataController.updateDataSet(it)
-                startFragment(this, LaunchFragment.newInstance())
+                startFragment(this, CurrencyNavigationFragment.newInstance())
             }
         })
     }

@@ -21,22 +21,22 @@ import kotlinx.android.synthetic.main.fragment_launch.*
 import java.util.*
 
 /**
- * LaunchFragment
+ * CurrencyNavigationFragment
  * squark-android
  *
  * Created by Delacrix Morgan on 01/05/2018.
  * Copyright (c) 2018 licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
  */
 
-class LaunchFragment : Fragment(), RowListener {
+class CurrencyNavigationFragment : Fragment(), RowListener {
 
     companion object {
         private const val REQUEST_BASE_COUNTRY: Int = 1
         private const val REQUEST_QUOTE_COUNTRY: Int = 2
 
-        const val EXTRA_COUNTRY_CODE = "LaunchFragment.countryCode"
+        const val EXTRA_COUNTRY_CODE = "CurrencyNavigationFragment.countryCode"
 
-        fun newInstance(): LaunchFragment = LaunchFragment()
+        fun newInstance(): CurrencyNavigationFragment = CurrencyNavigationFragment()
     }
 
     private var baseCountry: Country? = null
