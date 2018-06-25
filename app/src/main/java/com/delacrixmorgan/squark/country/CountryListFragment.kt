@@ -2,6 +2,7 @@ package com.delacrixmorgan.squark.country
 
 import android.app.Activity
 import android.os.Bundle
+import android.os.Handler
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -13,6 +14,7 @@ import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.controller.CountryDatabase
 import com.delacrixmorgan.squark.data.model.Country
 import com.delacrixmorgan.squark.CurrencyNavigationFragment
+import com.delacrixmorgan.squark.common.startFragment
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.fragment_country_list.*
 
@@ -55,9 +57,11 @@ class CountryListFragment : Fragment(), CountryListListener {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
 
-        this.countryCode = this.arguments?.getString(ARG_BELONGS_TO_COUNTRY_CODE) ?: "USD"
+        this.workerThread = SquarkWorkerThread(SquarkWorkerThread::class.java.simpleName)
+        this.workerThread.start()
 
-//        this.database = CountryDatabase.getInstance(requireContext())
+        this.database = CountryDatabase.getInstance(requireContext())
+        this.countryCode = this.arguments?.getString(ARG_BELONGS_TO_COUNTRY_CODE) ?: "USD"
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -73,8 +77,36 @@ class CountryListFragment : Fragment(), CountryListListener {
         this.countryRecyclerView.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         this.countryRecyclerView.adapter = this.countryAdapter
 
+
+        this.updateViewGroup.setOnClickListener {
+            updateCurrencyRates()
+        }
+
         updateDataSet(null)
-//        fetchCurrencyData()
+    }
+
+    private fun updateCurrencyRates() {
+        this.workerThread.postTask(Runnable {
+            val countryData = this.database?.countryDataDao()?.getCountries()
+
+            Handler().post {
+                if (countryData != null) {
+                    val malaysiaCountry = countryData.first {
+                        it.code == "MYR"
+                    }
+
+                    malaysiaCountry.currency?.rate = 4.01
+
+                    database?.apply {
+                        countryDataDao().updateCountry(malaysiaCountry)
+                    }
+
+                    this@CountryListFragment.activity?.runOnUiThread {
+                        this.updateTextView.text = "Updated"
+                    }
+                }
+            }
+        })
     }
 
     private fun updateDataSet(searchText: String? = null) {
@@ -166,17 +198,17 @@ class CountryListFragment : Fragment(), CountryListListener {
         }
     }
 
-//    override fun onPause() {
-//        super.onPause()
+    override fun onPause() {
+        super.onPause()
 //        this.disposable?.dispose()
-//    }
-//
-//    override fun onDestroy() {
-//        CountryDatabase.destroyInstance()
-//        this.workerThread.quit()
-//
-//        super.onDestroy()
-//    }
+    }
+
+    override fun onDestroy() {
+        CountryDatabase.destroyInstance()
+        this.workerThread.quit()
+
+        super.onDestroy()
+    }
 
 //    private fun fetchCurrencyData() {
 //        this.workerThread = SquarkWorkerThread(SquarkWorkerThread::class.java.simpleName)
