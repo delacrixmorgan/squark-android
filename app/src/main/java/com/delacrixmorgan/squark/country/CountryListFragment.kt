@@ -73,8 +73,6 @@ class CountryListFragment : Fragment(), CountryListListener {
         this.countryRecyclerView.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         this.countryRecyclerView.adapter = this.countryAdapter
 
-        Snackbar.make(view, "Last Updated: 22/04/2019 at 10:00 AM", Snackbar.LENGTH_SHORT).show()
-
         updateDataSet(null)
 //        fetchCurrencyData()
     }
@@ -143,6 +141,7 @@ class CountryListFragment : Fragment(), CountryListListener {
 
                 searchMenuItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
                     override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
+                        this@CountryListFragment.updateViewGroup.visibility = View.GONE
                         this@CountryListFragment.searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                             override fun onQueryTextSubmit(query: String): Boolean {
                                 updateDataSet(query)
@@ -159,6 +158,7 @@ class CountryListFragment : Fragment(), CountryListListener {
 
                     override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
                         this@CountryListFragment.searchView?.setQuery("", false)
+                        this@CountryListFragment.updateViewGroup.visibility = View.VISIBLE
                         return true
                     }
                 })
