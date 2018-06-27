@@ -7,6 +7,7 @@ import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SearchView
+import android.util.Log
 import android.view.*
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.data.SquarkWorkerThread
@@ -14,9 +15,13 @@ import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.controller.CountryDatabase
 import com.delacrixmorgan.squark.data.model.Country
 import com.delacrixmorgan.squark.CurrencyNavigationFragment
-import com.delacrixmorgan.squark.common.startFragment
+import com.delacrixmorgan.squark.data.api.SquarkApiService
+import com.delacrixmorgan.squark.data.model.Currency
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_country_list.*
+import java.math.RoundingMode
 
 /**
  * CountryListFragment
@@ -87,24 +92,53 @@ class CountryListFragment : Fragment(), CountryListListener {
 
     private fun updateCurrencyRates() {
         this.workerThread.postTask(Runnable {
-            val countryData = this.database?.countryDataDao()?.getCountries()
+            val countries = this.database?.countryDataDao()?.getCountries() ?: arrayListOf()
 
             Handler().post {
-                if (countryData != null) {
-                    val malaysiaCountry = countryData.first {
-                        it.code == "MYR"
-                    }
+                if (countries.isNotEmpty()) {
+                    this.disposable = SquarkApiService
+                            .create(requireActivity())
+                            .getCurrencies()
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe({ result ->
+                                val currencies = result.quotes?.map {
+                                    Currency(
+                                            code = it.key,
+                                            rate = it.value.toBigDecimal().setScale(2, RoundingMode.UP).toDouble()
+                                    )
+                                } ?: arrayListOf()
 
-                    malaysiaCountry.rate = 4.01
-
-                    database?.apply {
-                        countryDataDao().updateCountry(malaysiaCountry)
-                    }
-
-                    this@CountryListFragment.activity?.runOnUiThread {
-                        this.updateTextView.text = "Updated"
-                    }
+                                if (currencies.isNotEmpty()) {
+                                    updateCurrencies(
+                                            countries = countries,
+                                            currencies = currencies
+                                    )
+                                }
+                            }, { error ->
+                                Snackbar.make(this.view!!, "Error API Countries", Snackbar.LENGTH_SHORT).show()
+                                Log.e("Error", "$error")
+                            })
                 }
+            }
+        })
+    }
+
+    private fun updateCurrencies(countries: List<Country>, currencies: List<Currency>) {
+        this.workerThread.postTask(Runnable {
+            countries.forEach { country ->
+                val updateCurrency = currencies.find {
+                    it.code.contains(country.code) && it.code != "USDUSD"
+                }
+
+                updateCurrency?.let {
+                    country.rate = it.rate
+                    this.database?.countryDataDao()?.updateCountry(country)
+                }
+            }
+
+            this@CountryListFragment.activity?.runOnUiThread {
+                this.updateTextView.text = "Updated"
             }
         })
     }
@@ -200,7 +234,7 @@ class CountryListFragment : Fragment(), CountryListListener {
 
     override fun onPause() {
         super.onPause()
-//        this.disposable?.dispose()
+        this.disposable?.dispose()
     }
 
     override fun onDestroy() {
