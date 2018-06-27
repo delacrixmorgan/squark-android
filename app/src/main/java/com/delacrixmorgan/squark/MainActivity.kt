@@ -32,8 +32,8 @@ class MainActivity : AppCompatActivity() {
     private var database: CountryDatabase? = null
     private var disposable: Disposable? = null
 
-    private var countries: List<Country>? = ArrayList()
-    private var currencies: List<Currency>? = ArrayList()
+    private var countries: List<Country> = ArrayList()
+    private var currencies: List<Currency> = ArrayList()
 
     private lateinit var workerThread: SquarkWorkerThread
 
@@ -96,17 +96,16 @@ class MainActivity : AppCompatActivity() {
                     this.countries = result.quotes?.map {
                         Country(
                                 code = it.key,
-                                name = it.value
+                                name = it.value,
+                                rate = 0.0
                         )
-                    }
+                    } ?: arrayListOf()
 
                     initCurrencies()
                 }, { error ->
                     Snackbar.make(this.mainContainer, "Error API Countries", Snackbar.LENGTH_SHORT).show()
                     Log.e("Error", "$error")
                 })
-
-
     }
 
     private fun initCurrencies() {
@@ -121,9 +120,9 @@ class MainActivity : AppCompatActivity() {
                                 code = it.key,
                                 rate = it.value.toBigDecimal().setScale(2, RoundingMode.UP).toDouble()
                         )
-                    }
+                    } ?: arrayListOf()
 
-                    if (this.countries != null && this.currencies != null) {
+                    if (this.countries.isNotEmpty() && this.currencies.isNotEmpty()) {
                         insertCountries()
                     } else {
                         Snackbar.make(this.mainContainer, "Empty API Countries", Snackbar.LENGTH_SHORT).show()
@@ -137,20 +136,16 @@ class MainActivity : AppCompatActivity() {
     private fun insertCountries() {
         this.workerThread.postTask(Runnable {
             this.database?.let { database ->
-                this.countries?.forEachIndexed { index, country ->
-                    this.currencies?.get(index).let {
-                        it?.code = country.code
-
-                        country.currency = it
+                this.countries.forEachIndexed { index, country ->
+                    this.currencies[index].let {
+                        country.rate = it.rate
                         database.countryDataDao().insertCountry(country)
                     }
                 }
             }
 
-            this.countries?.let {
-                CountryDataController.updateDataSet(it)
-                startFragment(this, CurrencyNavigationFragment.newInstance())
-            }
+            CountryDataController.updateDataSet(this.countries)
+            startFragment(this, CurrencyNavigationFragment.newInstance())
         })
     }
 }

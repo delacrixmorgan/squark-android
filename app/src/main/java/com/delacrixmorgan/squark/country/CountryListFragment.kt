@@ -95,7 +95,7 @@ class CountryListFragment : Fragment(), CountryListListener {
                         it.code == "MYR"
                     }
 
-                    malaysiaCountry.currency?.rate = 4.01
+                    malaysiaCountry.rate = 4.01
 
                     database?.apply {
                         countryDataDao().updateCountry(malaysiaCountry)

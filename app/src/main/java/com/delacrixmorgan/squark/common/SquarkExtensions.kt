@@ -37,12 +37,12 @@ fun CountryDataController.getPreferenceCountry(context: Context, preferenceCurre
     return when (preferenceCurrency) {
         PreferenceHelper.BASE_CURRENCY_CODE -> {
             CountryDataController.getCountries().firstOrNull {
-                it.currency?.code == PreferenceHelper.getPreference(context)[PreferenceHelper.BASE_CURRENCY_CODE, PreferenceHelper.DEFAULT_BASE_CURRENCY_CODE]
+                it.code == PreferenceHelper.getPreference(context)[PreferenceHelper.BASE_CURRENCY_CODE, PreferenceHelper.DEFAULT_BASE_CURRENCY_CODE]
             }
         }
         else -> {
             CountryDataController.getCountries().firstOrNull {
-                it.currency?.code == PreferenceHelper.getPreference(context)[PreferenceHelper.QUOTE_CURRENCY_CODE, PreferenceHelper.DEFAULT_QUOTE_CURRENCY_CODE]
+                it.code == PreferenceHelper.getPreference(context)[PreferenceHelper.QUOTE_CURRENCY_CODE, PreferenceHelper.DEFAULT_QUOTE_CURRENCY_CODE]
             }
         }
     }

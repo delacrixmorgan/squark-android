@@ -16,7 +16,7 @@ import android.arch.persistence.room.PrimaryKey
 @Entity(tableName = "Country")
 data class Country(
         @PrimaryKey(autoGenerate = true) val id: Int = 0,
-        @ColumnInfo(name = "countryCode") val code: String,
+        @ColumnInfo(name = "code") val code: String,
         @ColumnInfo(name = "name") val name: String,
-        @Embedded var currency: Currency? = null
+        @ColumnInfo(name = "rate") var rate: Double
 )

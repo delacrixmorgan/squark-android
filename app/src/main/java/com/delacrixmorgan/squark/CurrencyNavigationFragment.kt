@@ -90,8 +90,8 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
         this.baseCurrencyTextView.text = this.baseCountry?.code
         this.quoteCurrencyTextView.text = this.quoteCountry?.code
 
-        if (this.baseCountry?.currency != null && this.quoteCountry?.currency != null) {
-            SquarkEngine.updateConversionRate(this.baseCountry!!.currency!!, this.quoteCountry!!.currency!!)
+        if (this.baseCountry?.rate != 0.0 && this.quoteCountry?.rate != 0.0) {
+            SquarkEngine.updateConversionRate(this.baseCountry?.rate, this.quoteCountry?.rate)
             SquarkEngine.updateTable(this.rowList)
         } else {
             view?.let {
