@@ -15,6 +15,9 @@ import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.controller.CountryDatabase
 import com.delacrixmorgan.squark.data.model.Country
 import com.delacrixmorgan.squark.CurrencyNavigationFragment
+import com.delacrixmorgan.squark.common.PreferenceHelper
+import com.delacrixmorgan.squark.common.PreferenceHelper.get
+import com.delacrixmorgan.squark.common.PreferenceHelper.set
 import com.delacrixmorgan.squark.data.api.SquarkApiService
 import com.delacrixmorgan.squark.data.model.Currency
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -22,6 +25,10 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_country_list.*
 import java.math.RoundingMode
+import java.sql.Time
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.util.*
 
 /**
  * CountryListFragment
@@ -47,6 +54,7 @@ class CountryListFragment : Fragment(), CountryListListener {
             return fragment
         }
     }
+    private val simpleDateFormat = SimpleDateFormat("'Last Updated:' dd/MM/yyyy 'at' hh:mm a")
 
     private var database: CountryDatabase? = null
     private var disposable: Disposable? = null
@@ -82,13 +90,33 @@ class CountryListFragment : Fragment(), CountryListListener {
         this.countryRecyclerView.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         this.countryRecyclerView.adapter = this.countryAdapter
 
-
         this.updateViewGroup.setOnClickListener {
-            this.updateTextView.text = "Updating.."
-            updateCurrencyRates()
+            this.updateTextView.text = "Everything is up to date.."
+            Handler().postDelayed({
+                this.updateTextView.text = simpleDateFormat.format(Date(Date().time))
+            }, 3000)
         }
 
+        checkIsDataUpdated()
         updateDataSet(null)
+    }
+
+    private fun checkIsDataUpdated() {
+        val weekInMilliseconds = 604800000
+
+        val timeStamp = PreferenceHelper.getPreference(requireContext())[PreferenceHelper.UPDATED_TIME_STAMP, PreferenceHelper.DEFAULT_UPDATED_TIME_STAMP]
+        val currentTimeStamp = Date().time
+
+        if (currentTimeStamp - timeStamp > weekInMilliseconds) {
+            this.updateTextView.text = "Updating.."
+            updateCurrencyRates()
+        } else {
+            this.updateTextView.text = "Everything is already up to date.."
+
+            Handler().postDelayed({
+                this.updateTextView.text = simpleDateFormat.format(Date(currentTimeStamp))
+            }, 3000)
+        }
     }
 
     private fun updateCurrencyRates() {
@@ -142,7 +170,10 @@ class CountryListFragment : Fragment(), CountryListListener {
 
             CountryDataController.updateDataSet(countries)
             this@CountryListFragment.activity?.runOnUiThread {
-                this.updateTextView.text = "Updated"
+                val currentTimeStamp = Date().time
+
+                PreferenceHelper.getPreference(requireContext())[PreferenceHelper.UPDATED_TIME_STAMP] = currentTimeStamp
+                this.updateTextView.text = simpleDateFormat.format(Date(currentTimeStamp))
             }
         })
     }
@@ -247,16 +278,4 @@ class CountryListFragment : Fragment(), CountryListListener {
 
         super.onDestroy()
     }
-
-//    private fun fetchCurrencyData() {
-//        this.workerThread = SquarkWorkerThread(SquarkWorkerThread::class.java.simpleName)
-//        this.workerThread.start()
-//        this.workerThread.postTask(Runnable {
-//            val countryData = this.database?.countryDataDao()?.getCountries()
-//
-//            if (countryData != null) {
-//                this.countryAdapter.updateDataSet(countries = countryData)
-//            }
-//        })
-//    }
 }

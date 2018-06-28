@@ -5,6 +5,8 @@ import android.os.Handler
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import com.delacrixmorgan.squark.common.PreferenceHelper
+import com.delacrixmorgan.squark.common.PreferenceHelper.set
 import com.delacrixmorgan.squark.common.changeAppOverview
 import com.delacrixmorgan.squark.common.startFragment
 import com.delacrixmorgan.squark.data.api.SquarkApiService
@@ -18,6 +20,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import java.math.RoundingMode
+import java.util.*
 
 /**
  * MainActivity
@@ -61,7 +64,7 @@ class MainActivity : AppCompatActivity() {
                         if (error != null) {
                             Snackbar.make(this.mainContainer, "Error API Countries", Snackbar.LENGTH_SHORT).show()
                         }
-                        
+
                         initCurrencies()
                     })
                 } else {
@@ -148,6 +151,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
+            PreferenceHelper.getPreference(this)[PreferenceHelper.UPDATED_TIME_STAMP] = Date().time
             CountryDataController.updateDataSet(this.countries)
             startFragment(this, CurrencyNavigationFragment.newInstance())
         })
