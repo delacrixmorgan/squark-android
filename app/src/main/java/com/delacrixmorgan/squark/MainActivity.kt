@@ -57,7 +57,13 @@ class MainActivity : AppCompatActivity() {
 
             Handler().post {
                 if (countryData == null || countryData.isEmpty()) {
-                    initCountries()
+                    initCountries(completion = { error ->
+                        if (error != null) {
+                            Snackbar.make(this.mainContainer, "Error API Countries", Snackbar.LENGTH_SHORT).show()
+                        }
+                        
+                        initCurrencies()
+                    })
                 } else {
                     startFragment(this, CurrencyNavigationFragment.newInstance())
                     CountryDataController.updateDataSet(countryData)
@@ -86,7 +92,7 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
-    private fun initCountries() {
+    private fun initCountries(completion: (error: Throwable?) -> Unit) {
         this.disposable = SquarkApiService
                 .create(this)
                 .getCountries()
@@ -100,11 +106,9 @@ class MainActivity : AppCompatActivity() {
                                 rate = 0.0
                         )
                     } ?: arrayListOf()
-
-                    initCurrencies()
+                    completion.invoke(null)
                 }, { error ->
-                    Snackbar.make(this.mainContainer, "Error API Countries", Snackbar.LENGTH_SHORT).show()
-                    Log.e("Error", "$error")
+                    completion.invoke(error)
                 })
     }
 
