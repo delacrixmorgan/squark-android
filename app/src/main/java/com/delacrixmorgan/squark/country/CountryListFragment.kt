@@ -25,9 +25,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_country_list.*
 import java.math.RoundingMode
-import java.sql.Time
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
 import java.util.*
 
 /**
@@ -54,6 +52,7 @@ class CountryListFragment : Fragment(), CountryListListener {
             return fragment
         }
     }
+
     private val simpleDateFormat = SimpleDateFormat("'Last Updated:' dd/MM/yyyy 'at' hh:mm a")
 
     private var database: CountryDatabase? = null
@@ -91,10 +90,7 @@ class CountryListFragment : Fragment(), CountryListListener {
         this.countryRecyclerView.adapter = this.countryAdapter
 
         this.updateViewGroup.setOnClickListener {
-            this.updateTextView.text = "Everything is up to date.."
-            Handler().postDelayed({
-                this.updateTextView.text = simpleDateFormat.format(Date(Date().time))
-            }, 3000)
+            checkIsDataUpdated()
         }
 
         checkIsDataUpdated()
@@ -107,6 +103,8 @@ class CountryListFragment : Fragment(), CountryListListener {
         val timeStamp = PreferenceHelper.getPreference(requireContext())[PreferenceHelper.UPDATED_TIME_STAMP, PreferenceHelper.DEFAULT_UPDATED_TIME_STAMP]
         val currentTimeStamp = Date().time
 
+        this.updateImageView.visibility = View.GONE
+
         if (currentTimeStamp - timeStamp > weekInMilliseconds) {
             this.updateTextView.text = "Updating.."
             updateCurrencyRates()
@@ -114,6 +112,7 @@ class CountryListFragment : Fragment(), CountryListListener {
             this.updateTextView.text = "Everything is already up to date.."
 
             Handler().postDelayed({
+                this.updateImageView.visibility = View.VISIBLE
                 this.updateTextView.text = simpleDateFormat.format(Date(currentTimeStamp))
             }, 3000)
         }
@@ -174,6 +173,8 @@ class CountryListFragment : Fragment(), CountryListListener {
 
                 PreferenceHelper.getPreference(requireContext())[PreferenceHelper.UPDATED_TIME_STAMP] = currentTimeStamp
                 this.updateTextView.text = simpleDateFormat.format(Date(currentTimeStamp))
+
+                this.updateImageView.visibility = View.VISIBLE
             }
         })
     }
