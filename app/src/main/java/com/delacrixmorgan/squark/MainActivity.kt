@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import com.delacrixmorgan.squark.common.PreferenceHelper
 import com.delacrixmorgan.squark.common.PreferenceHelper.set
 import com.delacrixmorgan.squark.common.changeAppOverview
@@ -75,26 +74,6 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    override fun onBackPressed() {
-        if (this.fragmentManager.backStackEntryCount == 0) {
-            finish()
-        } else {
-            this.fragmentManager.popBackStack()
-        }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        this.disposable?.dispose()
-    }
-
-    override fun onDestroy() {
-        CountryDatabase.destroyInstance()
-        this.workerThread.quit()
-
-        super.onDestroy()
-    }
-
     private fun initCountries(completion: (error: Throwable?) -> Unit) {
         this.disposable = SquarkApiService
                 .create(this)
@@ -135,8 +114,7 @@ class MainActivity : AppCompatActivity() {
                         Snackbar.make(this.mainContainer, "Empty API Countries", Snackbar.LENGTH_SHORT).show()
                     }
                 }, { error ->
-                    Snackbar.make(this.mainContainer, "Error API Countries", Snackbar.LENGTH_SHORT).show()
-                    Log.e("Error", "$error")
+                    Snackbar.make(this.mainContainer, "Error API Countries ${error.message}", Snackbar.LENGTH_SHORT).show()
                 })
     }
 
@@ -155,5 +133,25 @@ class MainActivity : AppCompatActivity() {
             CountryDataController.updateDataSet(this.countries)
             startFragment(this, CurrencyNavigationFragment.newInstance())
         })
+    }
+
+    override fun onBackPressed() {
+        if (this.fragmentManager.backStackEntryCount == 0) {
+            finish()
+        } else {
+            this.fragmentManager.popBackStack()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        this.disposable?.dispose()
+    }
+
+    override fun onDestroy() {
+        CountryDatabase.destroyInstance()
+        this.workerThread.quit()
+
+        super.onDestroy()
     }
 }

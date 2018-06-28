@@ -53,16 +53,12 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        this.activity?.let {
-            SquarkEngine.setupTable(
-                    activity = it,
-                    tableLayout = currencyTableLayout,
-                    rowList = this.rowList,
-                    listener = this)
-        }
-
-        val currencyIntent = CountryActivity.newLaunchIntent(requireContext(), countryCode = this.quoteCountry?.code)
-        startActivityForResult(currencyIntent, REQUEST_QUOTE_COUNTRY)
+        SquarkEngine.setupTable(
+                activity = requireActivity(),
+                tableLayout = currencyTableLayout,
+                rowList = this.rowList,
+                listener = this
+        )
 
         this.baseCurrencyTextView.setOnClickListener {
             val currencyIntent = CountryActivity.newLaunchIntent(requireContext(), countryCode = this.baseCountry?.code)
@@ -97,9 +93,7 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
             SquarkEngine.updateConversionRate(this.baseCountry?.rate, this.quoteCountry?.rate)
             SquarkEngine.updateTable(this.rowList)
         } else {
-            view?.let {
-                Snackbar.make(it, "Unable to get Base and Quote Currencies.", Snackbar.LENGTH_SHORT).show()
-            }
+            Snackbar.make(this.view!!, "Unable to get Base and Quote Currencies.", Snackbar.LENGTH_SHORT).show()
         }
     }
 
@@ -142,15 +136,16 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
                 tableLayout = currencyTableLayout,
                 expandQuantifier = selectedRow,
                 expandedList = expandedList,
-                listener = this)
+                listener = this
+        )
     }
 
-    private fun onRowCollapse(selectedRow: Int) {
-        this.expandedList.map {
+    private fun onRowCollapse() {
+        this.expandedList.forEach {
             currencyTableLayout.removeView(it)
         }
 
-        this.rowList.map {
+        this.rowList.forEach {
             it.visibility = View.VISIBLE
             it.setBackgroundColor(ContextCompat.getColor(requireContext(), android.R.color.black))
         }
@@ -170,7 +165,7 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
 
     override fun onClick(position: Int) {
         if (this.isExpanded) {
-            onRowCollapse(position)
+            onRowCollapse()
         } else {
             onRowExpand(position)
         }
