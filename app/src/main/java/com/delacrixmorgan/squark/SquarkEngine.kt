@@ -2,6 +2,8 @@ package com.delacrixmorgan.squark
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
+import android.view.animation.AnimationUtils
 import android.widget.TableLayout
 import android.widget.TableRow
 import com.delacrixmorgan.squark.common.OnSwipeTouch
@@ -92,6 +94,9 @@ object SquarkEngine {
 
             tableRow.quantifierTextView.text = this.decimalFormat.format(this.bigQuantifier).toString()
             tableRow.resultTextView.text = this.decimalFormat.format(this.bigResult).toString()
+
+            tableRow.quantifierTextView.startAnimation(AnimationUtils.loadAnimation(tableRow.context, R.anim.wobble));
+            tableRow.resultTextView.startAnimation(AnimationUtils.loadAnimation(tableRow.context, R.anim.wobble));
         }
     }
 

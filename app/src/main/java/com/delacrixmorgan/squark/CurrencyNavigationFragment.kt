@@ -61,6 +61,9 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
                     listener = this)
         }
 
+        val currencyIntent = CountryActivity.newLaunchIntent(requireContext(), countryCode = this.quoteCountry?.code)
+        startActivityForResult(currencyIntent, REQUEST_QUOTE_COUNTRY)
+
         this.baseCurrencyTextView.setOnClickListener {
             val currencyIntent = CountryActivity.newLaunchIntent(requireContext(), countryCode = this.baseCountry?.code)
             startActivityForResult(currencyIntent, REQUEST_BASE_COUNTRY)

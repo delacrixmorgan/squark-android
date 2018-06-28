@@ -36,7 +36,7 @@ import java.util.*
  * Copyright (c) 2018 licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
  */
 
-class CountryListFragment : Fragment(), CountryListListener {
+class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionExpandListener {
     companion object {
         private const val ARG_BELONGS_TO_COUNTRY_CODE = "Country.countryCode"
 
@@ -86,7 +86,7 @@ class CountryListFragment : Fragment(), CountryListListener {
         this.countryAdapter = CountryRecyclerViewAdapter(listener = this, countryCode = this.countryCode)
         this.countryAdapter.updateDataSet(CountryDataController.getCountries())
 
-        this.countryRecyclerView.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+        this.countryRecyclerView.layoutManager = LinearLayoutManager(this.activity, LinearLayoutManager.VERTICAL, false)
         this.countryRecyclerView.adapter = this.countryAdapter
 
         this.updateViewGroup.setOnClickListener {
@@ -112,8 +112,10 @@ class CountryListFragment : Fragment(), CountryListListener {
             this.updateTextView.text = "Everything is already up to date.."
 
             Handler().postDelayed({
-                this.updateImageView.visibility = View.VISIBLE
-                this.updateTextView.text = simpleDateFormat.format(Date(currentTimeStamp))
+                if (this.isVisible) {
+                    this.updateImageView.visibility = View.VISIBLE
+                    this.updateTextView.text = simpleDateFormat.format(Date(currentTimeStamp))
+                }
             }, 3000)
         }
     }
@@ -169,12 +171,14 @@ class CountryListFragment : Fragment(), CountryListListener {
 
             CountryDataController.updateDataSet(countries)
             this@CountryListFragment.activity?.runOnUiThread {
-                val currentTimeStamp = Date().time
+                if (this.isVisible) {
+                    val currentTimeStamp = Date().time
 
-                PreferenceHelper.getPreference(requireContext())[PreferenceHelper.UPDATED_TIME_STAMP] = currentTimeStamp
-                this.updateTextView.text = simpleDateFormat.format(Date(currentTimeStamp))
+                    PreferenceHelper.getPreference(requireContext())[PreferenceHelper.UPDATED_TIME_STAMP] = currentTimeStamp
+                    this.updateTextView.text = simpleDateFormat.format(Date(currentTimeStamp))
 
-                this.updateImageView.visibility = View.VISIBLE
+                    this.updateImageView.visibility = View.VISIBLE
+                }
             }
         })
     }
@@ -211,13 +215,44 @@ class CountryListFragment : Fragment(), CountryListListener {
     }
 
     override fun onCountrySelected(country: Country) {
-        requireActivity().let {
-            val intent = it.intent
-            intent.putExtra(CurrencyNavigationFragment.EXTRA_COUNTRY_CODE, country.code)
+        val activity = this.activity ?: return
+        val intent = activity.intent
 
-            it.setResult(Activity.RESULT_OK, intent)
-            it.finish()
-        }
+        intent.putExtra(CurrencyNavigationFragment.EXTRA_COUNTRY_CODE, country.code)
+
+        activity.setResult(Activity.RESULT_OK, intent)
+        activity.finish()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater?.inflate(R.menu.menu_search, menu)
+
+        this.searchMenuItem = menu?.findItem(R.id.actionSearch)
+        this.searchMenuItem?.setOnActionExpandListener(this)
+        this.searchView = this.searchMenuItem?.actionView as? SearchView
+    }
+
+    override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
+        this.updateViewGroup.visibility = View.GONE
+        this.searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                updateDataSet(query)
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                updateDataSet(newText)
+                return true
+            }
+        })
+        return true
+    }
+
+    override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
+        this.searchView?.setQuery("", false)
+        this.updateViewGroup.visibility = View.VISIBLE
+        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -228,42 +263,6 @@ class CountryListFragment : Fragment(), CountryListListener {
             }
             else -> {
                 super.onOptionsItemSelected(item)
-            }
-        }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater?.inflate(R.menu.menu_search, menu)
-
-        menu?.findItem(R.id.actionSearch)?.let { searchMenuItem ->
-            (searchMenuItem.actionView as? SearchView)?.let {
-                this@CountryListFragment.searchView = it
-                this@CountryListFragment.searchMenuItem = searchMenuItem
-
-                searchMenuItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
-                    override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
-                        this@CountryListFragment.updateViewGroup.visibility = View.GONE
-                        this@CountryListFragment.searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                            override fun onQueryTextSubmit(query: String): Boolean {
-                                updateDataSet(query)
-                                return true
-                            }
-
-                            override fun onQueryTextChange(newText: String): Boolean {
-                                updateDataSet(newText)
-                                return true
-                            }
-                        })
-                        return true
-                    }
-
-                    override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
-                        this@CountryListFragment.searchView?.setQuery("", false)
-                        this@CountryListFragment.updateViewGroup.visibility = View.VISIBLE
-                        return true
-                    }
-                })
             }
         }
     }
