@@ -84,6 +84,7 @@ class CountryListFragment : Fragment(), CountryListListener {
 
 
         this.updateViewGroup.setOnClickListener {
+            this.updateTextView.text = "Updating.."
             updateCurrencyRates()
         }
 
@@ -127,16 +128,19 @@ class CountryListFragment : Fragment(), CountryListListener {
     private fun updateCurrencies(countries: List<Country>, currencies: List<Currency>) {
         this.workerThread.postTask(Runnable {
             countries.forEach { country ->
-                val updateCurrency = currencies.find {
-                    it.code.contains(country.code) && it.code != "USDUSD"
-                }
+                if (country.code != "USD") {
+                    val updateCurrency = currencies.find {
+                        it.code.contains(country.code)
+                    }
 
-                updateCurrency?.let {
-                    country.rate = it.rate
-                    this.database?.countryDataDao()?.updateCountry(country)
+                    updateCurrency?.let {
+                        country.rate = it.rate
+                        this.database?.countryDataDao()?.updateCountry(country)
+                    }
                 }
             }
 
+            CountryDataController.updateDataSet(countries)
             this@CountryListFragment.activity?.runOnUiThread {
                 this.updateTextView.text = "Updated"
             }
