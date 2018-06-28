@@ -14,11 +14,12 @@ import android.view.View
  */
 
 open class OnSwipeTouch(context: Context) : View.OnTouchListener {
-    private val mGestureDetector: GestureDetector
+
     private val SWIPE_THRESHOLD = 100
     private val SWIPE_VELOCITY_THRESHOLD = 100
 
     private var isScrolling = false
+    private val gestureDetector: GestureDetector
     private var scrollDirection: ScrollDirection = ScrollDirection.LEFT
 
     enum class ScrollDirection {
@@ -26,13 +27,11 @@ open class OnSwipeTouch(context: Context) : View.OnTouchListener {
     }
 
     init {
-        mGestureDetector = GestureDetector(context, GestureListener())
+        gestureDetector = GestureDetector(context, GestureListener())
     }
 
-    override fun onTouch(v: View, event: MotionEvent): Boolean {
-        v.performClick()
-
-        if (mGestureDetector.onTouchEvent(event)) {
+    override fun onTouch(view: View, event: MotionEvent): Boolean {
+        if (gestureDetector.onTouchEvent(event)) {
             return true
         }
 
@@ -46,12 +45,10 @@ open class OnSwipeTouch(context: Context) : View.OnTouchListener {
                 }
             }
         }
-
         return false
     }
 
     private inner class GestureListener : GestureDetector.SimpleOnGestureListener() {
-
         override fun onSingleTapUp(e: MotionEvent): Boolean {
             onSingleTap()
             return true
@@ -103,17 +100,17 @@ open class OnSwipeTouch(context: Context) : View.OnTouchListener {
         }
     }
 
-    open fun onSingleTap() {}
+    open fun onSingleTap() = Unit
 
-    open fun onSwipeRight() {}
+    open fun onSwipeRight() = Unit
 
-    open fun onSwipeLeft() {}
+    open fun onSwipeLeft() = Unit
 
-    open fun onSwipeTop() {}
+    open fun onSwipeTop() = Unit
 
-    open fun onSwipeBottom() {}
+    open fun onSwipeBottom() = Unit
 
-    open fun onSwipingLeft() {}
+    open fun onSwipingLeft() = Unit
 
-    open fun onSwipingRight() {}
+    open fun onSwipingRight() = Unit
 }
