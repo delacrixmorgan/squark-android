@@ -135,7 +135,7 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
                                 val currencies = result.quotes?.map {
                                     Currency(
                                             code = it.key,
-                                            rate = it.value.toBigDecimal().setScale(2, RoundingMode.UP).toDouble()
+                                            rate = it.value
                                     )
                                 } ?: arrayListOf()
 
