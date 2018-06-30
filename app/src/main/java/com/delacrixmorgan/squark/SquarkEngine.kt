@@ -3,6 +3,7 @@ package com.delacrixmorgan.squark
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.support.v4.content.ContextCompat
 import android.view.animation.AnimationUtils
 import android.widget.TableLayout
 import android.widget.TableRow
@@ -10,6 +11,7 @@ import com.delacrixmorgan.squark.common.OnSwipeTouch
 import com.delacrixmorgan.squark.common.RowListener
 import kotlinx.android.synthetic.main.view_row.view.*
 import java.math.BigDecimal
+import java.math.RoundingMode
 import java.text.DecimalFormat
 
 /**
@@ -110,6 +112,7 @@ object SquarkEngine {
     ) {
         for (index in 1..9) {
             val tableRow = activity.layoutInflater.inflate(R.layout.view_row, tableLayout, false) as TableRow
+            tableRow.setBackgroundColor(ContextCompat.getColor(activity, R.color.borderGrey))
 
             val calculateQuantifier = (expandQuantifier + 1) * this.multiplier + (this.multiplier / 10 * index)
             val calculateResult = calculateQuantifier * this.conversionRate
