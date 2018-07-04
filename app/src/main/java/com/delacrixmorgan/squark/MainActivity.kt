@@ -14,6 +14,7 @@ import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.controller.CountryDatabase
 import com.delacrixmorgan.squark.data.model.Country
 import com.delacrixmorgan.squark.data.model.Currency
+import com.google.firebase.analytics.FirebaseAnalytics
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -40,6 +41,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        FirebaseAnalytics.getInstance(this)
 
         setContentView(R.layout.activity_main)
         changeAppOverview(this, theme)

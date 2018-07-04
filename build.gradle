@@ -4,7 +4,7 @@ buildscript {
     ext {
         archVersion = '1.1.1'
         rxJavaVersion = '2.0.1'
-        kotlinVersion = '1.2.50'
+        kotlinVersion = '1.2.51'
         retrofitVersion = '2.3.0'
         parcelerVersion = '1.1.6'
         supportLibraryVersion = '27.1.1'
@@ -16,6 +16,8 @@ buildscript {
     }
 
     dependencies {
+        classpath 'com.google.gms:google-services:4.0.0'
+        classpath 'com.google.firebase:firebase-plugins:1.1.5'
         classpath "com.android.tools.build:gradle:3.2.0-beta02"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
     }
