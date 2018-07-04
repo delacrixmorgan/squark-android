@@ -35,15 +35,22 @@ fun changeAppOverview(activity: AppCompatActivity, theme: Resources.Theme) {
 
 fun CountryDataController.getPreferenceCountry(context: Context, preferenceCurrency: String): Country? {
     return when (preferenceCurrency) {
-        PreferenceHelper.BASE_CURRENCY_CODE -> {
-            CountryDataController.getCountries().firstOrNull {
-                it.code == PreferenceHelper.getPreference(context)[PreferenceHelper.BASE_CURRENCY_CODE, PreferenceHelper.DEFAULT_BASE_CURRENCY_CODE]
-            }
+        PreferenceHelper.BASE_CURRENCY_CODE -> getCountries().firstOrNull {
+            it.code == PreferenceHelper.getPreference(context)[PreferenceHelper.BASE_CURRENCY_CODE, PreferenceHelper.DEFAULT_BASE_CURRENCY_CODE]
         }
-        else -> {
-            CountryDataController.getCountries().firstOrNull {
-                it.code == PreferenceHelper.getPreference(context)[PreferenceHelper.QUOTE_CURRENCY_CODE, PreferenceHelper.DEFAULT_QUOTE_CURRENCY_CODE]
-            }
+        else -> getCountries().firstOrNull {
+            it.code == PreferenceHelper.getPreference(context)[PreferenceHelper.QUOTE_CURRENCY_CODE, PreferenceHelper.DEFAULT_QUOTE_CURRENCY_CODE]
         }
+    }
+}
+
+fun CountryDataController.getFilteredCountries(
+        searchText: String?
+) = if (searchText.isNullOrBlank()) {
+    getCountries()
+} else {
+    val text: String = searchText?.toLowerCase() ?: ""
+    getCountries().filter {
+        it.name.toLowerCase().contains(text) || it.code.toLowerCase().contains(text)
     }
 }

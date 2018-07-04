@@ -19,7 +19,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
-                android:text="@string/preference_credits_summary"
+                android:text=""
                 android:textAlignment="center"
                 android:textSize="22sp"/>
 
@@ -184,7 +184,5 @@
                 android:text="Done"/>
 
         </LinearLayout>
-
     </ScrollView>
-
 </LinearLayout>

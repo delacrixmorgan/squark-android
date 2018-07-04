@@ -1,5 +1,6 @@
 package com.delacrixmorgan.squark.country
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Bundle
 import android.os.Handler
@@ -7,24 +8,23 @@ import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SearchView
-import android.util.Log
 import android.view.*
-import com.delacrixmorgan.squark.R
-import com.delacrixmorgan.squark.data.SquarkWorkerThread
-import com.delacrixmorgan.squark.data.controller.CountryDataController
-import com.delacrixmorgan.squark.data.controller.CountryDatabase
-import com.delacrixmorgan.squark.data.model.Country
 import com.delacrixmorgan.squark.CurrencyNavigationFragment
+import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.PreferenceHelper
 import com.delacrixmorgan.squark.common.PreferenceHelper.get
 import com.delacrixmorgan.squark.common.PreferenceHelper.set
+import com.delacrixmorgan.squark.common.getFilteredCountries
+import com.delacrixmorgan.squark.data.SquarkWorkerThread
 import com.delacrixmorgan.squark.data.api.SquarkApiService
+import com.delacrixmorgan.squark.data.controller.CountryDataController
+import com.delacrixmorgan.squark.data.controller.CountryDatabase
+import com.delacrixmorgan.squark.data.model.Country
 import com.delacrixmorgan.squark.data.model.Currency
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_country_list.*
-import java.math.RoundingMode
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -39,6 +39,8 @@ import java.util.*
 class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionExpandListener {
     companion object {
         private const val ARG_BELONGS_TO_COUNTRY_CODE = "Country.countryCode"
+        private const val MILLISECONDS_IN_A_WEEK = 604800000
+        private const val DEFAULT_COUNTRY_CODE = "USD"
 
         fun newInstance(
                 countryCode: String? = null
@@ -53,8 +55,6 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
         }
     }
 
-    private val simpleDateFormat = SimpleDateFormat("'Last Updated:' dd/MM/yyyy 'at' hh:mm a")
-
     private var database: CountryDatabase? = null
     private var disposable: Disposable? = null
 
@@ -63,8 +63,10 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
 
     private lateinit var countryCode: String
     private lateinit var workerThread: SquarkWorkerThread
+    private lateinit var simpleDateFormat: SimpleDateFormat
     private lateinit var countryAdapter: CountryRecyclerViewAdapter
 
+    @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -73,7 +75,8 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
         this.workerThread.start()
 
         this.database = CountryDatabase.getInstance(requireContext())
-        this.countryCode = this.arguments?.getString(ARG_BELONGS_TO_COUNTRY_CODE) ?: "USD"
+        this.simpleDateFormat = SimpleDateFormat("'Last Updated:' dd/MM/yyyy 'at' hh:mm a")
+        this.countryCode = this.arguments?.getString(ARG_BELONGS_TO_COUNTRY_CODE) ?: DEFAULT_COUNTRY_CODE
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -89,28 +92,23 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
         this.countryRecyclerView.layoutManager = LinearLayoutManager(this.activity, LinearLayoutManager.VERTICAL, false)
         this.countryRecyclerView.adapter = this.countryAdapter
 
-        this.updateViewGroup.setOnClickListener {
-            checkIsDataUpdated()
-        }
+        this.updateViewGroup.setOnClickListener { checkIsDataUpdated() }
 
         checkIsDataUpdated()
         updateDataSet(null)
     }
 
     private fun checkIsDataUpdated() {
-        val weekInMilliseconds = 604800000
-
         val timeStamp = PreferenceHelper.getPreference(requireContext())[PreferenceHelper.UPDATED_TIME_STAMP, PreferenceHelper.DEFAULT_UPDATED_TIME_STAMP]
         val currentTimeStamp = Date().time
 
         this.updateImageView.visibility = View.GONE
 
-        if (currentTimeStamp - timeStamp > weekInMilliseconds) {
-            this.updateTextView.text = "Updating.."
+        if (currentTimeStamp - timeStamp > MILLISECONDS_IN_A_WEEK) {
+            this.updateTextView.text = getString(R.string.fragment_country_list_title_updating)
             updateCurrencyRates()
         } else {
-            this.updateTextView.text = "Everything is already up to date.."
-
+            this.updateTextView.text = getString(R.string.fragment_country_list_title_updated)
             Handler().postDelayed({
                 if (this.isVisible) {
                     this.updateImageView.visibility = View.VISIBLE
@@ -145,9 +143,8 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
                                             currencies = currencies
                                     )
                                 }
-                            }, { error ->
-                                Snackbar.make(this.view!!, "Error API Countries", Snackbar.LENGTH_SHORT).show()
-                                Log.e("Error", "$error")
+                            }, {
+                                Snackbar.make(this.mainContainer, getString(R.string.error_api_countries), Snackbar.LENGTH_SHORT).show()
                             })
                 }
             }
@@ -157,7 +154,7 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
     private fun updateCurrencies(countries: List<Country>, currencies: List<Currency>) {
         this.workerThread.postTask(Runnable {
             countries.forEach { country ->
-                if (country.code != "USD") {
+                if (country.code != DEFAULT_COUNTRY_CODE) {
                     val updateCurrency = currencies.find {
                         it.code.contains(country.code)
                     }
@@ -173,10 +170,9 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
             this@CountryListFragment.activity?.runOnUiThread {
                 if (this.isVisible) {
                     val currentTimeStamp = Date().time
-
                     PreferenceHelper.getPreference(requireContext())[PreferenceHelper.UPDATED_TIME_STAMP] = currentTimeStamp
-                    this.updateTextView.text = simpleDateFormat.format(Date(currentTimeStamp))
 
+                    this.updateTextView.text = simpleDateFormat.format(Date(currentTimeStamp))
                     this.updateImageView.visibility = View.VISIBLE
                 }
             }
@@ -184,33 +180,16 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
     }
 
     private fun updateDataSet(searchText: String? = null) {
-        val filterCountries: MutableList<Country> = if (searchText.isNullOrBlank()) {
-            CountryDataController.getCountries()
-        } else {
-            val text: String = searchText?.toLowerCase() ?: ""
-            CountryDataController.getCountries().filter {
-                it.name.toLowerCase().contains(text) || it.code.toLowerCase().contains(text)
-            }
-        } as MutableList<Country>
-
-        val selectedCountry = filterCountries.firstOrNull {
-            it.code == this.countryCode
-        }
+        val filterCountries = CountryDataController.getFilteredCountries(searchText) as MutableList<Country>
+        val selectedCountry = filterCountries.firstOrNull { it.code == this.countryCode }
 
         selectedCountry?.let {
             filterCountries.remove(it)
-            filterCountries.sortBy {
-                it.code
-            }
+            filterCountries.sortBy { it.code }
             filterCountries.add(0, it)
         }
 
-        this.emptyStateViewGroup.visibility = if (filterCountries.isEmpty()) {
-            View.VISIBLE
-        } else {
-            View.GONE
-        }
-
+        this.emptyStateViewGroup.visibility = if (filterCountries.isEmpty()) View.VISIBLE else View.GONE
         this.countryAdapter.updateDataSet(filterCountries)
     }
 
@@ -261,9 +240,7 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
                 this.activity?.onBackPressed()
                 true
             }
-            else -> {
-                super.onOptionsItemSelected(item)
-            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
