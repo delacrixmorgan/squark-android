@@ -30,6 +30,6 @@ object CurrencyModel {
 
             @SerializedName("quotes")
             @Expose
-            val quotes: Map<String, Double>? = null
+            val quotes: Map<String, Double>
     )
 }

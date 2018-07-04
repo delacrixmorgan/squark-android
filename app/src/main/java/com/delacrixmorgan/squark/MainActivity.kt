@@ -8,8 +8,8 @@ import com.delacrixmorgan.squark.common.PreferenceHelper
 import com.delacrixmorgan.squark.common.PreferenceHelper.set
 import com.delacrixmorgan.squark.common.changeAppOverview
 import com.delacrixmorgan.squark.common.startFragment
-import com.delacrixmorgan.squark.data.api.SquarkApiService
 import com.delacrixmorgan.squark.data.SquarkWorkerThread
+import com.delacrixmorgan.squark.data.api.SquarkApiService
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.controller.CountryDatabase
 import com.delacrixmorgan.squark.data.model.Country
@@ -18,7 +18,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
-import java.math.RoundingMode
 import java.util.*
 
 /**
@@ -61,7 +60,7 @@ class MainActivity : AppCompatActivity() {
                 if (countryData == null || countryData.isEmpty()) {
                     initCountries(completion = { error ->
                         if (error != null) {
-                            Snackbar.make(this.mainContainer, "Error API Countries", Snackbar.LENGTH_SHORT).show()
+                            Snackbar.make(this.mainContainer, getString(R.string.error_api_countries), Snackbar.LENGTH_SHORT).show()
                         }
 
                         initCurrencies()
@@ -81,13 +80,7 @@ class MainActivity : AppCompatActivity() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ result ->
-                    this.countries = result.quotes?.map {
-                        Country(
-                                code = it.key,
-                                name = it.value,
-                                rate = 0.0
-                        )
-                    } ?: arrayListOf()
+                    this.countries = result.quotes?.map { Country(code = it.key, name = it.value, rate = 0.0) } ?: arrayListOf()
                     completion.invoke(null)
                 }, { error ->
                     completion.invoke(error)
@@ -101,20 +94,12 @@ class MainActivity : AppCompatActivity() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ result ->
-                    this.currencies = result.quotes?.map {
-                        Currency(
-                                code = it.key,
-                                rate = it.value
-                        )
-                    } ?: arrayListOf()
-
+                    this.currencies = result.quotes.map { Currency(code = it.key, rate = it.value) } ?: arrayListOf()
                     if (this.countries.isNotEmpty() && this.currencies.isNotEmpty()) {
                         insertCountries()
-                    } else {
-                        Snackbar.make(this.mainContainer, "Empty API Countries", Snackbar.LENGTH_SHORT).show()
                     }
-                }, { error ->
-                    Snackbar.make(this.mainContainer, "Error API Countries ${error.message}", Snackbar.LENGTH_SHORT).show()
+                }, {
+                    Snackbar.make(this.mainContainer, getString(R.string.error_api_countries), Snackbar.LENGTH_SHORT).show()
                 })
     }
 
