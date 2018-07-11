@@ -40,7 +40,8 @@ object SquarkEngine {
             rowList: ArrayList<TableRow>,
             listener: RowListener
     ) {
-        val thresholdWidth = activity.resources.displayMetrics.widthPixels / 6
+        val thresholdWidth = activity.resources.displayMetrics.widthPixels / 6F
+        val alphaRatio = 1F / thresholdWidth
 
         activity.currencyTableLayout.setOnTouchListener { _, event ->
             activity.currencyTableLayout.onTouchEvent(event)
@@ -60,7 +61,10 @@ object SquarkEngine {
                         listener.onSwipeRight()
                     }
 
-                    rowList.map { it.translationX = 0F }
+                    rowList.map {
+                        it.translationX = 0F
+                        it.alpha = 1F
+                    }
                 }
 
                 MotionEvent.ACTION_DOWN -> {
@@ -70,7 +74,11 @@ object SquarkEngine {
                 MotionEvent.ACTION_MOVE -> {
                     val movingPixels = event.rawX - this.anchorPosition
                     if (movingPixels.absoluteValue < thresholdWidth) {
-                        rowList.map { it.translationX = movingPixels }
+                        val alpha = movingPixels.absoluteValue * alphaRatio
+                        rowList.map {
+                            it.translationX = movingPixels
+                            it.alpha = if (it.alpha != alpha) 1F - alpha else it.alpha
+                        }
                     }
                 }
             }
