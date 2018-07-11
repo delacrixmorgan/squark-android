@@ -11,6 +11,7 @@ import kotlinx.android.synthetic.main.fragment_launch.*
 import kotlinx.android.synthetic.main.view_row.view.*
 import java.math.BigDecimal
 import java.text.DecimalFormat
+import kotlin.math.absoluteValue
 
 /**
  * SquarkEngine
@@ -39,6 +40,8 @@ object SquarkEngine {
             rowList: ArrayList<TableRow>,
             listener: RowListener
     ) {
+        val thresholdWidth = activity.resources.displayMetrics.widthPixels / 6
+
         activity.currencyTableLayout.setOnTouchListener { _, event ->
             activity.currencyTableLayout.onTouchEvent(event)
 
@@ -66,7 +69,9 @@ object SquarkEngine {
 
                 MotionEvent.ACTION_MOVE -> {
                     val movingPixels = event.rawX - this.anchorPosition
-                    rowList.map { it.translationX = movingPixels }
+                    if (movingPixels.absoluteValue < thresholdWidth) {
+                        rowList.map { it.translationX = movingPixels }
+                    }
                 }
             }
             true
