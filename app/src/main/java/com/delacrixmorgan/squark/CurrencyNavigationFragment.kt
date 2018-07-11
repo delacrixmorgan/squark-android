@@ -7,6 +7,7 @@ import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TableRow
@@ -60,6 +61,11 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
                 listener = this
         )
 
+        setupListeners()
+        updateTable()
+    }
+
+    private fun setupListeners() {
         this.baseCurrencyTextView.setOnClickListener {
             val currencyIntent = CountryActivity.newLaunchIntent(requireContext(), countryCode = this.baseCountry?.code)
             startActivityForResult(currencyIntent, REQUEST_BASE_COUNTRY)
@@ -78,8 +84,6 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
 
             updateTable()
         }
-
-        updateTable()
     }
 
     private fun updateTable() {
@@ -151,13 +155,13 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
         }
     }
 
-    override fun onSwipeLeft(position: Int) {
+    override fun onSwipeLeft() {
         if (!this.isExpanded) {
             SquarkEngine.updateTable(this.rowList)
         }
     }
 
-    override fun onSwipeRight(position: Int) {
+    override fun onSwipeRight() {
         if (!this.isExpanded) {
             SquarkEngine.updateTable(this.rowList)
         }
@@ -172,8 +176,4 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
 
         this.isExpanded = !this.isExpanded
     }
-
-    override fun onSwipingLeft(position: Int) = Unit
-
-    override fun onSwipingRight(position: Int) = Unit
 }

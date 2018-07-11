@@ -1,17 +1,15 @@
 package com.delacrixmorgan.squark
 
-import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.Context
 import android.support.v4.content.ContextCompat
+import android.view.MotionEvent
 import android.view.animation.AnimationUtils
 import android.widget.TableLayout
 import android.widget.TableRow
-import com.delacrixmorgan.squark.common.OnSwipeTouch
 import com.delacrixmorgan.squark.common.RowListener
+import kotlinx.android.synthetic.main.fragment_launch.*
 import kotlinx.android.synthetic.main.view_row.view.*
 import java.math.BigDecimal
-import java.math.RoundingMode
 import java.text.DecimalFormat
 
 /**
@@ -24,6 +22,7 @@ import java.text.DecimalFormat
 
 object SquarkEngine {
 
+    private var anchorPosition = 0F
     private var multiplier: Double = 1.0
     private var conversionRate: Double = 1.0
     private var bigResult: BigDecimal? = null
@@ -34,13 +33,45 @@ object SquarkEngine {
         this.conversionRate = quoteRate!! / baseRate!!
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     fun setupTable(
             activity: Activity,
             tableLayout: TableLayout,
             rowList: ArrayList<TableRow>,
             listener: RowListener
     ) {
+        activity.currencyTableLayout.setOnTouchListener { _, event ->
+            activity.currencyTableLayout.onTouchEvent(event)
+
+            when (event.action) {
+                MotionEvent.ACTION_UP -> {
+                    val currentPosition = rowList.firstOrNull()?.translationX ?: 0F
+                    if (currentPosition > 0) {
+                        if (this.multiplier < 1000000) {
+                            this.multiplier *= 10
+                        }
+                        listener.onSwipeLeft()
+                    } else {
+                        if (this.multiplier > 0.1) {
+                            this.multiplier /= 10
+                        }
+                        listener.onSwipeRight()
+                    }
+
+                    rowList.map { it.translationX = 0F }
+                }
+
+                MotionEvent.ACTION_DOWN -> {
+                    this.anchorPosition = event.rawX
+                }
+
+                MotionEvent.ACTION_MOVE -> {
+                    val movingPixels = event.rawX - this.anchorPosition
+                    rowList.map { it.translationX = movingPixels }
+                }
+            }
+            true
+        }
+
         for (index in 0..9) {
             val tableRow = activity.layoutInflater.inflate(R.layout.view_row, tableLayout, false) as TableRow
 
@@ -53,33 +84,10 @@ object SquarkEngine {
             tableRow.quantifierTextView.text = this.decimalFormat.format(this.bigQuantifier).toString()
             tableRow.resultTextView.text = this.decimalFormat.format(this.bigResult).toString()
 
-            tableRow.setOnTouchListener(object : OnSwipeTouch(activity) {
-                override fun onSwipeLeft() {
-                    if (this@SquarkEngine.multiplier < 1000000) {
-                        this@SquarkEngine.multiplier *= 10
-                    }
-                    listener.onSwipeLeft(index)
-                }
-
-                override fun onSwipeRight() {
-                    if (this@SquarkEngine.multiplier > 0.1) {
-                        this@SquarkEngine.multiplier /= 10
-                    }
-                    listener.onSwipeRight(index)
-                }
-
-                override fun onSwipingLeft() {
-                    listener.onSwipingLeft(index)
-                }
-
-                override fun onSwipingRight() {
-                    listener.onSwipingRight(index)
-                }
-
-                override fun onSingleTap() {
-                    listener.onClick(index)
-                }
-            })
+            // TODO - Restore Click When Ready
+//            tableRow.setOnClickListener {
+//                listener.onClick(index)
+//            }
 
             rowList.add(tableRow)
             tableLayout.addView(tableRow)
@@ -102,7 +110,6 @@ object SquarkEngine {
         }
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     fun expandTable(
             activity: Activity,
             tableLayout: TableLayout,

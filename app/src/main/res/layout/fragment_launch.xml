@@ -58,5 +58,4 @@
         android:animateLayoutChanges="true"
         android:background="@android:color/black"
         android:stretchColumns="*"/>
-
 </LinearLayout>

@@ -10,8 +10,6 @@ package com.delacrixmorgan.squark.common
 
 interface RowListener {
     fun onClick(position: Int)
-    fun onSwipeLeft(position: Int)
-    fun onSwipeRight(position: Int)
-    fun onSwipingLeft(position: Int)
-    fun onSwipingRight(position: Int)
+    fun onSwipeLeft()
+    fun onSwipeRight()
 }
