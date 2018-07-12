@@ -3,18 +3,61 @@
     android:layout_weight="1"
     android:background="@drawable/shape_cell">
 
-    <TextView
-        android:id="@+id/quantifierTextView"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:textSize="18sp"/>
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/resultTextView"
+        <TextView
+            android:id="@+id/beforeQuantifierTextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0"
+            android:gravity="center"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/quantifierTextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/nextQuantifierTextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0"
+            android:gravity="center"
+            android:textSize="18sp"/>
+    </RelativeLayout>
+
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:textSize="18sp"/>
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/beforeResultTextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0"
+            android:gravity="center"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/resultTextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/nextResultTextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0"
+            android:gravity="center"
+            android:textSize="18sp"/>
+    </RelativeLayout>
 
 </TableRow>
