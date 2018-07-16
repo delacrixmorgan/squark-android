@@ -3,6 +3,7 @@ package com.delacrixmorgan.squark
 import android.app.Activity
 import android.support.v4.content.ContextCompat
 import android.view.MotionEvent
+import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.TableLayout
 import android.widget.TableRow
@@ -73,6 +74,12 @@ object SquarkEngine {
 
                         it.beforeQuantifierTextView.alpha = 0F
                         it.beforeResultTextView.alpha = 0F
+
+                        it.nextQuantifierTextView.visibility = View.GONE
+                        it.nextResultTextView.visibility = View.GONE
+
+                        it.beforeQuantifierTextView.visibility = View.GONE
+                        it.beforeResultTextView.visibility = View.GONE
                     }
                 }
 
@@ -86,6 +93,12 @@ object SquarkEngine {
                         val alpha = movingPixels.absoluteValue * alphaRatio
                         rowList.forEach {
                             it.translationX = movingPixels
+
+                            it.nextQuantifierTextView.visibility = View.VISIBLE
+                            it.nextResultTextView.visibility = View.VISIBLE
+
+                            it.beforeQuantifierTextView.visibility = View.VISIBLE
+                            it.beforeResultTextView.visibility = View.VISIBLE
 
                             it.quantifierTextView.alpha = Math.round((1F - alpha) * 10F) / 10F
                             it.resultTextView.alpha = Math.round((1F - alpha) * 10F) / 10F

@@ -26,6 +26,7 @@
                 android:alpha="0"
                 android:textAlignment="textEnd"
                 android:textSize="18sp"
+                android:visibility="gone"
                 tools:text="10.00"/>
 
             <TextView
@@ -43,6 +44,7 @@
                 android:alpha="0"
                 android:textAlignment="textEnd"
                 android:textSize="18sp"
+                android:visibility="gone"
                 tools:text="1000.00"/>
         </FrameLayout>
     </android.support.constraint.ConstraintLayout>
@@ -55,7 +57,7 @@
         <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/blue"
+            android:background="@color/colorPrimaryDark"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -68,6 +70,7 @@
                 android:alpha="0"
                 android:textAlignment="textEnd"
                 android:textSize="18sp"
+                android:visibility="gone"
                 tools:text="10.00"/>
 
             <TextView
@@ -85,6 +88,7 @@
                 android:alpha="0"
                 android:textAlignment="textEnd"
                 android:textSize="18sp"
+                android:visibility="gone"
                 tools:text="1000.00"/>
         </FrameLayout>
     </android.support.constraint.ConstraintLayout>
