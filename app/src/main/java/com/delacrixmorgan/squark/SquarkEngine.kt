@@ -14,7 +14,6 @@ import java.math.BigDecimal
 import java.text.DecimalFormat
 import kotlin.math.absoluteValue
 
-
 /**
  * SquarkEngine
  * squark-android
@@ -63,9 +62,8 @@ object SquarkEngine {
                         listener.onSwipeRight()
                     }
 
-                    rowList.forEach {
+                    rowList.map {
                         it.translationX = 0F
-
                         it.quantifierTextView.alpha = 1F
                         it.resultTextView.alpha = 1F
 
@@ -91,7 +89,7 @@ object SquarkEngine {
                     val movingPixels = event.rawX - this.anchorPosition
                     if (movingPixels.absoluteValue < thresholdWidth) {
                         val alpha = movingPixels.absoluteValue * alphaRatio
-                        rowList.forEach {
+                        rowList.map {
                             it.translationX = movingPixels
 
                             it.nextQuantifierTextView.visibility = View.VISIBLE
@@ -112,7 +110,7 @@ object SquarkEngine {
                             }
                         }
                     } else {
-                        rowList.forEach {
+                        rowList.map {
                             it.quantifierTextView.alpha = 0F
                             it.resultTextView.alpha = 0F
 
