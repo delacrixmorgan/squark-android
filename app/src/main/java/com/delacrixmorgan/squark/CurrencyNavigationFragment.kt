@@ -7,7 +7,6 @@ import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TableRow
@@ -145,13 +144,14 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
     }
 
     private fun onRowCollapse() {
+        val context = this.context ?: return
         this.expandedList.forEach {
             currencyTableLayout.removeView(it)
         }
 
         this.rowList.forEach {
             it.visibility = View.VISIBLE
-            it.setBackgroundColor(ContextCompat.getColor(requireContext(), android.R.color.black))
+            it.background = ContextCompat.getDrawable(context, R.drawable.shape_cell_dark)
         }
     }
 

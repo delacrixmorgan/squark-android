@@ -88,6 +88,17 @@ object SquarkEngine {
             tableRow.setOnTouchListener { _, event ->
                 if (gestureDetector.onTouchEvent(event)) {
                     listener.onClick(index)
+                    rowList.forEach {
+                        it.translationX = 0F
+                        it.quantifierTextView.alpha = 1F
+                        it.resultTextView.alpha = 1F
+
+                        it.nextQuantifierTextView.alpha = 0F
+                        it.nextResultTextView.alpha = 0F
+
+                        it.beforeQuantifierTextView.alpha = 0F
+                        it.beforeResultTextView.alpha = 0F
+                    }
                 } else {
                     tableRow.onTouchEvent(event)
                     when (event.action) {
@@ -213,7 +224,7 @@ object SquarkEngine {
     ) {
         for (index in 1..9) {
             val tableRow = activity.layoutInflater.inflate(R.layout.view_row, tableLayout, false) as TableRow
-            tableRow.setBackgroundColor(ContextCompat.getColor(activity, R.color.borderGrey))
+            tableRow.background = ContextCompat.getDrawable(activity, R.drawable.shape_cell_light)
 
             val calculateQuantifier = (expandQuantifier + 1) * this.multiplier + (this.multiplier / 10 * index)
             val calculateResult = calculateQuantifier * this.conversionRate
