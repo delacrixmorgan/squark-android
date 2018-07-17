@@ -7,11 +7,13 @@ import android.view.animation.AnimationUtils
 import android.widget.TableLayout
 import android.widget.TableRow
 import com.delacrixmorgan.squark.common.RowListener
+import com.delacrixmorgan.squark.common.roundUp
 import kotlinx.android.synthetic.main.fragment_launch.*
 import kotlinx.android.synthetic.main.view_row.view.*
 import java.math.BigDecimal
 import java.text.DecimalFormat
 import kotlin.math.absoluteValue
+import kotlin.math.roundToInt
 
 /**
  * SquarkEngine
@@ -40,8 +42,9 @@ object SquarkEngine {
             rowList: ArrayList<TableRow>,
             listener: RowListener
     ) {
-        val thresholdWidth = activity.resources.displayMetrics.widthPixels / 6F
-        val alphaRatio = 1F / thresholdWidth
+        val thresholdTranslationWidth = activity.resources.displayMetrics.widthPixels / 6F
+        val thresholdSwipeWidth = thresholdTranslationWidth / 1.5F
+        val alphaRatio = 1F / thresholdTranslationWidth
 
         activity.currencyTableLayout.setOnTouchListener { _, event ->
             activity.currencyTableLayout.onTouchEvent(event)
@@ -50,7 +53,7 @@ object SquarkEngine {
                 MotionEvent.ACTION_UP -> {
                     val currentPosition = rowList.firstOrNull()?.translationX ?: 0F
 
-                    if (currentPosition.absoluteValue > thresholdWidth / 1.5) {
+                    if (currentPosition.absoluteValue > thresholdSwipeWidth) {
                         if (currentPosition > 0) {
                             if (this.multiplier < 1000000) {
                                 this.multiplier *= 10
@@ -64,7 +67,7 @@ object SquarkEngine {
                         }
                     }
 
-                    rowList.map {
+                    rowList.forEach {
                         it.translationX = 0F
                         it.quantifierTextView.alpha = 1F
                         it.resultTextView.alpha = 1F
@@ -77,30 +80,27 @@ object SquarkEngine {
                     }
                 }
 
-                MotionEvent.ACTION_DOWN -> {
-                    this.anchorPosition = event.rawX
-                }
-
                 MotionEvent.ACTION_MOVE -> {
                     val movingPixels = event.rawX - this.anchorPosition
-                    if (movingPixels.absoluteValue < thresholdWidth) {
+                    if (movingPixels.absoluteValue < thresholdTranslationWidth) {
+
                         val alpha = movingPixels.absoluteValue * alphaRatio
-                        rowList.map {
+                        rowList.forEach {
                             it.translationX = movingPixels
 
-                            it.quantifierTextView.alpha = Math.round((1F - alpha) * 10F) / 10F
-                            it.resultTextView.alpha = Math.round((1F - alpha) * 10F) / 10F
+                            it.quantifierTextView.alpha = (1F - alpha).roundUp()
+                            it.resultTextView.alpha = (1F - alpha).roundUp()
 
                             if (movingPixels > 0) {
-                                it.nextQuantifierTextView.alpha = Math.round(alpha * 10F) / 10F
-                                it.nextResultTextView.alpha = Math.round(alpha * 10F) / 10F
+                                it.nextQuantifierTextView.alpha = alpha.roundUp()
+                                it.nextResultTextView.alpha = alpha.roundUp()
                             } else {
-                                it.beforeQuantifierTextView.alpha = Math.round(alpha * 10F) / 10F
-                                it.beforeResultTextView.alpha = Math.round(alpha * 10F) / 10F
+                                it.beforeQuantifierTextView.alpha = alpha.roundUp()
+                                it.beforeResultTextView.alpha = alpha.roundUp()
                             }
                         }
                     } else {
-                        rowList.map {
+                        rowList.forEach {
                             it.quantifierTextView.alpha = 0F
                             it.resultTextView.alpha = 0F
 
@@ -113,6 +113,10 @@ object SquarkEngine {
                             }
                         }
                     }
+                }
+
+                MotionEvent.ACTION_DOWN -> {
+                    this.anchorPosition = event.rawX
                 }
             }
             true

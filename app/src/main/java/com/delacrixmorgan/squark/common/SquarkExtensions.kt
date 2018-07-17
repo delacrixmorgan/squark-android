@@ -33,6 +33,8 @@ fun changeAppOverview(activity: AppCompatActivity, theme: Resources.Theme) {
     bitmap.recycle()
 }
 
+fun Float.roundUp() = Math.round(this * 10F) / 10F
+
 fun CountryDataController.getPreferenceCountry(context: Context, preferenceCurrency: String): Country? {
     return when (preferenceCurrency) {
         PreferenceHelper.BASE_CURRENCY_CODE -> getCountries().firstOrNull {
