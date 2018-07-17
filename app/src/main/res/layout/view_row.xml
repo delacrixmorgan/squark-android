@@ -11,9 +11,9 @@
         android:layout_weight="1">
 
         <FrameLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimaryDark"
+            android:layout_marginEnd="72dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -24,15 +24,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:alpha="0"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:textAlignment="textEnd"
                 android:textSize="18sp"
-                android:visibility="gone"
                 tools:text="10.00"/>
 
             <TextView
                 android:id="@+id/quantifierTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:textAlignment="textEnd"
                 android:textSize="18sp"
                 tools:text="100.00"/>
@@ -42,9 +45,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:alpha="0"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:textAlignment="textEnd"
                 android:textSize="18sp"
-                android:visibility="gone"
                 tools:text="1000.00"/>
         </FrameLayout>
     </android.support.constraint.ConstraintLayout>
@@ -55,9 +59,9 @@
         android:layout_weight="1">
 
         <FrameLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimaryDark"
+            android:layout_marginEnd="72dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -68,15 +72,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:alpha="0"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:textAlignment="textEnd"
                 android:textSize="18sp"
-                android:visibility="gone"
                 tools:text="10.00"/>
 
             <TextView
                 android:id="@+id/resultTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:textAlignment="textEnd"
                 android:textSize="18sp"
                 tools:text="100.00"/>
@@ -86,9 +93,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:alpha="0"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:textAlignment="textEnd"
                 android:textSize="18sp"
-                android:visibility="gone"
                 tools:text="1000.00"/>
         </FrameLayout>
     </android.support.constraint.ConstraintLayout>
