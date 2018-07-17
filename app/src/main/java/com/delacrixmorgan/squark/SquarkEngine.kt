@@ -1,19 +1,21 @@
 package com.delacrixmorgan.squark
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.support.v4.content.ContextCompat
+import android.view.GestureDetector
+import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.MotionEvent
 import android.view.animation.AnimationUtils
 import android.widget.TableLayout
 import android.widget.TableRow
 import com.delacrixmorgan.squark.common.RowListener
 import com.delacrixmorgan.squark.common.roundUp
-import kotlinx.android.synthetic.main.fragment_launch.*
 import kotlinx.android.synthetic.main.view_row.view.*
 import java.math.BigDecimal
 import java.text.DecimalFormat
 import kotlin.math.absoluteValue
-import kotlin.math.roundToInt
+
 
 /**
  * SquarkEngine
@@ -36,6 +38,7 @@ object SquarkEngine {
         this.conversionRate = quoteRate!! / baseRate!!
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     fun setupTable(
             activity: Activity,
             tableLayout: TableLayout,
@@ -45,82 +48,7 @@ object SquarkEngine {
         val thresholdTranslationWidth = activity.resources.displayMetrics.widthPixels / 6F
         val thresholdSwipeWidth = thresholdTranslationWidth / 1.5F
         val alphaRatio = 1F / thresholdTranslationWidth
-
-        activity.currencyTableLayout.setOnTouchListener { _, event ->
-            activity.currencyTableLayout.onTouchEvent(event)
-
-            when (event.action) {
-                MotionEvent.ACTION_UP -> {
-                    val currentPosition = rowList.firstOrNull()?.translationX ?: 0F
-
-                    if (currentPosition.absoluteValue > thresholdSwipeWidth) {
-                        if (currentPosition > 0) {
-                            if (this.multiplier < 1000000) {
-                                this.multiplier *= 10
-                            }
-                            listener.onSwipeLeft()
-                        } else {
-                            if (this.multiplier > 0.1) {
-                                this.multiplier /= 10
-                            }
-                            listener.onSwipeRight()
-                        }
-                    }
-
-                    rowList.forEach {
-                        it.translationX = 0F
-                        it.quantifierTextView.alpha = 1F
-                        it.resultTextView.alpha = 1F
-
-                        it.nextQuantifierTextView.alpha = 0F
-                        it.nextResultTextView.alpha = 0F
-
-                        it.beforeQuantifierTextView.alpha = 0F
-                        it.beforeResultTextView.alpha = 0F
-                    }
-                }
-
-                MotionEvent.ACTION_MOVE -> {
-                    val movingPixels = event.rawX - this.anchorPosition
-                    if (movingPixels.absoluteValue < thresholdTranslationWidth) {
-
-                        val alpha = movingPixels.absoluteValue * alphaRatio
-                        rowList.forEach {
-                            it.translationX = movingPixels
-
-                            it.quantifierTextView.alpha = (1F - alpha).roundUp()
-                            it.resultTextView.alpha = (1F - alpha).roundUp()
-
-                            if (movingPixels > 0) {
-                                it.nextQuantifierTextView.alpha = alpha.roundUp()
-                                it.nextResultTextView.alpha = alpha.roundUp()
-                            } else {
-                                it.beforeQuantifierTextView.alpha = alpha.roundUp()
-                                it.beforeResultTextView.alpha = alpha.roundUp()
-                            }
-                        }
-                    } else {
-                        rowList.forEach {
-                            it.quantifierTextView.alpha = 0F
-                            it.resultTextView.alpha = 0F
-
-                            if (movingPixels > 0) {
-                                it.nextQuantifierTextView.alpha = 1F
-                                it.nextResultTextView.alpha = 1F
-                            } else {
-                                it.beforeQuantifierTextView.alpha = 1F
-                                it.beforeResultTextView.alpha = 1F
-                            }
-                        }
-                    }
-                }
-
-                MotionEvent.ACTION_DOWN -> {
-                    this.anchorPosition = event.rawX
-                }
-            }
-            true
-        }
+        val gestureDetector = GestureDetector(activity, SingleTapConfirm())
 
         for (index in 0..9) {
             val tableRow = activity.layoutInflater.inflate(R.layout.view_row, tableLayout, false) as TableRow
@@ -157,10 +85,82 @@ object SquarkEngine {
             tableRow.nextQuantifierTextView.text = this.decimalFormat.format(this.bigQuantifier).toString()
             tableRow.nextResultTextView.text = this.decimalFormat.format(this.bigResult).toString()
 
-            // TODO - Restore Click When Ready
-//            tableRow.setOnClickListener {
-//                listener.onClick(index)
-//            }
+            tableRow.setOnTouchListener { _, event ->
+                if (gestureDetector.onTouchEvent(event)) {
+                    listener.onClick(index)
+                } else {
+                    tableRow.onTouchEvent(event)
+                    when (event.action) {
+                        MotionEvent.ACTION_UP -> {
+                            val currentPosition = rowList.firstOrNull()?.translationX ?: 0F
+
+                            if (currentPosition.absoluteValue > thresholdSwipeWidth) {
+                                if (currentPosition > 0) {
+                                    if (this.multiplier < 1000000) {
+                                        this.multiplier *= 10
+                                    }
+                                    listener.onSwipeLeft()
+                                } else {
+                                    if (this.multiplier > 0.1) {
+                                        this.multiplier /= 10
+                                    }
+                                    listener.onSwipeRight()
+                                }
+                            }
+
+                            rowList.forEach {
+                                it.translationX = 0F
+                                it.quantifierTextView.alpha = 1F
+                                it.resultTextView.alpha = 1F
+
+                                it.nextQuantifierTextView.alpha = 0F
+                                it.nextResultTextView.alpha = 0F
+
+                                it.beforeQuantifierTextView.alpha = 0F
+                                it.beforeResultTextView.alpha = 0F
+                            }
+                        }
+
+                        MotionEvent.ACTION_MOVE -> {
+                            val movingPixels = event.rawX - this.anchorPosition
+                            if (movingPixels.absoluteValue < thresholdTranslationWidth) {
+
+                                val alpha = movingPixels.absoluteValue * alphaRatio
+                                rowList.forEach {
+                                    it.translationX = movingPixels
+
+                                    it.quantifierTextView.alpha = (1F - alpha).roundUp()
+                                    it.resultTextView.alpha = (1F - alpha).roundUp()
+
+                                    if (movingPixels > 0) {
+                                        it.nextQuantifierTextView.alpha = alpha.roundUp()
+                                        it.nextResultTextView.alpha = alpha.roundUp()
+                                    } else {
+                                        it.beforeQuantifierTextView.alpha = alpha.roundUp()
+                                        it.beforeResultTextView.alpha = alpha.roundUp()
+                                    }
+                                }
+                            } else {
+                                rowList.forEach {
+                                    it.quantifierTextView.alpha = 0F
+                                    it.resultTextView.alpha = 0F
+
+                                    if (movingPixels > 0) {
+                                        it.nextQuantifierTextView.alpha = 1F
+                                        it.nextResultTextView.alpha = 1F
+                                    } else {
+                                        it.beforeQuantifierTextView.alpha = 1F
+                                        it.beforeResultTextView.alpha = 1F
+                                    }
+                                }
+                            }
+                        }
+
+                        MotionEvent.ACTION_DOWN -> this.anchorPosition = event.rawX
+                    }
+                }
+                true
+            }
 
             rowList.add(tableRow)
             tableLayout.addView(tableRow)
@@ -231,5 +231,9 @@ object SquarkEngine {
             expandedList.add(tableRow)
             tableLayout.addView(tableRow, (expandQuantifier + index))
         }
+    }
+
+    private class SingleTapConfirm : SimpleOnGestureListener() {
+        override fun onSingleTapUp(event: MotionEvent) = true
     }
 }
