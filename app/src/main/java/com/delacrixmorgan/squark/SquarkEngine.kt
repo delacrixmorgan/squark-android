@@ -106,7 +106,7 @@ object SquarkEngine {
                             val currentPosition = rowList.firstOrNull()?.translationX ?: 0F
 
                             if (currentPosition.absoluteValue > thresholdSwipeWidth) {
-                                if (currentPosition > 0) {
+                                if (currentPosition < 0) {
                                     if (this.multiplier < 1000000) {
                                         this.multiplier *= 10
                                     }
@@ -191,17 +191,8 @@ object SquarkEngine {
             tableRow.resultTextView.text = this.decimalFormat.format(this.bigResult).toString()
 
             // BEFORE
+//            if (this.multiplier < 1000000)
             calculateQuantifier = (this.multiplier / 10 * (index + 1))
-            calculateResult = calculateQuantifier * this.conversionRate
-
-            this.bigQuantifier = BigDecimal(calculateQuantifier).setScale(2, BigDecimal.ROUND_HALF_UP)
-            this.bigResult = BigDecimal(calculateResult).setScale(2, BigDecimal.ROUND_HALF_UP)
-
-            tableRow.beforeQuantifierTextView.text = this.decimalFormat.format(this.bigQuantifier).toString()
-            tableRow.beforeResultTextView.text = this.decimalFormat.format(this.bigResult).toString()
-
-            // NEXT
-            calculateQuantifier = (this.multiplier * 10 * (index + 1))
             calculateResult = calculateQuantifier * this.conversionRate
 
             this.bigQuantifier = BigDecimal(calculateQuantifier).setScale(2, BigDecimal.ROUND_HALF_UP)
@@ -209,6 +200,18 @@ object SquarkEngine {
 
             tableRow.nextQuantifierTextView.text = this.decimalFormat.format(this.bigQuantifier).toString()
             tableRow.nextResultTextView.text = this.decimalFormat.format(this.bigResult).toString()
+
+
+            // NEXT
+//            if (this.multiplier > 0.1)
+            calculateQuantifier = (this.multiplier * 10 * (index + 1))
+            calculateResult = calculateQuantifier * this.conversionRate
+
+            this.bigQuantifier = BigDecimal(calculateQuantifier).setScale(2, BigDecimal.ROUND_HALF_UP)
+            this.bigResult = BigDecimal(calculateResult).setScale(2, BigDecimal.ROUND_HALF_UP)
+
+            tableRow.beforeQuantifierTextView.text = this.decimalFormat.format(this.bigQuantifier).toString()
+            tableRow.beforeResultTextView.text = this.decimalFormat.format(this.bigResult).toString()
 
             tableRow.quantifierTextView.startAnimation(AnimationUtils.loadAnimation(tableRow.context, R.anim.wobble))
             tableRow.resultTextView.startAnimation(AnimationUtils.loadAnimation(tableRow.context, R.anim.wobble))
