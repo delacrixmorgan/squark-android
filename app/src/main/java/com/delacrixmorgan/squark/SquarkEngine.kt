@@ -49,16 +49,19 @@ object SquarkEngine {
             when (event.action) {
                 MotionEvent.ACTION_UP -> {
                     val currentPosition = rowList.firstOrNull()?.translationX ?: 0F
-                    if (currentPosition > 0) {
-                        if (this.multiplier < 1000000) {
-                            this.multiplier *= 10
+
+                    if (currentPosition.absoluteValue > thresholdWidth / 1.5) {
+                        if (currentPosition > 0) {
+                            if (this.multiplier < 1000000) {
+                                this.multiplier *= 10
+                            }
+                            listener.onSwipeLeft()
+                        } else {
+                            if (this.multiplier > 0.1) {
+                                this.multiplier /= 10
+                            }
+                            listener.onSwipeRight()
                         }
-                        listener.onSwipeLeft()
-                    } else {
-                        if (this.multiplier > 0.1) {
-                            this.multiplier /= 10
-                        }
-                        listener.onSwipeRight()
                     }
 
                     rowList.map {
@@ -117,7 +120,6 @@ object SquarkEngine {
 
         for (index in 0..9) {
             val tableRow = activity.layoutInflater.inflate(R.layout.view_row, tableLayout, false) as TableRow
-
 
             // PRESENT
             var calculateQuantifier = (this.multiplier * (index + 1))
