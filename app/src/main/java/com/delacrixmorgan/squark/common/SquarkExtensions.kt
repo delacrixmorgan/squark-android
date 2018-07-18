@@ -12,6 +12,8 @@ import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.PreferenceHelper.get
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.model.Country
+import java.math.BigDecimal
+import java.text.DecimalFormat
 
 fun startFragment(context: Context, fragment: Fragment) {
     val activity = context as FragmentActivity
@@ -34,6 +36,36 @@ fun changeAppOverview(activity: AppCompatActivity, theme: Resources.Theme) {
 }
 
 fun Float.roundUp() = Math.round(this * 10F) / 10F
+
+fun DecimalFormat.calculateRowQuantifier(multiplier: Double, position: Int): String {
+    val quantifier = (multiplier * (position + 1))
+    val bigDecimal = BigDecimal(quantifier).setScale(2, BigDecimal.ROUND_HALF_UP)
+
+    return this.format(bigDecimal)
+}
+
+fun DecimalFormat.calculateRowResult(multiplier: Double, position: Int, conversionRate: Double): String {
+    val quantifier = (multiplier * (position + 1))
+    val result = quantifier * conversionRate
+    val bigDecimal = BigDecimal(result).setScale(2, BigDecimal.ROUND_HALF_UP)
+
+    return this.format(bigDecimal)
+}
+
+fun DecimalFormat.calculateExpandQuantifier(expandQuantifier: Int, multiplier: Double, position: Int): String {
+    val quantifier = (expandQuantifier + 1) * multiplier + (multiplier / 10 * position)
+    val bigDecimal = BigDecimal(quantifier).setScale(2, BigDecimal.ROUND_HALF_UP)
+
+    return this.format(bigDecimal)
+}
+
+fun DecimalFormat.calculateExpandResult(expandQuantifier: Int, multiplier: Double, position: Int, conversionRate: Double): String {
+    val quantifier = (expandQuantifier + 1) * multiplier + (multiplier / 10 * position)
+    val result = quantifier * conversionRate
+    val bigDecimal = BigDecimal(result).setScale(2, BigDecimal.ROUND_HALF_UP)
+
+    return this.format(bigDecimal)
+}
 
 fun CountryDataController.getPreferenceCountry(context: Context, preferenceCurrency: String): Country? {
     return when (preferenceCurrency) {
