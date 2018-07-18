@@ -10,7 +10,7 @@ import android.view.animation.AnimationUtils
 import android.widget.TableLayout
 import android.widget.TableRow
 import com.delacrixmorgan.squark.common.*
-import kotlinx.android.synthetic.main.view_row.view.*
+import kotlinx.android.synthetic.main.cell_row.view.*
 import java.text.DecimalFormat
 import kotlin.math.absoluteValue
 
@@ -46,19 +46,19 @@ object SquarkEngine {
         val gestureDetector = GestureDetector(activity, SingleTapConfirm())
 
         for (index in 0..9) {
-            val tableRow = activity.layoutInflater.inflate(R.layout.view_row, tableLayout, false) as TableRow
+            val tableRow = activity.layoutInflater.inflate(R.layout.cell_row, tableLayout, false) as TableRow
 
             // PRESENT
-            tableRow.quantifierTextView.text = this.decimalFormat.calculateRowQuantifier(this.multiplier, index)
-            tableRow.resultTextView.text = this.decimalFormat.calculateRowResult(this.multiplier, index, this.conversionRate)
+            tableRow.quantifierTextView.text = calculateRowQuantifier(this.multiplier, index)
+            tableRow.resultTextView.text = calculateRowResult(this.multiplier, index, this.conversionRate)
 
             // BEFORE
-            tableRow.beforeQuantifierTextView.text = this.decimalFormat.calculateRowQuantifier(this.multiplier / 10, index)
-            tableRow.beforeResultTextView.text = this.decimalFormat.calculateRowResult(this.multiplier / 10, index, this.conversionRate)
+            tableRow.beforeQuantifierTextView.text = calculateRowQuantifier(this.multiplier / 10, index)
+            tableRow.beforeResultTextView.text = calculateRowResult(this.multiplier / 10, index, this.conversionRate)
 
             // NEXT
-            tableRow.nextQuantifierTextView.text = this.decimalFormat.calculateRowQuantifier(this.multiplier * 10, index)
-            tableRow.nextResultTextView.text = this.decimalFormat.calculateRowResult(this.multiplier * 10, index, this.conversionRate)
+            tableRow.nextQuantifierTextView.text = calculateRowQuantifier(this.multiplier * 10, index)
+            tableRow.nextResultTextView.text = calculateRowResult(this.multiplier * 10, index, this.conversionRate)
 
             tableRow.setOnTouchListener { _, event ->
                 if (gestureDetector.onTouchEvent(event)) {
@@ -82,7 +82,7 @@ object SquarkEngine {
 
                             if (currentPosition.absoluteValue > thresholdSwipeWidth) {
                                 if (currentPosition < 0) {
-                                    if (this.multiplier < 1000000) {
+                                    if (this.multiplier < 10000000000) {
                                         this.multiplier *= 10
                                     }
                                     listener.onSwipeLeft()
@@ -156,19 +156,17 @@ object SquarkEngine {
     fun updateTable(rowList: ArrayList<TableRow>) {
         rowList.forEachIndexed { index, tableRow ->
             // PRESENT
-            tableRow.quantifierTextView.text = this.decimalFormat.calculateRowQuantifier(this.multiplier, index)
-            tableRow.resultTextView.text = this.decimalFormat.calculateRowResult(this.multiplier, index, this.conversionRate)
+            tableRow.quantifierTextView.text = calculateRowQuantifier(this.multiplier, index)
+            tableRow.resultTextView.text = calculateRowResult(this.multiplier, index, this.conversionRate)
 
             // BEFORE
-//            if (this.multiplier < 1000000)
-            tableRow.nextQuantifierTextView.text = this.decimalFormat.calculateRowQuantifier(this.multiplier / 10, index)
-            tableRow.nextResultTextView.text = this.decimalFormat.calculateRowResult(this.multiplier / 10, index, this.conversionRate)
+            tableRow.nextQuantifierTextView.text = calculateRowQuantifier(this.multiplier / 10, index)
+            tableRow.nextResultTextView.text = calculateRowResult(this.multiplier / 10, index, this.conversionRate)
 
 
             // NEXT
-//            if (this.multiplier > 0.1)
-            tableRow.beforeQuantifierTextView.text = this.decimalFormat.calculateRowQuantifier(this.multiplier * 10, index)
-            tableRow.beforeResultTextView.text = this.decimalFormat.calculateRowResult(this.multiplier * 10, index, this.conversionRate)
+            tableRow.beforeQuantifierTextView.text = calculateRowQuantifier(this.multiplier * 10, index)
+            tableRow.beforeResultTextView.text = calculateRowResult(this.multiplier * 10, index, this.conversionRate)
 
 
             // Start Animation
@@ -185,11 +183,11 @@ object SquarkEngine {
             listener: RowListener
     ) {
         for (index in 1..9) {
-            val tableRow = activity.layoutInflater.inflate(R.layout.view_row, tableLayout, false) as TableRow
+            val tableRow = activity.layoutInflater.inflate(R.layout.cell_row, tableLayout, false) as TableRow
             tableRow.background = ContextCompat.getDrawable(activity, R.drawable.shape_cell_light)
 
-            tableRow.quantifierTextView.text = this.decimalFormat.calculateExpandQuantifier(expandQuantifier, this.multiplier, index)
-            tableRow.resultTextView.text = this.decimalFormat.calculateExpandResult(expandQuantifier, this.multiplier, index, this.conversionRate)
+            tableRow.quantifierTextView.text = calculateExpandQuantifier(expandQuantifier, this.multiplier, index)
+            tableRow.resultTextView.text = calculateExpandResult(expandQuantifier, this.multiplier, index, this.conversionRate)
 
             tableRow.setOnClickListener { listener.onClick(index) }
             expandedList.add(tableRow)
