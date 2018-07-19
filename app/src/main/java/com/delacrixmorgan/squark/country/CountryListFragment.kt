@@ -7,6 +7,7 @@ import android.os.Handler
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
 import android.view.*
 import com.delacrixmorgan.squark.CurrencyNavigationFragment
@@ -63,6 +64,7 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
 
     private lateinit var countryCode: String
     private lateinit var workerThread: SquarkWorkerThread
+    private lateinit var layoutManager: LinearLayoutManager
     private lateinit var simpleDateFormat: SimpleDateFormat
     private lateinit var countryAdapter: CountryRecyclerViewAdapter
 
@@ -88,9 +90,25 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
 
         this.countryAdapter = CountryRecyclerViewAdapter(listener = this)
         this.countryAdapter.updateDataSet(CountryDataController.getCountries(), false)
+        this.layoutManager = LinearLayoutManager(this.activity, LinearLayoutManager.VERTICAL, false)
 
-        this.countryRecyclerView.layoutManager = LinearLayoutManager(this.activity, LinearLayoutManager.VERTICAL, false)
+        this.countryRecyclerView.layoutManager = this.layoutManager
         this.countryRecyclerView.adapter = this.countryAdapter
+        this.countryRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    val visibleItemCount = layoutManager.childCount
+                    val totalItemCount = layoutManager.itemCount - visibleItemCount
+                    val pastVisibleItems = layoutManager.findFirstVisibleItemPosition()
+
+                    this@CountryListFragment.updateViewGroup.visibility = if (pastVisibleItems + visibleItemCount >= totalItemCount && countryAdapter.itemCount > 0) {
+                        View.GONE
+                    } else {
+                        View.VISIBLE
+                    }
+                }
+            }
+        })
 
         this.updateViewGroup.setOnClickListener { checkIsDataUpdated() }
 
@@ -231,7 +249,7 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
     override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
         this.searchView?.setQuery("", false)
         this.updateViewGroup.visibility = View.VISIBLE
-        
+
         updateDataSet("", false)
         return true
     }
