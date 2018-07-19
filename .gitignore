@@ -57,3 +57,6 @@ gen-external-apklibs
 .DS_STORE
 
 app/release
+
+# API Keys
+/data/src/main/res/values/secrets.xml

@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <Preference android:layout="@layout/preference_header" />
-    <Preference android:layout="@layout/preference_footer" />
-
+    <Preference android:layout="@layout/preference_header"/>
     <Preference
         android:icon="@drawable/squark_logo_coin"
         android:key="quick_guide"
-        android:title="Quick Guide" />
+        android:title="Quick Guide"/>
 
     <PreferenceCategory android:title="Creator">
         <Preference
@@ -17,7 +15,7 @@
 
             <intent
                 android:action="android.intent.action.VIEW"
-                android:data="https://github.com/delacrixmorgan" />
+                android:data="https://github.com/delacrixmorgan"/>
 
         </Preference>
     </PreferenceCategory>
@@ -27,11 +25,11 @@
             android:icon="@drawable/squark_logo_coin"
             android:key=""
             android:summary="GitHub Repository"
-            android:title="@string/preference_source_code">
+            android:title="">
 
             <intent
                 android:action="android.intent.action.VIEW"
-                android:data="@string/github_sourcecode" />
+                android:data=""/>
 
         </Preference>
 
@@ -43,21 +41,20 @@
 
             <intent
                 android:action="android.intent.action.VIEW"
-                android:data="http://fixer.io/" />
+                android:data="http://fixer.io/"/>
 
         </Preference>
 
         <Preference
             android:icon="@drawable/squark_logo_coin"
             android:key="credits_library"
-            android:summary="@string/preference_credits_summary"
-            android:title="@string/preference_credits" />
+            android:summary=""
+            android:title=""/>
 
         <Preference
             android:icon="@drawable/squark_logo_coin"
             android:key="version_number"
             android:summary="1.0.0"
-            android:title="@string/preference_version" />
+            android:title=""/>
     </PreferenceCategory>
-
 </PreferenceScreen>

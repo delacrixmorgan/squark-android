@@ -1,12 +1,9 @@
 <resources>
     <string name="app_name">Squark</string>
-
-    <string name="choose_currency">Choose Currency</string>
-
-    <string name="preference_source_code">Source Code</string>
-    <string name="preference_credits_summary">Hearts and Kisses</string>
-    <string name="preference_credits">Credits</string>
-    <string name="preference_version">Version</string>
-
-    <string name="github_sourcecode">https://github.com/delacrixmorgan/squark-android</string>
+    <string name="fragment_country_list_title_updating">Updating..</string>
+    <string name="fragment_country_list_title_updated">Everything is already up to date..</string>
+    <string name="error_api_countries">Unable to load currencies now..</string>
+    <string name="fragment_country_list_title_empty_state">No Results Found</string>
+    <string name="fragment_country_list_title_header_selected_currency">Selected Currency</string>
+    <string name="fragment_country_list_title_header_available_currencies">%d Available Currencies</string>
 </resources>

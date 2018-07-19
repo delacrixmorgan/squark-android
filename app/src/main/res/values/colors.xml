@@ -2,16 +2,13 @@
 <resources>
     <color name="colorPrimary">#4CAF50</color>
     <color name="colorPrimaryDark">#388E3C</color>
-    <color name="colorAccent">@color/amber</color>
+    <color name="colorAccent">#FFC107</color>
 
     <color name="green">@color/colorPrimary</color>
-    <color name="amber">#FFC107</color>
-    <color name="black">#212121</color>
-    <color name="white">#FFFFFF</color>
     <color name="grey">#C09E9E9E</color>
     <color name="red">#BF0A30</color>
     <color name="blue">#002868</color>
-    
-    <color name="borderGrey">#209E9E9E</color>
-    <color name="borderWhite">#20FFFFFF</color>
+
+    <color name="borderGrey">#409E9E9E</color>
+    <color name="cellGrey">#40000000</color>
 </resources>
