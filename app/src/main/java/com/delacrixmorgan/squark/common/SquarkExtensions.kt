@@ -68,10 +68,13 @@ fun calculateExpandResult(expandQuantifier: Int, multiplier: Double, position: I
 }
 
 fun getNumberFormatType(bigDecimal: BigDecimal): String {
-    return when (bigDecimal.setScale(0, BigDecimal.ROUND_HALF_UP).precision()) {
-        13, 12, 11, 10 -> NumberFormatTypes.BILLIONTH.decimal.format(bigDecimal.movePointLeft(9))
-        9, 8, 7 -> NumberFormatTypes.MILLIONTH.decimal.format(bigDecimal.movePointLeft(6))
-        6, 5, 4 -> NumberFormatTypes.THOUSANDTH.decimal.format(bigDecimal.movePointLeft(3))
+    val roundedBigDecimal = bigDecimal.setScale(0, BigDecimal.ROUND_HALF_UP).precision()
+    return when {
+        roundedBigDecimal >= 16 -> NumberFormatTypes.QUADRILLIONTH.decimal.format(bigDecimal.movePointLeft(15))
+        roundedBigDecimal >= 13 -> NumberFormatTypes.TRILLIONTH.decimal.format(bigDecimal.movePointLeft(12))
+        roundedBigDecimal >= 10 -> NumberFormatTypes.BILLIONTH.decimal.format(bigDecimal.movePointLeft(9))
+        roundedBigDecimal >= 7 -> NumberFormatTypes.MILLIONTH.decimal.format(bigDecimal.movePointLeft(6))
+        roundedBigDecimal >= 4 -> NumberFormatTypes.THOUSANDTH.decimal.format(bigDecimal.movePointLeft(3))
         else -> NumberFormatTypes.HUNDREDTH.decimal.format(bigDecimal)
     }
 }
