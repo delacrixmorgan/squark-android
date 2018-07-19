@@ -8,6 +8,14 @@ import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.data.model.Country
 import kotlinx.android.synthetic.main.cell_country.view.*
 
+/**
+ * CountryRecyclerViewAdapter
+ * squark-android
+ *
+ * Created by Delacrix Morgan on 19/07/2018.
+ * Copyright (c) 2018 licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
+ */
+
 class CountryRecyclerViewAdapter(
         private val listener: CountryListListener,
         private val countryCode: String
