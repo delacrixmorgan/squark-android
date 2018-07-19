@@ -14,7 +14,7 @@ import com.delacrixmorgan.squark.data.model.Country
  * Copyright (c) 2018 licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
  */
 
-@Database(entities = [(Country::class)], version = 1)
+@Database(entities = [(Country::class)], version = 1, exportSchema = false)
 abstract class CountryDatabase : RoomDatabase() {
     abstract fun countryDataDao(): CountryDataDao
 
