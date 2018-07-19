@@ -10,5 +10,5 @@
     <color name="blue">#002868</color>
 
     <color name="borderGrey">#409E9E9E</color>
-    <color name="borderWhite">#40FFFFFF</color>
+    <color name="cellGrey">#40000000</color>
 </resources>
