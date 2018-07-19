@@ -86,8 +86,8 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        this.countryAdapter = CountryRecyclerViewAdapter(listener = this, countryCode = this.countryCode)
-        this.countryAdapter.updateDataSet(CountryDataController.getCountries())
+        this.countryAdapter = CountryRecyclerViewAdapter(listener = this)
+        this.countryAdapter.updateDataSet(CountryDataController.getCountries(), false)
 
         this.countryRecyclerView.layoutManager = LinearLayoutManager(this.activity, LinearLayoutManager.VERTICAL, false)
         this.countryRecyclerView.adapter = this.countryAdapter
@@ -95,7 +95,7 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
         this.updateViewGroup.setOnClickListener { checkIsDataUpdated() }
 
         checkIsDataUpdated()
-        updateDataSet(null)
+        updateDataSet(null, false)
     }
 
     private fun checkIsDataUpdated() {
@@ -179,7 +179,7 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
         })
     }
 
-    private fun updateDataSet(searchText: String? = null) {
+    private fun updateDataSet(searchText: String? = null, searchMode: Boolean) {
         val filterCountries = CountryDataController.getFilteredCountries(searchText) as MutableList<Country>
         val selectedCountry = filterCountries.firstOrNull { it.code == this.countryCode }
 
@@ -190,7 +190,7 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
         }
 
         this.emptyStateViewGroup.visibility = if (filterCountries.isEmpty()) View.VISIBLE else View.GONE
-        this.countryAdapter.updateDataSet(filterCountries)
+        this.countryAdapter.updateDataSet(filterCountries, searchMode)
     }
 
     override fun onCountrySelected(country: Country) {
@@ -216,12 +216,12 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
         this.updateViewGroup.visibility = View.GONE
         this.searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-                updateDataSet(query)
+                updateDataSet(query, true)
                 return true
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-                updateDataSet(newText)
+                updateDataSet(newText, true)
                 return true
             }
         })
@@ -231,6 +231,8 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
     override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
         this.searchView?.setQuery("", false)
         this.updateViewGroup.visibility = View.VISIBLE
+        
+        updateDataSet("", false)
         return true
     }
 

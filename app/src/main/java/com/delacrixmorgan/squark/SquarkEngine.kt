@@ -11,7 +11,6 @@ import android.widget.TableLayout
 import android.widget.TableRow
 import com.delacrixmorgan.squark.common.*
 import kotlinx.android.synthetic.main.cell_row.view.*
-import java.text.DecimalFormat
 import kotlin.math.absoluteValue
 
 /**
@@ -27,10 +26,13 @@ object SquarkEngine {
     private var anchorPosition = 0F
     private var multiplier: Double = 1.0
     private var conversionRate: Double = 1.0
-    private val decimalFormat: DecimalFormat = DecimalFormat("###,##0.00")
 
     fun updateConversionRate(baseRate: Double? = 1.0, quoteRate: Double? = 1.0) {
         this.conversionRate = quoteRate!! / baseRate!!
+    }
+
+    fun resetMultiplier() {
+        this.multiplier = 1.0
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -48,15 +50,12 @@ object SquarkEngine {
         for (index in 0..9) {
             val tableRow = activity.layoutInflater.inflate(R.layout.cell_row, tableLayout, false) as TableRow
 
-            // PRESENT
             tableRow.quantifierTextView.text = calculateRowQuantifier(this.multiplier, index)
             tableRow.resultTextView.text = calculateRowResult(this.multiplier, index, this.conversionRate)
 
-            // BEFORE
             tableRow.beforeQuantifierTextView.text = calculateRowQuantifier(this.multiplier / 10, index)
             tableRow.beforeResultTextView.text = calculateRowResult(this.multiplier / 10, index, this.conversionRate)
 
-            // NEXT
             tableRow.nextQuantifierTextView.text = calculateRowQuantifier(this.multiplier * 10, index)
             tableRow.nextResultTextView.text = calculateRowResult(this.multiplier * 10, index, this.conversionRate)
 
@@ -155,23 +154,19 @@ object SquarkEngine {
 
     fun updateTable(rowList: ArrayList<TableRow>) {
         rowList.forEachIndexed { index, tableRow ->
-            // PRESENT
-            tableRow.quantifierTextView.text = calculateRowQuantifier(this.multiplier, index)
-            tableRow.resultTextView.text = calculateRowResult(this.multiplier, index, this.conversionRate)
+            with(tableRow) {
+                quantifierTextView.text = calculateRowQuantifier(multiplier, index)
+                resultTextView.text = calculateRowResult(multiplier, index, conversionRate)
 
-            // BEFORE
-            tableRow.nextQuantifierTextView.text = calculateRowQuantifier(this.multiplier / 10, index)
-            tableRow.nextResultTextView.text = calculateRowResult(this.multiplier / 10, index, this.conversionRate)
+                nextQuantifierTextView.text = calculateRowQuantifier(multiplier / 10, index)
+                nextResultTextView.text = calculateRowResult(multiplier / 10, index, conversionRate)
 
+                beforeQuantifierTextView.text = calculateRowQuantifier(multiplier * 10, index)
+                beforeResultTextView.text = calculateRowResult(multiplier * 10, index, conversionRate)
 
-            // NEXT
-            tableRow.beforeQuantifierTextView.text = calculateRowQuantifier(this.multiplier * 10, index)
-            tableRow.beforeResultTextView.text = calculateRowResult(this.multiplier * 10, index, this.conversionRate)
-
-
-            // Start Animation
-            tableRow.quantifierTextView.startAnimation(AnimationUtils.loadAnimation(tableRow.context, R.anim.wobble))
-            tableRow.resultTextView.startAnimation(AnimationUtils.loadAnimation(tableRow.context, R.anim.wobble))
+                quantifierTextView.startAnimation(AnimationUtils.loadAnimation(tableRow.context, R.anim.wobble))
+                resultTextView.startAnimation(AnimationUtils.loadAnimation(tableRow.context, R.anim.wobble))
+            }
         }
     }
 

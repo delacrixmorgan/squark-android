@@ -17,10 +17,10 @@ import kotlinx.android.synthetic.main.cell_country.view.*
  */
 
 class CountryRecyclerViewAdapter(
-        private val listener: CountryListListener,
-        private val countryCode: String
+        private val listener: CountryListListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var countries: List<Country> = ArrayList()
+    private var isSearchMode = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return CountryViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.cell_country, parent, false), listener)
@@ -30,7 +30,7 @@ class CountryRecyclerViewAdapter(
         val country = countries[position]
 
         if (holder is CountryViewHolder) {
-            holder.updateData(country, countryCode)
+            holder.updateData(country, position, this.isSearchMode)
         }
     }
 
@@ -38,8 +38,9 @@ class CountryRecyclerViewAdapter(
         return this.countries.size
     }
 
-    fun updateDataSet(countries: List<Country>) {
+    fun updateDataSet(countries: List<Country>, searchMode: Boolean) {
         this.countries = countries
+        this.isSearchMode = searchMode
         notifyDataSetChanged()
     }
 
@@ -47,12 +48,12 @@ class CountryRecyclerViewAdapter(
         private lateinit var country: Country
 
         init {
-            this.itemView.setOnClickListener {
+            this.itemView.cellViewGroup.setOnClickListener {
                 this.listener.onCountrySelected(this.country)
             }
         }
 
-        fun updateData(country: Country, countryCode: String) {
+        fun updateData(country: Country, position: Int, searchMode: Boolean) {
             this.country = country
 
             this.itemView.context.let {
@@ -68,6 +69,26 @@ class CountryRecyclerViewAdapter(
 
             this.itemView.codeTextView.text = this.country.code
             this.itemView.descriptionTextView.text = this.country.name
+
+            when (position) {
+                0 -> {
+                    this.itemView.headerTextView.text = "Selected Currency"
+                    this.itemView.headerTextView.visibility = View.VISIBLE
+                }
+
+                1 -> {
+                    this.itemView.headerTextView.text = "168 Available Currencies"
+                    this.itemView.headerTextView.visibility = View.VISIBLE
+                }
+
+                else -> {
+                    this.itemView.headerTextView.visibility = View.GONE
+                }
+            }
+
+            if (searchMode) {
+                this.itemView.headerTextView.visibility = View.GONE
+            }
         }
     }
 }
