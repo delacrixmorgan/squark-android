@@ -130,12 +130,12 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe({ result ->
-                                val currencies = result.quotes?.map {
+                                val currencies = result.quotes.map {
                                     Currency(
                                             code = it.key,
                                             rate = it.value
                                     )
-                                } ?: arrayListOf()
+                                }
 
                                 if (currencies.isNotEmpty()) {
                                     updateCurrencies(

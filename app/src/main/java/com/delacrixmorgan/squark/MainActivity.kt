@@ -96,7 +96,7 @@ class MainActivity : AppCompatActivity() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ result ->
-                    this.currencies = result.quotes.map { Currency(code = it.key, rate = it.value) } ?: arrayListOf()
+                    this.currencies = result.quotes.map { Currency(code = it.key, rate = it.value) }
                     if (this.countries.isNotEmpty() && this.currencies.isNotEmpty()) {
                         insertCountries()
                     }
