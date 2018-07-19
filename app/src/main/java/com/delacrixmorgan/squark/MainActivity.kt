@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ result ->
-                    this.countries = result.quotes?.map { Country(code = it.key, name = it.value, rate = 0.0) } ?: arrayListOf()
+                    this.countries = result.quotes?.map { Country(code = it.key, name = it.value.capitalize(), rate = 0.0) } ?: arrayListOf()
                     completion.invoke(null)
                 }, { error ->
                     completion.invoke(error)
