@@ -3,7 +3,6 @@ package com.delacrixmorgan.squark
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
@@ -95,8 +94,6 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
         if (this.baseCountry?.rate != 0.0 && this.quoteCountry?.rate != 0.0) {
             SquarkEngine.updateConversionRate(this.baseCountry?.rate, this.quoteCountry?.rate)
             SquarkEngine.updateTable(this.rowList)
-        } else {
-            Snackbar.make(this.view!!, "Unable to get Base and Quote Currencies.", Snackbar.LENGTH_SHORT).show()
         }
     }
 

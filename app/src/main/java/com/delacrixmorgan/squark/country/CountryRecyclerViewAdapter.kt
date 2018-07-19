@@ -30,7 +30,7 @@ class CountryRecyclerViewAdapter(
         val country = countries[position]
 
         if (holder is CountryViewHolder) {
-            holder.updateData(country, position, this.isSearchMode)
+            holder.updateData(country, position, this.countries.size, this.isSearchMode)
         }
     }
 
@@ -53,7 +53,7 @@ class CountryRecyclerViewAdapter(
             }
         }
 
-        fun updateData(country: Country, position: Int, searchMode: Boolean) {
+        fun updateData(country: Country, position: Int, size: Int, searchMode: Boolean) {
             this.country = country
 
             this.itemView.context.let {
@@ -72,12 +72,12 @@ class CountryRecyclerViewAdapter(
 
             when (position) {
                 0 -> {
-                    this.itemView.headerTextView.text = "Selected Currency"
+                    this.itemView.headerTextView.text = this.itemView.context.getString(R.string.fragment_country_list_title_header_selected_currency)
                     this.itemView.headerTextView.visibility = View.VISIBLE
                 }
 
                 1 -> {
-                    this.itemView.headerTextView.text = "168 Available Currencies"
+                    this.itemView.headerTextView.text = this.itemView.context.getString(R.string.fragment_country_list_title_header_available_currencies, size)
                     this.itemView.headerTextView.visibility = View.VISIBLE
                 }
 

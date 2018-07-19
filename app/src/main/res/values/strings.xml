@@ -4,4 +4,6 @@
     <string name="fragment_country_list_title_updated">Everything is already up to date..</string>
     <string name="error_api_countries">Unable to load currencies now..</string>
     <string name="fragment_country_list_title_empty_state">No Results Found</string>
+    <string name="fragment_country_list_title_header_selected_currency">Selected Currency</string>
+    <string name="fragment_country_list_title_header_available_currencies">%d Available Currencies</string>
 </resources>
