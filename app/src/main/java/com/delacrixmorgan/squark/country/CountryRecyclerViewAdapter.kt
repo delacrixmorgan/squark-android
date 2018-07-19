@@ -68,11 +68,6 @@ class CountryRecyclerViewAdapter(
 
             this.itemView.codeTextView.text = this.country.code
             this.itemView.descriptionTextView.text = this.country.name
-            this.itemView.selectedCountryImageView.visibility = if (this.country.code == countryCode) {
-                View.VISIBLE
-            } else {
-                View.GONE
-            }
         }
     }
 }
