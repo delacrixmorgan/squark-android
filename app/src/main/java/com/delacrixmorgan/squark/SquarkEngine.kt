@@ -31,10 +31,6 @@ object SquarkEngine {
         this.conversionRate = quoteRate!! / baseRate!!
     }
 
-    fun resetMultiplier() {
-        this.multiplier = 1.0
-    }
-
     @SuppressLint("ClickableViewAccessibility")
     fun setupTable(
             activity: Activity,
@@ -43,7 +39,7 @@ object SquarkEngine {
             listener: RowListener
     ) {
         val thresholdTranslationWidth = activity.resources.displayMetrics.widthPixels / 6F
-        val thresholdSwipeWidth = thresholdTranslationWidth / 1.5F
+        val thresholdSwipeWidth = thresholdTranslationWidth / 2F
         val alphaRatio = 1F / thresholdTranslationWidth
         val gestureDetector = GestureDetector(activity, SingleTapConfirm())
 
