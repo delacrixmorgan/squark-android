@@ -12,10 +12,8 @@ import java.text.DecimalFormat
 
 enum class NumberFormatTypes(val decimal: DecimalFormat) {
     HUNDREDTH(DecimalFormat("###,##0.00")),
-    THOUSANDTH(DecimalFormat("###,##0.00K")),
     MILLIONTH(DecimalFormat("###,##0.00M")),
     BILLIONTH(DecimalFormat("###,##0.00B")),
     TRILLIONTH(DecimalFormat("###,##0.00T")),
     QUADRILLIONTH(DecimalFormat("###,##0.00Q"))
 }
-
