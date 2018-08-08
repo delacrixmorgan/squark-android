@@ -74,7 +74,6 @@ fun getNumberFormatType(bigDecimal: BigDecimal): String {
         roundedBigDecimal >= 13 -> NumberFormatTypes.TRILLIONTH.decimal.format(bigDecimal.movePointLeft(12))
         roundedBigDecimal >= 10 -> NumberFormatTypes.BILLIONTH.decimal.format(bigDecimal.movePointLeft(9))
         roundedBigDecimal >= 7 -> NumberFormatTypes.MILLIONTH.decimal.format(bigDecimal.movePointLeft(6))
-        roundedBigDecimal >= 4 -> NumberFormatTypes.THOUSANDTH.decimal.format(bigDecimal.movePointLeft(3))
         else -> NumberFormatTypes.HUNDREDTH.decimal.format(bigDecimal)
     }
 }

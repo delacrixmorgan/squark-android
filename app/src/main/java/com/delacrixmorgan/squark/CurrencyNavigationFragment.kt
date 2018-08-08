@@ -107,7 +107,6 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
                     data?.getStringExtra(EXTRA_COUNTRY_CODE)?.let {
                         preference[PreferenceHelper.BASE_CURRENCY_CODE] = it
                         if (this.isExpanded) onRowCollapse()
-                        SquarkEngine.resetMultiplier()
                         updateTable()
                     }
                 }
@@ -118,7 +117,6 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
                     data?.getStringExtra(EXTRA_COUNTRY_CODE)?.let {
                         preference[PreferenceHelper.QUOTE_CURRENCY_CODE] = it
                         if (this.isExpanded) onRowCollapse()
-                        SquarkEngine.resetMultiplier()
                         updateTable()
                     }
                 }
