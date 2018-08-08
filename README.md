@@ -27,4 +27,6 @@ More to come. In the meantime, go bananas!
 [Google Play Store - Squark Zero Cluttered Currency Converter](https://play.google.com/store/apps/details?id=com.delacrixmorgan.squark)
 
 ## Screenshots
-![Overview](screenshots/4_overview.png?raw=true "Overview")
+![Swipe](screenshots/1_swipe.gif?raw=true "Swipe")
+![Currencies](screenshots/2_currencies.gif?raw=true "Currencies")
+![Expand](screenshots/3_expand.gif?raw=true "Expand")
