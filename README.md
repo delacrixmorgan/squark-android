@@ -5,9 +5,6 @@
 ## Overview
 Travel the world with the ultimate zero clutter currency converter app.
 
-![Interactive](screenshots/1_interactive.png?raw=true "Interactive")
-![Design](screenshots/2_design.png?raw=true "Design")
-
 ## Description
 Squark is a currency converter app that lets you interactively convert your money. It’s super fun and easy with just a few swipes and BOOM you are where you wanted to be!
 
@@ -28,3 +25,8 @@ Designed to bring Google Material Design to every aspects of the app. PERFECT co
 More to come. In the meantime, go bananas!
 
 [Google Play Store - Squark Zero Cluttered Currency Converter](https://play.google.com/store/apps/details?id=com.delacrixmorgan.squark)
+
+## Screenshots
+![Swipe](screenshots/1_swipe.gif?raw=true "Swipe"){:height="50%" width="50%"}
+![Currencies](screenshots/2_currencies.gif?raw=true "Currencies")
+![Expand](screenshots/3_expand.gif?raw=true "Expand")
