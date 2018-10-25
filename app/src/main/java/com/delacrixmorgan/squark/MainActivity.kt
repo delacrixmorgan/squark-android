@@ -2,11 +2,9 @@ package com.delacrixmorgan.squark
 
 import android.os.Bundle
 import android.os.Handler
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import com.delacrixmorgan.squark.common.PreferenceHelper
 import com.delacrixmorgan.squark.common.PreferenceHelper.set
-import com.delacrixmorgan.squark.common.changeAppOverview
 import com.delacrixmorgan.squark.common.startFragment
 import com.delacrixmorgan.squark.data.SquarkWorkerThread
 import com.delacrixmorgan.squark.data.api.SquarkApiService
@@ -14,6 +12,7 @@ import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.controller.CountryDatabase
 import com.delacrixmorgan.squark.data.model.Country
 import com.delacrixmorgan.squark.data.model.Currency
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -44,7 +43,6 @@ class MainActivity : AppCompatActivity() {
         FirebaseAnalytics.getInstance(this)
 
         setContentView(R.layout.activity_main)
-        changeAppOverview(this, theme)
 
         this.workerThread = SquarkWorkerThread(SquarkWorkerThread::class.java.simpleName)
         this.workerThread.start()
@@ -68,7 +66,7 @@ class MainActivity : AppCompatActivity() {
                         initCurrencies()
                     })
                 } else {
-                    startFragment(this, CurrencyNavigationFragment.newInstance())
+                    startFragment(CurrencyNavigationFragment.newInstance())
                     CountryDataController.updateDataSet(countryData)
                 }
             }
@@ -83,7 +81,7 @@ class MainActivity : AppCompatActivity() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ result ->
                     this.countries = result.quotes?.map { Country(code = it.key, name = it.value.capitalize(), rate = 0.0) } ?: arrayListOf()
-                    completion.invoke(null)
+                completion.invoke(null)
                 }, { error ->
                     completion.invoke(error)
                 })
@@ -118,7 +116,7 @@ class MainActivity : AppCompatActivity() {
 
             PreferenceHelper.getPreference(this)[PreferenceHelper.UPDATED_TIME_STAMP] = Date().time
             CountryDataController.updateDataSet(this.countries)
-            startFragment(this, CurrencyNavigationFragment.newInstance())
+            startFragment(CurrencyNavigationFragment.newInstance())
         })
     }
 

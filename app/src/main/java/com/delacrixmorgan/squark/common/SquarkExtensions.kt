@@ -1,37 +1,20 @@
 package com.delacrixmorgan.squark.common
 
-import android.app.ActivityManager
 import android.content.Context
-import android.content.res.Resources
-import android.graphics.BitmapFactory
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.appcompat.app.AppCompatActivity
-import android.util.TypedValue
+import androidx.fragment.app.Fragment
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.PreferenceHelper.get
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.model.Country
 import java.math.BigDecimal
 
-fun startFragment(context: Context, fragment: Fragment) {
-    val activity = context as FragmentActivity
-
-    activity.supportFragmentManager
+fun AppCompatActivity.startFragment(fragment: Fragment) {
+    supportFragmentManager
             .beginTransaction()
             .replace(R.id.mainContainer, fragment, fragment.javaClass.simpleName)
             .addToBackStack(fragment.javaClass.simpleName)
             .commit()
-}
-
-fun changeAppOverview(activity: AppCompatActivity, theme: Resources.Theme) {
-    val typedValue = TypedValue()
-    val colour = typedValue.data
-    val bitmap = BitmapFactory.decodeResource(activity.resources, R.drawable.squark_logo_coin)
-
-    activity.setTaskDescription(ActivityManager.TaskDescription(null, bitmap, colour))
-    theme.resolveAttribute(R.attr.colorPrimary, typedValue, true)
-    bitmap.recycle()
 }
 
 fun Float.roundUp() = Math.round(this * 10F) / 10F
