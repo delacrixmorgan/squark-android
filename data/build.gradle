@@ -3,15 +3,15 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
 
     defaultConfig {
         minSdkVersion 22
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0.0"
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -32,8 +32,8 @@ dependencies {
     api "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     api "com.squareup.retrofit2:retrofit:$retrofitVersion"
 
-    api "android.arch.persistence.room:runtime:$archVersion"
-    api "android.arch.persistence.room:rxjava2:$archVersion"
+    api 'androidx.room:room-runtime:2.1.0-alpha01'
+    api 'androidx.room:room-rxjava2:2.1.0-alpha01'
 
-    kapt "android.arch.persistence.room:compiler:$archVersion"
+    kapt 'androidx.room:room-compiler:2.1.0-alpha01'
 }

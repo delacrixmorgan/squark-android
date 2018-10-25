@@ -1,7 +1,7 @@
 package com.delacrixmorgan.squark.data.controller
 
-import android.arch.persistence.room.*
-import android.arch.persistence.room.OnConflictStrategy.REPLACE
+import androidx.room.*
+import androidx.room.OnConflictStrategy.REPLACE
 import com.delacrixmorgan.squark.data.model.Country
 
 /**

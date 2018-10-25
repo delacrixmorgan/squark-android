@@ -4,12 +4,11 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Bundle
 import android.os.Handler
-import android.support.design.widget.Snackbar
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.SearchView
 import android.view.*
+import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.delacrixmorgan.squark.CurrencyNavigationFragment
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.PreferenceHelper
@@ -22,6 +21,7 @@ import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.controller.CountryDatabase
 import com.delacrixmorgan.squark.data.model.Country
 import com.delacrixmorgan.squark.data.model.Currency
+import com.google.android.material.snackbar.Snackbar
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -90,12 +90,12 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
 
         this.countryAdapter = CountryRecyclerViewAdapter(listener = this)
         this.countryAdapter.updateDataSet(CountryDataController.getCountries(), false)
-        this.layoutManager = LinearLayoutManager(this.activity, LinearLayoutManager.VERTICAL, false)
+        this.layoutManager = LinearLayoutManager(this.activity, RecyclerView.VERTICAL, false)
 
         this.countryRecyclerView.layoutManager = this.layoutManager
         this.countryRecyclerView.adapter = this.countryAdapter
         this.countryRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     val visibleItemCount = layoutManager.childCount
                     val totalItemCount = layoutManager.itemCount - visibleItemCount
