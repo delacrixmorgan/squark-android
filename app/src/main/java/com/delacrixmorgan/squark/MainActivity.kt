@@ -2,8 +2,8 @@ package com.delacrixmorgan.squark
 
 import android.os.Bundle
 import android.os.Handler
-import android.support.design.widget.Snackbar
-import android.support.v7.app.AppCompatActivity
+import com.google.android.material.snackbar.Snackbar
+import androidx.appcompat.app.AppCompatActivity
 import com.delacrixmorgan.squark.common.PreferenceHelper
 import com.delacrixmorgan.squark.common.PreferenceHelper.set
 import com.delacrixmorgan.squark.common.changeAppOverview
@@ -123,10 +123,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (this.fragmentManager.backStackEntryCount == 0) {
+        if (this.supportFragmentManager.backStackEntryCount == 0) {
             finish()
         } else {
-            this.fragmentManager.popBackStack()
+            this.supportFragmentManager.popBackStack()
         }
     }
 

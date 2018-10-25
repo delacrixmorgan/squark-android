@@ -2,7 +2,7 @@ package com.delacrixmorgan.squark
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.support.v4.content.ContextCompat
+import androidx.core.content.ContextCompat
 import android.view.GestureDetector
 import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.MotionEvent
