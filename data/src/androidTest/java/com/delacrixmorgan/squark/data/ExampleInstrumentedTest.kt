@@ -1,14 +1,11 @@
 package com.delacrixmorgan.squark.data
 
-import android.content.Context
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.delacrixmorgan.squark.data.model.Country
-import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.io.BufferedReader
 
 @RunWith(AndroidJUnit4::class)
 class ExampleInstrumentedTest {
@@ -39,19 +36,5 @@ class ExampleInstrumentedTest {
         }
 
         org.junit.Assert.assertTrue("Should have at least 1 countryList", countries.isNotEmpty())
-    }
-
-    private fun Context.getJsonMap(rawFile: Int, key: String): Map<String, String> {
-        val inputStream = resources.openRawResource(rawFile)
-        val responseObject = inputStream.bufferedReader().use(BufferedReader::readText)
-
-        val map = HashMap<String, String>()
-        val jsonObject = JSONObject(responseObject).optJSONObject(key)
-
-        jsonObject.keys().forEach {
-            map[it] = "${jsonObject[it]}"
-        }
-
-        return map
     }
 }
