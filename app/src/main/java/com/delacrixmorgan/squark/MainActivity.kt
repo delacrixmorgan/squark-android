@@ -2,12 +2,10 @@ package com.delacrixmorgan.squark
 
 import android.os.AsyncTask
 import android.os.Bundle
-import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import com.delacrixmorgan.squark.common.PreferenceHelper
 import com.delacrixmorgan.squark.common.PreferenceHelper.set
 import com.delacrixmorgan.squark.common.startFragment
-import com.delacrixmorgan.squark.data.SquarkWorkerThread
 import com.delacrixmorgan.squark.data.api.SquarkApiService
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.controller.CountryDatabase
@@ -31,13 +29,11 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
-    private var countryDatabase: CountryDatabase? = null
     private var disposable: Disposable? = null
+    private var countryDatabase: CountryDatabase? = null
 
     private var countries: List<Country> = ArrayList()
     private var currencies: List<Currency> = ArrayList()
-
-    private lateinit var workerThread: SquarkWorkerThread
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,33 +41,26 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
 
-        this.workerThread = SquarkWorkerThread(SquarkWorkerThread::class.java.simpleName)
-        this.workerThread.start()
-
         this.countryDatabase = CountryDatabase.getInstance(this)
-
         fetchCurrencyData()
     }
 
     private fun fetchCurrencyData() {
-        this.workerThread.postTask(Runnable {
+        AsyncTask.execute {
             val countryData = this.countryDatabase?.countryDataDao()?.getCountries()
+            if (countryData == null || countryData.isEmpty()) {
+                initCountries(completion = { error ->
+                    if (error != null) {
+                        Snackbar.make(this.mainContainer, getString(R.string.error_api_countries), Snackbar.LENGTH_SHORT).show()
+                    }
 
-            Handler().post {
-                if (countryData == null || countryData.isEmpty()) {
-                    initCountries(completion = { error ->
-                        if (error != null) {
-                            Snackbar.make(this.mainContainer, getString(R.string.error_api_countries), Snackbar.LENGTH_SHORT).show()
-                        }
-
-                        initCurrencies()
-                    })
-                } else {
-                    startFragment(CurrencyNavigationFragment.newInstance())
-                    CountryDataController.updateDataSet(countryData)
-                }
+                    initCurrencies()
+                })
+            } else {
+                startFragment(CurrencyNavigationFragment.newInstance())
+                CountryDataController.updateDataSet(countryData)
             }
-        })
+        }
     }
 
     private fun initCountries(completion: (error: Throwable?) -> Unit) {
@@ -135,8 +124,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         CountryDatabase.destroyInstance()
-        this.workerThread.quit()
-
         super.onDestroy()
     }
 }
