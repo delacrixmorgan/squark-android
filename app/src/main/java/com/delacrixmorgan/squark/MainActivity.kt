@@ -1,5 +1,6 @@
 package com.delacrixmorgan.squark
 
+import android.os.AsyncTask
 import android.os.Bundle
 import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
@@ -30,7 +31,7 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
-    private var database: CountryDatabase? = null
+    private var countryDatabase: CountryDatabase? = null
     private var disposable: Disposable? = null
 
     private var countries: List<Country> = ArrayList()
@@ -47,14 +48,14 @@ class MainActivity : AppCompatActivity() {
         this.workerThread = SquarkWorkerThread(SquarkWorkerThread::class.java.simpleName)
         this.workerThread.start()
 
-        this.database = CountryDatabase.getInstance(this)
+        this.countryDatabase = CountryDatabase.getInstance(this)
 
         fetchCurrencyData()
     }
 
     private fun fetchCurrencyData() {
         this.workerThread.postTask(Runnable {
-            val countryData = this.database?.countryDataDao()?.getCountries()
+            val countryData = this.countryDatabase?.countryDataDao()?.getCountries()
 
             Handler().post {
                 if (countryData == null || countryData.isEmpty()) {
@@ -81,7 +82,7 @@ class MainActivity : AppCompatActivity() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ result ->
                     this.countries = result.quotes?.map { Country(code = it.key, name = it.value.capitalize(), rate = 0.0) } ?: arrayListOf()
-                completion.invoke(null)
+                    completion.invoke(null)
                 }, { error ->
                     completion.invoke(error)
                 })
@@ -104,20 +105,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun insertCountries() {
-        this.workerThread.postTask(Runnable {
-            this.database?.let { database ->
-                this.countries.forEachIndexed { index, country ->
-                    this.currencies[index].let {
-                        country.rate = it.rate
-                        database.countryDataDao().insertCountry(country)
-                    }
+        val database = this.countryDatabase ?: return
+        this.countries.forEachIndexed { index, country ->
+            this.currencies[index].let {
+                country.rate = it.rate
+                AsyncTask.execute {
+                    database.countryDataDao().insertCountry(country)
                 }
             }
+        }
 
-            PreferenceHelper.getPreference(this)[PreferenceHelper.UPDATED_TIME_STAMP] = Date().time
-            CountryDataController.updateDataSet(this.countries)
-            startFragment(CurrencyNavigationFragment.newInstance())
-        })
+        PreferenceHelper.getPreference(this)[PreferenceHelper.UPDATED_TIME_STAMP] = Date().time
+        CountryDataController.updateDataSet(this.countries)
+        startFragment(CurrencyNavigationFragment.newInstance())
     }
 
     override fun onBackPressed() {
