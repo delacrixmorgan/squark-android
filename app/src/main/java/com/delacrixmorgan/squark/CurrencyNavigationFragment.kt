@@ -3,12 +3,12 @@ package com.delacrixmorgan.squark
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.core.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TableRow
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.delacrixmorgan.squark.common.PreferenceHelper
 import com.delacrixmorgan.squark.common.PreferenceHelper.set
 import com.delacrixmorgan.squark.common.RowListener
@@ -16,7 +16,7 @@ import com.delacrixmorgan.squark.common.getPreferenceCountry
 import com.delacrixmorgan.squark.country.CountryActivity
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.model.Country
-import kotlinx.android.synthetic.main.fragment_launch.*
+import kotlinx.android.synthetic.main.fragment_currency_navigation.*
 import java.util.*
 
 /**
@@ -30,8 +30,8 @@ import java.util.*
 class CurrencyNavigationFragment : Fragment(), RowListener {
 
     companion object {
-        private const val REQUEST_BASE_COUNTRY: Int = 1
-        private const val REQUEST_QUOTE_COUNTRY: Int = 2
+        private const val REQUEST_BASE_COUNTRY = 1
+        private const val REQUEST_QUOTE_COUNTRY = 2
 
         const val EXTRA_COUNTRY_CODE = "CurrencyNavigationFragment.countryCode"
 
@@ -47,7 +47,7 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
     private var isExpanded = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_launch, container, false)
+        return inflater.inflate(R.layout.fragment_currency_navigation, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -64,18 +64,20 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
     }
 
     private fun setupListeners() {
+        val context = this.context ?: return
+
         this.baseCurrencyTextView.setOnClickListener {
-            val currencyIntent = CountryActivity.newLaunchIntent(requireContext(), countryCode = this.baseCountry?.code)
+            val currencyIntent = CountryActivity.newLaunchIntent(context, countryCode = this.baseCountry?.code)
             startActivityForResult(currencyIntent, REQUEST_BASE_COUNTRY)
         }
 
         this.quoteCurrencyTextView.setOnClickListener {
-            val currencyIntent = CountryActivity.newLaunchIntent(requireContext(), countryCode = this.quoteCountry?.code)
+            val currencyIntent = CountryActivity.newLaunchIntent(context, countryCode = this.quoteCountry?.code)
             startActivityForResult(currencyIntent, REQUEST_QUOTE_COUNTRY)
         }
 
         this.swapButton.setOnClickListener {
-            val preference = PreferenceHelper.getPreference(requireContext())
+            val preference = PreferenceHelper.getPreference(context)
 
             preference[PreferenceHelper.BASE_CURRENCY_CODE] = this.quoteCountry?.code
             preference[PreferenceHelper.QUOTE_CURRENCY_CODE] = this.baseCountry?.code
@@ -85,8 +87,10 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
     }
 
     private fun updateTable() {
-        this.baseCountry = CountryDataController.getPreferenceCountry(requireContext(), preferenceCurrency = PreferenceHelper.BASE_CURRENCY_CODE)
-        this.quoteCountry = CountryDataController.getPreferenceCountry(requireContext(), preferenceCurrency = PreferenceHelper.QUOTE_CURRENCY_CODE)
+        val context = this.context ?: return
+
+        this.baseCountry = CountryDataController.getPreferenceCountry(context, preferenceCurrency = PreferenceHelper.BASE_CURRENCY_CODE)
+        this.quoteCountry = CountryDataController.getPreferenceCountry(context, preferenceCurrency = PreferenceHelper.QUOTE_CURRENCY_CODE)
 
         this.baseCurrencyTextView.text = this.baseCountry?.code
         this.quoteCurrencyTextView.text = this.quoteCountry?.code
