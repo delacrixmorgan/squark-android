@@ -2,9 +2,11 @@
 <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_weight="1"
-    android:background="@drawable/shape_cell_dark">
+    android:background="@drawable/shape_cell_dark"
+    tools:layout_height="match_parent"
+    tools:layout_width="match_parent">
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1">
@@ -37,9 +39,9 @@
             android:maxLines="1"
             android:textSize="18sp"
             tools:text="1000.00"/>
-    </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1">
@@ -72,5 +74,5 @@
             android:maxLines="1"
             android:textSize="18sp"
             tools:text="1000.00"/>
-    </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </TableRow>
