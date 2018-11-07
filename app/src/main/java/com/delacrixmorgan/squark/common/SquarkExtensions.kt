@@ -77,7 +77,7 @@ fun CountryDataController.getFilteredCountries(
 ) = if (searchText.isNullOrBlank()) {
     getCountries()
 } else {
-    val text: String = searchText?.toLowerCase() ?: ""
+    val text: String = searchText.toLowerCase()
     getCountries().filter {
         it.name.toLowerCase().contains(text) || it.code.toLowerCase().contains(text)
     }

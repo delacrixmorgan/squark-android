@@ -35,8 +35,8 @@ dependencies {
     api "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     api "com.squareup.retrofit2:retrofit:$retrofitVersion"
 
-    api 'androidx.room:room-runtime:2.1.0-alpha01'
-    api 'androidx.room:room-rxjava2:2.1.0-alpha01'
+    api 'androidx.room:room-runtime:2.1.0-alpha02'
+    api 'androidx.room:room-rxjava2:2.1.0-alpha02'
 
-    kapt 'androidx.room:room-compiler:2.1.0-alpha01'
+    kapt 'androidx.room:room-compiler:2.1.0-alpha02'
 }
