@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Bundle
 import android.os.Handler
+import android.text.InputType
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -94,23 +95,23 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
 
         this.countryRecyclerView.layoutManager = this.layoutManager
         this.countryRecyclerView.adapter = this.countryAdapter
-        this.countryRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    val visibleItemCount = layoutManager.childCount
-                    val totalItemCount = layoutManager.itemCount - visibleItemCount
-                    val pastVisibleItems = layoutManager.findFirstVisibleItemPosition()
+//        this.countryRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+//            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+//                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+//                    val visibleItemCount = layoutManager.childCount
+//                    val totalItemCount = layoutManager.itemCount - visibleItemCount
+//                    val pastVisibleItems = layoutManager.findFirstVisibleItemPosition()
+//
+//                    this@CountryListFragment.updateViewGroup.visibility = if (pastVisibleItems + visibleItemCount >= totalItemCount && countryAdapter.itemCount > 0) {
+//                        View.GONE
+//                    } else {
+//                        View.VISIBLE
+//                    }
+//                }
+//            }
+//        })
 
-                    this@CountryListFragment.updateViewGroup.visibility = if (pastVisibleItems + visibleItemCount >= totalItemCount && countryAdapter.itemCount > 0) {
-                        View.GONE
-                    } else {
-                        View.VISIBLE
-                    }
-                }
-            }
-        })
-
-        this.updateViewGroup.setOnClickListener { checkIsDataUpdated() }
+//        this.updateViewGroup.setOnClickListener { checkIsDataUpdated() }
 
         checkIsDataUpdated()
         updateDataSet(null, false)
@@ -120,20 +121,20 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
         val timeStamp = PreferenceHelper.getPreference(requireContext())[PreferenceHelper.UPDATED_TIME_STAMP, PreferenceHelper.DEFAULT_UPDATED_TIME_STAMP]
         val currentTimeStamp = Date().time
 
-        this.updateImageView.visibility = View.GONE
-
-        if (currentTimeStamp - timeStamp > MILLISECONDS_IN_A_WEEK) {
-            this.updateTextView.text = getString(R.string.fragment_country_list_title_updating)
-            updateCurrencyRates()
-        } else {
-            this.updateTextView.text = getString(R.string.fragment_country_list_title_updated)
-            Handler().postDelayed({
-                if (this.isVisible) {
-                    this.updateImageView.visibility = View.VISIBLE
-                    this.updateTextView.text = simpleDateFormat.format(Date(currentTimeStamp))
-                }
-            }, 3000)
-        }
+//        this.updateImageView.visibility = View.GONE
+//
+//        if (currentTimeStamp - timeStamp > MILLISECONDS_IN_A_WEEK) {
+//            this.updateTextView.text = getString(R.string.fragment_country_list_title_updating)
+//            updateCurrencyRates()
+//        } else {
+//            this.updateTextView.text = getString(R.string.fragment_country_list_title_updated)
+//            Handler().postDelayed({
+//                if (this.isVisible) {
+//                    this.updateImageView.visibility = View.VISIBLE
+//                    this.updateTextView.text = simpleDateFormat.format(Date(currentTimeStamp))
+//                }
+//            }, 3000)
+//        }
     }
 
     private fun updateCurrencyRates() {
@@ -190,8 +191,8 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
                     val currentTimeStamp = Date().time
                     PreferenceHelper.getPreference(requireContext())[PreferenceHelper.UPDATED_TIME_STAMP] = currentTimeStamp
 
-                    this.updateTextView.text = simpleDateFormat.format(Date(currentTimeStamp))
-                    this.updateImageView.visibility = View.VISIBLE
+//                    this.updateTextView.text = simpleDateFormat.format(Date(currentTimeStamp))
+//                    this.updateImageView.visibility = View.VISIBLE
                 }
             }
         })
@@ -227,11 +228,13 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
 
         this.searchMenuItem = menu?.findItem(R.id.actionSearch)
         this.searchMenuItem?.setOnActionExpandListener(this)
+        
         this.searchView = this.searchMenuItem?.actionView as? SearchView
+        this.searchView?.inputType = InputType.TYPE_TEXT_FLAG_CAP_WORDS
     }
 
     override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
-        this.updateViewGroup.visibility = View.GONE
+//        this.updateViewGroup.visibility = View.GONE
         this.searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 updateDataSet(query, true)
@@ -248,7 +251,7 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
 
     override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
         this.searchView?.setQuery("", false)
-        this.updateViewGroup.visibility = View.VISIBLE
+//        this.updateViewGroup.visibility = View.VISIBLE
 
         updateDataSet("", false)
         return true
