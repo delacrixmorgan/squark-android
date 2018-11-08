@@ -275,9 +275,15 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val activity = this.activity ?: return false
+
         return when (item.itemId) {
             android.R.id.home -> {
-                this.activity?.onBackPressed()
+                if (activity.supportFragmentManager.backStackEntryCount > 1) {
+                    activity.supportFragmentManager.popBackStack()
+                } else {
+                    activity.finish()
+                }
                 true
             }
             else -> super.onOptionsItemSelected(item)
