@@ -42,8 +42,9 @@ class CountryActivity : AppCompatActivity() {
             this.countryCode = this.intent.extras.getString(EXTRA_COUNTRY_CODE)
         }
 
-        this.setContentView(R.layout.activity_country)
+        setContentView(R.layout.activity_country)
         setSupportActionBar(this.toolbar)
+
         this.supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
             setHomeButtonEnabled(true)
