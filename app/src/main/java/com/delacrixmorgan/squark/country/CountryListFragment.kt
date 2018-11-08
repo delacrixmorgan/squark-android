@@ -114,7 +114,24 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
 //        this.updateViewGroup.setOnClickListener { checkIsDataUpdated() }
 
         checkIsDataUpdated()
+        setupListeners()
         updateDataSet(null, false)
+    }
+
+    private fun setupListeners() {
+        this.bottomNavigationView.setOnNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.itemCountries -> {
+                }
+
+                R.id.itemSupport -> {
+                }
+
+                R.id.itemSettings -> {
+                }
+            }
+            true
+        }
     }
 
     private fun checkIsDataUpdated() {
@@ -228,7 +245,7 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
 
         this.searchMenuItem = menu?.findItem(R.id.actionSearch)
         this.searchMenuItem?.setOnActionExpandListener(this)
-        
+
         this.searchView = this.searchMenuItem?.actionView as? SearchView
         this.searchView?.inputType = InputType.TYPE_TEXT_FLAG_CAP_WORDS
     }

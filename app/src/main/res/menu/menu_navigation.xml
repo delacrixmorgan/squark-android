@@ -3,20 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/itemCountries"
-        android:icon="@drawable/ic_search"
+        android:icon="@drawable/ic_country_logo"
         android:title="Countries"
-        app:showAsAction="collapseActionView|always" />
+        app:showAsAction="collapseActionView|always"/>
 
     <item
-        android:id="@+id/itemSupporth"
-        android:icon="@drawable/ic_search"
+        android:id="@+id/itemSupport"
+        android:icon="@drawable/ic_support"
         android:title="Support"
-        app:showAsAction="collapseActionView|always" />
+        app:showAsAction="collapseActionView|always"/>
 
     <item
         android:id="@+id/itemSettings"
-        android:icon="@drawable/ic_search"
+        android:icon="@drawable/ic_settings"
         android:title="Settings"
-        app:showAsAction="collapseActionView|always" />
+        app:showAsAction="collapseActionView|always"/>
 
 </menu>

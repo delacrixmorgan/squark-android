@@ -54,10 +54,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="8dp"
         android:background="@color/colorPrimary"
-        app:itemIconTint="@android:color/white"
-        app:itemTextColor="@android:color/white"
+        app:itemIconTint="@drawable/nav_item_color_state"
+        app:labelVisibilityMode="unlabeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/menu_navigation"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
