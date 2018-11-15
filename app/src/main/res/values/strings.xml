@@ -7,9 +7,9 @@
     <string name="fragment_country_list_title_header_selected_currency">Selected Currency</string>
     <string name="fragment_country_list_title_header_available_currencies">%d Available Currencies</string>
 
-    <string name="rate_title">Hey There</string>
-    <string name="rate_paragraph_1">Didn\'t mean to pull you out from your game.</string>
-    <string name="rate_paragraph_2">King’s Cup is designed, coded and put together by a single person. Making every single rating a big boost for me.</string>
-    <string name="rate_paragraph_3">The well-being of this game rest entirely on your reviews. Have a great one mate!</string>
-    <string name="rate_button_awesome">Be Awesome</string>
+    <string name="fragment_rate_title_hey">Hey There</string>
+    <string name="fragment_rate_body">Didn\'t mean to pull you out from your app.\n\nSquark is designed, coded and put together by a single person. Making every single rating a big boost for me.\n\nThe well-being of this currency converter rest entirely on your reviews. Have a great one mate!</string>
+    <string name="fragment_rate_title_more_stuff">More stuff from me.</string>
+    <string name="fragment_rate_button_be_awesome">Be Awesome</string>
+    <string name="fragment_rate_title_kings_cup">King\'s Cup</string>
 </resources>
