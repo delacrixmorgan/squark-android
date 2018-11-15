@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_weight="1"
     android:background="@drawable/shape_cell_dark"
@@ -13,31 +14,42 @@
 
         <TextView
             android:id="@+id/beforeQuantifierTextView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:alpha="0"
-            android:gravity="center"
+            android:gravity="start|center"
             android:maxLines="1"
             android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/quantifierTextView"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="10.00"/>
 
         <TextView
             android:id="@+id/quantifierTextView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:maxLines="1"
             android:textSize="18sp"
-            tools:text="100.00"/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="1.00"/>
 
         <TextView
             android:id="@+id/nextQuantifierTextView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:alpha="0"
-            android:gravity="center"
+            android:gravity="end|center"
             android:maxLines="1"
             android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/quantifierTextView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="1000.00"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -48,31 +60,42 @@
 
         <TextView
             android:id="@+id/beforeResultTextView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:alpha="0"
-            android:gravity="center"
+            android:gravity="start|center"
             android:maxLines="1"
             android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/resultTextView"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="10.00"/>
 
         <TextView
             android:id="@+id/resultTextView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:maxLines="1"
             android:textSize="18sp"
-            tools:text="100.00"/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="1.00"/>
 
         <TextView
             android:id="@+id/nextResultTextView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:alpha="0"
-            android:gravity="center"
+            android:gravity="end|center"
             android:maxLines="1"
             android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/resultTextView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="1000.00"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </TableRow>
