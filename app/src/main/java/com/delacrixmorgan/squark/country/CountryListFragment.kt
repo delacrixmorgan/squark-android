@@ -125,6 +125,7 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
                 }
 
                 R.id.itemSupport -> {
+
                 }
 
                 R.id.itemSettings -> {

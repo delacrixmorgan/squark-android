@@ -13,7 +13,6 @@ import com.delacrixmorgan.squark.common.PreferenceHelper
 import com.delacrixmorgan.squark.common.PreferenceHelper.set
 import com.delacrixmorgan.squark.common.RowListener
 import com.delacrixmorgan.squark.common.getPreferenceCountry
-import com.delacrixmorgan.squark.country.CountryActivity
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.model.Country
 import kotlinx.android.synthetic.main.fragment_currency_navigation.*
@@ -67,12 +66,12 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
         val context = this.context ?: return
 
         this.baseCurrencyTextView.setOnClickListener {
-            val currencyIntent = CountryActivity.newLaunchIntent(context, countryCode = this.baseCountry?.code)
+            val currencyIntent = CountryNavigationActivity.newLaunchIntent(context, countryCode = this.baseCountry?.code)
             startActivityForResult(currencyIntent, REQUEST_BASE_COUNTRY)
         }
 
         this.quoteCurrencyTextView.setOnClickListener {
-            val currencyIntent = CountryActivity.newLaunchIntent(context, countryCode = this.quoteCountry?.code)
+            val currencyIntent = CountryNavigationActivity.newLaunchIntent(context, countryCode = this.quoteCountry?.code)
             startActivityForResult(currencyIntent, REQUEST_QUOTE_COUNTRY)
         }
 
