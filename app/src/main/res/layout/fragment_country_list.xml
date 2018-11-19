@@ -28,7 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="120dp"
                 android:adjustViewBounds="true"
-                android:src="@drawable/ic_country_globe"/>
+                android:src="@drawable/ic_country_globe" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -36,7 +36,7 @@
                 android:padding="16dp"
                 android:text="@string/fragment_country_list_title_empty_state"
                 android:textAlignment="center"
-                android:textSize="18sp"/>
+                android:textSize="18sp" />
         </LinearLayout>
 
     </FrameLayout>
@@ -45,18 +45,6 @@
         android:id="@+id/countryRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/cell_country"/>
+        tools:listitem="@layout/cell_country" />
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigationView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="@color/colorPrimary"
-        app:itemIconTint="@drawable/nav_item_color_state"
-        app:labelVisibilityMode="unlabeled"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/menu_navigation"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
