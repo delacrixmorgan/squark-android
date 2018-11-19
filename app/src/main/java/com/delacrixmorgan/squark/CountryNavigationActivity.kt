@@ -47,8 +47,19 @@ class CountryNavigationActivity : AppCompatActivity(), BottomNavigationView.OnNa
         if (this.intent.extras != null) {
             this.countryCode = this.intent.extras.getString(EXTRA_RESULT_COUNTRY_CODE)
         }
+
+        if (savedInstanceState == null) {
+            this.supportFragmentManager.beginTransaction()
+                    .add(this.contentContainer.id, CountryListFragment.newInstance(this.countryCode))
+                    .commit()
+        }
+
+        setupListeners()
     }
 
+    private fun setupListeners() {
+        this.bottomNavigationView.setOnNavigationItemSelectedListener(this)
+    }
 
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
         val existingFragment = this.supportFragmentManager.findFragmentById(this.contentContainer.id)

@@ -1,23 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
 
-    <include
-        android:id="@+id/creditsViewGroup"
-        layout="@layout/cell_settings"
-        app:title='@{@string/app_name}' />
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <include
-        android:id="@+id/shareViewGroup"
-        layout="@layout/cell_settings"
-        app:title='@{@string/app_name}' />
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="country"
+            type="com.delacrixmorgan.squark.data.model.Country" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/black"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/creditsViewGroup"
+            layout="@layout/cell_settings"
+            app:title='@{@string/fragment_support_settings_list_credtis}' />
+
+        <include
+            android:id="@+id/shareViewGroup"
+            layout="@layout/cell_settings"
+            app:title='@{@string/fragment_support_settings_list_share}' />
 
 
-    <include
-        android:id="@+id/sourceCodeViewGroup"
-        layout="@layout/cell_settings"
-        app:title='@{@string/app_name}' />
-</LinearLayout>
+        <include
+            android:id="@+id/sourceCodeViewGroup"
+            layout="@layout/cell_settings"
+            app:title='@{@string/fragment_support_settings_list_source_code}' />
+    </LinearLayout>
+</layout>
