@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.delacrixmorgan.squark.R
+import com.delacrixmorgan.squark.databinding.FragmentSettingsListBinding
 import kotlinx.android.synthetic.main.fragment_settings_list.*
 
 /**
@@ -18,19 +18,18 @@ import kotlinx.android.synthetic.main.fragment_settings_list.*
 
 class SettingsListFragment : Fragment() {
     companion object {
-        fun newInstance() = SupportListFragment()
+        fun newInstance() = SettingsListFragment()
     }
 
-//    private lateinit var dataBinding: FragmentSettingsListBinding
+    private lateinit var dataBinding: FragmentSettingsListBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-//        this.dataBinding = FragmentSettingsListBinding.inflate(inflater, container, false)
-//        return this.dataBinding.root
-        return inflater.inflate(R.layout.fragment_settings_list, container, false)
+        this.dataBinding = FragmentSettingsListBinding.inflate(inflater, container, false)
+        return this.dataBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

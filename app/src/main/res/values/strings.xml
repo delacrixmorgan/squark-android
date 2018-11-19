@@ -12,4 +12,9 @@
     <string name="fragment_rate_title_more_stuff">More stuff from me.</string>
     <string name="fragment_rate_button_be_awesome">Be Awesome</string>
     <string name="fragment_rate_title_kings_cup">King\'s Cup</string>
+
+    <string name="fragment_support_settings_list_credtis">Hearts and Kisses</string>
+    <string name="fragment_support_settings_list_share">Tell a travelling mate</string>
+    <string name="fragment_support_settings_list_source_code">Source Code</string>
+
 </resources>
