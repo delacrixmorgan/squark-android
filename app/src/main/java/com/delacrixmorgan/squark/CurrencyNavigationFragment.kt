@@ -13,6 +13,7 @@ import com.delacrixmorgan.squark.common.PreferenceHelper
 import com.delacrixmorgan.squark.common.PreferenceHelper.set
 import com.delacrixmorgan.squark.common.RowListener
 import com.delacrixmorgan.squark.common.getPreferenceCountry
+import com.delacrixmorgan.squark.common.performHapticContextClick
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.model.Country
 import kotlinx.android.synthetic.main.fragment_currency_navigation.*
@@ -128,6 +129,7 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
     }
 
     private fun onRowExpand(selectedRow: Int) {
+        this.currencyTableLayout.performHapticContextClick()
         this.rowList.forEachIndexed { index, tableRow ->
             if (index != selectedRow && index != (selectedRow + 1)) {
                 tableRow.visibility = View.GONE
@@ -147,6 +149,7 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
 
     private fun onRowCollapse() {
         val context = this.context ?: return
+        this.currencyTableLayout.performHapticContextClick()
         this.expandedList.forEach {
             currencyTableLayout.removeView(it)
         }
@@ -159,12 +162,14 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
 
     override fun onSwipeLeft() {
         if (!this.isExpanded) {
+            this.currencyTableLayout.performHapticContextClick()
             SquarkEngine.updateTable(this.rowList)
         }
     }
 
     override fun onSwipeRight() {
         if (!this.isExpanded) {
+            this.currencyTableLayout.performHapticContextClick()
             SquarkEngine.updateTable(this.rowList)
         }
     }
