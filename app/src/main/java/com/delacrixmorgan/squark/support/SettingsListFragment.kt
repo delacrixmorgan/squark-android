@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.delacrixmorgan.squark.BuildConfig
+import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.launchWebsite
 import com.delacrixmorgan.squark.common.shareAppIntent
 import com.delacrixmorgan.squark.databinding.FragmentSettingsListBinding
@@ -35,7 +37,15 @@ class SettingsListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupLayouts()
         setupListeners()
+    }
+
+    private fun setupLayouts() {
+        val versionName = BuildConfig.VERSION_NAME
+        val versionCode = BuildConfig.VERSION_CODE
+
+        this.buildNumberTextView.text = getString(R.string.message_build_version_name, versionName, versionCode)
     }
 
     private fun setupListeners() {

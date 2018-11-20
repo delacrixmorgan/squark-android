@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.launchPlayStore
+import com.delacrixmorgan.squark.common.performHapticContextClick
 import kotlinx.android.synthetic.main.fragment_support_list.*
 
 /**
@@ -38,6 +39,7 @@ class SupportListFragment : Fragment() {
         val context = this.context ?: return
 
         this.starImageView.setOnClickListener {
+            this.starImageView.performHapticContextClick()
             this.personImageView.setImageResource(R.drawable.ic_human_happy)
             this.starImageView.setColorFilter(ContextCompat.getColor(context, R.color.colorAccent))
 
@@ -45,11 +47,13 @@ class SupportListFragment : Fragment() {
         }
 
         this.rateButton.setOnClickListener {
+            this.rateButton.performHapticContextClick()
             this.personImageView.setImageResource(R.drawable.ic_human_happy)
             context.launchPlayStore(context.packageName)
         }
 
         this.kingscupViewGroup.setOnClickListener {
+            this.kingscupViewGroup.performHapticContextClick()
             context.launchPlayStore(KINGS_CUP_PACKAGE_NAME)
         }
     }

@@ -52,7 +52,7 @@
                 android:id="@+id/descriptionTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/grey"
+                android:textColor="@color/colorGrey"
                 android:textSize="14sp"
                 tools:text="Malaysian Ringgit"/>
         </LinearLayout>
