@@ -12,26 +12,31 @@
             type="com.delacrixmorgan.squark.data.model.Country" />
     </data>
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/black"
-        android:orientation="vertical">
+        android:background="@android:color/black">
 
-        <include
-            android:id="@+id/creditsViewGroup"
-            layout="@layout/cell_settings"
-            app:title='@{@string/fragment_support_settings_list_credtis}' />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-        <include
-            android:id="@+id/shareViewGroup"
-            layout="@layout/cell_settings"
-            app:title='@{@string/fragment_support_settings_list_share}' />
+            <include
+                android:id="@+id/creditsViewGroup"
+                layout="@layout/cell_settings"
+                app:title='@{@string/fragment_support_settings_list_credtis}' />
+
+            <include
+                android:id="@+id/shareViewGroup"
+                layout="@layout/cell_settings"
+                app:title='@{@string/fragment_support_settings_list_share}' />
 
 
-        <include
-            android:id="@+id/sourceCodeViewGroup"
-            layout="@layout/cell_settings"
-            app:title='@{@string/fragment_support_settings_list_source_code}' />
-    </LinearLayout>
+            <include
+                android:id="@+id/sourceCodeViewGroup"
+                layout="@layout/cell_settings"
+                app:title='@{@string/fragment_support_settings_list_source_code}' />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 </layout>
