@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Squark</string>
+    <string name="message_build_version_name">v%s #%d</string>
+
     <string name="fragment_country_list_title_updated">Everything is now updated..</string>
     <string name="fragment_country_list_title_everything_already_updated">Everything is already up to date..</string>
     <string name="error_api_countries">Unable to load currencies now..</string>
@@ -14,6 +16,6 @@
     <string name="fragment_rate_title_kings_cup">King\'s Cup</string>
 
     <string name="fragment_support_settings_list_credtis">Hearts and Kisses</string>
-    <string name="fragment_support_settings_list_share">Tell a travelling mate</string>
+    <string name="fragment_support_settings_list_share">Tell a Travelling Mate</string>
     <string name="fragment_support_settings_list_source_code">Source Code</string>
 </resources>

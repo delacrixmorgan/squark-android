@@ -39,9 +39,18 @@ class MainActivity : AppCompatActivity() {
         FirebaseAnalytics.getInstance(this)
         setContentView(R.layout.activity_main)
 
+        setupLayouts()
+        fetchCurrencyData()
+    }
+
+    private fun setupLayouts(){
+        val versionName = BuildConfig.VERSION_NAME
+        val versionCode = BuildConfig.VERSION_CODE
+
+        this.buildNumberTextView.text = getString(R.string.message_build_version_name, versionName, versionCode)
+
         this.countryDatabase = CountryDatabase.getInstance(this)
         CountryDataController.populateMaps(this)
-        fetchCurrencyData()
     }
 
     private fun fetchCurrencyData() {
