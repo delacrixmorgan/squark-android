@@ -77,6 +77,7 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
         }
 
         this.swapButton.setOnClickListener {
+            this.swapButton.performHapticContextClick()
             val preference = PreferenceHelper.getPreference(context)
 
             preference[PreferenceHelper.BASE_CURRENCY_CODE] = this.quoteCountry?.code
