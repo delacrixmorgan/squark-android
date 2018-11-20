@@ -3,6 +3,9 @@ package com.delacrixmorgan.squark.common
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
+import android.view.HapticFeedbackConstants
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -49,6 +52,14 @@ fun Context.shareAppIntent() {
     intent.putExtra(Intent.EXTRA_TEXT, message)
 
     startActivity(Intent.createChooser(intent, "Share"))
+}
+
+fun View.performHapticContextClick() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        performHapticFeedback(HapticFeedbackConstants.CONTEXT_CLICK)
+    } else {
+        performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+    }
 }
 
 fun calculateRowQuantifier(multiplier: Double, position: Int): String {
