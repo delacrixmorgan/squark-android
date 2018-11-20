@@ -1,6 +1,8 @@
 package com.delacrixmorgan.squark.common
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.delacrixmorgan.squark.R
@@ -19,6 +21,30 @@ fun AppCompatActivity.startFragment(fragment: Fragment) {
 
 fun Float.roundUp() = Math.round(this * 10F) / 10F
 
+fun Context.launchPlayStore(packageName: String) {
+    val url = "https://play.google.com/store/apps/details?id=$packageName"
+    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+
+    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+    startActivity(intent)
+}
+
+fun Context.launchWebsite(url: String) {
+    val intent = Intent(Intent.ACTION_VIEW)
+
+    intent.data = Uri.parse(url)
+    startActivity(intent)
+}
+
+fun Context.shareAppIntent(){
+    val message = "Psst. "
+    val intent = Intent(Intent.ACTION_SEND)
+
+    intent.type = "text/plain"
+    intent.putExtra(Intent.EXTRA_TEXT, message)
+
+    startActivity(Intent.createChooser(intent, "Share"))
+}
 
 fun calculateRowQuantifier(multiplier: Double, position: Int): String {
     val quantifier = (multiplier * (position + 1))

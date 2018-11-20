@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.delacrixmorgan.squark.common.launchWebsite
+import com.delacrixmorgan.squark.common.shareAppIntent
 import com.delacrixmorgan.squark.databinding.FragmentSettingsListBinding
 import kotlinx.android.synthetic.main.fragment_settings_list.*
 
@@ -18,14 +20,12 @@ import kotlinx.android.synthetic.main.fragment_settings_list.*
 
 class SettingsListFragment : Fragment() {
     companion object {
+        private const val SOURCE_CODE_URL = "https://github.com/delacrixmorgan/squark-android"
+
         fun newInstance() = SettingsListFragment()
     }
 
     private lateinit var dataBinding: FragmentSettingsListBinding
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         this.dataBinding = FragmentSettingsListBinding.inflate(inflater, container, false)
@@ -34,21 +34,23 @@ class SettingsListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        
         setupListeners()
     }
 
     private fun setupListeners() {
+        val context = this.context ?: return
+
         this.creditsViewGroup.setOnClickListener {
 
         }
 
         this.shareViewGroup.setOnClickListener {
-
+            context.shareAppIntent()
         }
 
         this.sourceCodeViewGroup.setOnClickListener {
-
+            context.launchWebsite(SOURCE_CODE_URL)
         }
     }
 }

@@ -4,8 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.delacrixmorgan.squark.R
+import com.delacrixmorgan.squark.common.launchPlayStore
+import kotlinx.android.synthetic.main.fragment_support_list.*
 
 /**
  * SupportListFragment
@@ -17,11 +20,9 @@ import com.delacrixmorgan.squark.R
 
 class SupportListFragment : Fragment() {
     companion object {
-        fun newInstance() = SupportListFragment()
-    }
+        private const val KINGS_CUP_PACKAGE_NAME = "com.delacrixmorgan.kingscup"
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        fun newInstance() = SupportListFragment()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -30,5 +31,26 @@ class SupportListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupListeners()
+    }
+
+    private fun setupListeners() {
+        val context = this.context ?: return
+
+        this.starImageView.setOnClickListener {
+            this.personImageView.setImageResource(R.drawable.ic_human_happy)
+            this.starImageView.setColorFilter(ContextCompat.getColor(context, R.color.colorAccent))
+
+            context.launchPlayStore(context.packageName)
+        }
+
+        this.rateButton.setOnClickListener {
+            this.personImageView.setImageResource(R.drawable.ic_human_happy)
+            context.launchPlayStore(context.packageName)
+        }
+
+        this.kingscupViewGroup.setOnClickListener {
+            context.launchPlayStore(KINGS_CUP_PACKAGE_NAME)
+        }
     }
 }
