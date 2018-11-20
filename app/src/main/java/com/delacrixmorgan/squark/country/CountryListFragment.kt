@@ -15,6 +15,7 @@ import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.PreferenceHelper
 import com.delacrixmorgan.squark.common.PreferenceHelper.get
 import com.delacrixmorgan.squark.common.PreferenceHelper.set
+import com.delacrixmorgan.squark.common.getCompatColor
 import com.delacrixmorgan.squark.common.getFilteredCountries
 import com.delacrixmorgan.squark.data.SquarkWorkerThread
 import com.delacrixmorgan.squark.data.api.SquarkApiService
@@ -90,39 +91,38 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupLayouts()
+        setupListeners()
+
+        updateDataSet()
+    }
+
+    private fun setupLayouts() {
+        val context = this.context ?: return
+
         this.countryAdapter = CountryRecyclerViewAdapter(listener = this)
         this.countryAdapter.updateDataSet(CountryDataController.getCountries(), false)
         this.layoutManager = LinearLayoutManager(this.activity, RecyclerView.VERTICAL, false)
 
         this.countryRecyclerView.layoutManager = this.layoutManager
         this.countryRecyclerView.adapter = this.countryAdapter
-//        this.countryRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-//            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-//                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-//                    val visibleItemCount = layoutManager.childCount
-//                    val totalItemCount = layoutManager.itemCount - visibleItemCount
-//                    val pastVisibleItems = layoutManager.findFirstVisibleItemPosition()
-//
-//                    this@CountryListFragment.updateViewGroup.visibility = if (pastVisibleItems + visibleItemCount >= totalItemCount && countryAdapter.itemCount > 0) {
-//                        View.GONE
-//                    } else {
-//                        View.VISIBLE
-//                    }
-//                }
-//            }
-//        })
 
-//        this.updateViewGroup.setOnClickListener { checkIsDataUpdated() }
+        this.swipeRefreshLayout.setColorSchemeColors(
+                context.getCompatColor(R.color.colorAccent),
+                context.getCompatColor(R.color.colorPrimary)
+        )
+    }
 
-        checkIsDataUpdated()
-        updateDataSet(null, false)
+    private fun setupListeners() {
+        this.swipeRefreshLayout.setOnRefreshListener {
+            Snackbar.make(this.mainContainer, "Updated Currencies", Snackbar.LENGTH_SHORT).show()
+            this.swipeRefreshLayout.isRefreshing = false
+        }
     }
 
     private fun checkIsDataUpdated() {
         val timeStamp = PreferenceHelper.getPreference(requireContext())[PreferenceHelper.UPDATED_TIME_STAMP, PreferenceHelper.DEFAULT_UPDATED_TIME_STAMP]
         val currentTimeStamp = Date().time
-
-//        this.updateImageView.visibility = View.GONE
 //
 //        if (currentTimeStamp - timeStamp > MILLISECONDS_IN_A_WEEK) {
 //            this.updateTextView.text = getString(R.string.fragment_country_list_title_updating)
@@ -199,7 +199,7 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
         })
     }
 
-    private fun updateDataSet(searchText: String? = null, searchMode: Boolean) {
+    private fun updateDataSet(searchText: String? = null, searchMode: Boolean = false) {
         if (!this.isVisible) return
         val filterCountries = CountryDataController.getFilteredCountries(searchText) as MutableList<Country>
         val selectedCountry = filterCountries.firstOrNull { it.code == this.countryCode }
@@ -253,9 +253,7 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
 
     override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
         this.searchView?.setQuery("", false)
-//        this.updateViewGroup.visibility = View.VISIBLE
-
-        updateDataSet("", false)
+        updateDataSet()
         return true
     }
 
