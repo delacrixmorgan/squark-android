@@ -42,11 +42,17 @@ class CountryNavigationActivity : AppCompatActivity(), BottomNavigationView.OnNa
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_country_navigation)
 
         if (this.intent.extras != null) {
             this.countryCode = this.intent.extras.getString(EXTRA_RESULT_COUNTRY_CODE)
         }
+
+        setContentView(R.layout.activity_country_navigation)
+
+        this.setSupportActionBar(this.toolbar)
+        this.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        this.supportActionBar?.setHomeButtonEnabled(true)
+        this.title = ""
 
         if (savedInstanceState == null) {
             this.supportFragmentManager.beginTransaction()
@@ -90,5 +96,13 @@ class CountryNavigationActivity : AppCompatActivity(), BottomNavigationView.OnNa
                 .commitAllowingStateLoss()
 
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item?.itemId == android.R.id.home) {
+            finish()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

@@ -10,7 +10,6 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.delacrixmorgan.squark.CountryNavigationActivity
 import com.delacrixmorgan.squark.CurrencyNavigationFragment
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.PreferenceHelper
@@ -27,7 +26,6 @@ import com.google.android.material.snackbar.Snackbar
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_country_navigation.*
 import kotlinx.android.synthetic.main.fragment_country_list.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -202,6 +200,7 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
     }
 
     private fun updateDataSet(searchText: String? = null, searchMode: Boolean) {
+        if (!this.isVisible) return
         val filterCountries = CountryDataController.getFilteredCountries(searchText) as MutableList<Country>
         val selectedCountry = filterCountries.firstOrNull { it.code == this.countryCode }
 
