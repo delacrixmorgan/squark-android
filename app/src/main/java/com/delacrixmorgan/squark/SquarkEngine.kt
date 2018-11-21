@@ -2,13 +2,13 @@ package com.delacrixmorgan.squark
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.support.v4.content.ContextCompat
 import android.view.GestureDetector
 import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.MotionEvent
 import android.view.animation.AnimationUtils
 import android.widget.TableLayout
 import android.widget.TableRow
+import androidx.core.content.ContextCompat
 import com.delacrixmorgan.squark.common.*
 import kotlinx.android.synthetic.main.cell_row.view.*
 import kotlin.math.absoluteValue
@@ -28,7 +28,7 @@ object SquarkEngine {
     private var conversionRate: Double = 1.0
 
     fun updateConversionRate(baseRate: Double? = 1.0, quoteRate: Double? = 1.0) {
-        this.conversionRate = quoteRate!! / baseRate!!
+        this.conversionRate = (quoteRate ?: 1.0) / (baseRate ?: 1.0)
     }
 
     @SuppressLint("ClickableViewAccessibility")

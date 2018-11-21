@@ -1,42 +1,123 @@
 package com.delacrixmorgan.squark.common
 
-import android.app.ActivityManager
 import android.content.Context
-import android.content.res.Resources
-import android.graphics.BitmapFactory
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentActivity
-import android.support.v7.app.AppCompatActivity
-import android.util.TypedValue
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
+import android.view.HapticFeedbackConstants
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.PreferenceHelper.get
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.model.Country
 import java.math.BigDecimal
+import java.util.*
 
-fun startFragment(context: Context, fragment: Fragment) {
-    val activity = context as FragmentActivity
+/**
+ * SquarkExtensions
+ * squark-android
+ *
+ * Created by Delacrix Morgan on 21/11/2018.
+ * Copyright (c) 2018 licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
+ */
 
-    activity.supportFragmentManager
+val defaultQuoteCurrencyCode: String
+    get() {
+        val localeCountryCode = Currency.getInstance(Locale.getDefault()).currencyCode
+        val fallbackCountryCode = "MYR"
+
+        return when {
+            localeCountryCode == "USD" -> {
+                fallbackCountryCode
+            }
+
+            CountryDataController.getCountries().find { it.code == localeCountryCode } != null -> {
+                localeCountryCode
+            }
+
+            else -> {
+                fallbackCountryCode
+            }
+        }
+    }
+
+fun AppCompatActivity.startFragment(fragment: Fragment) {
+    supportFragmentManager
             .beginTransaction()
             .replace(R.id.mainContainer, fragment, fragment.javaClass.simpleName)
             .addToBackStack(fragment.javaClass.simpleName)
             .commit()
 }
 
-fun changeAppOverview(activity: AppCompatActivity, theme: Resources.Theme) {
-    val typedValue = TypedValue()
-    val colour = typedValue.data
-    val bitmap = BitmapFactory.decodeResource(activity.resources, R.drawable.squark_logo_coin)
-
-    activity.setTaskDescription(ActivityManager.TaskDescription(null, bitmap, colour))
-    theme.resolveAttribute(R.attr.colorPrimary, typedValue, true)
-    bitmap.recycle()
+fun View.performHapticContextClick() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        performHapticFeedback(HapticFeedbackConstants.CONTEXT_CLICK)
+    } else {
+        performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+    }
 }
 
 fun Float.roundUp() = Math.round(this * 10F) / 10F
 
+//region Context
+fun Context.getCompatColor(colorResource: Int): Int {
+    return ContextCompat.getColor(this, colorResource)
+}
 
+fun Context.launchPlayStore(packageName: String) {
+    val url = "https://play.google.com/store/apps/details?id=$packageName"
+    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+
+    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+    startActivity(intent)
+}
+
+fun Context.launchWebsite(url: String) {
+    val intent = Intent(Intent.ACTION_VIEW)
+
+    intent.data = Uri.parse(url)
+    startActivity(intent)
+}
+
+fun Context.shareAppIntent(message: String) {
+    val intent = Intent(Intent.ACTION_SEND)
+
+    intent.type = "text/plain"
+    intent.putExtra(Intent.EXTRA_TEXT, message)
+
+    startActivity(Intent.createChooser(intent, getString(R.string.fragment_support_settings_list_share)))
+}
+
+//endregion
+
+//region CountryDataController
+fun CountryDataController.getPreferenceCountry(context: Context, preferenceCurrency: String): Country? {
+    return when (preferenceCurrency) {
+        PreferenceHelper.BASE_CURRENCY_CODE -> getCountries().firstOrNull {
+            it.code == PreferenceHelper.getPreference(context)[PreferenceHelper.BASE_CURRENCY_CODE, PreferenceHelper.DEFAULT_BASE_CURRENCY_CODE]
+        }
+        else -> getCountries().firstOrNull {
+            it.code == PreferenceHelper.getPreference(context)[PreferenceHelper.QUOTE_CURRENCY_CODE, defaultQuoteCurrencyCode]
+        }
+    }
+}
+
+fun CountryDataController.getFilteredCountries(
+        searchText: String?
+) = if (searchText.isNullOrBlank()) {
+    getCountries()
+} else {
+    val text: String = searchText.toLowerCase()
+    getCountries().filter {
+        it.name.toLowerCase().contains(text) || it.code.toLowerCase().contains(text)
+    }
+}
+//endregion
+
+//region CalculationQuantifier, CalculationResult
 fun calculateRowQuantifier(multiplier: Double, position: Int): String {
     val quantifier = (multiplier * (position + 1))
     val bigDecimal = BigDecimal(quantifier).setScale(2, BigDecimal.ROUND_HALF_UP)
@@ -77,25 +158,4 @@ fun getNumberFormatType(bigDecimal: BigDecimal): String {
         else -> NumberFormatTypes.HUNDREDTH.decimal.format(bigDecimal)
     }
 }
-
-fun CountryDataController.getPreferenceCountry(context: Context, preferenceCurrency: String): Country? {
-    return when (preferenceCurrency) {
-        PreferenceHelper.BASE_CURRENCY_CODE -> getCountries().firstOrNull {
-            it.code == PreferenceHelper.getPreference(context)[PreferenceHelper.BASE_CURRENCY_CODE, PreferenceHelper.DEFAULT_BASE_CURRENCY_CODE]
-        }
-        else -> getCountries().firstOrNull {
-            it.code == PreferenceHelper.getPreference(context)[PreferenceHelper.QUOTE_CURRENCY_CODE, PreferenceHelper.DEFAULT_QUOTE_CURRENCY_CODE]
-        }
-    }
-}
-
-fun CountryDataController.getFilteredCountries(
-        searchText: String?
-) = if (searchText.isNullOrBlank()) {
-    getCountries()
-} else {
-    val text: String = searchText?.toLowerCase() ?: ""
-    getCountries().filter {
-        it.name.toLowerCase().contains(text) || it.code.toLowerCase().contains(text)
-    }
-}
+//endregion

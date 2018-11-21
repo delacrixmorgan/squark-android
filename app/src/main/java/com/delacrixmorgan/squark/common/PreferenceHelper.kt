@@ -3,7 +3,6 @@ package com.delacrixmorgan.squark.common
 import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
-import java.util.*
 
 /**
  * PreferenceHelper
@@ -20,7 +19,6 @@ object PreferenceHelper {
     const val UPDATED_TIME_STAMP = "Preference.UpdatedTimeStamp"
 
     const val DEFAULT_BASE_CURRENCY_CODE = "USD"
-    const val DEFAULT_QUOTE_CURRENCY_CODE = "MYR"
     const val DEFAULT_UPDATED_TIME_STAMP = 0L
 
     fun getPreference(context: Context): SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)

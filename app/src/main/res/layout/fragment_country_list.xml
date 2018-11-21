@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mainContainer"
     android:layout_width="match_parent"
@@ -7,16 +8,19 @@
     android:animateLayoutChanges="true"
     android:background="@android:color/black">
 
-    <RelativeLayout
+    <FrameLayout
         android:id="@+id/emptyStateViewGroup"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -24,51 +28,29 @@
                 android:layout_width="wrap_content"
                 android:layout_height="120dp"
                 android:adjustViewBounds="true"
-                android:src="@drawable/ic_country_globe"/>
+                android:src="@drawable/ic_country_globe" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
                 android:text="@string/fragment_country_list_title_empty_state"
-                android:textSize="18sp"/>
+                android:textAlignment="center"
+                android:textSize="18sp" />
         </LinearLayout>
 
-    </RelativeLayout>
+    </FrameLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/countryRecyclerView"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:listItem="@layout/cell_country"/>
+        android:layout_height="wrap_content">
 
-    <RelativeLayout
-        android:id="@+id/updateViewGroup"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/colorPrimary"
-        android:paddingEnd="26dp"
-        android:paddingStart="26dp">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/countryRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            tools:listitem="@layout/cell_country" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-        <TextView
-            android:id="@+id/updateTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingBottom="16dp"
-            android:paddingTop="16dp"
-            android:textSize="12sp"
-            tools:text="Last Updated: 22/04/2019 at 10:00 AM"/>
-
-        <ImageButton
-            android:id="@+id/updateImageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:background="@android:color/transparent"
-            android:clickable="false"
-            android:src="@drawable/ic_replay_white_24dp"/>
-    </RelativeLayout>
-
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

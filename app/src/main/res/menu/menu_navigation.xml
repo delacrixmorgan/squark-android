@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/itemCountries"
+        android:icon="@drawable/ic_country_logo"
+        android:title="Countries"
+        app:showAsAction="collapseActionView|always"/>
+
+    <item
+        android:id="@+id/itemSupport"
+        android:icon="@drawable/ic_support"
+        android:title="Support"
+        app:showAsAction="collapseActionView|always"/>
+
+    <item
+        android:id="@+id/itemSettings"
+        android:icon="@drawable/ic_settings"
+        android:title="Settings"
+        app:showAsAction="collapseActionView|always"/>
+
+</menu>

@@ -3,7 +3,7 @@ package com.delacrixmorgan.squark.country
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.delacrixmorgan.squark.R
 import kotlinx.android.synthetic.main.activity_country.*
 
@@ -42,8 +42,9 @@ class CountryActivity : AppCompatActivity() {
             this.countryCode = this.intent.extras.getString(EXTRA_COUNTRY_CODE)
         }
 
-        this.setContentView(R.layout.activity_country)
+        setContentView(R.layout.activity_country)
         setSupportActionBar(this.toolbar)
+
         this.supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
             setHomeButtonEnabled(true)

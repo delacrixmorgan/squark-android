@@ -1,25 +1,24 @@
 package com.delacrixmorgan.squark
 
+import android.os.AsyncTask
 import android.os.Bundle
-import android.os.Handler
-import android.support.design.widget.Snackbar
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.delacrixmorgan.squark.common.PreferenceHelper
 import com.delacrixmorgan.squark.common.PreferenceHelper.set
-import com.delacrixmorgan.squark.common.changeAppOverview
 import com.delacrixmorgan.squark.common.startFragment
-import com.delacrixmorgan.squark.data.SquarkWorkerThread
 import com.delacrixmorgan.squark.data.api.SquarkApiService
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.controller.CountryDatabase
 import com.delacrixmorgan.squark.data.model.Country
 import com.delacrixmorgan.squark.data.model.Currency
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * MainActivity
@@ -31,62 +30,39 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
-    private var database: CountryDatabase? = null
     private var disposable: Disposable? = null
-
-    private var countries: List<Country> = ArrayList()
+    private var countryDatabase: CountryDatabase? = null
     private var currencies: List<Currency> = ArrayList()
-
-    private lateinit var workerThread: SquarkWorkerThread
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         FirebaseAnalytics.getInstance(this)
-
         setContentView(R.layout.activity_main)
-        changeAppOverview(this, theme)
 
-        this.workerThread = SquarkWorkerThread(SquarkWorkerThread::class.java.simpleName)
-        this.workerThread.start()
-
-        this.database = CountryDatabase.getInstance(this)
-
+        setupLayouts()
         fetchCurrencyData()
     }
 
-    private fun fetchCurrencyData() {
-        this.workerThread.postTask(Runnable {
-            val countryData = this.database?.countryDataDao()?.getCountries()
+    private fun setupLayouts(){
+        val versionName = BuildConfig.VERSION_NAME
+        val versionCode = BuildConfig.VERSION_CODE
 
-            Handler().post {
-                if (countryData == null || countryData.isEmpty()) {
-                    initCountries(completion = { error ->
-                        if (error != null) {
-                            Snackbar.make(this.mainContainer, getString(R.string.error_api_countries), Snackbar.LENGTH_SHORT).show()
-                        }
+        this.buildNumberTextView.text = getString(R.string.message_build_version_name, versionName, versionCode)
 
-                        initCurrencies()
-                    })
-                } else {
-                    startFragment(this, CurrencyNavigationFragment.newInstance())
-                    CountryDataController.updateDataSet(countryData)
-                }
-            }
-        })
+        this.countryDatabase = CountryDatabase.getInstance(this)
+        CountryDataController.populateMaps(this)
     }
 
-    private fun initCountries(completion: (error: Throwable?) -> Unit) {
-        this.disposable = SquarkApiService
-                .create(this)
-                .getCountries()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ result ->
-                    this.countries = result.quotes?.map { Country(code = it.key, name = it.value.capitalize(), rate = 0.0) } ?: arrayListOf()
-                    completion.invoke(null)
-                }, { error ->
-                    completion.invoke(error)
-                })
+    private fun fetchCurrencyData() {
+        AsyncTask.execute {
+            val countryData = this.countryDatabase?.countryDataDao()?.getCountries() ?: listOf()
+
+            if (countryData.isEmpty()) {
+                initCurrencies()
+            } else {
+                launchCurrencyNavigationFragment(countryData)
+            }
+        }
     }
 
     private fun initCurrencies() {
@@ -97,7 +73,7 @@ class MainActivity : AppCompatActivity() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ result ->
                     this.currencies = result.quotes.map { Currency(code = it.key, rate = it.value) }
-                    if (this.countries.isNotEmpty() && this.currencies.isNotEmpty()) {
+                    if (this.currencies.isNotEmpty()) {
                         insertCountries()
                     }
                 }, {
@@ -106,27 +82,39 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun insertCountries() {
-        this.workerThread.postTask(Runnable {
-            this.database?.let { database ->
-                this.countries.forEachIndexed { index, country ->
-                    this.currencies[index].let {
-                        country.rate = it.rate
-                        database.countryDataDao().insertCountry(country)
-                    }
-                }
+        val database = this.countryDatabase ?: return
+        val countries = arrayListOf<Country>()
+
+        CountryDataController.countryMap.forEach { country ->
+            val currency = this.currencies.firstOrNull {
+                it.code == "USD${country.key}"
             }
 
-            PreferenceHelper.getPreference(this)[PreferenceHelper.UPDATED_TIME_STAMP] = Date().time
-            CountryDataController.updateDataSet(this.countries)
-            startFragment(this, CurrencyNavigationFragment.newInstance())
-        })
+            if (currency != null) {
+                countries.add(Country(code = country.key, name = country.value, rate = currency.rate))
+            }
+        }
+
+        countries.forEach {
+            AsyncTask.execute {
+                database.countryDataDao().insertCountry(it)
+            }
+        }
+
+        PreferenceHelper.getPreference(this)[PreferenceHelper.UPDATED_TIME_STAMP] = Date().time
+        launchCurrencyNavigationFragment(countries)
+    }
+
+    private fun launchCurrencyNavigationFragment(countries: List<Country>) {
+        CountryDataController.updateDataSet(countries)
+        startFragment(CurrencyNavigationFragment.newInstance())
     }
 
     override fun onBackPressed() {
-        if (this.fragmentManager.backStackEntryCount == 0) {
+        if (this.supportFragmentManager.backStackEntryCount == 0) {
             finish()
         } else {
-            this.fragmentManager.popBackStack()
+            this.supportFragmentManager.popBackStack()
         }
     }
 
@@ -137,8 +125,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         CountryDatabase.destroyInstance()
-        this.workerThread.quit()
-
         super.onDestroy()
     }
 }
