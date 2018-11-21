@@ -15,6 +15,14 @@ import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.model.Country
 import java.math.BigDecimal
 
+/**
+ * SquarkExtensions
+ * squark-android
+ *
+ * Created by Delacrix Morgan on 21/11/2018.
+ * Copyright (c) 2018 licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
+ */
+
 fun AppCompatActivity.startFragment(fragment: Fragment) {
     supportFragmentManager
             .beginTransaction()
@@ -23,8 +31,17 @@ fun AppCompatActivity.startFragment(fragment: Fragment) {
             .commit()
 }
 
+fun View.performHapticContextClick() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        performHapticFeedback(HapticFeedbackConstants.CONTEXT_CLICK)
+    } else {
+        performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+    }
+}
+
 fun Float.roundUp() = Math.round(this * 10F) / 10F
 
+//region Context
 fun Context.getCompatColor(colorResource: Int): Int {
     return ContextCompat.getColor(this, colorResource)
 }
@@ -44,24 +61,41 @@ fun Context.launchWebsite(url: String) {
     startActivity(intent)
 }
 
-fun Context.shareAppIntent() {
-    val message = "Psst. "
+fun Context.shareAppIntent(message: String) {
     val intent = Intent(Intent.ACTION_SEND)
 
     intent.type = "text/plain"
     intent.putExtra(Intent.EXTRA_TEXT, message)
 
-    startActivity(Intent.createChooser(intent, "Share"))
+    startActivity(Intent.createChooser(intent, getString(R.string.fragment_support_settings_list_share)))
 }
+//endregion
 
-fun View.performHapticContextClick() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        performHapticFeedback(HapticFeedbackConstants.CONTEXT_CLICK)
-    } else {
-        performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+//region CountryDataController
+fun CountryDataController.getPreferenceCountry(context: Context, preferenceCurrency: String): Country? {
+    return when (preferenceCurrency) {
+        PreferenceHelper.BASE_CURRENCY_CODE -> getCountries().firstOrNull {
+            it.code == PreferenceHelper.getPreference(context)[PreferenceHelper.BASE_CURRENCY_CODE, PreferenceHelper.DEFAULT_BASE_CURRENCY_CODE]
+        }
+        else -> getCountries().firstOrNull {
+            it.code == PreferenceHelper.getPreference(context)[PreferenceHelper.QUOTE_CURRENCY_CODE, PreferenceHelper.DEFAULT_QUOTE_CURRENCY_CODE]
+        }
     }
 }
 
+fun CountryDataController.getFilteredCountries(
+        searchText: String?
+) = if (searchText.isNullOrBlank()) {
+    getCountries()
+} else {
+    val text: String = searchText.toLowerCase()
+    getCountries().filter {
+        it.name.toLowerCase().contains(text) || it.code.toLowerCase().contains(text)
+    }
+}
+//endregion
+
+//region CalculationQuantifier, CalculationResult
 fun calculateRowQuantifier(multiplier: Double, position: Int): String {
     val quantifier = (multiplier * (position + 1))
     val bigDecimal = BigDecimal(quantifier).setScale(2, BigDecimal.ROUND_HALF_UP)
@@ -102,25 +136,4 @@ fun getNumberFormatType(bigDecimal: BigDecimal): String {
         else -> NumberFormatTypes.HUNDREDTH.decimal.format(bigDecimal)
     }
 }
-
-fun CountryDataController.getPreferenceCountry(context: Context, preferenceCurrency: String): Country? {
-    return when (preferenceCurrency) {
-        PreferenceHelper.BASE_CURRENCY_CODE -> getCountries().firstOrNull {
-            it.code == PreferenceHelper.getPreference(context)[PreferenceHelper.BASE_CURRENCY_CODE, PreferenceHelper.DEFAULT_BASE_CURRENCY_CODE]
-        }
-        else -> getCountries().firstOrNull {
-            it.code == PreferenceHelper.getPreference(context)[PreferenceHelper.QUOTE_CURRENCY_CODE, PreferenceHelper.DEFAULT_QUOTE_CURRENCY_CODE]
-        }
-    }
-}
-
-fun CountryDataController.getFilteredCountries(
-        searchText: String?
-) = if (searchText.isNullOrBlank()) {
-    getCountries()
-} else {
-    val text: String = searchText.toLowerCase()
-    getCountries().filter {
-        it.name.toLowerCase().contains(text) || it.code.toLowerCase().contains(text)
-    }
-}
+//endregion

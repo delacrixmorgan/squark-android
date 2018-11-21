@@ -56,7 +56,8 @@ class SettingsListFragment : Fragment() {
         }
 
         this.shareViewGroup.setOnClickListener {
-            context.shareAppIntent()
+            val shareMessage = getString(R.string.fragment_settings_list_share_message)
+            context.shareAppIntent(shareMessage)
         }
 
         this.sourceCodeViewGroup.setOnClickListener {
