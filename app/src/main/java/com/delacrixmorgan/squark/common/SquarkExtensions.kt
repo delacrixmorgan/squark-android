@@ -14,6 +14,7 @@ import com.delacrixmorgan.squark.common.PreferenceHelper.get
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.model.Country
 import java.math.BigDecimal
+import java.util.*
 
 /**
  * SquarkExtensions
@@ -22,6 +23,26 @@ import java.math.BigDecimal
  * Created by Delacrix Morgan on 21/11/2018.
  * Copyright (c) 2018 licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
  */
+
+val defaultQuoteCurrencyCode: String
+    get() {
+        val localeCountryCode = Currency.getInstance(Locale.getDefault()).currencyCode
+        val fallbackCountryCode = "MYR"
+
+        return when {
+            localeCountryCode == "USD" -> {
+                fallbackCountryCode
+            }
+
+            CountryDataController.getCountries().find { it.code == localeCountryCode } != null -> {
+                localeCountryCode
+            }
+
+            else -> {
+                fallbackCountryCode
+            }
+        }
+    }
 
 fun AppCompatActivity.startFragment(fragment: Fragment) {
     supportFragmentManager
@@ -69,6 +90,7 @@ fun Context.shareAppIntent(message: String) {
 
     startActivity(Intent.createChooser(intent, getString(R.string.fragment_support_settings_list_share)))
 }
+
 //endregion
 
 //region CountryDataController
@@ -78,7 +100,7 @@ fun CountryDataController.getPreferenceCountry(context: Context, preferenceCurre
             it.code == PreferenceHelper.getPreference(context)[PreferenceHelper.BASE_CURRENCY_CODE, PreferenceHelper.DEFAULT_BASE_CURRENCY_CODE]
         }
         else -> getCountries().firstOrNull {
-            it.code == PreferenceHelper.getPreference(context)[PreferenceHelper.QUOTE_CURRENCY_CODE, PreferenceHelper.DEFAULT_QUOTE_CURRENCY_CODE]
+            it.code == PreferenceHelper.getPreference(context)[PreferenceHelper.QUOTE_CURRENCY_CODE, defaultQuoteCurrencyCode]
         }
     }
 }
