@@ -39,7 +39,7 @@ class CountryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         if (this.intent.extras != null) {
-            this.countryCode = this.intent.extras.getString(EXTRA_COUNTRY_CODE)
+            this.countryCode = this.intent.getStringExtra(EXTRA_COUNTRY_CODE)
         }
 
         setContentView(R.layout.activity_country)
