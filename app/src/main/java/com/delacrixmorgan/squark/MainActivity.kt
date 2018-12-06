@@ -6,9 +6,11 @@ import androidx.appcompat.app.AppCompatActivity
 import com.delacrixmorgan.squark.common.PreferenceHelper
 import com.delacrixmorgan.squark.common.PreferenceHelper.set
 import com.delacrixmorgan.squark.common.startFragment
+import com.delacrixmorgan.squark.data.R
 import com.delacrixmorgan.squark.data.api.SquarkApiService
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.controller.CountryDatabase
+import com.delacrixmorgan.squark.data.getJsonMap
 import com.delacrixmorgan.squark.data.model.Country
 import com.delacrixmorgan.squark.data.model.Currency
 import com.google.android.material.snackbar.Snackbar
@@ -43,7 +45,7 @@ class MainActivity : AppCompatActivity() {
         fetchCurrencyData()
     }
 
-    private fun setupLayouts(){
+    private fun setupLayouts() {
         val versionName = BuildConfig.VERSION_NAME
         val versionCode = BuildConfig.VERSION_CODE
 
@@ -77,7 +79,8 @@ class MainActivity : AppCompatActivity() {
                         insertCountries()
                     }
                 }, {
-                    Snackbar.make(this.mainContainer, getString(R.string.error_api_countries), Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(this.mainContainer, "${it.message}", Snackbar.LENGTH_SHORT).show()
+                    fallbackCurrencies()
                 })
     }
 
@@ -103,6 +106,14 @@ class MainActivity : AppCompatActivity() {
 
         PreferenceHelper.getPreference(this)[PreferenceHelper.UPDATED_TIME_STAMP] = Date().time
         launchCurrencyNavigationFragment(countries)
+    }
+
+    private fun fallbackCurrencies() {
+        val currencyMap = getJsonMap(R.raw.data_currency, "quotes")
+        this.currencies = currencyMap.map { Currency(code = it.key, rate = it.value.toDouble()) }
+        if (this.currencies.isNotEmpty()) {
+            insertCountries()
+        }
     }
 
     private fun launchCurrencyNavigationFragment(countries: List<Country>) {
