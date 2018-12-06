@@ -40,7 +40,7 @@ import java.util.*
 class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionExpandListener {
     companion object {
         private const val ARG_BELONGS_TO_COUNTRY_CODE = "Country.countryCode"
-        private const val MILLISECONDS_IN_A_WEEK = 604800000
+        private const val MILLISECONDS_IN_A_DAY = 86400000
         private const val DEFAULT_COUNTRY_CODE = "USD"
 
         fun newInstance(
@@ -111,7 +111,7 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
         val timeStamp = PreferenceHelper.getPreference(requireContext())[PreferenceHelper.UPDATED_TIME_STAMP, PreferenceHelper.DEFAULT_UPDATED_TIME_STAMP]
         val currentTimeStamp = Date().time
 
-        if (currentTimeStamp - timeStamp > MILLISECONDS_IN_A_WEEK) {
+        if (currentTimeStamp - timeStamp > MILLISECONDS_IN_A_DAY) {
             updateCurrencyRates()
         } else {
             Snackbar.make(this.mainContainer, getString(R.string.fragment_country_list_title_everything_already_updated), Snackbar.LENGTH_SHORT).show()
