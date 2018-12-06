@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.delacrixmorgan.squark.common.PreferenceHelper
 import com.delacrixmorgan.squark.common.PreferenceHelper.set
 import com.delacrixmorgan.squark.common.startFragment
-import com.delacrixmorgan.squark.data.R
 import com.delacrixmorgan.squark.data.api.SquarkApiService
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.controller.CountryDatabase
