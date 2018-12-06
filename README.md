@@ -30,3 +30,10 @@ More to come. In the meantime, go bananas!
 ![Swipe](screenshots/1_swipe.gif?raw=true "Swipe")
 ![Currencies](screenshots/2_currencies.gif?raw=true "Currencies")
 ![Expand](screenshots/3_expand.gif?raw=true "Expand")
+
+## License
+```
+King's Cup © by Delacrix Morgan
+Licensed under the Creative Commons Attribution-ShareAlike 4.0 International License.
+```
+[Creative Commons CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/legalcode)
