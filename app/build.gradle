@@ -13,14 +13,22 @@ android {
         applicationId "com.delacrixmorgan.squark"
         minSdkVersion 22
         targetSdkVersion rootProject.ext.compileSdkVersion
-        versionCode 9
-        versionName "2.2.2"
+        versionCode 10
+        versionName "2.2.3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
     }
     buildTypes {
         release {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            manifestPlaceholders = [appLabel: "@string/app_name"]
+        }
+
+        debug {
+            manifestPlaceholders = [appLabel: "@string/app_name_debug"]
+            splits.abi.enable = false
+            splits.density.enable = false
+            ext.alwaysUpdateBuildId = false
         }
     }
 }
@@ -37,17 +45,16 @@ dependencies {
 
     testImplementation 'junit:junit:4.12'
 
-    implementation 'com.google.firebase:firebase-core:16.0.6'
-    implementation 'com.google.firebase:firebase-perf:16.2.2'
-    implementation "com.google.android.material:material:1.0.0"
+    implementation "com.google.firebase:firebase-core:$firebaseCoreVersion"
+    implementation "com.google.firebase:firebase-perf:$firebasePrefVersion"
+    implementation "com.google.android.material:material:$androidMaterialVersion"
 
-    implementation "androidx.appcompat:appcompat:1.0.2"
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation "androidx.appcompat:appcompat:$androidxAppcompatVersion"
+    implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     implementation "org.parceler:parceler-api:$parcelerVersion"
-
     implementation "io.reactivex.rxjava2:rxandroid:$rxJavaVersion"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
 
     annotationProcessor "org.parceler:parceler:$parcelerVersion"
 }
