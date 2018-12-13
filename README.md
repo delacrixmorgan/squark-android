@@ -28,8 +28,8 @@ More to come. In the meantime, go bananas!
 
 ## Screenshots
 ![Swipe](screenshots/1_swipe.gif?raw=true "Swipe")
-![Currencies](screenshots/2_currencies.gif?raw=true "Currencies")
-![Expand](screenshots/3_expand.gif?raw=true "Expand")
+![Expand](screenshots/2_expand.gif?raw=true "Expand")
+![Currencies](screenshots/3_currencies.gif?raw=true "Currencies")
 
 ## License
 ```
