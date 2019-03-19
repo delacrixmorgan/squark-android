@@ -8,15 +8,15 @@ Travel the world with the ultimate zero clutter currency converter app.
 ## Description
 Squark is a currency converter app that lets you interactively convert your money. It’s super fun and easy with just a few swipes and BOOM you are where you wanted to be!
 
-a) Interactive Rate Table 💰
+__a) Interactive Rate Table__ 💰
 
 Essentially, it removes the keypad and replaced it with a giant incremental number set table. Just a SWIPE to get to the nearest tens, hundreds and thousands of your designated currency.
 
-b) Offline Support 📡
+__b) Offline Support__ 📡
 
 Internet connectivity can be a problem when you are on a trip. Not to worry, we got you COVERED mate!
 
-c) 170 Currencies World Wide 🌍
+__c) 170 Currencies World Wide__ 🌍
 
 From your everyday United Status Dollars to crypto realm of Bitcoins. Mr. Worldwide, yo!
 
