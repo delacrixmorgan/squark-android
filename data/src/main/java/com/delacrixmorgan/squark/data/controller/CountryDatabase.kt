@@ -1,9 +1,9 @@
 package com.delacrixmorgan.squark.data.controller
 
+import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import android.content.Context
 import com.delacrixmorgan.squark.data.model.Country
 
 /**
@@ -24,10 +24,12 @@ abstract class CountryDatabase : RoomDatabase() {
         fun getInstance(context: Context): CountryDatabase? {
             if (INSTANCE == null) {
                 synchronized(CountryDatabase::class) {
-                    INSTANCE = Room.databaseBuilder(context.applicationContext,
-                            CountryDatabase::class.java,
-                            "country.db")
-                            .build()
+                    INSTANCE = Room.databaseBuilder(
+                        context.applicationContext,
+                        CountryDatabase::class.java,
+                        "country.db"
+                    )
+                        .build()
                 }
             }
             return INSTANCE

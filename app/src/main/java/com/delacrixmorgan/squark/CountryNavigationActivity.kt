@@ -24,10 +24,7 @@ class CountryNavigationActivity : AppCompatActivity(), BottomNavigationView.OnNa
     companion object {
         const val EXTRA_RESULT_COUNTRY_CODE = "countryCode"
 
-        fun newLaunchIntent(
-                context: Context,
-                countryCode: String? = null
-        ): Intent {
+        fun newLaunchIntent(context: Context, countryCode: String? = null): Intent {
             val launchIntent = Intent(context, CountryNavigationActivity::class.java)
 
             countryCode?.let {
@@ -56,8 +53,8 @@ class CountryNavigationActivity : AppCompatActivity(), BottomNavigationView.OnNa
 
         if (savedInstanceState == null) {
             this.supportFragmentManager.beginTransaction()
-                    .add(this.contentContainer.id, CountryListFragment.newInstance(this.countryCode))
-                    .commit()
+                .add(this.contentContainer.id, CountryListFragment.newInstance(this.countryCode))
+                .commit()
         }
 
         setupListeners()
@@ -92,8 +89,8 @@ class CountryNavigationActivity : AppCompatActivity(), BottomNavigationView.OnNa
         }
 
         this.supportFragmentManager.beginTransaction()
-                .replace(this.contentContainer.id, targetFragment, targetFragment.javaClass.simpleName)
-                .commitAllowingStateLoss()
+            .replace(this.contentContainer.id, targetFragment, targetFragment.javaClass.simpleName)
+            .commitAllowingStateLoss()
 
         return true
     }
