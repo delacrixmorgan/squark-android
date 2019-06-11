@@ -137,7 +137,10 @@ object SquarkEngine {
                             }
                         }
 
-                        MotionEvent.ACTION_DOWN -> this.anchorPosition = event.rawX
+                        MotionEvent.ACTION_DOWN -> {
+                            tableRow.performHapticContextClick()
+                            this.anchorPosition = event.rawX
+                        }
                     }
                 }
                 true
