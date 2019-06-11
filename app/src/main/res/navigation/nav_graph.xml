@@ -29,5 +29,7 @@
         android:id="@+id/preferenceMenuFragment"
         android:name="com.delacrixmorgan.squark.PreferenceMenuFragment"
         tools:layout="@layout/fragment_preference_menu"
-        android:label="PreferenceMenuFragment" />
+        android:label="PreferenceMenuFragment" >
+        <argument android:name="countryCode" app:argType="string"/>
+    </fragment>
 </navigation>

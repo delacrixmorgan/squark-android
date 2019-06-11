@@ -34,17 +34,15 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
         private const val REQUEST_QUOTE_COUNTRY = 2
 
         const val EXTRA_COUNTRY_CODE = "CurrencyNavigationFragment.countryCode"
-
-        fun newInstance(): CurrencyNavigationFragment = CurrencyNavigationFragment()
     }
 
-    private var baseCountry: Country? = null
-    private var quoteCountry: Country? = null
-
-    private var rowList: ArrayList<TableRow> = ArrayList()
-    private var expandedList: ArrayList<TableRow> = ArrayList()
-
     private var isExpanded = false
+    private var baseCountry: Country? = null
+
+    private var quoteCountry: Country? = null
+    private var rowList: ArrayList<TableRow> = ArrayList()
+
+    private var expandedList: ArrayList<TableRow> = ArrayList()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_currency_navigation, container, false)
@@ -59,32 +57,27 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
                 listener = this
         )
 
-        setupListeners()
-        updateTable()
-    }
-
-    private fun setupListeners() {
-        val context = this.context ?: return
-
         this.baseCurrencyTextView.setOnClickListener {
-            val currencyIntent = CountryNavigationActivity.newLaunchIntent(context, countryCode = this.baseCountry?.code)
+            val currencyIntent = CountryNavigationActivity.newLaunchIntent(view.context, countryCode = this.baseCountry?.code)
             startActivityForResult(currencyIntent, REQUEST_BASE_COUNTRY)
         }
 
         this.quoteCurrencyTextView.setOnClickListener {
-            val currencyIntent = CountryNavigationActivity.newLaunchIntent(context, countryCode = this.quoteCountry?.code)
+            val currencyIntent = CountryNavigationActivity.newLaunchIntent(view.context, countryCode = this.quoteCountry?.code)
             startActivityForResult(currencyIntent, REQUEST_QUOTE_COUNTRY)
         }
 
         this.swapButton.setOnClickListener {
             this.swapButton.performHapticContextClick()
-            val preference = PreferenceHelper.getPreference(context)
+            val preference = PreferenceHelper.getPreference(view.context)
 
             preference[PreferenceHelper.BASE_CURRENCY_CODE] = this.quoteCountry?.code
             preference[PreferenceHelper.QUOTE_CURRENCY_CODE] = this.baseCountry?.code
 
             updateTable()
         }
+
+        updateTable()
     }
 
     private fun updateTable() {
