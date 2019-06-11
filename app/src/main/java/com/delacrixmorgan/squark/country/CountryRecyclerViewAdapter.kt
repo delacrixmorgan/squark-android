@@ -1,9 +1,9 @@
 package com.delacrixmorgan.squark.country
 
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.data.model.Country
 import kotlinx.android.synthetic.main.cell_country.view.*
@@ -18,26 +18,21 @@ import kotlinx.android.synthetic.main.cell_country.view.*
 
 class CountryRecyclerViewAdapter(
         private val listener: CountryListListener
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+) : RecyclerView.Adapter<CountryRecyclerViewAdapter.CountryViewHolder>() {
 
     private var countries: List<Country> = ArrayList()
     private var isSearchMode = false
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CountryViewHolder {
         return CountryViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.cell_country, parent, false), listener)
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CountryViewHolder, position: Int) {
         val country = countries[position]
-
-        if (holder is CountryViewHolder) {
-            holder.updateData(country, position, this.countries.size, this.isSearchMode)
-        }
+        holder.updateData(country, position, this.countries.size, this.isSearchMode)
     }
 
-    override fun getItemCount(): Int {
-        return this.countries.size
-    }
+    override fun getItemCount() = this.countries.size
 
     fun updateDataSet(countries: List<Country>, searchMode: Boolean) {
         this.countries = countries
