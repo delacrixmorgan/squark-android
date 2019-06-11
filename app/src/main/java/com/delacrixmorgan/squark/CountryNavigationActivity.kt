@@ -42,13 +42,6 @@ class CountryNavigationActivity : AppCompatActivity(), BottomNavigationView.OnNa
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_country_navigation)
 
-        this.setSupportActionBar(this.toolbar)
-        this.supportActionBar?.let {
-            it.setDisplayHomeAsUpEnabled(true)
-            it.setHomeButtonEnabled(true)
-            it.title = ""
-        }
-
         if (this.intent.extras != null) {
             this.countryCode = this.intent.getStringExtra(EXTRA_RESULT_COUNTRY_CODE)
         }

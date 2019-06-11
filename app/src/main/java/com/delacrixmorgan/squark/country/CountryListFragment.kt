@@ -5,6 +5,7 @@ import android.os.AsyncTask
 import android.os.Bundle
 import android.text.InputType
 import android.view.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -73,6 +74,15 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val activity = this.activity as AppCompatActivity
+
+        activity.setSupportActionBar(this.toolbar)
+        activity.supportActionBar?.let {
+            it.setDisplayHomeAsUpEnabled(true)
+            it.setHomeButtonEnabled(true)
+            it.title = ""
+        }
+
         this.countryAdapter = CountryRecyclerViewAdapter(listener = this)
         this.countryRecyclerView.adapter = this.countryAdapter
 
