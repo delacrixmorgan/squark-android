@@ -39,7 +39,7 @@ object SquarkEngine {
             listener: RowListener
     ) {
         val thresholdTranslationWidth = activity.resources.displayMetrics.widthPixels / 6F
-        val thresholdSwipeWidth = thresholdTranslationWidth / 2F
+        val thresholdSwipeWidth = thresholdTranslationWidth / 1.5F
         val alphaRatio = 1F / thresholdTranslationWidth
         val gestureDetector = GestureDetector(activity, SingleTapConfirm())
 
