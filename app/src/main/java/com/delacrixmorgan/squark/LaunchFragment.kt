@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.delacrixmorgan.squark.common.PreferenceHelper
 import com.delacrixmorgan.squark.common.PreferenceHelper.set
-import com.delacrixmorgan.squark.common.startFragment
 import com.delacrixmorgan.squark.data.api.SquarkApiService
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.controller.CountryDatabase
@@ -33,9 +32,9 @@ import java.util.*
 
 class LaunchFragment : Fragment() {
 
+    private var currencies = listOf<Currency>()
     private var disposable: Disposable? = null
     private var countryDatabase: CountryDatabase? = null
-    private var currencies: List<Currency> = ArrayList()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_launch, container, false)
@@ -43,7 +42,6 @@ class LaunchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         this.buildNumberTextView.text = getString(R.string.message_build_version_name, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE)
 
         this.countryDatabase = CountryDatabase.getInstance(view.context)
@@ -65,19 +63,19 @@ class LaunchFragment : Fragment() {
 
     private fun initCurrencies() {
         this.disposable = SquarkApiService
-            .create(requireContext())
-            .getCurrencies()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ result ->
-                this.currencies = result.quotes.map { Currency(code = it.key, rate = it.value) }
-                if (this.currencies.isNotEmpty()) {
-                    insertCountries()
-                }
-            }, {
-                Snackbar.make(this.mainContainer, "${it.message}", Snackbar.LENGTH_SHORT).show()
-                fallbackCurrencies()
-            })
+                .create(requireContext())
+                .getCurrencies()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ result ->
+                    this.currencies = result.quotes.map { Currency(code = it.key, rate = it.value) }
+                    if (this.currencies.isNotEmpty()) {
+                        insertCountries()
+                    }
+                }, {
+                    Snackbar.make(this.mainContainer, "${it.message}", Snackbar.LENGTH_SHORT).show()
+                    fallbackCurrencies()
+                })
     }
 
     private fun insertCountries() {

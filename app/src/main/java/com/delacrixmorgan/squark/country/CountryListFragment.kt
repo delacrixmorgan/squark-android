@@ -6,15 +6,14 @@ import android.os.Bundle
 import android.text.InputType
 import android.view.*
 import androidx.appcompat.widget.SearchView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.delacrixmorgan.squark.CurrencyNavigationFragment
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.PreferenceHelper
 import com.delacrixmorgan.squark.common.PreferenceHelper.get
 import com.delacrixmorgan.squark.common.PreferenceHelper.set
-import com.delacrixmorgan.squark.common.getCompatColor
+import com.delacrixmorgan.squark.common.compatColor
 import com.delacrixmorgan.squark.common.getFilteredCountries
 import com.delacrixmorgan.squark.common.performHapticContextClick
 import com.delacrixmorgan.squark.data.api.SquarkApiService
@@ -43,16 +42,10 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
         private const val MILLISECONDS_IN_A_DAY = 86400000
         private const val DEFAULT_COUNTRY_CODE = "USD"
 
-        fun newInstance(
-                countryCode: String? = null
-        ): CountryListFragment {
-            val fragment = CountryListFragment()
-            val args = Bundle()
-
-            args.putString(ARG_BELONGS_TO_COUNTRY_CODE, countryCode)
-            fragment.arguments = args
-
-            return fragment
+        fun newInstance(countryCode: String? = null): CountryListFragment {
+            return CountryListFragment().apply {
+                this.arguments = bundleOf(ARG_BELONGS_TO_COUNTRY_CODE to countryCode)
+            }
         }
     }
 
@@ -70,7 +63,8 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
         setHasOptionsMenu(true)
 
         this.database = CountryDatabase.getInstance(requireContext())
-        this.countryCode = this.arguments?.getString(ARG_BELONGS_TO_COUNTRY_CODE) ?: DEFAULT_COUNTRY_CODE
+        this.countryCode = this.arguments?.getString(ARG_BELONGS_TO_COUNTRY_CODE)
+                ?: DEFAULT_COUNTRY_CODE
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -79,32 +73,17 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        setupLayouts()
-        setupListeners()
-
-        updateDataSet()
-    }
-
-    private fun setupLayouts() {
-        val context = this.context ?: return
-
         this.countryAdapter = CountryRecyclerViewAdapter(listener = this)
-
-        this.countryRecyclerView.layoutManager = LinearLayoutManager(this.activity, RecyclerView.VERTICAL, false)
         this.countryRecyclerView.adapter = this.countryAdapter
 
-        this.swipeRefreshLayout.setColorSchemeColors(
-                context.getCompatColor(R.color.colorAccent),
-                context.getCompatColor(R.color.colorPrimary)
-        )
-    }
+        this.swipeRefreshLayout.setColorSchemeColors(R.color.colorAccent.compatColor(this.context), R.color.colorPrimary.compatColor(this.context))
 
-    private fun setupListeners() {
         this.swipeRefreshLayout.setOnRefreshListener {
             this.swipeRefreshLayout.performHapticContextClick()
             checkIsDataUpdated()
         }
+
+        updateDataSet()
     }
 
     private fun checkIsDataUpdated() {
@@ -130,17 +109,11 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({ result ->
                             val currencies = result.quotes.map {
-                                Currency(
-                                        code = it.key,
-                                        rate = it.value
-                                )
+                                Currency(code = it.key, rate = it.value)
                             }
 
                             if (currencies.isNotEmpty()) {
-                                updateCurrencies(
-                                        countries = countries,
-                                        currencies = currencies
-                                )
+                                updateCurrencies(countries = countries, currencies = currencies)
                             }
                             this.swipeRefreshLayout.isRefreshing = false
                         }, {
@@ -196,7 +169,7 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
     }
 
     override fun onCountrySelected(country: Country) {
-        val activity = this.activity ?: return
+        val activity = requireActivity()
         val intent = activity.intent
 
         intent.putExtra(CurrencyNavigationFragment.EXTRA_COUNTRY_CODE, country.code)
@@ -238,7 +211,7 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val activity = this.activity ?: return false
+        val activity = requireActivity()
 
         return when (item.itemId) {
             android.R.id.home -> {

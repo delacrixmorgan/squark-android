@@ -6,9 +6,7 @@ import android.net.Uri
 import android.os.Build
 import android.view.HapticFeedbackConstants
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.PreferenceHelper.get
 import com.delacrixmorgan.squark.data.controller.CountryDataController
@@ -44,14 +42,6 @@ val defaultQuoteCurrencyCode: String
         }
     }
 
-fun AppCompatActivity.startFragment(fragment: Fragment) {
-    supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.mainContainer, fragment, fragment.javaClass.simpleName)
-            .addToBackStack(fragment.javaClass.simpleName)
-            .commit()
-}
-
 fun View.performHapticContextClick() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         performHapticFeedback(HapticFeedbackConstants.CONTEXT_CLICK)
@@ -62,11 +52,15 @@ fun View.performHapticContextClick() {
 
 fun Float.roundUp() = Math.round(this * 10F) / 10F
 
-//region Context
-fun Context.getCompatColor(colorResource: Int): Int {
-    return ContextCompat.getColor(this, colorResource)
+fun Int.compatColor(context: Context?): Int {
+    return if (context == null) {
+        0
+    } else {
+        ContextCompat.getColor(context, this)
+    }
 }
 
+//region Context
 fun Context.launchPlayStore(packageName: String) {
     val url = "https://play.google.com/store/apps/details?id=$packageName"
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
@@ -90,7 +84,6 @@ fun Context.shareAppIntent(message: String) {
 
     startActivity(Intent.createChooser(intent, getString(R.string.fragment_support_settings_list_share)))
 }
-
 //endregion
 
 //region CountryDataController
@@ -105,8 +98,7 @@ fun CountryDataController.getPreferenceCountry(context: Context, preferenceCurre
     }
 }
 
-fun CountryDataController.getFilteredCountries(
-        searchText: String?
+fun CountryDataController.getFilteredCountries(searchText: String?
 ) = if (searchText.isNullOrBlank()) {
     getCountries()
 } else {

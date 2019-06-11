@@ -20,16 +20,5 @@
         android:id="@+id/currencyNavigationFragment"
         android:name="com.delacrixmorgan.squark.CurrencyNavigationFragment"
         android:label="CurrencyNavigationFragment"
-        tools:layout="@layout/fragment_currency_navigation" >
-        <action
-            android:id="@+id/action_currencyNavigationFragment_to_preferenceMenuFragment"
-            app:destination="@id/preferenceMenuFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/preferenceMenuFragment"
-        android:name="com.delacrixmorgan.squark.PreferenceMenuFragment"
-        tools:layout="@layout/fragment_preference_menu"
-        android:label="PreferenceMenuFragment" >
-        <argument android:name="countryCode" app:argType="string"/>
-    </fragment>
+        tools:layout="@layout/fragment_currency_navigation" />
 </navigation>

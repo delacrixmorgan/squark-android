@@ -41,7 +41,6 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
 
     private var quoteCountry: Country? = null
     private var rowList: ArrayList<TableRow> = ArrayList()
-
     private var expandedList: ArrayList<TableRow> = ArrayList()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -154,6 +153,7 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
         }
     }
 
+    //region RowListener
     override fun onSwipeLeft() {
         if (!this.isExpanded) {
             this.currencyTableLayout.performHapticContextClick()
@@ -177,4 +177,5 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
 
         this.isExpanded = !this.isExpanded
     }
+    //endregion
 }

@@ -21,6 +21,7 @@ import kotlinx.android.synthetic.main.fragment_settings_list.*
  */
 
 class SettingsListFragment : Fragment() {
+
     companion object {
         private const val SOURCE_CODE_URL = "https://github.com/delacrixmorgan/squark-android"
 
@@ -37,19 +38,7 @@ class SettingsListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupLayouts()
-        setupListeners()
-    }
-
-    private fun setupLayouts() {
-        val versionName = BuildConfig.VERSION_NAME
-        val versionCode = BuildConfig.VERSION_CODE
-
-        this.buildNumberTextView.text = getString(R.string.message_build_version_name, versionName, versionCode)
-    }
-
-    private fun setupListeners() {
-        val context = this.context ?: return
+        this.buildNumberTextView.text = getString(R.string.message_build_version_name, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE)
 
         this.creditsViewGroup.setOnClickListener {
 
@@ -57,11 +46,11 @@ class SettingsListFragment : Fragment() {
 
         this.shareViewGroup.setOnClickListener {
             val shareMessage = getString(R.string.fragment_settings_list_share_message)
-            context.shareAppIntent(shareMessage)
+            view.context.shareAppIntent(shareMessage)
         }
 
         this.sourceCodeViewGroup.setOnClickListener {
-            context.launchWebsite(SOURCE_CODE_URL)
+            view.context.launchWebsite(SOURCE_CODE_URL)
         }
     }
 }

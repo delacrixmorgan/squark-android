@@ -32,29 +32,25 @@ class SupportListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupListeners()
-    }
-
-    private fun setupListeners() {
-        val context = this.context ?: return
-
+        val packageName = view.context.packageName
+        
         this.starImageView.setOnClickListener {
             this.starImageView.performHapticContextClick()
             this.personImageView.setImageResource(R.drawable.ic_human_happy)
-            this.starImageView.setColorFilter(ContextCompat.getColor(context, R.color.colorAccent))
+            this.starImageView.setColorFilter(ContextCompat.getColor(view.context, R.color.colorAccent))
 
-            context.launchPlayStore(context.packageName)
+            view.context.launchPlayStore(packageName)
         }
 
         this.rateButton.setOnClickListener {
             this.rateButton.performHapticContextClick()
             this.personImageView.setImageResource(R.drawable.ic_human_happy)
-            context.launchPlayStore(context.packageName)
+            view.context.launchPlayStore(packageName)
         }
 
         this.kingscupViewGroup.setOnClickListener {
             this.kingscupViewGroup.performHapticContextClick()
-            context.launchPlayStore(KINGS_CUP_PACKAGE_NAME)
+            view.context.launchPlayStore(KINGS_CUP_PACKAGE_NAME)
         }
     }
 }
