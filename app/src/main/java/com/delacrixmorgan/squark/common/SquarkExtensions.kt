@@ -4,15 +4,17 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import android.preference.PreferenceManager
 import android.view.HapticFeedbackConstants
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.delacrixmorgan.squark.R
-import com.delacrixmorgan.squark.common.PreferenceHelper.get
+import com.delacrixmorgan.squark.common.SharedPreferenceHelper.BASE_CURRENCY_CODE
+import com.delacrixmorgan.squark.common.SharedPreferenceHelper.DEFAULT_BASE_CURRENCY_CODE
+import com.delacrixmorgan.squark.common.SharedPreferenceHelper.DEFAULT_QUOTE_CURRENCY_CODE
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.model.Country
 import java.math.BigDecimal
-import java.util.*
 
 /**
  * SquarkExtensions
@@ -21,26 +23,6 @@ import java.util.*
  * Created by Delacrix Morgan on 21/11/2018.
  * Copyright (c) 2018 licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
  */
-
-val defaultQuoteCurrencyCode: String
-    get() {
-        val localeCountryCode = Currency.getInstance(Locale.getDefault()).currencyCode
-        val fallbackCountryCode = "MYR"
-
-        return when {
-            localeCountryCode == "USD" -> {
-                fallbackCountryCode
-            }
-
-            CountryDataController.getCountries().find { it.code == localeCountryCode } != null -> {
-                localeCountryCode
-            }
-
-            else -> {
-                fallbackCountryCode
-            }
-        }
-    }
 
 fun View.performHapticContextClick() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -88,13 +70,11 @@ fun Context.shareAppIntent(message: String) {
 
 //region CountryDataController
 fun CountryDataController.getPreferenceCountry(context: Context, preferenceCurrency: String): Country? {
-    return when (preferenceCurrency) {
-        PreferenceHelper.BASE_CURRENCY_CODE -> getCountries().firstOrNull {
-            it.code == PreferenceHelper.getPreference(context)[PreferenceHelper.BASE_CURRENCY_CODE, PreferenceHelper.DEFAULT_BASE_CURRENCY_CODE]
-        }
-        else -> getCountries().firstOrNull {
-            it.code == PreferenceHelper.getPreference(context)[PreferenceHelper.QUOTE_CURRENCY_CODE, defaultQuoteCurrencyCode]
-        }
+    val preferenceManager = PreferenceManager.getDefaultSharedPreferences(context)
+    val fallbackCurrency = if (preferenceCurrency == BASE_CURRENCY_CODE) DEFAULT_BASE_CURRENCY_CODE else DEFAULT_QUOTE_CURRENCY_CODE
+    
+    return getCountries().firstOrNull {
+        it.code == preferenceManager.getString(preferenceCurrency, fallbackCurrency)
     }
 }
 

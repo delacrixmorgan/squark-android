@@ -1,14 +1,16 @@
 package com.delacrixmorgan.squark
 
+import android.content.SharedPreferences
 import android.os.AsyncTask
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
-import com.delacrixmorgan.squark.common.PreferenceHelper
-import com.delacrixmorgan.squark.common.PreferenceHelper.set
+import com.delacrixmorgan.squark.common.SharedPreferenceHelper.UPDATED_TIME_STAMP
 import com.delacrixmorgan.squark.data.api.SquarkApiService
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.controller.CountryDatabase
@@ -35,6 +37,10 @@ class LaunchFragment : Fragment() {
     private var currencies = listOf<Currency>()
     private var disposable: Disposable? = null
     private var countryDatabase: CountryDatabase? = null
+
+    private val sharedPreferences: SharedPreferences by lazy {
+        PreferenceManager.getDefaultSharedPreferences(requireContext())
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_launch, container, false)
@@ -98,7 +104,7 @@ class LaunchFragment : Fragment() {
             }
         }
 
-        PreferenceHelper.getPreference(requireContext())[PreferenceHelper.UPDATED_TIME_STAMP] = Date().time
+        this.sharedPreferences.edit { putLong(UPDATED_TIME_STAMP, Date().time) }
         launchCurrencyNavigationFragment(countries)
     }
 

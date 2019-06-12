@@ -11,11 +11,15 @@ import android.view.ViewGroup
 import android.widget.TableRow
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import com.delacrixmorgan.squark.common.*
-import com.delacrixmorgan.squark.common.PreferenceHelper.set
+import com.delacrixmorgan.squark.common.RowListener
+import com.delacrixmorgan.squark.common.SharedPreferenceHelper.BASE_CURRENCY_CODE
 import com.delacrixmorgan.squark.common.SharedPreferenceHelper.MULTIPLIER
 import com.delacrixmorgan.squark.common.SharedPreferenceHelper.MULTIPLIER_ENABLED
+import com.delacrixmorgan.squark.common.SharedPreferenceHelper.QUOTE_CURRENCY_CODE
+import com.delacrixmorgan.squark.common.getPreferenceCountry
+import com.delacrixmorgan.squark.common.performHapticContextClick
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.model.Country
 import kotlinx.android.synthetic.main.fragment_currency_navigation.*
@@ -54,7 +58,6 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
             return this.sharedPreferences.getBoolean(MULTIPLIER_ENABLED, true)
         }
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_currency_navigation, container, false)
     }
@@ -84,12 +87,12 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
         }
 
         this.swapButton.setOnClickListener {
+            this.sharedPreferences.edit {
+                putString(BASE_CURRENCY_CODE, this@CurrencyNavigationFragment.quoteCountry?.code)
+                putString(QUOTE_CURRENCY_CODE, this@CurrencyNavigationFragment.baseCountry?.code)
+            }
+
             this.swapButton.performHapticContextClick()
-            val preference = PreferenceHelper.getPreference(view.context)
-
-            preference[PreferenceHelper.BASE_CURRENCY_CODE] = this.quoteCountry?.code
-            preference[PreferenceHelper.QUOTE_CURRENCY_CODE] = this.baseCountry?.code
-
             updateTable()
         }
 
@@ -99,8 +102,8 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
     private fun updateTable() {
         val context = this.context ?: return
 
-        this.baseCountry = CountryDataController.getPreferenceCountry(context, preferenceCurrency = PreferenceHelper.BASE_CURRENCY_CODE)
-        this.quoteCountry = CountryDataController.getPreferenceCountry(context, preferenceCurrency = PreferenceHelper.QUOTE_CURRENCY_CODE)
+        this.baseCountry = CountryDataController.getPreferenceCountry(context, preferenceCurrency = BASE_CURRENCY_CODE)
+        this.quoteCountry = CountryDataController.getPreferenceCountry(context, preferenceCurrency = QUOTE_CURRENCY_CODE)
 
         this.baseCurrencyTextView.text = this.baseCountry?.code
         this.quoteCurrencyTextView.text = this.quoteCountry?.code
@@ -113,26 +116,24 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        val preference = PreferenceHelper.getPreference(requireContext())
-
         when (requestCode) {
             REQUEST_BASE_COUNTRY -> {
                 if (resultCode == Activity.RESULT_OK) {
-                    data?.getStringExtra(EXTRA_COUNTRY_CODE)?.let {
-                        preference[PreferenceHelper.BASE_CURRENCY_CODE] = it
-                        if (this.isExpanded) onRowCollapse()
-                        updateTable()
-                    }
+                    val countryCode = data?.getStringExtra(EXTRA_COUNTRY_CODE)
+                    this.sharedPreferences.edit { putString(BASE_CURRENCY_CODE, countryCode) }
+
+                    if (this.isExpanded) onRowCollapse()
+                    updateTable()
                 }
             }
 
             REQUEST_QUOTE_COUNTRY -> {
                 if (resultCode == Activity.RESULT_OK) {
-                    data?.getStringExtra(EXTRA_COUNTRY_CODE)?.let {
-                        preference[PreferenceHelper.QUOTE_CURRENCY_CODE] = it
-                        if (this.isExpanded) onRowCollapse()
-                        updateTable()
-                    }
+                    val countryCode = data?.getStringExtra(EXTRA_COUNTRY_CODE)
+                    this.sharedPreferences.edit { putString(QUOTE_CURRENCY_CODE, countryCode) }
+
+                    if (this.isExpanded) onRowCollapse()
+                    updateTable()
                 }
             }
         }
@@ -142,7 +143,7 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
         this.currencyTableLayout.performHapticContextClick()
         this.rowList.forEachIndexed { index, tableRow ->
             if (index != selectedRow && index != (selectedRow + 1)) {
-                tableRow.visibility = View.GONE
+                tableRow.isVisible = false
             } else {
                 tableRow.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.colorAccent))
             }
@@ -165,7 +166,7 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
         }
 
         this.rowList.forEach {
-            it.visibility = View.VISIBLE
+            it.isVisible = true
             it.background = ContextCompat.getDrawable(context, R.drawable.shape_cell_dark)
         }
     }

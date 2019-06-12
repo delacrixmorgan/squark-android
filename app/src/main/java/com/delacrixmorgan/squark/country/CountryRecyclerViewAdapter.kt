@@ -16,9 +16,7 @@ import kotlinx.android.synthetic.main.cell_country.view.*
  * Copyright (c) 2018 licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
  */
 
-class CountryRecyclerViewAdapter(
-        private val listener: CountryListListener
-) : RecyclerView.Adapter<CountryRecyclerViewAdapter.CountryViewHolder>() {
+class CountryRecyclerViewAdapter(private val listener: CountryListListener) : RecyclerView.Adapter<CountryRecyclerViewAdapter.CountryViewHolder>() {
 
     private var countries: List<Country> = ArrayList()
     private var isSearchMode = false
