@@ -22,6 +22,7 @@ import kotlinx.android.synthetic.main.fragment_support_list.*
 class SupportListFragment : Fragment() {
     companion object {
         private const val KINGS_CUP_PACKAGE_NAME = "com.delacrixmorgan.kingscup"
+        private const val MAMIKA_PACKAGE_NAME = "com.delacrixmorgan.mamika"
 
         fun newInstance() = SupportListFragment()
     }
@@ -33,7 +34,7 @@ class SupportListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val packageName = view.context.packageName
-        
+
         this.starImageView.setOnClickListener {
             this.starImageView.performHapticContextClick()
             this.personImageView.setImageResource(R.drawable.ic_human_happy)
@@ -51,6 +52,11 @@ class SupportListFragment : Fragment() {
         this.kingscupViewGroup.setOnClickListener {
             this.kingscupViewGroup.performHapticContextClick()
             view.context.launchPlayStore(KINGS_CUP_PACKAGE_NAME)
+        }
+
+        this.mamikaViewGroup.setOnClickListener {
+            this.kingscupViewGroup.performHapticContextClick()
+            view.context.launchPlayStore(MAMIKA_PACKAGE_NAME)
         }
     }
 }
