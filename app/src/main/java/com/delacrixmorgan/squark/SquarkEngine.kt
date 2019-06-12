@@ -80,12 +80,12 @@ object SquarkEngine {
                                     if (this.multiplier < 10000000000) {
                                         this.multiplier *= 10
                                     }
-                                    listener.onSwipeLeft()
+                                    listener.onSwipeLeft(this.multiplier)
                                 } else {
                                     if (this.multiplier > 0.1) {
                                         this.multiplier /= 10
                                     }
-                                    listener.onSwipeRight()
+                                    listener.onSwipeRight(this.multiplier)
                                 }
                             }
 
@@ -187,6 +187,10 @@ object SquarkEngine {
             expandedList.add(tableRow)
             tableLayout.addView(tableRow, (expandQuantifier + index))
         }
+    }
+
+    fun updateMultiplier(multiplier: Int) {
+        this.multiplier = multiplier.toDouble()
     }
 
     private class SingleTapConfirm : SimpleOnGestureListener() {

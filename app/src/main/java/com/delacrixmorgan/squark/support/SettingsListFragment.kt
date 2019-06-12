@@ -1,12 +1,17 @@
 package com.delacrixmorgan.squark.support
 
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import com.delacrixmorgan.squark.BuildConfig
 import com.delacrixmorgan.squark.R
+import com.delacrixmorgan.squark.common.SharedPreferenceHelper.MULTIPLIER
+import com.delacrixmorgan.squark.common.SharedPreferenceHelper.MULTIPLIER_ENABLED
 import com.delacrixmorgan.squark.common.launchWebsite
 import com.delacrixmorgan.squark.common.shareAppIntent
 import com.delacrixmorgan.squark.databinding.FragmentSettingsListBinding
@@ -29,11 +34,12 @@ class SettingsListFragment : Fragment() {
         fun newInstance() = SettingsListFragment()
     }
 
-    private lateinit var dataBinding: FragmentSettingsListBinding
+    private val sharedPreferences: SharedPreferences by lazy {
+        PreferenceManager.getDefaultSharedPreferences(requireContext())
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        this.dataBinding = FragmentSettingsListBinding.inflate(inflater, container, false)
-        return this.dataBinding.root
+        return FragmentSettingsListBinding.inflate(inflater, container, false).root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -41,12 +47,16 @@ class SettingsListFragment : Fragment() {
 
         this.buildNumberTextView.text = getString(R.string.message_build_version_name, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE)
 
+        this.multiplierViewGroup.switchCompat.isChecked = this.sharedPreferences.getBoolean(MULTIPLIER_ENABLED, true)
+
         this.multiplierViewGroup.setOnClickListener {
-            this.multiplierViewGroup.switchCompat.isChecked = !this.multiplierViewGroup.switchCompat.isChecked
-        }
+            val updatedSwitchCheck = !this.multiplierViewGroup.switchCompat.isChecked
+            this.multiplierViewGroup.switchCompat.isChecked = updatedSwitchCheck
 
-        this.multiplierViewGroup.switchCompat.setOnCheckedChangeListener { _, isChecked ->
-
+            this.sharedPreferences.edit {
+                putInt(MULTIPLIER, 1)
+                putBoolean(MULTIPLIER_ENABLED, updatedSwitchCheck)
+            }
         }
 
         this.creditsViewGroup.setOnClickListener {

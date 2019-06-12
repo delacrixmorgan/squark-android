@@ -2,18 +2,20 @@ package com.delacrixmorgan.squark
 
 import android.app.Activity
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TableRow
 import androidx.core.content.ContextCompat
+import androidx.core.content.edit
 import androidx.fragment.app.Fragment
-import com.delacrixmorgan.squark.common.PreferenceHelper
+import com.delacrixmorgan.squark.common.*
 import com.delacrixmorgan.squark.common.PreferenceHelper.set
-import com.delacrixmorgan.squark.common.RowListener
-import com.delacrixmorgan.squark.common.getPreferenceCountry
-import com.delacrixmorgan.squark.common.performHapticContextClick
+import com.delacrixmorgan.squark.common.SharedPreferenceHelper.MULTIPLIER
+import com.delacrixmorgan.squark.common.SharedPreferenceHelper.MULTIPLIER_ENABLED
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.model.Country
 import kotlinx.android.synthetic.main.fragment_currency_navigation.*
@@ -43,12 +45,27 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
     private var rowList: ArrayList<TableRow> = ArrayList()
     private var expandedList: ArrayList<TableRow> = ArrayList()
 
+    private val sharedPreferences: SharedPreferences by lazy {
+        PreferenceManager.getDefaultSharedPreferences(requireContext())
+    }
+
+    private val isPersistentMultiplierEnabled: Boolean
+        get() {
+            return this.sharedPreferences.getBoolean(MULTIPLIER_ENABLED, true)
+        }
+
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_currency_navigation, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        if (this.isPersistentMultiplierEnabled) {
+            SquarkEngine.updateMultiplier(this.sharedPreferences.getInt(MULTIPLIER, 1))
+        }
+
         SquarkEngine.setupTable(
                 activity = requireActivity(),
                 tableLayout = currencyTableLayout,
@@ -154,15 +171,27 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
     }
 
     //region RowListener
-    override fun onSwipeLeft() {
+    override fun onSwipeLeft(multiplier: Double) {
         if (!this.isExpanded) {
+            if (this.isPersistentMultiplierEnabled) {
+                this.sharedPreferences.edit {
+                    putInt(MULTIPLIER, multiplier.toInt())
+                }
+            }
+
             this.currencyTableLayout.performHapticContextClick()
             SquarkEngine.updateTable(this.rowList)
         }
     }
 
-    override fun onSwipeRight() {
+    override fun onSwipeRight(multiplier: Double) {
         if (!this.isExpanded) {
+            if (this.isPersistentMultiplierEnabled) {
+                this.sharedPreferences.edit {
+                    putInt(MULTIPLIER, multiplier.toInt())
+                }
+            }
+
             this.currencyTableLayout.performHapticContextClick()
             SquarkEngine.updateTable(this.rowList)
         }
