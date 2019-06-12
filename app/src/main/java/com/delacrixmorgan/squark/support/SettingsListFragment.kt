@@ -10,6 +10,7 @@ import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.launchWebsite
 import com.delacrixmorgan.squark.common.shareAppIntent
 import com.delacrixmorgan.squark.databinding.FragmentSettingsListBinding
+import kotlinx.android.synthetic.main.cell_settings.view.*
 import kotlinx.android.synthetic.main.fragment_settings_list.*
 
 /**
@@ -39,6 +40,14 @@ class SettingsListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         this.buildNumberTextView.text = getString(R.string.message_build_version_name, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE)
+
+        this.multiplierViewGroup.setOnClickListener {
+            this.multiplierViewGroup.switchCompat.isChecked = !this.multiplierViewGroup.switchCompat.isChecked
+        }
+
+        this.multiplierViewGroup.switchCompat.setOnCheckedChangeListener { _, isChecked ->
+
+        }
 
         this.creditsViewGroup.setOnClickListener {
 
