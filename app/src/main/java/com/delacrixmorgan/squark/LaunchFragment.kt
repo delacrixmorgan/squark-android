@@ -11,6 +11,7 @@ import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.delacrixmorgan.squark.common.SharedPreferenceHelper.UPDATED_TIME_STAMP
+import com.delacrixmorgan.squark.common.isConnected
 import com.delacrixmorgan.squark.data.api.SquarkApiService
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.controller.CountryDatabase
@@ -55,12 +56,15 @@ class LaunchFragment : Fragment() {
 
     private fun fetchCurrencyData() {
         AsyncTask.execute {
-            val countryData = this.countryDatabase?.countryDataDao()?.getCountries() ?: listOf()
-
-            if (countryData.isEmpty()) {
-                initCurrencies()
+            if (requireContext().isConnected) {
+                val countryData = this.countryDatabase?.countryDataDao()?.getCountries() ?: listOf()
+                if (countryData.isEmpty()) {
+                    initCurrencies()
+                } else {
+                    launchCurrencyNavigationFragment(countryData)
+                }
             } else {
-                launchCurrencyNavigationFragment(countryData)
+                fallbackCurrencies()
             }
         }
     }

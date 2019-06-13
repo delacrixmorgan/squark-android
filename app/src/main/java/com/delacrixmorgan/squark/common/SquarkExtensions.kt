@@ -2,6 +2,7 @@ package com.delacrixmorgan.squark.common
 
 import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
 import android.preference.PreferenceManager
@@ -51,6 +52,12 @@ fun Fragment.launchWebsite(url: String) {
 }
 
 //region Context
+val Context.isConnected: Boolean
+    get() {
+        return (getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
+                .activeNetworkInfo?.isConnected == true
+    }
+
 fun Context.launchPlayStore(packageName: String) {
     val url = "https://play.google.com/store/apps/details?id=$packageName"
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
