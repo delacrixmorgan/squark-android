@@ -26,7 +26,7 @@ object SharedPreferenceHelper {
             val localeCountry = CountryDataController.getCountries().firstOrNull { it.code == localeCountryCode }
             val fallbackCountryCode = "MYR"
 
-            return if (localeCountryCode != DEFAULT_BASE_CURRENCY_CODE || localeCountry != null) {
+            return if (localeCountryCode != DEFAULT_BASE_CURRENCY_CODE && localeCountry != null) {
                 localeCountryCode
             } else {
                 fallbackCountryCode
