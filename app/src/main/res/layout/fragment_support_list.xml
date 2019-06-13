@@ -178,7 +178,7 @@
                     android:layout_marginTop="12dp"
                     android:layout_marginEnd="24dp"
                     android:layout_marginBottom="24dp"
-                    android:background="@drawable/btn_rounded_amber"
+                    android:background="@drawable/btn_rounded_accent"
                     android:padding="16dp"
                     android:text="@string/fragment_rate_button_be_awesome"
                     android:textColor="@android:color/white" />

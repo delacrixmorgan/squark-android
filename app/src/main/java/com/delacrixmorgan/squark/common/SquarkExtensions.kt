@@ -8,6 +8,7 @@ import android.preference.PreferenceManager
 import android.view.HapticFeedbackConstants
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.SharedPreferenceHelper.BASE_CURRENCY_CODE
 import com.delacrixmorgan.squark.common.SharedPreferenceHelper.DEFAULT_BASE_CURRENCY_CODE
@@ -42,19 +43,19 @@ fun Int.compatColor(context: Context?): Int {
     }
 }
 
+fun Fragment.launchWebsite(url: String) {
+    val intent = Intent(Intent.ACTION_VIEW)
+
+    intent.data = Uri.parse(url)
+    startActivity(intent)
+}
+
 //region Context
 fun Context.launchPlayStore(packageName: String) {
     val url = "https://play.google.com/store/apps/details?id=$packageName"
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
 
     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-    startActivity(intent)
-}
-
-fun Context.launchWebsite(url: String) {
-    val intent = Intent(Intent.ACTION_VIEW)
-
-    intent.data = Uri.parse(url)
     startActivity(intent)
 }
 

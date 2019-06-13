@@ -60,7 +60,8 @@ class SettingsListFragment : Fragment() {
         }
 
         this.creditsViewGroup.setOnClickListener {
-
+            val launchIntent = CreditActivity.newLaunchIntent(view.context)
+            startActivity(launchIntent)
         }
 
         this.shareViewGroup.setOnClickListener {
@@ -69,7 +70,7 @@ class SettingsListFragment : Fragment() {
         }
 
         this.sourceCodeViewGroup.setOnClickListener {
-            view.context.launchWebsite(SOURCE_CODE_URL)
+            launchWebsite(SOURCE_CODE_URL)
         }
     }
 }
