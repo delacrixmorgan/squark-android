@@ -1,20 +1,21 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.firebase.firebase-perf'
-apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'androidx.navigation.safeargs.kotlin'
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
+    compileSdkVersion 28
     dataBinding {
         enabled = true
     }
     defaultConfig {
         applicationId "com.delacrixmorgan.squark"
         minSdkVersion 22
-        targetSdkVersion rootProject.ext.compileSdkVersion
-        versionCode 10
-        versionName "2.2.3"
+        targetSdkVersion 28
+        versionCode 11
+        versionName "2.3.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
     }
@@ -36,31 +37,32 @@ android {
 dependencies {
     implementation project(':data')
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestImplementation 'androidx.test:runner:1.1.0'
-    androidTestImplementation 'androidx.test.ext:junit:1.0.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0-beta02', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
     testImplementation 'junit:junit:4.12'
 
-    implementation "com.google.firebase:firebase-core:$firebaseCoreVersion"
-    implementation "com.google.firebase:firebase-perf:$firebasePrefVersion"
-    implementation "com.google.android.material:material:$androidMaterialVersion"
+    implementation "com.google.firebase:firebase-core:16.0.9"
+    implementation "com.google.firebase:firebase-perf:17.0.2"
+    implementation "com.google.android.material:material:1.0.0"
 
-    implementation "androidx.appcompat:appcompat:$androidxAppcompatVersion"
-    implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
+    implementation "androidx.core:core-ktx:1.0.2"
+    implementation "androidx.fragment:fragment-ktx:1.0.0"
+    implementation "androidx.appcompat:appcompat:1.0.2"
+    implementation "androidx.constraintlayout:constraintlayout:1.1.3"
 
-    implementation "org.parceler:parceler-api:$parcelerVersion"
-    implementation "io.reactivex.rxjava2:rxandroid:$rxJavaVersion"
+    implementation "androidx.navigation:navigation-ui-ktx:2.0.0"
+    implementation "androidx.navigation:navigation-fragment-ktx:2.0.0"
+
+    implementation "org.parceler:parceler-api:1.1.12"
+    implementation "io.reactivex.rxjava2:rxandroid:2.0.1"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
 
-    annotationProcessor "org.parceler:parceler:$parcelerVersion"
-}
-
-repositories {
-    mavenCentral()
+    annotationProcessor "org.parceler:parceler:1.1.12"
 }
 
 apply plugin: 'com.google.gms.google-services'

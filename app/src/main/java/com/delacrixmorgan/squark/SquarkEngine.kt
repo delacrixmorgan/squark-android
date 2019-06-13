@@ -39,7 +39,7 @@ object SquarkEngine {
             listener: RowListener
     ) {
         val thresholdTranslationWidth = activity.resources.displayMetrics.widthPixels / 6F
-        val thresholdSwipeWidth = thresholdTranslationWidth / 2F
+        val thresholdSwipeWidth = thresholdTranslationWidth / 1.5F
         val alphaRatio = 1F / thresholdTranslationWidth
         val gestureDetector = GestureDetector(activity, SingleTapConfirm())
 
@@ -80,12 +80,12 @@ object SquarkEngine {
                                     if (this.multiplier < 10000000000) {
                                         this.multiplier *= 10
                                     }
-                                    listener.onSwipeLeft()
+                                    listener.onSwipeLeft(this.multiplier)
                                 } else {
                                     if (this.multiplier > 0.1) {
                                         this.multiplier /= 10
                                     }
-                                    listener.onSwipeRight()
+                                    listener.onSwipeRight(this.multiplier)
                                 }
                             }
 
@@ -137,7 +137,10 @@ object SquarkEngine {
                             }
                         }
 
-                        MotionEvent.ACTION_DOWN -> this.anchorPosition = event.rawX
+                        MotionEvent.ACTION_DOWN -> {
+                            tableRow.performHapticContextClick()
+                            this.anchorPosition = event.rawX
+                        }
                     }
                 }
                 true
@@ -184,6 +187,10 @@ object SquarkEngine {
             expandedList.add(tableRow)
             tableLayout.addView(tableRow, (expandQuantifier + index))
         }
+    }
+
+    fun updateMultiplier(multiplier: Int) {
+        this.multiplier = multiplier.toDouble()
     }
 
     private class SingleTapConfirm : SimpleOnGestureListener() {

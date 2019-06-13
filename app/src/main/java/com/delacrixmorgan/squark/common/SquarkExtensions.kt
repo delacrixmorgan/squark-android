@@ -2,19 +2,21 @@ package com.delacrixmorgan.squark.common
 
 import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
+import android.preference.PreferenceManager
 import android.view.HapticFeedbackConstants
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.delacrixmorgan.squark.R
-import com.delacrixmorgan.squark.common.PreferenceHelper.get
+import com.delacrixmorgan.squark.common.SharedPreferenceHelper.BASE_CURRENCY_CODE
+import com.delacrixmorgan.squark.common.SharedPreferenceHelper.DEFAULT_BASE_CURRENCY_CODE
+import com.delacrixmorgan.squark.common.SharedPreferenceHelper.DEFAULT_QUOTE_CURRENCY_CODE
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.model.Country
 import java.math.BigDecimal
-import java.util.*
 
 /**
  * SquarkExtensions
@@ -23,34 +25,6 @@ import java.util.*
  * Created by Delacrix Morgan on 21/11/2018.
  * Copyright (c) 2018 licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
  */
-
-val defaultQuoteCurrencyCode: String
-    get() {
-        val localeCountryCode = Currency.getInstance(Locale.getDefault()).currencyCode
-        val fallbackCountryCode = "MYR"
-
-        return when {
-            localeCountryCode == "USD" -> {
-                fallbackCountryCode
-            }
-
-            CountryDataController.getCountries().find { it.code == localeCountryCode } != null -> {
-                localeCountryCode
-            }
-
-            else -> {
-                fallbackCountryCode
-            }
-        }
-    }
-
-fun AppCompatActivity.startFragment(fragment: Fragment) {
-    supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.mainContainer, fragment, fragment.javaClass.simpleName)
-            .addToBackStack(fragment.javaClass.simpleName)
-            .commit()
-}
 
 fun View.performHapticContextClick() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -62,23 +36,33 @@ fun View.performHapticContextClick() {
 
 fun Float.roundUp() = Math.round(this * 10F) / 10F
 
-//region Context
-fun Context.getCompatColor(colorResource: Int): Int {
-    return ContextCompat.getColor(this, colorResource)
+fun Int.compatColor(context: Context?): Int {
+    return if (context == null) {
+        0
+    } else {
+        ContextCompat.getColor(context, this)
+    }
 }
+
+fun Fragment.launchWebsite(url: String) {
+    val intent = Intent(Intent.ACTION_VIEW)
+
+    intent.data = Uri.parse(url)
+    startActivity(intent)
+}
+
+//region Context
+val Context.isConnected: Boolean
+    get() {
+        return (getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
+                .activeNetworkInfo?.isConnected == true
+    }
 
 fun Context.launchPlayStore(packageName: String) {
     val url = "https://play.google.com/store/apps/details?id=$packageName"
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
 
     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-    startActivity(intent)
-}
-
-fun Context.launchWebsite(url: String) {
-    val intent = Intent(Intent.ACTION_VIEW)
-
-    intent.data = Uri.parse(url)
     startActivity(intent)
 }
 
@@ -90,23 +74,19 @@ fun Context.shareAppIntent(message: String) {
 
     startActivity(Intent.createChooser(intent, getString(R.string.fragment_support_settings_list_share)))
 }
-
 //endregion
 
 //region CountryDataController
 fun CountryDataController.getPreferenceCountry(context: Context, preferenceCurrency: String): Country? {
-    return when (preferenceCurrency) {
-        PreferenceHelper.BASE_CURRENCY_CODE -> getCountries().firstOrNull {
-            it.code == PreferenceHelper.getPreference(context)[PreferenceHelper.BASE_CURRENCY_CODE, PreferenceHelper.DEFAULT_BASE_CURRENCY_CODE]
-        }
-        else -> getCountries().firstOrNull {
-            it.code == PreferenceHelper.getPreference(context)[PreferenceHelper.QUOTE_CURRENCY_CODE, defaultQuoteCurrencyCode]
-        }
+    val preferenceManager = PreferenceManager.getDefaultSharedPreferences(context)
+    val fallbackCurrency = if (preferenceCurrency == BASE_CURRENCY_CODE) DEFAULT_BASE_CURRENCY_CODE else DEFAULT_QUOTE_CURRENCY_CODE
+    
+    return getCountries().firstOrNull {
+        it.code == preferenceManager.getString(preferenceCurrency, fallbackCurrency)
     }
 }
 
-fun CountryDataController.getFilteredCountries(
-        searchText: String?
+fun CountryDataController.getFilteredCountries(searchText: String?
 ) = if (searchText.isNullOrBlank()) {
     getCountries()
 } else {

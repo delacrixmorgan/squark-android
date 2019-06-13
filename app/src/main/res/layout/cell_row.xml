@@ -24,19 +24,20 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/quantifierTextView"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="10.00"/>
+            tools:text="10.00" />
 
         <TextView
             android:id="@+id/quantifierTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:maxLines="1"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="1.00"/>
+            tools:text="1.00" />
 
         <TextView
             android:id="@+id/nextQuantifierTextView"
@@ -50,7 +51,7 @@
             app:layout_constraintEnd_toEndOf="@+id/quantifierTextView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="1000.00"/>
+            tools:text="1000.00" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -70,19 +71,20 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/resultTextView"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="10.00"/>
+            tools:text="10.00" />
 
         <TextView
             android:id="@+id/resultTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:maxLines="1"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="1.00"/>
+            tools:text="1.00" />
 
         <TextView
             android:id="@+id/nextResultTextView"
@@ -96,6 +98,6 @@
             app:layout_constraintEnd_toEndOf="@+id/resultTextView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="1000.00"/>
+            tools:text="1000.00" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </TableRow>

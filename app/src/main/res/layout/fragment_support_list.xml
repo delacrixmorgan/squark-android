@@ -144,6 +144,28 @@
                                 android:text="@string/fragment_rate_title_kings_cup"
                                 android:textAlignment="center" />
                         </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/mamikaViewGroup"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="12dp"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="80dp"
+                                android:layout_height="wrap_content"
+                                android:adjustViewBounds="true"
+                                android:padding="8dp"
+                                android:src="@drawable/ic_mamika" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/fragment_rate_title_mamika"
+                                android:textAlignment="center" />
+                        </LinearLayout>
                     </LinearLayout>
 
                 </androidx.core.widget.NestedScrollView>
@@ -156,7 +178,7 @@
                     android:layout_marginTop="12dp"
                     android:layout_marginEnd="24dp"
                     android:layout_marginBottom="24dp"
-                    android:background="@drawable/btn_rounded_amber"
+                    android:background="@drawable/btn_rounded_accent"
                     android:padding="16dp"
                     android:text="@string/fragment_rate_button_be_awesome"
                     android:textColor="@android:color/white" />

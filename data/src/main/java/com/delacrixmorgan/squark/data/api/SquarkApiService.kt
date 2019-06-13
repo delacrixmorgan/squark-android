@@ -21,14 +21,14 @@ interface SquarkApiService {
 
     @GET("list")
     fun getCountries(
-            @Query("access_key") accessKey: String? = ACCESS_KEY,
-            @Query("source") source: String? = SOURCE
+        @Query("access_key") accessKey: String? = ACCESS_KEY,
+        @Query("source") source: String? = SOURCE
     ): Observable<CountryModel.Result>
 
     @GET("live")
     fun getCurrencies(
-            @Query("access_key") accessKey: String? = ACCESS_KEY,
-            @Query("source") source: String? = SOURCE
+        @Query("access_key") accessKey: String? = ACCESS_KEY,
+        @Query("source") source: String? = SOURCE
     ): Observable<CurrencyModel.Result>
 
     companion object {
@@ -41,10 +41,10 @@ interface SquarkApiService {
             ACCESS_KEY = context.getString(R.string.currency_layer_api_key)
 
             val retrofit = Retrofit.Builder()
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .baseUrl(BASE_URL)
-                    .build()
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(BASE_URL)
+                .build()
 
             return retrofit.create(SquarkApiService::class.java)
         }
