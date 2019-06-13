@@ -1,4 +1,4 @@
-package com.delacrixmorgan.squark.support
+package com.delacrixmorgan.squark.preference.credit
 
 import android.os.Bundle
 import android.view.LayoutInflater

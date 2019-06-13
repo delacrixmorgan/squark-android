@@ -22,6 +22,7 @@ import com.delacrixmorgan.squark.common.getPreferenceCountry
 import com.delacrixmorgan.squark.common.performHapticContextClick
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.model.Country
+import com.delacrixmorgan.squark.preference.PreferenceNavigationActivity
 import kotlinx.android.synthetic.main.fragment_currency_navigation.*
 import java.util.*
 
@@ -77,12 +78,12 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
         )
 
         this.baseCurrencyTextView.setOnClickListener {
-            val currencyIntent = CountryNavigationActivity.newLaunchIntent(view.context, countryCode = this.baseCountry?.code)
+            val currencyIntent = PreferenceNavigationActivity.newLaunchIntent(view.context, countryCode = this.baseCountry?.code)
             startActivityForResult(currencyIntent, REQUEST_BASE_COUNTRY)
         }
 
         this.quoteCurrencyTextView.setOnClickListener {
-            val currencyIntent = CountryNavigationActivity.newLaunchIntent(view.context, countryCode = this.quoteCountry?.code)
+            val currencyIntent = PreferenceNavigationActivity.newLaunchIntent(view.context, countryCode = this.quoteCountry?.code)
             startActivityForResult(currencyIntent, REQUEST_QUOTE_COUNTRY)
         }
 

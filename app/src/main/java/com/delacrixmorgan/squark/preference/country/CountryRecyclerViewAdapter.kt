@@ -1,4 +1,4 @@
-package com.delacrixmorgan.squark.country
+package com.delacrixmorgan.squark.preference.country
 
 import android.view.LayoutInflater
 import android.view.View

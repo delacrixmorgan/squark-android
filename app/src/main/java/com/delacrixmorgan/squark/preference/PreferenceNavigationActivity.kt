@@ -1,4 +1,4 @@
-package com.delacrixmorgan.squark
+package com.delacrixmorgan.squark.preference
 
 import android.content.Context
 import android.content.Intent
@@ -7,26 +7,25 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.transaction
-import com.delacrixmorgan.squark.country.CountryListFragment
-import com.delacrixmorgan.squark.support.SettingsListFragment
-import com.delacrixmorgan.squark.support.SupportListFragment
+import com.delacrixmorgan.squark.R
+import com.delacrixmorgan.squark.preference.country.CountryListFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.android.synthetic.main.activity_country_navigation.*
+import kotlinx.android.synthetic.main.activity_preference_navigation.*
 
 /**
- * CountryNavigationActivity
+ * PreferenceNavigationActivity
  * squark-android
  *
  * Created by Morgan Koh on 17/11/2018.
  * Copyright (c) 2018 licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
  */
 
-class CountryNavigationActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
+class PreferenceNavigationActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
     companion object {
         const val EXTRA_RESULT_COUNTRY_CODE = "countryCode"
 
         fun newLaunchIntent(context: Context, countryCode: String? = null): Intent {
-            val launchIntent = Intent(context, CountryNavigationActivity::class.java)
+            val launchIntent = Intent(context, PreferenceNavigationActivity::class.java)
 
             countryCode?.let {
                 launchIntent.putExtra(EXTRA_RESULT_COUNTRY_CODE, it)
@@ -40,7 +39,7 @@ class CountryNavigationActivity : AppCompatActivity(), BottomNavigationView.OnNa
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_country_navigation)
+        setContentView(R.layout.activity_preference_navigation)
 
         if (this.intent.extras != null) {
             this.countryCode = this.intent.getStringExtra(EXTRA_RESULT_COUNTRY_CODE)
@@ -64,7 +63,7 @@ class CountryNavigationActivity : AppCompatActivity(), BottomNavigationView.OnNa
         }
 
         this.supportFragmentManager.transaction(allowStateLoss = true) {
-            replace(this@CountryNavigationActivity.contentContainer.id, targetFragment)
+            replace(this@PreferenceNavigationActivity.contentContainer.id, targetFragment)
         }
 
         return true

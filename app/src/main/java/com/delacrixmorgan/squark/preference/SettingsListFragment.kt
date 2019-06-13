@@ -1,4 +1,4 @@
-package com.delacrixmorgan.squark.support
+package com.delacrixmorgan.squark.preference
 
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -15,6 +15,7 @@ import com.delacrixmorgan.squark.common.SharedPreferenceHelper.MULTIPLIER_ENABLE
 import com.delacrixmorgan.squark.common.launchWebsite
 import com.delacrixmorgan.squark.common.shareAppIntent
 import com.delacrixmorgan.squark.databinding.FragmentSettingsListBinding
+import com.delacrixmorgan.squark.preference.credit.CreditActivity
 import kotlinx.android.synthetic.main.cell_settings.view.*
 import kotlinx.android.synthetic.main.fragment_settings_list.*
 
