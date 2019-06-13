@@ -48,8 +48,6 @@ class LaunchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        this.buildNumberTextView.text = getString(R.string.message_build_version_name, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE)
-
         this.countryDatabase = CountryDatabase.getInstance(view.context)
         CountryDataController.populateMaps(view.context)
         fetchCurrencyData()
@@ -77,6 +75,8 @@ class LaunchFragment : Fragment() {
                     this.currencies = result.quotes.map { Currency(code = it.key, rate = it.value) }
                     if (this.currencies.isNotEmpty()) {
                         insertCountries()
+                    } else {
+                        fallbackCurrencies()
                     }
                 }, {
                     Snackbar.make(this.mainContainer, "${it.message}", Snackbar.LENGTH_SHORT).show()
