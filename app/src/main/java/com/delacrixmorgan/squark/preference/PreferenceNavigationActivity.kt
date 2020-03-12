@@ -6,21 +6,14 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.transaction
+import androidx.fragment.app.commit
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.preference.country.CountryListFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_preference_navigation.*
 
-/**
- * PreferenceNavigationActivity
- * squark-android
- *
- * Created by Morgan Koh on 17/11/2018.
- * Copyright (c) 2018 licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
- */
-
-class PreferenceNavigationActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
+class PreferenceNavigationActivity : AppCompatActivity(),
+    BottomNavigationView.OnNavigationItemSelectedListener {
     companion object {
         const val EXTRA_RESULT_COUNTRY_CODE = "countryCode"
 
@@ -50,7 +43,8 @@ class PreferenceNavigationActivity : AppCompatActivity(), BottomNavigationView.O
     }
 
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
-        val existingFragment = this.supportFragmentManager.findFragmentById(this.contentContainer.id)
+        val existingFragment =
+            this.supportFragmentManager.findFragmentById(this.contentContainer.id)
         val targetFragment: Fragment = when (menuItem.itemId) {
             R.id.itemCountries -> CountryListFragment.newInstance(this.countryCode)
             R.id.itemSupport -> SupportListFragment.newInstance()
@@ -62,15 +56,15 @@ class PreferenceNavigationActivity : AppCompatActivity(), BottomNavigationView.O
             return true
         }
 
-        this.supportFragmentManager.transaction(allowStateLoss = true) {
+        this.supportFragmentManager.commit(allowStateLoss = true) {
             replace(this@PreferenceNavigationActivity.contentContainer.id, targetFragment)
         }
 
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if (item?.itemId == android.R.id.home) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
             finish()
             return true
         }

@@ -3,14 +3,14 @@ package com.delacrixmorgan.squark
 import android.content.SharedPreferences
 import android.os.AsyncTask
 import android.os.Bundle
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
-import com.delacrixmorgan.squark.common.SharedPreferenceHelper.UPDATED_TIME_STAMP
+import com.delacrixmorgan.squark.common.SharedPreferenceHelper.updatedTimeStamp
 import com.delacrixmorgan.squark.common.isConnected
 import com.delacrixmorgan.squark.data.api.SquarkApiService
 import com.delacrixmorgan.squark.data.controller.CountryDataController
@@ -108,7 +108,7 @@ class LaunchFragment : Fragment() {
             }
         }
 
-        this.sharedPreferences.edit { putLong(UPDATED_TIME_STAMP, Date().time) }
+        this.sharedPreferences.edit { putLong(updatedTimeStamp, Date().time) }
         launchCurrencyNavigationFragment(countries)
     }
 

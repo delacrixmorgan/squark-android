@@ -13,14 +13,6 @@ import com.delacrixmorgan.squark.common.*
 import kotlinx.android.synthetic.main.cell_row.view.*
 import kotlin.math.absoluteValue
 
-/**
- * SquarkEngine
- * squark-android
- *
- * Created by Delacrix Morgan on 01/05/2018.
- * Copyright (c) 2018 licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
- */
-
 object SquarkEngine {
 
     private var anchorPosition = 0F
@@ -33,10 +25,10 @@ object SquarkEngine {
 
     @SuppressLint("ClickableViewAccessibility")
     fun setupTable(
-            activity: Activity,
-            tableLayout: TableLayout,
-            rowList: ArrayList<TableRow>,
-            listener: RowListener
+        activity: Activity,
+        tableLayout: TableLayout,
+        rowList: ArrayList<TableRow>,
+        listener: RowListener
     ) {
         val thresholdTranslationWidth = activity.resources.displayMetrics.widthPixels / 6F
         val thresholdSwipeWidth = thresholdTranslationWidth / 1.5F
@@ -44,16 +36,22 @@ object SquarkEngine {
         val gestureDetector = GestureDetector(activity, SingleTapConfirm())
 
         for (index in 0..9) {
-            val tableRow = activity.layoutInflater.inflate(R.layout.cell_row, tableLayout, false) as TableRow
+            val tableRow =
+                activity.layoutInflater.inflate(R.layout.cell_row, tableLayout, false) as TableRow
 
             tableRow.quantifierTextView.text = calculateRowQuantifier(this.multiplier, index)
-            tableRow.resultTextView.text = calculateRowResult(this.multiplier, index, this.conversionRate)
+            tableRow.resultTextView.text =
+                calculateRowResult(this.multiplier, index, this.conversionRate)
 
-            tableRow.beforeQuantifierTextView.text = calculateRowQuantifier(this.multiplier / 10, index)
-            tableRow.beforeResultTextView.text = calculateRowResult(this.multiplier / 10, index, this.conversionRate)
+            tableRow.beforeQuantifierTextView.text =
+                calculateRowQuantifier(this.multiplier / 10, index)
+            tableRow.beforeResultTextView.text =
+                calculateRowResult(this.multiplier / 10, index, this.conversionRate)
 
-            tableRow.nextQuantifierTextView.text = calculateRowQuantifier(this.multiplier * 10, index)
-            tableRow.nextResultTextView.text = calculateRowResult(this.multiplier * 10, index, this.conversionRate)
+            tableRow.nextQuantifierTextView.text =
+                calculateRowQuantifier(this.multiplier * 10, index)
+            tableRow.nextResultTextView.text =
+                calculateRowResult(this.multiplier * 10, index, this.conversionRate)
 
             tableRow.setOnTouchListener { _, event ->
                 if (gestureDetector.onTouchEvent(event)) {
@@ -161,27 +159,41 @@ object SquarkEngine {
                 nextResultTextView.text = calculateRowResult(multiplier / 10, index, conversionRate)
 
                 beforeQuantifierTextView.text = calculateRowQuantifier(multiplier * 10, index)
-                beforeResultTextView.text = calculateRowResult(multiplier * 10, index, conversionRate)
+                beforeResultTextView.text =
+                    calculateRowResult(multiplier * 10, index, conversionRate)
 
-                quantifierTextView.startAnimation(AnimationUtils.loadAnimation(tableRow.context, R.anim.wobble))
-                resultTextView.startAnimation(AnimationUtils.loadAnimation(tableRow.context, R.anim.wobble))
+                quantifierTextView.startAnimation(
+                    AnimationUtils.loadAnimation(
+                        tableRow.context,
+                        R.anim.wobble
+                    )
+                )
+                resultTextView.startAnimation(
+                    AnimationUtils.loadAnimation(
+                        tableRow.context,
+                        R.anim.wobble
+                    )
+                )
             }
         }
     }
 
     fun expandTable(
-            activity: Activity,
-            tableLayout: TableLayout,
-            expandQuantifier: Int,
-            expandedList: ArrayList<TableRow>,
-            listener: RowListener
+        activity: Activity,
+        tableLayout: TableLayout,
+        expandQuantifier: Int,
+        expandedList: ArrayList<TableRow>,
+        listener: RowListener
     ) {
         for (index in 1..9) {
-            val tableRow = activity.layoutInflater.inflate(R.layout.cell_row, tableLayout, false) as TableRow
+            val tableRow =
+                activity.layoutInflater.inflate(R.layout.cell_row, tableLayout, false) as TableRow
             tableRow.background = ContextCompat.getDrawable(activity, R.drawable.shape_cell_light)
 
-            tableRow.quantifierTextView.text = calculateExpandQuantifier(expandQuantifier, this.multiplier, index)
-            tableRow.resultTextView.text = calculateExpandResult(expandQuantifier, this.multiplier, index, this.conversionRate)
+            tableRow.quantifierTextView.text =
+                calculateExpandQuantifier(expandQuantifier, this.multiplier, index)
+            tableRow.resultTextView.text =
+                calculateExpandResult(expandQuantifier, this.multiplier, index, this.conversionRate)
 
             tableRow.setOnClickListener { listener.onClick(index) }
             expandedList.add(tableRow)

@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,10 +14,11 @@ import androidx.core.content.edit
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.delacrixmorgan.squark.common.RowListener
-import com.delacrixmorgan.squark.common.SharedPreferenceHelper.BASE_CURRENCY_CODE
-import com.delacrixmorgan.squark.common.SharedPreferenceHelper.MULTIPLIER
-import com.delacrixmorgan.squark.common.SharedPreferenceHelper.MULTIPLIER_ENABLED
-import com.delacrixmorgan.squark.common.SharedPreferenceHelper.QUOTE_CURRENCY_CODE
+import com.delacrixmorgan.squark.common.SharedPreferenceHelper
+import com.delacrixmorgan.squark.common.SharedPreferenceHelper.baseCurrencyCode
+import com.delacrixmorgan.squark.common.SharedPreferenceHelper.multiplier
+import com.delacrixmorgan.squark.common.SharedPreferenceHelper.isMultiplierEnabled
+import com.delacrixmorgan.squark.common.SharedPreferenceHelper.quoteCurrencyCode
 import com.delacrixmorgan.squark.common.getPreferenceCountry
 import com.delacrixmorgan.squark.common.performHapticContextClick
 import com.delacrixmorgan.squark.data.controller.CountryDataController
@@ -56,7 +57,7 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
 
     private val isPersistentMultiplierEnabled: Boolean
         get() {
-            return this.sharedPreferences.getBoolean(MULTIPLIER_ENABLED, true)
+            return this.sharedPreferences.getBoolean(isMultiplierEnabled, true)
         }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -67,7 +68,7 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
         super.onViewCreated(view, savedInstanceState)
 
         if (this.isPersistentMultiplierEnabled) {
-            SquarkEngine.updateMultiplier(this.sharedPreferences.getInt(MULTIPLIER, 1))
+            SquarkEngine.updateMultiplier(this.sharedPreferences.getInt(multiplier, 1))
         }
 
         SquarkEngine.setupTable(
@@ -89,8 +90,8 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
 
         this.swapButton.setOnClickListener {
             this.sharedPreferences.edit {
-                putString(BASE_CURRENCY_CODE, this@CurrencyNavigationFragment.quoteCountry?.code)
-                putString(QUOTE_CURRENCY_CODE, this@CurrencyNavigationFragment.baseCountry?.code)
+                putString(baseCurrencyCode, this@CurrencyNavigationFragment.quoteCountry?.code)
+                putString(quoteCurrencyCode, this@CurrencyNavigationFragment.baseCountry?.code)
             }
 
             this.swapButton.performHapticContextClick()
@@ -103,8 +104,8 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
     private fun updateTable() {
         val context = this.context ?: return
 
-        this.baseCountry = CountryDataController.getPreferenceCountry(context, preferenceCurrency = BASE_CURRENCY_CODE)
-        this.quoteCountry = CountryDataController.getPreferenceCountry(context, preferenceCurrency = QUOTE_CURRENCY_CODE)
+        this.baseCountry = CountryDataController.getPreferenceCountry(context, preferenceCurrency = baseCurrencyCode)
+        this.quoteCountry = CountryDataController.getPreferenceCountry(context, preferenceCurrency = quoteCurrencyCode)
 
         this.baseCurrencyTextView.text = this.baseCountry?.code
         this.quoteCurrencyTextView.text = this.quoteCountry?.code
@@ -121,7 +122,7 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
             REQUEST_BASE_COUNTRY -> {
                 if (resultCode == Activity.RESULT_OK) {
                     val countryCode = data?.getStringExtra(EXTRA_COUNTRY_CODE)
-                    this.sharedPreferences.edit { putString(BASE_CURRENCY_CODE, countryCode) }
+                    this.sharedPreferences.edit { putString(baseCurrencyCode, countryCode) }
 
                     if (this.isExpanded) onRowCollapse()
                     updateTable()
@@ -131,7 +132,7 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
             REQUEST_QUOTE_COUNTRY -> {
                 if (resultCode == Activity.RESULT_OK) {
                     val countryCode = data?.getStringExtra(EXTRA_COUNTRY_CODE)
-                    this.sharedPreferences.edit { putString(QUOTE_CURRENCY_CODE, countryCode) }
+                    this.sharedPreferences.edit { putString(quoteCurrencyCode, countryCode) }
 
                     if (this.isExpanded) onRowCollapse()
                     updateTable()
@@ -177,7 +178,7 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
         if (!this.isExpanded) {
             if (this.isPersistentMultiplierEnabled) {
                 this.sharedPreferences.edit {
-                    putInt(MULTIPLIER, multiplier.toInt())
+                    putInt(SharedPreferenceHelper.multiplier, multiplier.toInt())
                 }
             }
 
@@ -190,7 +191,7 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
         if (!this.isExpanded) {
             if (this.isPersistentMultiplierEnabled) {
                 this.sharedPreferences.edit {
-                    putInt(MULTIPLIER, multiplier.toInt())
+                    putInt(SharedPreferenceHelper.multiplier, multiplier.toInt())
                 }
             }
 

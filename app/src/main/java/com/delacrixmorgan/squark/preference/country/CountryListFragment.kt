@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.SharedPreferences
 import android.os.AsyncTask
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.text.InputType
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
@@ -12,10 +11,11 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.content.edit
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.preference.PreferenceManager
 import com.delacrixmorgan.squark.CurrencyNavigationFragment
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.SharedPreferenceHelper.DEFAULT_UPDATED_TIME_STAMP
-import com.delacrixmorgan.squark.common.SharedPreferenceHelper.UPDATED_TIME_STAMP
+import com.delacrixmorgan.squark.common.SharedPreferenceHelper.updatedTimeStamp
 import com.delacrixmorgan.squark.common.compatColor
 import com.delacrixmorgan.squark.common.getFilteredCountries
 import com.delacrixmorgan.squark.common.performHapticContextClick
@@ -30,14 +30,6 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_country_list.*
 import java.util.*
-
-/**
- * CountryListFragment
- * squark-android
- *
- * Created by Delacrix Morgan on 01/05/2018.
- * Copyright (c) 2018 licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
- */
 
 class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionExpandListener {
     companion object {
@@ -82,7 +74,7 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
         super.onViewCreated(view, savedInstanceState)
         val activity = this.activity as AppCompatActivity
 
-        activity.setSupportActionBar(this.toolbar)
+        activity.setSupportActionBar(toolbar)
         activity.supportActionBar?.let {
             it.setDisplayHomeAsUpEnabled(true)
             it.setHomeButtonEnabled(true)
@@ -103,7 +95,7 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
     }
 
     private fun checkIsDataUpdated() {
-        val timeStamp = this.sharedPreferences.getLong(UPDATED_TIME_STAMP, DEFAULT_UPDATED_TIME_STAMP)
+        val timeStamp = this.sharedPreferences.getLong(updatedTimeStamp, DEFAULT_UPDATED_TIME_STAMP)
         val currentTimeStamp = Date().time
 
         if (currentTimeStamp - timeStamp > MILLISECONDS_IN_A_DAY) {
@@ -159,7 +151,7 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
             this.activity?.runOnUiThread {
                 if (this.isVisible) {
                     val currentTimeStamp = Date().time
-                    this.sharedPreferences.edit { putLong(UPDATED_TIME_STAMP, currentTimeStamp) }
+                    this.sharedPreferences.edit { putLong(updatedTimeStamp, currentTimeStamp) }
                     Snackbar.make(this.mainContainer, getString(R.string.fragment_country_list_title_updated), Snackbar.LENGTH_SHORT).show()
                 }
             }
@@ -193,11 +185,11 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
         activity.finish()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater?.inflate(R.menu.menu_search, menu)
+        inflater.inflate(R.menu.menu_search, menu)
 
-        this.searchMenuItem = menu?.findItem(R.id.actionSearch)
+        this.searchMenuItem = menu.findItem(R.id.actionSearch)
         this.searchMenuItem?.setOnActionExpandListener(this)
 
         this.searchView = this.searchMenuItem?.actionView as? SearchView

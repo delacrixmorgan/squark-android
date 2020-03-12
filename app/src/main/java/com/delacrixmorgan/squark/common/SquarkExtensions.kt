@@ -5,26 +5,19 @@ import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
-import android.preference.PreferenceManager
 import android.view.HapticFeedbackConstants
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.preference.PreferenceManager
 import com.delacrixmorgan.squark.R
-import com.delacrixmorgan.squark.common.SharedPreferenceHelper.BASE_CURRENCY_CODE
 import com.delacrixmorgan.squark.common.SharedPreferenceHelper.DEFAULT_BASE_CURRENCY_CODE
 import com.delacrixmorgan.squark.common.SharedPreferenceHelper.DEFAULT_QUOTE_CURRENCY_CODE
+import com.delacrixmorgan.squark.common.SharedPreferenceHelper.baseCurrencyCode
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.model.Country
 import java.math.BigDecimal
-
-/**
- * SquarkExtensions
- * squark-android
- *
- * Created by Delacrix Morgan on 21/11/2018.
- * Copyright (c) 2018 licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
- */
+import kotlin.math.roundToInt
 
 fun View.performHapticContextClick() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -34,7 +27,7 @@ fun View.performHapticContextClick() {
     }
 }
 
-fun Float.roundUp() = Math.round(this * 10F) / 10F
+fun Float.roundUp() = (this * 10F).roundToInt() / 10F
 
 fun Int.compatColor(context: Context?): Int {
     return if (context == null) {
@@ -55,7 +48,7 @@ fun Fragment.launchWebsite(url: String) {
 val Context.isConnected: Boolean
     get() {
         return (getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
-                .activeNetworkInfo?.isConnected == true
+            .activeNetworkInfo?.isConnected == true
     }
 
 fun Context.launchPlayStore(packageName: String) {
@@ -72,21 +65,31 @@ fun Context.shareAppIntent(message: String) {
     intent.type = "text/plain"
     intent.putExtra(Intent.EXTRA_TEXT, message)
 
-    startActivity(Intent.createChooser(intent, getString(R.string.fragment_support_settings_list_share)))
+    startActivity(
+        Intent.createChooser(
+            intent,
+            getString(R.string.fragment_support_settings_list_share)
+        )
+    )
 }
 //endregion
 
 //region CountryDataController
-fun CountryDataController.getPreferenceCountry(context: Context, preferenceCurrency: String): Country? {
+fun CountryDataController.getPreferenceCountry(
+    context: Context,
+    preferenceCurrency: String
+): Country? {
     val preferenceManager = PreferenceManager.getDefaultSharedPreferences(context)
-    val fallbackCurrency = if (preferenceCurrency == BASE_CURRENCY_CODE) DEFAULT_BASE_CURRENCY_CODE else DEFAULT_QUOTE_CURRENCY_CODE
-    
+    val fallbackCurrency =
+        if (preferenceCurrency == baseCurrencyCode) DEFAULT_BASE_CURRENCY_CODE else DEFAULT_QUOTE_CURRENCY_CODE
+
     return getCountries().firstOrNull {
         it.code == preferenceManager.getString(preferenceCurrency, fallbackCurrency)
     }
 }
 
-fun CountryDataController.getFilteredCountries(searchText: String?
+fun CountryDataController.getFilteredCountries(
+    searchText: String?
 ) = if (searchText.isNullOrBlank()) {
     getCountries()
 } else {
@@ -120,7 +123,12 @@ fun calculateExpandQuantifier(expandQuantifier: Int, multiplier: Double, positio
     return getNumberFormatType(bigDecimal)
 }
 
-fun calculateExpandResult(expandQuantifier: Int, multiplier: Double, position: Int, conversionRate: Double): String {
+fun calculateExpandResult(
+    expandQuantifier: Int,
+    multiplier: Double,
+    position: Int,
+    conversionRate: Double
+): String {
     val quantifier = (expandQuantifier + 1) * multiplier + (multiplier / 10 * position)
     val result = quantifier * conversionRate
     val bigDecimal = BigDecimal(result).setScale(2, BigDecimal.ROUND_HALF_UP)
@@ -131,10 +139,26 @@ fun calculateExpandResult(expandQuantifier: Int, multiplier: Double, position: I
 fun getNumberFormatType(bigDecimal: BigDecimal): String {
     val roundedBigDecimal = bigDecimal.setScale(0, BigDecimal.ROUND_HALF_UP).precision()
     return when {
-        roundedBigDecimal >= 16 -> NumberFormatTypes.QUADRILLIONTH.decimal.format(bigDecimal.movePointLeft(15))
-        roundedBigDecimal >= 13 -> NumberFormatTypes.TRILLIONTH.decimal.format(bigDecimal.movePointLeft(12))
-        roundedBigDecimal >= 10 -> NumberFormatTypes.BILLIONTH.decimal.format(bigDecimal.movePointLeft(9))
-        roundedBigDecimal >= 7 -> NumberFormatTypes.MILLIONTH.decimal.format(bigDecimal.movePointLeft(6))
+        roundedBigDecimal >= 16 -> NumberFormatTypes.QUADRILLIONTH.decimal.format(
+            bigDecimal.movePointLeft(
+                15
+            )
+        )
+        roundedBigDecimal >= 13 -> NumberFormatTypes.TRILLIONTH.decimal.format(
+            bigDecimal.movePointLeft(
+                12
+            )
+        )
+        roundedBigDecimal >= 10 -> NumberFormatTypes.BILLIONTH.decimal.format(
+            bigDecimal.movePointLeft(
+                9
+            )
+        )
+        roundedBigDecimal >= 7 -> NumberFormatTypes.MILLIONTH.decimal.format(
+            bigDecimal.movePointLeft(
+                6
+            )
+        )
         else -> NumberFormatTypes.HUNDREDTH.decimal.format(bigDecimal)
     }
 }
