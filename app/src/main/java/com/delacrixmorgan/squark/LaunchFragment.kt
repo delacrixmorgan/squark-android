@@ -11,7 +11,7 @@ import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.delacrixmorgan.squark.common.SharedPreferenceHelper.updatedTimeStamp
-import com.delacrixmorgan.squark.common.isConnected
+import com.delacrixmorgan.squark.common.isNetworkAvailable
 import com.delacrixmorgan.squark.data.api.SquarkApiService
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.controller.CountryDatabase
@@ -24,14 +24,6 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_launch.*
 import java.util.*
-
-/**
- * LaunchFragment
- * squark-android
- *
- * Created by Delacrix Morgan on 10/06/2019.
- * Copyright (c) 2019 licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
- */
 
 class LaunchFragment : Fragment() {
 
@@ -56,7 +48,7 @@ class LaunchFragment : Fragment() {
 
     private fun fetchCurrencyData() {
         AsyncTask.execute {
-            if (requireContext().isConnected) {
+            if (requireContext().isNetworkAvailable) {
                 val countryData = this.countryDatabase?.countryDataDao()?.getCountries() ?: listOf()
                 if (countryData.isEmpty()) {
                     initCurrencies()
