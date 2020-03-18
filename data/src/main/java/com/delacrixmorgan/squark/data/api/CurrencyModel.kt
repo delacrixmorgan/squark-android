@@ -3,14 +3,6 @@ package com.delacrixmorgan.squark.data.api
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-/**
- * CurrencyModel
- * squark-android
- *
- * Created by Delacrix Morgan on 15/05/2018.
- * Copyright (c) 2018 licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
- */
-
 object CurrencyModel {
     data class Result(
         @SerializedName("terms")

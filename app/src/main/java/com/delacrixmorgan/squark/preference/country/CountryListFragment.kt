@@ -19,7 +19,7 @@ import com.delacrixmorgan.squark.common.SharedPreferenceHelper.updatedTimeStamp
 import com.delacrixmorgan.squark.common.compatColor
 import com.delacrixmorgan.squark.common.getFilteredCountries
 import com.delacrixmorgan.squark.common.performHapticContextClick
-import com.delacrixmorgan.squark.data.api.SquarkApiService
+import com.delacrixmorgan.squark.data.api.SquarkServiceClient
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.controller.CountryDatabase
 import com.delacrixmorgan.squark.data.model.Country
@@ -107,29 +107,29 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
     }
 
     private fun updateCurrencyRates() {
-        AsyncTask.execute {
-            val countries = this.database?.countryDataDao()?.getCountries() ?: arrayListOf()
-            if (countries.isNotEmpty()) {
-                this.disposable = SquarkApiService
-                        .create(requireActivity())
-                        .getCurrencies()
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({ result ->
-                            val currencies = result.quotes.map {
-                                Currency(code = it.key, rate = it.value)
-                            }
-
-                            if (currencies.isNotEmpty()) {
-                                updateCurrencies(countries = countries, currencies = currencies)
-                            }
-                            this.swipeRefreshLayout.isRefreshing = false
-                        }, {
-                            Snackbar.make(this.mainContainer, getString(R.string.error_api_countries), Snackbar.LENGTH_SHORT).show()
-                            this.swipeRefreshLayout.isRefreshing = false
-                        })
-            }
-        }
+//        AsyncTask.execute {
+//            val countries = this.database?.countryDataDao()?.getCountries() ?: arrayListOf()
+//            if (countries.isNotEmpty()) {
+//                this.disposable = SquarkServiceClient
+//                        .create(requireActivity())
+//                        .getCurrencies()
+//                        .subscribeOn(Schedulers.io())
+//                        .observeOn(AndroidSchedulers.mainThread())
+//                        .subscribe({ result ->
+//                            val currencies = result.quotes.map {
+//                                Currency(code = it.key, rate = it.value)
+//                            }
+//
+//                            if (currencies.isNotEmpty()) {
+//                                updateCurrencies(countries = countries, currencies = currencies)
+//                            }
+//                            this.swipeRefreshLayout.isRefreshing = false
+//                        }, {
+//                            Snackbar.make(this.mainContainer, getString(R.string.error_api_countries), Snackbar.LENGTH_SHORT).show()
+//                            this.swipeRefreshLayout.isRefreshing = false
+//                        })
+//            }
+//        }
     }
 
     private fun updateCurrencies(countries: List<Country>, currencies: List<Currency>) {

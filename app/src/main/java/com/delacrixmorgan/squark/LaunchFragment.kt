@@ -12,7 +12,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.delacrixmorgan.squark.common.SharedPreferenceHelper.updatedTimeStamp
 import com.delacrixmorgan.squark.common.isNetworkAvailable
-import com.delacrixmorgan.squark.data.api.SquarkApiService
+import com.delacrixmorgan.squark.data.api.SquarkService
+import com.delacrixmorgan.squark.data.api.SquarkServiceClient
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.controller.CountryDatabase
 import com.delacrixmorgan.squark.data.getJsonMap
@@ -62,22 +63,23 @@ class LaunchFragment : Fragment() {
     }
 
     private fun initCurrencies() {
-        this.disposable = SquarkApiService
-                .create(requireContext())
-                .getCurrencies()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ result ->
-                    this.currencies = result.quotes.map { Currency(code = it.key, rate = it.value) }
-                    if (this.currencies.isNotEmpty()) {
-                        insertCountries()
-                    } else {
-                        fallbackCurrencies()
-                    }
-                }, {
-                    Snackbar.make(this.mainContainer, "${it.message}", Snackbar.LENGTH_SHORT).show()
-                    fallbackCurrencies()
-                })
+        fallbackCurrencies()
+//        this.disposable = SquarkServiceClient
+//                .create(requireContext())
+//                .getCurrencies()
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe({ result ->
+//                    this.currencies = result.quotes.map { Currency(code = it.key, rate = it.value) }
+//                    if (this.currencies.isNotEmpty()) {
+//                        insertCountries()
+//                    } else {
+//                        fallbackCurrencies()
+//                    }
+//                }, {
+//                    Snackbar.make(this.mainContainer, "${it.message}", Snackbar.LENGTH_SHORT).show()
+//                    fallbackCurrencies()
+//                })
     }
 
     private fun insertCountries() {
