@@ -2,8 +2,6 @@ package com.delacrixmorgan.squark.common
 
 import android.content.Context
 import android.content.Intent
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Build
 import android.view.HapticFeedbackConstants
@@ -17,9 +15,10 @@ import com.delacrixmorgan.squark.common.SharedPreferenceHelper.DEFAULT_QUOTE_CUR
 import com.delacrixmorgan.squark.common.SharedPreferenceHelper.baseCurrencyCode
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.model.Country
+import org.json.JSONObject
+import java.io.BufferedReader
 import java.math.BigDecimal
 import kotlin.math.roundToInt
-
 
 fun View.performHapticContextClick() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -55,26 +54,6 @@ inline fun <T, R> T?.guard(block: () -> R): T {
 }
 
 //region Context
-val Context.isNetworkAvailable: Boolean
-    get() {
-        val connectivityManager = getSystemService(
-            Context.CONNECTIVITY_SERVICE
-        ) as ConnectivityManager
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val network = connectivityManager.activeNetwork ?: return false
-            val networkCapabilities = connectivityManager.getNetworkCapabilities(
-                network
-            ) ?: return false
-
-            return networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || networkCapabilities.hasTransport(
-                NetworkCapabilities.TRANSPORT_CELLULAR
-            )
-        } else {
-            return connectivityManager.activeNetworkInfo?.isConnected == true
-        }
-    }
-
 fun Context.launchPlayStore(packageName: String) {
     val url = "https://play.google.com/store/apps/details?id=$packageName"
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
@@ -187,3 +166,17 @@ fun getNumberFormatType(bigDecimal: BigDecimal): String {
     }
 }
 //endregion
+
+fun Context.getJsonMap(rawFile: Int, key: String): Map<String, String> {
+    val inputStream = resources.openRawResource(rawFile)
+    val responseObject = inputStream.bufferedReader().use(BufferedReader::readText)
+
+    val map = HashMap<String, String>()
+    val jsonObject = JSONObject(responseObject).optJSONObject(key)
+
+    jsonObject?.keys()?.forEach {
+        map[it] = "${jsonObject[it]}"
+    }
+
+    return map
+}

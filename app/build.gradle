@@ -42,7 +42,6 @@ android {
 }
 
 dependencies {
-    implementation project(':data')
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
@@ -66,11 +65,21 @@ dependencies {
 
     implementation "androidx.preference:preference-ktx:1.1.0"
     implementation "androidx.navigation:navigation-ui-ktx:2.2.1"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0"
     implementation "androidx.navigation:navigation-fragment-ktx:2.2.1"
 
     implementation "org.parceler:parceler-api:1.1.12"
     implementation "io.reactivex.rxjava2:rxandroid:2.0.1"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+
+    api "com.squareup.retrofit2:adapter-rxjava2:2.3.0"
+    api "com.squareup.retrofit2:converter-gson:2.6.2"
+    api "com.squareup.retrofit2:retrofit:2.6.2"
+
+    api 'androidx.room:room-runtime:2.2.4'
+    api 'androidx.room:room-rxjava2:2.2.4'
+
+    kapt 'androidx.room:room-compiler:2.2.4'
 
     annotationProcessor "org.parceler:parceler:1.1.12"
 }

@@ -1,4 +1,4 @@
-package com.delacrixmorgan.squark.data.api
+package com.delacrixmorgan.squark.data.model
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
@@ -23,5 +23,8 @@ object CurrencyModel {
         @SerializedName("quotes")
         @Expose
         val quotes: Map<String, Double>
-    )
+    ) {
+        val currencies: List<Currency>
+            get() = quotes.map { Currency(code = it.key, rate = it.value) }
+    }
 }

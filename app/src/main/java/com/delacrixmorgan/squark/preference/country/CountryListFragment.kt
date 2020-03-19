@@ -19,15 +19,12 @@ import com.delacrixmorgan.squark.common.SharedPreferenceHelper.updatedTimeStamp
 import com.delacrixmorgan.squark.common.compatColor
 import com.delacrixmorgan.squark.common.getFilteredCountries
 import com.delacrixmorgan.squark.common.performHapticContextClick
-import com.delacrixmorgan.squark.data.api.SquarkServiceClient
 import com.delacrixmorgan.squark.data.controller.CountryDataController
-import com.delacrixmorgan.squark.data.controller.CountryDatabase
+import com.delacrixmorgan.squark.data.dao.CountryDatabase
 import com.delacrixmorgan.squark.data.model.Country
 import com.delacrixmorgan.squark.data.model.Currency
 import com.google.android.material.snackbar.Snackbar
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_country_list.*
 import java.util.*
 
@@ -63,10 +60,14 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
 
         this.database = CountryDatabase.getInstance(requireContext())
         this.countryCode = this.arguments?.getString(ARG_BELONGS_TO_COUNTRY_CODE)
-                ?: DEFAULT_COUNTRY_CODE
+            ?: DEFAULT_COUNTRY_CODE
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_country_list, container, false)
     }
 
@@ -84,7 +85,10 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
         this.countryAdapter = CountryRecyclerViewAdapter(listener = this)
         this.countryRecyclerView.adapter = this.countryAdapter
 
-        this.swipeRefreshLayout.setColorSchemeColors(R.color.colorAccent.compatColor(this.context), R.color.colorPrimary.compatColor(this.context))
+        this.swipeRefreshLayout.setColorSchemeColors(
+            R.color.colorAccent.compatColor(this.context),
+            R.color.colorPrimary.compatColor(this.context)
+        )
 
         this.swipeRefreshLayout.setOnRefreshListener {
             this.swipeRefreshLayout.performHapticContextClick()
@@ -101,7 +105,11 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
         if (currentTimeStamp - timeStamp > MILLISECONDS_IN_A_DAY) {
             updateCurrencyRates()
         } else {
-            Snackbar.make(this.mainContainer, getString(R.string.fragment_country_list_title_everything_already_updated), Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(
+                this.mainContainer,
+                getString(R.string.fragment_country_list_title_everything_already_updated),
+                Snackbar.LENGTH_SHORT
+            ).show()
             this.swipeRefreshLayout.isRefreshing = false
         }
     }
@@ -152,14 +160,19 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
                 if (this.isVisible) {
                     val currentTimeStamp = Date().time
                     this.sharedPreferences.edit { putLong(updatedTimeStamp, currentTimeStamp) }
-                    Snackbar.make(this.mainContainer, getString(R.string.fragment_country_list_title_updated), Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(
+                        this.mainContainer,
+                        getString(R.string.fragment_country_list_title_updated),
+                        Snackbar.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
     }
 
     private fun updateDataSet(searchText: String? = null, searchMode: Boolean = false) {
-        val filterCountries = CountryDataController.getFilteredCountries(searchText) as MutableList<Country>
+        val filterCountries =
+            CountryDataController.getFilteredCountries(searchText) as MutableList<Country>
         val selectedCountry = filterCountries.firstOrNull { it.code == this.countryCode }
 
         selectedCountry?.let { country ->
@@ -171,7 +184,8 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
         this.countryAdapter.updateDataSet(filterCountries, searchMode)
 
         if (this.isVisible) {
-            this.emptyStateViewGroup.visibility = if (filterCountries.isEmpty()) View.VISIBLE else View.GONE
+            this.emptyStateViewGroup.visibility =
+                if (filterCountries.isEmpty()) View.VISIBLE else View.GONE
         }
     }
 
