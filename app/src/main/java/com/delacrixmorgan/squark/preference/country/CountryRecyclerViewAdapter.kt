@@ -7,9 +7,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.data.model.Country
 import kotlinx.android.synthetic.main.cell_country.view.*
+import me.zhanghai.android.fastscroll.PopupTextProvider
 
 class CountryRecyclerViewAdapter(private val listener: CountryListListener) :
-    RecyclerView.Adapter<CountryRecyclerViewAdapter.CountryViewHolder>() {
+    RecyclerView.Adapter<CountryRecyclerViewAdapter.CountryViewHolder>(), PopupTextProvider {
 
     private var countries: List<Country> = ArrayList()
     private var isSearchMode = false
@@ -32,6 +33,14 @@ class CountryRecyclerViewAdapter(private val listener: CountryListListener) :
         this.countries = countries
         this.isSearchMode = searchMode
         notifyDataSetChanged()
+    }
+
+    override fun getPopupText(position: Int): String {
+        return if (position == 0) {
+            countries[position + 1].code[0].toString()
+        } else {
+            countries[position].code[0].toString()
+        }
     }
 
     class CountryViewHolder(itemView: View, private val listener: CountryListListener) :

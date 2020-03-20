@@ -28,6 +28,7 @@ import com.google.android.material.snackbar.Snackbar
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.fragment_country_list.*
 import kotlinx.coroutines.launch
+import me.zhanghai.android.fastscroll.FastScrollerBuilder
 import java.util.*
 
 class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionExpandListener {
@@ -50,7 +51,10 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
     private var searchMenuItem: MenuItem? = null
 
     private lateinit var countryCode: String
-    private lateinit var countryAdapter: CountryRecyclerViewAdapter
+
+    private val countryAdapter: CountryRecyclerViewAdapter by lazy {
+        CountryRecyclerViewAdapter(listener = this)
+    }
 
     private val sharedPreferences: SharedPreferences by lazy {
         PreferenceManager.getDefaultSharedPreferences(requireContext())
@@ -84,16 +88,19 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
             it.title = ""
         }
 
-        this.countryAdapter = CountryRecyclerViewAdapter(listener = this)
-        this.countryRecyclerView.adapter = this.countryAdapter
+        countryRecyclerView.adapter = countryAdapter
 
-        this.swipeRefreshLayout.setColorSchemeColors(
-            R.color.colorAccent.compatColor(this.context),
-            R.color.colorPrimary.compatColor(this.context)
+        FastScrollerBuilder(countryRecyclerView)
+            .setPadding(0, 12, 0, 12)
+            .build()
+
+        swipeRefreshLayout.setColorSchemeColors(
+            R.color.colorAccent.compatColor(context),
+            R.color.colorPrimary.compatColor(context)
         )
 
-        this.swipeRefreshLayout.setOnRefreshListener {
-            this.swipeRefreshLayout.performHapticContextClick()
+        swipeRefreshLayout.setOnRefreshListener {
+            swipeRefreshLayout.performHapticContextClick()
             checkIsDataUpdated()
         }
 
