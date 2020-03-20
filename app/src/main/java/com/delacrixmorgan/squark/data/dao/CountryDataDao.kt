@@ -6,14 +6,14 @@ import com.delacrixmorgan.squark.data.model.Country
 @Dao
 interface CountryDataDao {
     @Query("SELECT * from Country")
-    fun getCountries(): List<Country>
+    suspend fun getCountries(): List<Country>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertCountry(country: Country)
+    suspend fun insertCountry(country: Country)
 
     @Update(onConflict = OnConflictStrategy.IGNORE)
-    fun updateCountry(country: Country)
+    suspend fun updateCountry(country: Country)
 
     @Query("DELETE from Country")
-    fun deleteCountries()
+    suspend fun deleteCountries()
 }

@@ -11,6 +11,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.content.edit
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import com.delacrixmorgan.squark.CurrencyNavigationFragment
 import com.delacrixmorgan.squark.R
@@ -26,6 +27,7 @@ import com.delacrixmorgan.squark.data.model.Currency
 import com.google.android.material.snackbar.Snackbar
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.fragment_country_list.*
+import kotlinx.coroutines.launch
 import java.util.*
 
 class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionExpandListener {
@@ -148,9 +150,11 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
                         it.code.contains(country.code)
                     }
 
-                    updateCurrency?.let {
-                        country.rate = it.rate
-                        this.database?.countryDataDao()?.updateCountry(country)
+                    lifecycleScope.launch {
+                        updateCurrency?.let {
+                            country.rate = it.rate
+                            database?.countryDataDao()?.updateCountry(country)
+                        }
                     }
                 }
             }

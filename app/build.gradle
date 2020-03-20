@@ -50,9 +50,10 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.4'
-
+    testImplementation "androidx.room:room-testing:2.2.5"
     testImplementation 'junit:junit:4.12'
 
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     implementation "com.google.firebase:firebase-core:17.2.3"
     implementation "com.google.firebase:firebase-perf:19.0.5"
     implementation "com.google.android.material:material:1.1.0"
@@ -70,18 +71,18 @@ dependencies {
 
     implementation "org.parceler:parceler-api:1.1.12"
     implementation "io.reactivex.rxjava2:rxandroid:2.0.1"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
 
     api "com.squareup.retrofit2:adapter-rxjava2:2.3.0"
     api "com.squareup.retrofit2:converter-gson:2.6.2"
     api "com.squareup.retrofit2:retrofit:2.6.2"
 
-    api 'androidx.room:room-runtime:2.2.4'
-    api 'androidx.room:room-rxjava2:2.2.4'
+    implementation "androidx.room:room-runtime:2.2.5"
+    implementation 'androidx.room:room-ktx:2.2.5'
 
-    kapt 'androidx.room:room-compiler:2.2.4'
-
-    annotationProcessor "org.parceler:parceler:1.1.12"
+    kapt 'androidx.room:room-ktx:2.2.5'
+    kapt 'androidx.room:room-runtime:2.2.5'
+    kapt 'androidx.room:room-compiler:2.2.5'
+    kapt "org.parceler:parceler:1.1.12"
 }
 
 apply plugin: 'com.google.gms.google-services'

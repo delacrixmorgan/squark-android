@@ -25,7 +25,7 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 class LaunchFragment : Fragment() {
-    private lateinit var countryDatabaseDao: CountryDataDao
+    private var countryDatabaseDao: CountryDataDao? = null
 
     private val sharedPreferences: SharedPreferences by lazy {
         PreferenceManager.getDefaultSharedPreferences(requireContext())
@@ -41,12 +41,15 @@ class LaunchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        countryDatabaseDao = CountryDatabase.getInstance(requireContext())?.countryDataDao() ?: throw Exception()
-
-        if (!countryDatabaseDao.getCountries().isNullOrEmpty()) {
-            launchCurrencyNavigationFragment()
-        } else {
-            fetchCountries()
+        lifecycleScope.launch {
+            countryDatabaseDao = CountryDatabase.getInstance(requireContext())?.countryDataDao()
+            val countries = countryDatabaseDao?.getCountries()
+            if (!countries.isNullOrEmpty()) {
+                CountryDataController.updateDataSet(countries)
+                launchCurrencyNavigationFragment()
+            } else {
+                fetchCountries()
+            }
         }
     }
 
@@ -83,7 +86,7 @@ class LaunchFragment : Fragment() {
             .map { Currency(code = it.key, rate = it.value.toDouble()) }
     }
 
-    private fun addCountryDatabase(currencies: List<Currency>) {
+    private suspend fun addCountryDatabase(currencies: List<Currency>) {
         val countries = CountryDataController.countryMap.mapNotNull { country ->
             val currency = currencies.firstOrNull { it.code == "USD${country.key}" }
             Country(code = country.key, name = country.value, rate = currency?.rate ?: 0.0)
