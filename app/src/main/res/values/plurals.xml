@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="number_of_currencies">
+        <item quantity="one">%d Available Currency</item>
+        <item quantity="other">%d Available Currencies</item>
+    </plurals>
+</resources>

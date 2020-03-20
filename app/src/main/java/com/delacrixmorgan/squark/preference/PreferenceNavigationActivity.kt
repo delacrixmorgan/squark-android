@@ -46,17 +46,17 @@ class PreferenceNavigationActivity : AppCompatActivity(),
         val existingFragment =
             this.supportFragmentManager.findFragmentById(this.contentContainer.id)
         val targetFragment: Fragment = when (menuItem.itemId) {
-            R.id.itemCountries -> CountryListFragment.newInstance(this.countryCode)
-            R.id.itemSupport -> SupportListFragment.newInstance()
-            R.id.itemSettings -> SettingsListFragment.newInstance()
-            else -> CountryListFragment.newInstance()
+            R.id.itemCountries -> CountryListFragment.create(this.countryCode)
+            R.id.itemSupport -> SupportListFragment.create()
+            R.id.itemSettings -> SettingsListFragment.create()
+            else -> CountryListFragment.create()
         }
 
         if (existingFragment != null && existingFragment::class.java == targetFragment::class.java) {
             return true
         }
 
-        this.supportFragmentManager.commit(allowStateLoss = true) {
+        supportFragmentManager.commit(allowStateLoss = true) {
             replace(this@PreferenceNavigationActivity.contentContainer.id, targetFragment)
         }
 

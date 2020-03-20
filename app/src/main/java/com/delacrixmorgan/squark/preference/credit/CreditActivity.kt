@@ -16,8 +16,8 @@ class CreditActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_credit)
 
-        val fragment = CreditListFragment.newInstance()
-        this.supportFragmentManager.commit {
+        val fragment = CreditListFragment.create()
+        supportFragmentManager.commit {
             replace(R.id.contentContainer, fragment)
         }
     }

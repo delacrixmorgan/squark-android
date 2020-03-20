@@ -11,20 +11,12 @@ import com.delacrixmorgan.squark.common.launchPlayStore
 import com.delacrixmorgan.squark.common.performHapticContextClick
 import kotlinx.android.synthetic.main.fragment_support_list.*
 
-/**
- * SupportListFragment
- * squark-android
- *
- * Created by Delacrix Morgan on 17/11/2018.
- * Copyright (c) 2018 licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
- */
-
 class SupportListFragment : Fragment() {
     companion object {
         private const val KINGS_CUP_PACKAGE_NAME = "com.delacrixmorgan.kingscup"
         private const val MAMIKA_PACKAGE_NAME = "com.delacrixmorgan.mamika"
 
-        fun newInstance() = SupportListFragment()
+        fun create() = SupportListFragment()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

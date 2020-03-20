@@ -3,11 +3,14 @@ package com.delacrixmorgan.squark.preference.country
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.data.model.Country
 import kotlinx.android.synthetic.main.cell_country.view.*
 import me.zhanghai.android.fastscroll.PopupTextProvider
+import java.util.*
+import kotlin.collections.ArrayList
 
 class CountryRecyclerViewAdapter(private val listener: CountryListListener) :
     RecyclerView.Adapter<CountryRecyclerViewAdapter.CountryViewHolder>(), PopupTextProvider {
@@ -24,14 +27,14 @@ class CountryRecyclerViewAdapter(private val listener: CountryListListener) :
 
     override fun onBindViewHolder(holder: CountryViewHolder, position: Int) {
         val country = countries[position]
-        holder.updateData(country, position, this.countries.size, this.isSearchMode)
+        holder.bind(country, position, countries.size, isSearchMode)
     }
 
-    override fun getItemCount() = this.countries.size
+    override fun getItemCount() = countries.size
 
     fun updateDataSet(countries: List<Country>, searchMode: Boolean) {
         this.countries = countries
-        this.isSearchMode = searchMode
+        isSearchMode = searchMode
         notifyDataSetChanged()
     }
 
@@ -45,59 +48,52 @@ class CountryRecyclerViewAdapter(private val listener: CountryListListener) :
 
     class CountryViewHolder(itemView: View, private val listener: CountryListListener) :
         RecyclerView.ViewHolder(itemView) {
-        private lateinit var country: Country
 
-        init {
-            this.itemView.cellViewGroup.setOnClickListener {
-                this.listener.onCountrySelected(this.country)
-            }
-        }
-
-        fun updateData(country: Country, position: Int, size: Int, searchMode: Boolean) {
-            this.country = country
-
-            this.itemView.context.let {
-                val flagResource = it.resources.getIdentifier(
-                    "ic_flag_${this.country.code.toLowerCase()}",
-                    "drawable",
-                    it.packageName
-                )
-                val fallbackFlagResource =
-                    it.resources.getIdentifier("ic_flag_un", "drawable", it.packageName)
-
-                if (flagResource != 0) {
-                    this.itemView.flagImageView.setImageResource(flagResource)
-                } else {
-                    this.itemView.flagImageView.setImageResource(fallbackFlagResource)
-                }
-            }
-
-            this.itemView.codeTextView.text = this.country.code
-            this.itemView.descriptionTextView.text = this.country.name
+        fun bind(country: Country, position: Int, size: Int, searchMode: Boolean) = with(itemView) {
+            codeTextView.text = country.code
+            descriptionTextView.text = country.name
+            flagImageView.setImageResource(getFlagResource(country))
 
             when (position) {
                 0 -> {
-                    this.itemView.headerTextView.text =
-                        this.itemView.context.getString(R.string.fragment_country_list_title_header_selected_currency)
-                    this.itemView.headerTextView.visibility = View.VISIBLE
+                    headerTextView.text = context.getString(
+                        R.string.fragment_country_list_title_header_selected_currency
+                    )
+                    headerTextView.isVisible = true
                 }
 
                 1 -> {
-                    this.itemView.headerTextView.text = this.itemView.context.getString(
-                        R.string.fragment_country_list_title_header_available_currencies,
+                    headerTextView.text = context.resources.getQuantityString(
+                        R.plurals.number_of_currencies,
+                        size,
                         size
                     )
-                    this.itemView.headerTextView.visibility = View.VISIBLE
+                    headerTextView.isVisible = true
                 }
 
-                else -> {
-                    this.itemView.headerTextView.visibility = View.GONE
-                }
+                else -> headerTextView.isVisible = false
             }
 
             if (searchMode) {
-                this.itemView.headerTextView.visibility = View.GONE
+                headerTextView.isVisible = false
             }
+
+            cellViewGroup.setOnClickListener {
+                listener.onCountrySelected(country)
+            }
+        }
+
+        private fun getFlagResource(country: Country): Int {
+            val flagResource = itemView.context.resources.getIdentifier(
+                "ic_flag_${country.code.toLowerCase(Locale.US)}",
+                "drawable",
+                itemView.context.packageName
+            )
+            val fallbackFlagResource = itemView.context.resources.getIdentifier(
+                "ic_flag_un", "drawable", itemView.context.packageName
+            )
+
+            return if (flagResource != 0) flagResource else fallbackFlagResource
         }
     }
 }

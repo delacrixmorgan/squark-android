@@ -24,7 +24,7 @@ class SettingsListFragment : Fragment() {
     companion object {
         private const val SOURCE_CODE_URL = "https://github.com/delacrixmorgan/squark-android"
 
-        fun newInstance() = SettingsListFragment()
+        fun create() = SettingsListFragment()
     }
 
     private val sharedPreferences: SharedPreferences by lazy {
