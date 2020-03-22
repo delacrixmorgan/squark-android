@@ -1,4 +1,4 @@
-package com.delacrixmorgan.squark
+package com.delacrixmorgan.squark.ui
 
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -10,10 +10,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.preference.PreferenceManager
+import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.SharedPreferenceHelper.updatedTimeStamp
 import com.delacrixmorgan.squark.common.getJsonMap
 import com.delacrixmorgan.squark.data.api.SquarkResult
-import com.delacrixmorgan.squark.data.api.SquarkService
+import com.delacrixmorgan.squark.data.service.SquarkService
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.dao.CountryDataDao
 import com.delacrixmorgan.squark.data.dao.CountryDatabase
@@ -101,6 +102,6 @@ class LaunchFragment : Fragment() {
 
     private fun launchCurrencyNavigationFragment() {
         val action = LaunchFragmentDirections.actionLaunchFragmentToCurrencyNavigationFragment()
-        Navigation.findNavController(this.rootView).navigate(action)
+        Navigation.findNavController(rootView).navigate(action)
     }
 }

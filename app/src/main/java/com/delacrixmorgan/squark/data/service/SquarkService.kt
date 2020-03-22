@@ -1,7 +1,10 @@
-package com.delacrixmorgan.squark.data.api
+package com.delacrixmorgan.squark.data.service
 
 import com.delacrixmorgan.squark.App
 import com.delacrixmorgan.squark.R
+import com.delacrixmorgan.squark.data.api.NetworkController
+import com.delacrixmorgan.squark.data.api.SquarkResult
+import com.delacrixmorgan.squark.data.api.SquarkServiceClient
 import com.delacrixmorgan.squark.data.model.CurrencyModel
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory

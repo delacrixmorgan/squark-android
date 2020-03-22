@@ -1,4 +1,4 @@
-package com.delacrixmorgan.squark.preference.credit
+package com.delacrixmorgan.squark.ui.preference.credit
 
 import android.content.Context
 import android.content.Intent

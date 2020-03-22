@@ -1,4 +1,4 @@
-package com.delacrixmorgan.squark.preference
+package com.delacrixmorgan.squark.ui.preference
 
 import android.content.Context
 import android.content.Intent
@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.delacrixmorgan.squark.R
-import com.delacrixmorgan.squark.preference.country.CountryListFragment
+import com.delacrixmorgan.squark.ui.preference.country.CountryListFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_preference_navigation.*
 

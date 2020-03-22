@@ -1,4 +1,4 @@
-package com.delacrixmorgan.squark.preference.country
+package com.delacrixmorgan.squark.ui.preference.country
 
 import android.app.Activity
 import android.content.SharedPreferences
@@ -13,7 +13,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
-import com.delacrixmorgan.squark.CurrencyNavigationFragment
+import com.delacrixmorgan.squark.ui.CurrencyNavigationFragment
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.Keys
 import com.delacrixmorgan.squark.common.SharedPreferenceHelper.DEFAULT_UPDATED_TIME_STAMP
@@ -22,7 +22,7 @@ import com.delacrixmorgan.squark.common.compatColor
 import com.delacrixmorgan.squark.common.getFilteredCountries
 import com.delacrixmorgan.squark.common.performHapticContextClick
 import com.delacrixmorgan.squark.data.api.SquarkResult
-import com.delacrixmorgan.squark.data.api.SquarkService
+import com.delacrixmorgan.squark.data.service.SquarkService
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.dao.CountryDatabase
 import com.delacrixmorgan.squark.data.model.Country

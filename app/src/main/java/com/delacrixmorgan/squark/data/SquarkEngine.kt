@@ -34,36 +34,27 @@ object SquarkEngine {
         val thresholdTranslationWidth = activity.resources.displayMetrics.widthPixels / 6F
         val thresholdSwipeWidth = thresholdTranslationWidth / 1.5F
         val alphaRatio = 1F / thresholdTranslationWidth
-        val gestureDetector = GestureDetector(activity,
-            SingleTapConfirm()
-        )
+        val gestureDetector = GestureDetector(activity, SingleTapConfirm())
 
         for (index in 0..9) {
-            val tableRow =
-                activity.layoutInflater.inflate(R.layout.cell_row, tableLayout, false) as TableRow
+            val tableRow = activity.layoutInflater.inflate(
+                R.layout.cell_row, tableLayout, false
+            ) as TableRow
 
             tableRow.quantifierTextView.text = calculateRowQuantifier(multiplier, index)
-            tableRow.resultTextView.text =
-                calculateRowResult(
-                    multiplier, index,
-                    conversionRate
-                )
+            tableRow.resultTextView.text = calculateRowResult(
+                multiplier, index, conversionRate
+            )
 
-            tableRow.beforeQuantifierTextView.text =
-                calculateRowQuantifier(multiplier / 10, index)
-            tableRow.beforeResultTextView.text =
-                calculateRowResult(
-                    multiplier / 10, index,
-                    conversionRate
-                )
+            tableRow.beforeQuantifierTextView.text = calculateRowQuantifier(multiplier / 10, index)
+            tableRow.beforeResultTextView.text = calculateRowResult(
+                multiplier / 10, index, conversionRate
+            )
 
-            tableRow.nextQuantifierTextView.text =
-                calculateRowQuantifier(multiplier * 10, index)
-            tableRow.nextResultTextView.text =
-                calculateRowResult(
-                    multiplier * 10, index,
-                    conversionRate
-                )
+            tableRow.nextQuantifierTextView.text = calculateRowQuantifier(multiplier * 10, index)
+            tableRow.nextResultTextView.text = calculateRowResult(
+                multiplier * 10, index, conversionRate
+            )
 
             tableRow.setOnTouchListener { _, event ->
                 if (gestureDetector.onTouchEvent(event)) {
@@ -207,20 +198,23 @@ object SquarkEngine {
         listener: RowListener
     ) {
         for (index in 1..9) {
-            val tableRow =
-                activity.layoutInflater.inflate(R.layout.cell_row, tableLayout, false) as TableRow
-            tableRow.background = ContextCompat.getDrawable(activity,
+            val tableRow = activity.layoutInflater.inflate(
+                R.layout.cell_row, tableLayout, false
+            ) as TableRow
+
+            tableRow.background = ContextCompat.getDrawable(
+                activity,
                 R.drawable.shape_cell_light
             )
 
-            tableRow.quantifierTextView.text =
-                calculateExpandQuantifier(expandQuantifier,
-                    multiplier, index)
-            tableRow.resultTextView.text =
-                calculateExpandResult(expandQuantifier,
-                    multiplier, index,
-                    conversionRate
-                )
+            tableRow.quantifierTextView.text = calculateExpandQuantifier(
+                expandQuantifier, multiplier, index
+            )
+            tableRow.resultTextView.text = calculateExpandResult(
+                expandQuantifier,
+                multiplier, index,
+                conversionRate
+            )
 
             tableRow.setOnClickListener { listener.onClick(index) }
             expandedList.add(tableRow)

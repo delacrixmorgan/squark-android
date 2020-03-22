@@ -1,4 +1,4 @@
-package com.delacrixmorgan.squark.preference
+package com.delacrixmorgan.squark.ui.preference
 
 import android.os.Bundle
 import android.view.LayoutInflater
