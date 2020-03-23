@@ -127,15 +127,13 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
         lifecycleScope.launch {
             val countries = database?.countryDataDao()?.getCountries()
             countries?.forEach { country ->
-                if (country.code != SharedPreferenceHelper.DEFAULT_BASE_CURRENCY_CODE) {
-                    val updateCurrency = currencies.find {
-                        it.code.contains(country.code)
-                    }
+                val updateCurrency = currencies.find {
+                    it.code.contains(country.code)
+                }
 
-                    updateCurrency?.let {
-                        country.rate = it.rate
-                        database?.countryDataDao()?.updateCountry(country)
-                    }
+                updateCurrency?.let {
+                    country.rate = it.rate
+                    database?.countryDataDao()?.updateCountry(country)
                 }
             }
             countries?.let {

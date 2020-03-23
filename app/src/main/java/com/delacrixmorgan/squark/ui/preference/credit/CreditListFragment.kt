@@ -33,6 +33,14 @@ class CreditListFragment : DialogFragment() {
             launchWebsite("https://github.com/apilayer/currencylayer-API")
         }
 
+        fastScrollImageView.setOnClickListener {
+            launchWebsite("https://github.com/zhanghai/AndroidFastScroll")
+        }
+
+        dateTimeWhartonImageView.setOnClickListener {
+            launchWebsite("https://github.com/JakeWharton/ThreeTenABP")
+        }
+
         doneButton.setOnClickListener {
             activity?.finish()
         }
