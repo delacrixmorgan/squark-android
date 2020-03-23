@@ -71,6 +71,7 @@ dependencies {
 
     implementation "org.parceler:parceler-api:1.1.12"
     implementation 'me.zhanghai.android.fastscroll:library:1.1.1'
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.2.1'
 
     api "com.squareup.retrofit2:adapter-rxjava2:2.3.0"
     api "com.squareup.retrofit2:converter-gson:2.6.2"

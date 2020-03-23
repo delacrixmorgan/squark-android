@@ -12,12 +12,16 @@ import androidx.preference.PreferenceManager
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.SharedPreferenceHelper.DEFAULT_BASE_CURRENCY_CODE
 import com.delacrixmorgan.squark.common.SharedPreferenceHelper.DEFAULT_QUOTE_CURRENCY_CODE
-import com.delacrixmorgan.squark.common.SharedPreferenceHelper.baseCurrencyCode
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.model.Country
 import org.json.JSONObject
+import org.threeten.bp.DateTimeUtils
+import org.threeten.bp.Instant
+import org.threeten.bp.format.DateTimeFormatter
 import java.io.BufferedReader
 import java.math.BigDecimal
+import java.util.*
+import kotlin.collections.HashMap
 import kotlin.math.roundToInt
 
 fun View.performHapticContextClick() {
@@ -53,7 +57,25 @@ inline fun <T, R> T?.guard(block: () -> R): T {
     return this
 }
 
-//region Context
+/**
+ * Date
+ */
+
+fun Date.toStringFormat(): String {
+    val calendar = Calendar.getInstance().apply { time = this@toStringFormat }
+    val zonedDateTime = DateTimeUtils.toZonedDateTime(calendar)
+
+    return DateTimeFormatter.ISO_INSTANT.format(zonedDateTime)
+}
+
+fun String.toDateFormat(): Date {
+    val dateInstant = Instant.from(DateTimeFormatter.ISO_INSTANT.parse(this))
+    return DateTimeUtils.toDate(dateInstant)
+}
+
+/**
+ * Context
+ */
 fun Context.launchPlayStore(packageName: String) {
     val url = "https://play.google.com/store/apps/details?id=$packageName"
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
@@ -75,16 +97,34 @@ fun Context.shareAppIntent(message: String) {
         )
     )
 }
-//endregion
 
-//region CountryDataController
+fun Context.getJsonMap(rawFile: Int, key: String): Map<String, String> {
+    val inputStream = resources.openRawResource(rawFile)
+    val responseObject = inputStream.bufferedReader().use(BufferedReader::readText)
+
+    val map = HashMap<String, String>()
+    val jsonObject = JSONObject(responseObject).optJSONObject(key)
+
+    jsonObject?.keys()?.forEach {
+        map[it] = "${jsonObject[it]}"
+    }
+
+    return map
+}
+
+/**
+ * CountryDataController
+ */
 fun CountryDataController.getPreferenceCountry(
     context: Context,
-    preferenceCurrency: String
+    preferenceCurrency: String?
 ): Country? {
     val preferenceManager = PreferenceManager.getDefaultSharedPreferences(context)
-    val fallbackCurrency =
-        if (preferenceCurrency == baseCurrencyCode) DEFAULT_BASE_CURRENCY_CODE else DEFAULT_QUOTE_CURRENCY_CODE
+    val fallbackCurrency = if (preferenceCurrency == SharedPreferenceHelper.baseCurrency) {
+        DEFAULT_BASE_CURRENCY_CODE
+    } else {
+        DEFAULT_QUOTE_CURRENCY_CODE
+    }
 
     return getCountries().firstOrNull {
         it.code == preferenceManager.getString(preferenceCurrency, fallbackCurrency)
@@ -101,9 +141,10 @@ fun CountryDataController.getFilteredCountries(
         it.name.toLowerCase().contains(text) || it.code.toLowerCase().contains(text)
     }
 }
-//endregion
 
-//region CalculationQuantifier, CalculationResult
+/**
+ * CalculationQuantifier, CalculationResult
+ */
 fun calculateRowQuantifier(multiplier: Double, position: Int): String {
     val quantifier = (multiplier * (position + 1))
     val bigDecimal = BigDecimal(quantifier).setScale(2, BigDecimal.ROUND_HALF_UP)
@@ -164,19 +205,4 @@ fun getNumberFormatType(bigDecimal: BigDecimal): String {
         )
         else -> NumberFormatTypes.HUNDREDTH.decimal.format(bigDecimal)
     }
-}
-//endregion
-
-fun Context.getJsonMap(rawFile: Int, key: String): Map<String, String> {
-    val inputStream = resources.openRawResource(rawFile)
-    val responseObject = inputStream.bufferedReader().use(BufferedReader::readText)
-
-    val map = HashMap<String, String>()
-    val jsonObject = JSONObject(responseObject).optJSONObject(key)
-
-    jsonObject?.keys()?.forEach {
-        map[it] = "${jsonObject[it]}"
-    }
-
-    return map
 }

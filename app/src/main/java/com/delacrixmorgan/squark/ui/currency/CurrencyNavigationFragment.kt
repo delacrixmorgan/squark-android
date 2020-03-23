@@ -1,4 +1,4 @@
-package com.delacrixmorgan.squark.ui
+package com.delacrixmorgan.squark.ui.currency
 
 import android.app.Activity
 import android.content.Intent
@@ -9,17 +9,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TableRow
 import androidx.core.content.ContextCompat
-import androidx.core.content.edit
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.RowListener
 import com.delacrixmorgan.squark.common.SharedPreferenceHelper
-import com.delacrixmorgan.squark.common.SharedPreferenceHelper.baseCurrencyCode
-import com.delacrixmorgan.squark.common.SharedPreferenceHelper.isMultiplierEnabled
-import com.delacrixmorgan.squark.common.SharedPreferenceHelper.multiplier
-import com.delacrixmorgan.squark.common.SharedPreferenceHelper.quoteCurrencyCode
 import com.delacrixmorgan.squark.common.getPreferenceCountry
 import com.delacrixmorgan.squark.common.performHapticContextClick
 import com.delacrixmorgan.squark.data.SquarkEngine
@@ -49,9 +44,6 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
         PreferenceManager.getDefaultSharedPreferences(requireContext())
     }
 
-    private val isPersistentMultiplierEnabled: Boolean
-        get() = sharedPreferences.getBoolean(isMultiplierEnabled, true)
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -63,8 +55,8 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (isPersistentMultiplierEnabled) {
-            SquarkEngine.updateMultiplier(sharedPreferences.getInt(multiplier, 1))
+        if (SharedPreferenceHelper.isPersistentMultiplierEnabled) {
+            SquarkEngine.updateMultiplier(SharedPreferenceHelper.multiplier)
         }
 
         SquarkEngine.setupTable(
@@ -79,7 +71,8 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
                 view.context,
                 countryCode = baseCountry?.code
             )
-            startActivityForResult(currencyIntent,
+            startActivityForResult(
+                currencyIntent,
                 REQUEST_BASE_COUNTRY
             )
         }
@@ -89,15 +82,16 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
                 view.context,
                 countryCode = quoteCountry?.code
             )
-            startActivityForResult(currencyIntent,
+            startActivityForResult(
+                currencyIntent,
                 REQUEST_QUOTE_COUNTRY
             )
         }
 
         swapButton.setOnClickListener {
-            sharedPreferences.edit {
-                putString(baseCurrencyCode, quoteCountry?.code)
-                putString(quoteCurrencyCode, baseCountry?.code)
+            SharedPreferenceHelper.apply {
+                baseCurrency = quoteCountry?.code
+                quoteCurrency = baseCountry?.code
             }
 
             swapButton.performHapticContextClick()
@@ -111,12 +105,10 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
         val context = requireContext()
 
         baseCountry = CountryDataController.getPreferenceCountry(
-            context,
-            preferenceCurrency = baseCurrencyCode
+            context, SharedPreferenceHelper.baseCurrency
         )
         quoteCountry = CountryDataController.getPreferenceCountry(
-            context,
-            preferenceCurrency = quoteCurrencyCode
+            context, SharedPreferenceHelper.quoteCurrency
         )
 
         baseCurrencyTextView.text = baseCountry?.code
@@ -134,7 +126,7 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
             REQUEST_BASE_COUNTRY -> {
                 if (resultCode == Activity.RESULT_OK) {
                     val countryCode = data?.getStringExtra(EXTRA_COUNTRY_CODE)
-                    sharedPreferences.edit { putString(baseCurrencyCode, countryCode) }
+                    SharedPreferenceHelper.baseCurrency = countryCode
 
                     if (isExpanded) onRowCollapse()
                     updateTable()
@@ -144,7 +136,7 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
             REQUEST_QUOTE_COUNTRY -> {
                 if (resultCode == Activity.RESULT_OK) {
                     val countryCode = data?.getStringExtra(EXTRA_COUNTRY_CODE)
-                    sharedPreferences.edit { putString(quoteCurrencyCode, countryCode) }
+                    SharedPreferenceHelper.quoteCurrency = countryCode
 
                     if (isExpanded) onRowCollapse()
                     updateTable()
@@ -186,7 +178,8 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
 
         rowList.forEach {
             it.isVisible = true
-            it.background = ContextCompat.getDrawable(context,
+            it.background = ContextCompat.getDrawable(
+                context,
                 R.drawable.shape_cell_dark
             )
         }
@@ -197,10 +190,8 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
      */
     override fun onSwipeLeft(multiplier: Double) {
         if (!isExpanded) {
-            if (isPersistentMultiplierEnabled) {
-                sharedPreferences.edit {
-                    putInt(SharedPreferenceHelper.multiplier, multiplier.toInt())
-                }
+            if (SharedPreferenceHelper.isPersistentMultiplierEnabled) {
+                SharedPreferenceHelper.multiplier = multiplier.toInt()
             }
 
             currencyTableLayout.performHapticContextClick()
@@ -210,10 +201,8 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
 
     override fun onSwipeRight(multiplier: Double) {
         if (!isExpanded) {
-            if (isPersistentMultiplierEnabled) {
-                sharedPreferences.edit {
-                    putInt(SharedPreferenceHelper.multiplier, multiplier.toInt())
-                }
+            if (SharedPreferenceHelper.isPersistentMultiplierEnabled) {
+                SharedPreferenceHelper.multiplier = multiplier.toInt()
             }
 
             currencyTableLayout.performHapticContextClick()
@@ -221,7 +210,7 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
         }
     }
 
-    override fun onClick(position: Int) {
+    override fun onRowClicked(position: Int) {
         if (isExpanded) {
             onRowCollapse()
         } else {

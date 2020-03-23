@@ -7,26 +7,20 @@ import android.text.InputType
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.core.content.edit
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
-import com.delacrixmorgan.squark.ui.CurrencyNavigationFragment
 import com.delacrixmorgan.squark.R
-import com.delacrixmorgan.squark.common.Keys
-import com.delacrixmorgan.squark.common.SharedPreferenceHelper.DEFAULT_UPDATED_TIME_STAMP
-import com.delacrixmorgan.squark.common.SharedPreferenceHelper.updatedTimeStamp
-import com.delacrixmorgan.squark.common.compatColor
-import com.delacrixmorgan.squark.common.getFilteredCountries
-import com.delacrixmorgan.squark.common.performHapticContextClick
+import com.delacrixmorgan.squark.common.*
 import com.delacrixmorgan.squark.data.api.SquarkResult
-import com.delacrixmorgan.squark.data.service.SquarkService
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.dao.CountryDatabase
 import com.delacrixmorgan.squark.data.model.Country
 import com.delacrixmorgan.squark.data.model.Currency
+import com.delacrixmorgan.squark.data.service.SquarkService
+import com.delacrixmorgan.squark.ui.currency.CurrencyNavigationFragment
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_country_list.*
 import kotlinx.coroutines.launch
@@ -104,7 +98,7 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
     }
 
     private fun checkIsDataUpdated() {
-        val timeStamp = this.sharedPreferences.getLong(updatedTimeStamp, DEFAULT_UPDATED_TIME_STAMP)
+        val timeStamp = SharedPreferenceHelper.lastUpdatedDate.time
         val currentTimeStamp = Date().time
 
         if (currentTimeStamp - timeStamp > MILLISECONDS_IN_A_DAY) {
@@ -155,8 +149,7 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
             }
             countries?.let {
                 CountryDataController.updateDataSet(it)
-                val currentTimeStamp = Date().time
-                sharedPreferences.edit { putLong(updatedTimeStamp, currentTimeStamp) }
+                SharedPreferenceHelper.lastUpdatedDate = Date()
             }
 
             if (isVisible) {

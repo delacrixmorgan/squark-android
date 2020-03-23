@@ -5,21 +5,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.preference.PreferenceManager
 import com.delacrixmorgan.squark.R
-import com.delacrixmorgan.squark.common.SharedPreferenceHelper.updatedTimeStamp
+import com.delacrixmorgan.squark.common.SharedPreferenceHelper
 import com.delacrixmorgan.squark.common.getJsonMap
 import com.delacrixmorgan.squark.data.api.SquarkResult
-import com.delacrixmorgan.squark.data.service.SquarkService
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.dao.CountryDataDao
 import com.delacrixmorgan.squark.data.dao.CountryDatabase
 import com.delacrixmorgan.squark.data.model.Country
 import com.delacrixmorgan.squark.data.model.Currency
+import com.delacrixmorgan.squark.data.service.SquarkService
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_launch.*
 import kotlinx.coroutines.launch
@@ -96,7 +95,7 @@ class LaunchFragment : Fragment() {
         countries.forEach { countryDatabaseDao?.insertCountry(it) }
         CountryDataController.updateDataSet(countries)
 
-        sharedPreferences.edit { putLong(updatedTimeStamp, Date().time) }
+        SharedPreferenceHelper.lastUpdatedDate = Date()
         launchCurrencyNavigationFragment()
     }
 

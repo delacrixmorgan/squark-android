@@ -1,17 +1,13 @@
 package com.delacrixmorgan.squark.ui.preference
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.edit
 import androidx.databinding.library.BuildConfig
 import androidx.fragment.app.Fragment
-import androidx.preference.PreferenceManager
 import com.delacrixmorgan.squark.R
-import com.delacrixmorgan.squark.common.SharedPreferenceHelper.multiplier
-import com.delacrixmorgan.squark.common.SharedPreferenceHelper.isMultiplierEnabled
+import com.delacrixmorgan.squark.common.SharedPreferenceHelper
 import com.delacrixmorgan.squark.common.launchWebsite
 import com.delacrixmorgan.squark.common.shareAppIntent
 import com.delacrixmorgan.squark.databinding.FragmentSettingsListBinding
@@ -27,42 +23,47 @@ class SettingsListFragment : Fragment() {
         fun create() = SettingsListFragment()
     }
 
-    private val sharedPreferences: SharedPreferences by lazy {
-        PreferenceManager.getDefaultSharedPreferences(requireContext())
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return FragmentSettingsListBinding.inflate(inflater, container, false).root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        this.buildNumberTextView.text = getString(R.string.message_build_version_name, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE)
+        buildNumberTextView.text = getString(
+            R.string.message_build_version_name,
+            BuildConfig.VERSION_NAME,
+            BuildConfig.VERSION_CODE
+        )
 
-        this.multiplierViewGroup.switchCompat.isChecked = this.sharedPreferences.getBoolean(isMultiplierEnabled, true)
+        multiplierViewGroup.switchCompat.isChecked =
+            SharedPreferenceHelper.isPersistentMultiplierEnabled
 
-        this.multiplierViewGroup.setOnClickListener {
+        multiplierViewGroup.setOnClickListener {
             val updatedSwitchCheck = !this.multiplierViewGroup.switchCompat.isChecked
-            this.multiplierViewGroup.switchCompat.isChecked = updatedSwitchCheck
+            multiplierViewGroup.switchCompat.isChecked = updatedSwitchCheck
 
-            this.sharedPreferences.edit {
-                putInt(multiplier, 1)
-                putBoolean(isMultiplierEnabled, updatedSwitchCheck)
+            SharedPreferenceHelper.apply {
+                multiplier = 1
+                isPersistentMultiplierEnabled = updatedSwitchCheck
             }
         }
 
-        this.creditsViewGroup.setOnClickListener {
+        creditsViewGroup.setOnClickListener {
             val launchIntent = CreditActivity.newLaunchIntent(view.context)
             startActivity(launchIntent)
         }
 
-        this.shareViewGroup.setOnClickListener {
+        shareViewGroup.setOnClickListener {
             val shareMessage = getString(R.string.fragment_settings_list_share_message)
             view.context.shareAppIntent(shareMessage)
         }
 
-        this.sourceCodeViewGroup.setOnClickListener {
+        sourceCodeViewGroup.setOnClickListener {
             launchWebsite(SOURCE_CODE_URL)
         }
     }

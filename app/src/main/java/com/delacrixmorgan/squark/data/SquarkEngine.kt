@@ -58,7 +58,7 @@ object SquarkEngine {
 
             tableRow.setOnTouchListener { _, event ->
                 if (gestureDetector.onTouchEvent(event)) {
-                    listener.onClick(index)
+                    listener.onRowClicked(index)
                     rowList.forEach {
                         it.translationX = 0F
                         it.quantifierTextView.alpha = 1F
@@ -216,7 +216,7 @@ object SquarkEngine {
                 conversionRate
             )
 
-            tableRow.setOnClickListener { listener.onClick(index) }
+            tableRow.setOnClickListener { listener.onRowClicked(index) }
             expandedList.add(tableRow)
             tableLayout.addView(tableRow, (expandQuantifier + index))
         }
