@@ -1,21 +1,20 @@
-package com.delacrixmorgan.squark.data
+package com.delacrixmorgan.squark.ui.currency
 
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.view.GestureDetector
-import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.MotionEvent
 import android.view.animation.AnimationUtils
 import android.widget.TableLayout
 import android.widget.TableRow
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModel
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.*
 import kotlinx.android.synthetic.main.cell_row.view.*
 import kotlin.math.absoluteValue
 
-object SquarkEngine {
-
+class CurrencyViewModel : ViewModel() {
     private var anchorPosition = 0F
     private var multiplier: Double = 1.0
     private var conversionRate: Double = 1.0
@@ -156,35 +155,21 @@ object SquarkEngine {
         rowList.forEachIndexed { index, tableRow ->
             with(tableRow) {
                 quantifierTextView.text = calculateRowQuantifier(multiplier, index)
-                resultTextView.text = calculateRowResult(
-                    multiplier, index,
-                    conversionRate
-                )
+                resultTextView.text = calculateRowResult(multiplier, index, conversionRate)
 
                 nextQuantifierTextView.text = calculateRowQuantifier(multiplier / 10, index)
-                nextResultTextView.text = calculateRowResult(
-                    multiplier / 10, index,
-                    conversionRate
-                )
+                nextResultTextView.text =
+                    calculateRowResult(multiplier / 10, index, conversionRate)
 
                 beforeQuantifierTextView.text = calculateRowQuantifier(multiplier * 10, index)
                 beforeResultTextView.text =
-                    calculateRowResult(
-                        multiplier * 10, index,
-                        conversionRate
-                    )
+                    calculateRowResult(multiplier * 10, index, conversionRate)
 
                 quantifierTextView.startAnimation(
-                    AnimationUtils.loadAnimation(
-                        tableRow.context,
-                        R.anim.wobble
-                    )
+                    AnimationUtils.loadAnimation(context, R.anim.wobble)
                 )
                 resultTextView.startAnimation(
-                    AnimationUtils.loadAnimation(
-                        tableRow.context,
-                        R.anim.wobble
-                    )
+                    AnimationUtils.loadAnimation(context, R.anim.wobble)
                 )
             }
         }
@@ -223,10 +208,10 @@ object SquarkEngine {
     }
 
     fun updateMultiplier(multiplier: Int) {
-        SquarkEngine.multiplier = multiplier.toDouble()
+        this.multiplier = multiplier.toDouble()
     }
 
-    private class SingleTapConfirm : SimpleOnGestureListener() {
+    private class SingleTapConfirm : GestureDetector.SimpleOnGestureListener() {
         override fun onSingleTapUp(event: MotionEvent) = true
     }
 }

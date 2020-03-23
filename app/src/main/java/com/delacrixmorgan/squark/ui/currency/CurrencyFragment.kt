@@ -10,18 +10,18 @@ import android.widget.TableRow
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.RowListener
 import com.delacrixmorgan.squark.common.SharedPreferenceHelper
 import com.delacrixmorgan.squark.common.getPreferenceCountry
 import com.delacrixmorgan.squark.common.performHapticContextClick
-import com.delacrixmorgan.squark.data.SquarkEngine
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.model.Country
 import com.delacrixmorgan.squark.ui.preference.PreferenceNavigationActivity
 import kotlinx.android.synthetic.main.fragment_currency_navigation.*
 
-class CurrencyNavigationFragment : Fragment(), RowListener {
+class CurrencyFragment : Fragment(), RowListener {
 
     companion object {
         private const val REQUEST_BASE_COUNTRY = 1
@@ -37,6 +37,13 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
     private var rowList = arrayListOf<TableRow>()
     private var expandedList = arrayListOf<TableRow>()
 
+    private lateinit var viewModel: CurrencyViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel = ViewModelProvider(this).get(CurrencyViewModel::class.java)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -49,13 +56,13 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
         super.onViewCreated(view, savedInstanceState)
 
         if (SharedPreferenceHelper.isPersistentMultiplierEnabled) {
-            SquarkEngine.updateMultiplier(SharedPreferenceHelper.multiplier)
+            viewModel.updateMultiplier(SharedPreferenceHelper.multiplier)
         }
 
-        SquarkEngine.setupTable(
+        viewModel.setupTable(
             activity = requireActivity(),
             tableLayout = currencyTableLayout,
-            rowList = this.rowList,
+            rowList = rowList,
             listener = this
         )
 
@@ -106,8 +113,8 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
         quoteCurrencyTextView.text = quoteCountry?.code
 
         if (baseCountry?.rate != 0.0 && quoteCountry?.rate != 0.0) {
-            SquarkEngine.updateConversionRate(baseCountry?.rate, quoteCountry?.rate)
-            SquarkEngine.updateTable(rowList)
+            viewModel.updateConversionRate(baseCountry?.rate, quoteCountry?.rate)
+            viewModel.updateTable(rowList)
         }
     }
 
@@ -149,7 +156,7 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
             }
         }
 
-        SquarkEngine.expandTable(
+        viewModel.expandTable(
             activity = requireActivity(),
             tableLayout = currencyTableLayout,
             expandQuantifier = selectedRow,
@@ -180,7 +187,7 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
             }
 
             currencyTableLayout.performHapticContextClick()
-            SquarkEngine.updateTable(rowList)
+            viewModel.updateTable(rowList)
         }
     }
 
@@ -191,7 +198,7 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
             }
 
             currencyTableLayout.performHapticContextClick()
-            SquarkEngine.updateTable(rowList)
+            viewModel.updateTable(rowList)
         }
     }
 

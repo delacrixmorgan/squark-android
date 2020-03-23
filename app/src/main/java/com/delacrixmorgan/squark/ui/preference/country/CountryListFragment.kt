@@ -1,7 +1,6 @@
 package com.delacrixmorgan.squark.ui.preference.country
 
 import android.app.Activity
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.InputType
 import android.view.*
@@ -11,7 +10,6 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.preference.PreferenceManager
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.*
 import com.delacrixmorgan.squark.data.api.SquarkResult
@@ -20,18 +18,16 @@ import com.delacrixmorgan.squark.data.dao.CountryDatabase
 import com.delacrixmorgan.squark.data.model.Country
 import com.delacrixmorgan.squark.data.model.Currency
 import com.delacrixmorgan.squark.data.service.SquarkService
-import com.delacrixmorgan.squark.ui.currency.CurrencyNavigationFragment
+import com.delacrixmorgan.squark.ui.currency.CurrencyFragment
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_country_list.*
 import kotlinx.coroutines.launch
 import me.zhanghai.android.fastscroll.FastScrollerBuilder
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionExpandListener {
     companion object {
-        private const val MILLISECONDS_IN_A_DAY = 86400000
-        private const val DEFAULT_COUNTRY_CODE = "USD"
-
         fun create(countryCode: String? = null) = CountryListFragment().apply {
             arguments = bundleOf(Keys.Country.Code.name to countryCode)
         }
@@ -47,17 +43,12 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
         CountryRecyclerViewAdapter(listener = this)
     }
 
-    private val sharedPreferences: SharedPreferences by lazy {
-        PreferenceManager.getDefaultSharedPreferences(requireContext())
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
 
         database = CountryDatabase.getInstance(requireContext())
-        countryCode = arguments?.getString(Keys.Country.Code.name)
-            ?: DEFAULT_COUNTRY_CODE
+        countryCode = requireNotNull(arguments?.getString(Keys.Country.Code.name))
     }
 
     override fun onCreateView(
@@ -98,10 +89,10 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
     }
 
     private fun checkIsDataUpdated() {
-        val timeStamp = SharedPreferenceHelper.lastUpdatedDate.time
-        val currentTimeStamp = Date().time
+        val lastUpdatedDateTime = SharedPreferenceHelper.lastUpdatedDate.time
+        val currentDateTime = Date().time
 
-        if (currentTimeStamp - timeStamp > MILLISECONDS_IN_A_DAY) {
+        if (TimeUnit.MILLISECONDS.toDays(currentDateTime - lastUpdatedDateTime) >= 1) {
             updateCurrencyRates()
         } else {
             Snackbar.make(
@@ -136,7 +127,7 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
         lifecycleScope.launch {
             val countries = database?.countryDataDao()?.getCountries()
             countries?.forEach { country ->
-                if (country.code != DEFAULT_COUNTRY_CODE) {
+                if (country.code != SharedPreferenceHelper.DEFAULT_BASE_CURRENCY_CODE) {
                     val updateCurrency = currencies.find {
                         it.code.contains(country.code)
                     }
@@ -163,8 +154,9 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
     }
 
     private fun updateDataSet(searchText: String? = null, searchMode: Boolean = false) {
-        val filterCountries =
-            CountryDataController.getFilteredCountries(searchText) as MutableList<Country>
+        val filterCountries = CountryDataController.getFilteredCountries(
+            searchText
+        ) as MutableList<Country>
         val selectedCountry = filterCountries.firstOrNull { it.code == this.countryCode }
 
         selectedCountry?.let { country ->
@@ -184,7 +176,7 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
         val activity = requireActivity()
         val intent = activity.intent
 
-        intent.putExtra(CurrencyNavigationFragment.EXTRA_COUNTRY_CODE, country.code)
+        intent.putExtra(CurrencyFragment.EXTRA_COUNTRY_CODE, country.code)
 
         activity.setResult(Activity.RESULT_OK, intent)
         activity.finish()
