@@ -2,7 +2,6 @@ package com.delacrixmorgan.squark.ui.currency
 
 import android.app.Activity
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +10,6 @@ import android.widget.TableRow
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.preference.PreferenceManager
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.RowListener
 import com.delacrixmorgan.squark.common.SharedPreferenceHelper
@@ -22,7 +20,6 @@ import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.model.Country
 import com.delacrixmorgan.squark.ui.preference.PreferenceNavigationActivity
 import kotlinx.android.synthetic.main.fragment_currency_navigation.*
-import java.util.*
 
 class CurrencyNavigationFragment : Fragment(), RowListener {
 
@@ -37,12 +34,8 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
     private var baseCountry: Country? = null
     private var quoteCountry: Country? = null
 
-    private var rowList: ArrayList<TableRow> = ArrayList()
-    private var expandedList: ArrayList<TableRow> = ArrayList()
-
-    private val sharedPreferences: SharedPreferences by lazy {
-        PreferenceManager.getDefaultSharedPreferences(requireContext())
-    }
+    private var rowList = arrayListOf<TableRow>()
+    private var expandedList = arrayListOf<TableRow>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -102,13 +95,11 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
     }
 
     private fun updateTable() {
-        val context = requireContext()
-
         baseCountry = CountryDataController.getPreferenceCountry(
-            context, SharedPreferenceHelper.baseCurrency
+            requireContext(), SharedPreferenceHelper.baseCurrency
         )
         quoteCountry = CountryDataController.getPreferenceCountry(
-            context, SharedPreferenceHelper.quoteCurrency
+            requireContext(), SharedPreferenceHelper.quoteCurrency
         )
 
         baseCurrencyTextView.text = baseCountry?.code
@@ -122,25 +113,23 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode != Activity.RESULT_OK) return
+
         when (requestCode) {
             REQUEST_BASE_COUNTRY -> {
-                if (resultCode == Activity.RESULT_OK) {
-                    val countryCode = data?.getStringExtra(EXTRA_COUNTRY_CODE)
-                    SharedPreferenceHelper.baseCurrency = countryCode
+                val countryCode = data?.getStringExtra(EXTRA_COUNTRY_CODE)
+                SharedPreferenceHelper.baseCurrency = countryCode
 
-                    if (isExpanded) onRowCollapse()
-                    updateTable()
-                }
+                if (isExpanded) onRowCollapse()
+                updateTable()
             }
 
             REQUEST_QUOTE_COUNTRY -> {
-                if (resultCode == Activity.RESULT_OK) {
-                    val countryCode = data?.getStringExtra(EXTRA_COUNTRY_CODE)
-                    SharedPreferenceHelper.quoteCurrency = countryCode
+                val countryCode = data?.getStringExtra(EXTRA_COUNTRY_CODE)
+                SharedPreferenceHelper.quoteCurrency = countryCode
 
-                    if (isExpanded) onRowCollapse()
-                    updateTable()
-                }
+                if (isExpanded) onRowCollapse()
+                updateTable()
             }
         }
     }
@@ -170,7 +159,6 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
     }
 
     private fun onRowCollapse() {
-        val context = requireContext()
         currencyTableLayout.performHapticContextClick()
         expandedList.forEach {
             currencyTableLayout.removeView(it)
@@ -178,10 +166,7 @@ class CurrencyNavigationFragment : Fragment(), RowListener {
 
         rowList.forEach {
             it.isVisible = true
-            it.background = ContextCompat.getDrawable(
-                context,
-                R.drawable.shape_cell_dark
-            )
+            it.background = ContextCompat.getDrawable(requireContext(), R.drawable.shape_cell_dark)
         }
     }
 

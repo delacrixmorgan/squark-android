@@ -1,6 +1,5 @@
 package com.delacrixmorgan.squark.ui
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
-import androidx.preference.PreferenceManager
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.SharedPreferenceHelper
 import com.delacrixmorgan.squark.common.getJsonMap
@@ -26,10 +24,6 @@ import java.util.*
 
 class LaunchFragment : Fragment() {
     private var countryDatabaseDao: CountryDataDao? = null
-
-    private val sharedPreferences: SharedPreferences by lazy {
-        PreferenceManager.getDefaultSharedPreferences(requireContext())
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
