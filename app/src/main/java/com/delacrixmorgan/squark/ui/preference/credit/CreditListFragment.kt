@@ -41,6 +41,10 @@ class CreditListFragment : DialogFragment() {
             launchWebsite("https://github.com/JakeWharton/ThreeTenABP")
         }
 
+        serializationWhartonImageView.setOnClickListener {
+            launchWebsite("https://github.com/JakeWharton/retrofit2-kotlinx-serialization-converter")
+        }
+
         doneButton.setOnClickListener {
             activity?.finish()
         }

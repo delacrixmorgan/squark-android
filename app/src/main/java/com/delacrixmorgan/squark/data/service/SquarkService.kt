@@ -6,10 +6,13 @@ import com.delacrixmorgan.squark.data.api.NetworkController
 import com.delacrixmorgan.squark.data.api.SquarkResult
 import com.delacrixmorgan.squark.data.api.SquarkServiceClient
 import com.delacrixmorgan.squark.data.model.CurrencyModel
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import kotlinx.serialization.UnstableDefault
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
 
+@UnstableDefault
 object SquarkService {
     private const val BASE_URL = "http://apilayer.net/api/"
     private val client: SquarkServiceClient
@@ -21,15 +24,15 @@ object SquarkService {
         }
 
     init {
+        val contentType = "application/json".toMediaType()
         client = Retrofit.Builder()
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(BASE_URL)
+            .addConverterFactory(Json.asConverterFactory(contentType))
             .build()
             .create(SquarkServiceClient::class.java)
     }
 
-    suspend fun getCurrencies(): SquarkResult<CurrencyModel.Result> {
+    suspend fun getCurrencies(): SquarkResult<CurrencyModel> {
         return NetworkController.apiRequest {
             client.getCurrencies()
         }

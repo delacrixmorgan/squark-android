@@ -20,8 +20,10 @@ import com.delacrixmorgan.squark.data.service.SquarkService
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_launch.*
 import kotlinx.coroutines.launch
+import kotlinx.serialization.UnstableDefault
 import java.util.*
 
+@UnstableDefault
 class LaunchFragment : Fragment() {
     private var countryDatabaseDao: CountryDataDao? = null
 
