@@ -1,35 +1,77 @@
 package com.delacrixmorgan.squark.common
 
+import android.content.SharedPreferences
+import androidx.core.content.edit
+import androidx.core.os.ConfigurationCompat
+import androidx.preference.PreferenceManager
+import com.delacrixmorgan.squark.App
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import java.util.*
 
-/**
- * SharedPreferenceHelper
- * squark-android
- *
- * Created by Delacrix Morgan on 12/06/2019.
- * Copyright (c) 2019 licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
- */
-
 object SharedPreferenceHelper {
-    const val BASE_CURRENCY_CODE = "Preference.BaseCurrencyCode"
-    const val QUOTE_CURRENCY_CODE = "Preference.QuoteCurrencyCode"
-    const val UPDATED_TIME_STAMP = "Preference.UpdatedTimeStamp"
-    const val MULTIPLIER_ENABLED = "Preference.MultiplierEnabled"
-    const val MULTIPLIER = "Preference.Multiplier"
 
-    const val DEFAULT_UPDATED_TIME_STAMP = 0L
+    enum class Keys {
+        BaseCurrency,
+        QuoteCurrency,
+        LastUpdatedDate,
+        IsPersistentMultipleEnabled,
+        Multiplier
+    }
+
     const val DEFAULT_BASE_CURRENCY_CODE = "USD"
+    private const val DEFAULT_QUOTE_FALLBACK_CURRENCY_CODE = "MYR"
+
     val DEFAULT_QUOTE_CURRENCY_CODE: String
         get() {
-            val localeCountryCode = Currency.getInstance(Locale.getDefault()).currencyCode
-            val localeCountry = CountryDataController.getCountries().firstOrNull { it.code == localeCountryCode }
-            val fallbackCountryCode = "MYR"
-
+            val currentLocale = ConfigurationCompat.getLocales(
+                App.appContext.resources.configuration
+            )[0]
+            val localeCountryCode = Currency.getInstance(currentLocale).currencyCode
+            val localeCountry = CountryDataController.getCountries().firstOrNull {
+                it.code == localeCountryCode
+            }
             return if (localeCountryCode != DEFAULT_BASE_CURRENCY_CODE && localeCountry != null) {
                 localeCountryCode
             } else {
-                fallbackCountryCode
+                DEFAULT_QUOTE_FALLBACK_CURRENCY_CODE
             }
         }
+
+    private val sharedPreferences: SharedPreferences =
+        PreferenceManager.getDefaultSharedPreferences(App.appContext)
+
+    var baseCurrency: String?
+        get() = sharedPreferences.getString(Keys.BaseCurrency.name, DEFAULT_BASE_CURRENCY_CODE)
+            ?: DEFAULT_BASE_CURRENCY_CODE
+        set(value) = sharedPreferences.edit { putString(Keys.BaseCurrency.name, value) }
+
+    var quoteCurrency: String?
+        get() = sharedPreferences.getString(Keys.QuoteCurrency.name, DEFAULT_QUOTE_CURRENCY_CODE)
+            ?: DEFAULT_QUOTE_CURRENCY_CODE
+        set(value) = sharedPreferences.edit { putString(Keys.QuoteCurrency.name, value) }
+
+    var lastUpdatedDate: Date
+        get() {
+            return sharedPreferences.getString(Keys.LastUpdatedDate.name, null)?.toDateFormat()
+                ?: Date()
+        }
+        set(value) = sharedPreferences.edit {
+            putString(
+                Keys.LastUpdatedDate.name,
+                value.toStringFormat()
+            )
+        }
+
+    var isPersistentMultiplierEnabled: Boolean
+        get() = sharedPreferences.getBoolean(Keys.IsPersistentMultipleEnabled.name, true)
+        set(value) = sharedPreferences.edit {
+            putBoolean(
+                Keys.IsPersistentMultipleEnabled.name,
+                value
+            )
+        }
+
+    var multiplier: Int
+        get() = sharedPreferences.getInt(Keys.Multiplier.name, 1)
+        set(value) = sharedPreferences.edit { putInt(Keys.Multiplier.name, value) }
 }

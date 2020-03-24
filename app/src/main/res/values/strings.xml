@@ -8,7 +8,6 @@
     <string name="error_api_countries">Unable to load currencies now..</string>
     <string name="fragment_country_list_title_empty_state">No Results Found</string>
     <string name="fragment_country_list_title_header_selected_currency">Selected Currency</string>
-    <string name="fragment_country_list_title_header_available_currencies">%d Available Currencies</string>
 
     <string name="fragment_rate_title_hey">Hey There</string>
     <string name="fragment_rate_body">Didn\'t mean to pull you out from your app.\n\nSquark is designed, coded and put together by a single person. Making every single rating a big boost for me.\n\nThe well-being of this currency converter rest entirely on your reviews. Have a great one mate!</string>
