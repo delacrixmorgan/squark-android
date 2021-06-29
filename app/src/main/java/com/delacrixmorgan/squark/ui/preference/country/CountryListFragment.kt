@@ -26,7 +26,8 @@ import me.zhanghai.android.fastscroll.FastScrollerBuilder
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class CountryListFragment : Fragment(R.layout.fragment_country_list), CountryListListener, MenuItem.OnActionExpandListener {
+class CountryListFragment : Fragment(R.layout.fragment_country_list), CountryListListener,
+    MenuItem.OnActionExpandListener {
     companion object {
         fun create(countryCode: String? = null) = CountryListFragment().apply {
             arguments = bundleOf(Keys.Country.Code.name to countryCode)
@@ -115,7 +116,7 @@ class CountryListFragment : Fragment(R.layout.fragment_country_list), CountryLis
 
     private fun updateCurrencyRates() {
         lifecycleScope.launch {
-            when (val result = SquarkService.getCurrencies()) {
+            when (val result = SquarkService.getCurrencies(requireContext())) {
                 is SquarkResult.Success -> {
                     binding.swipeRefreshLayout.isRefreshing = false
                     updateCurrencies(result.value.currencies)

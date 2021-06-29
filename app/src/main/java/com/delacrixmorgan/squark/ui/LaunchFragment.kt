@@ -69,7 +69,7 @@ class LaunchFragment : Fragment(R.layout.fragment_launch) {
     }
 
     private suspend fun fetchCurrencies(): List<Currency>? {
-        return when (val result = SquarkService.getCurrencies()) {
+        return when (val result = SquarkService.getCurrencies(requireContext())) {
             is SquarkResult.Success -> {
                 result.value.currencies
             }
