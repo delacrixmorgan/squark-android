@@ -17,22 +17,29 @@ import com.delacrixmorgan.squark.data.dao.CountryDatabase
 import com.delacrixmorgan.squark.data.model.Country
 import com.delacrixmorgan.squark.data.model.Currency
 import com.delacrixmorgan.squark.data.service.SquarkService
+import com.delacrixmorgan.squark.databinding.FragmentLaunchBinding
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.fragment_launch.*
 import kotlinx.coroutines.launch
-import kotlinx.serialization.UnstableDefault
 import java.util.*
 
-@UnstableDefault
-class LaunchFragment : Fragment() {
+class LaunchFragment : Fragment(R.layout.fragment_launch) {
     private var countryDatabaseDao: CountryDataDao? = null
+
+    private val binding get() = requireNotNull(_binding)
+    private var _binding: FragmentLaunchBinding? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_launch, container, false)
+    ): View {
+        _binding = FragmentLaunchBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -68,7 +75,7 @@ class LaunchFragment : Fragment() {
             }
             is SquarkResult.Failure -> {
                 Snackbar.make(
-                    mainContainer,
+                    binding.mainContainer,
                     result.error.localizedMessage ?: "",
                     Snackbar.LENGTH_SHORT
                 ).show()
@@ -97,6 +104,6 @@ class LaunchFragment : Fragment() {
 
     private fun launchCurrencyNavigationFragment() {
         val action = LaunchFragmentDirections.actionLaunchFragmentToCurrencyNavigationFragment()
-        Navigation.findNavController(rootView).navigate(action)
+        Navigation.findNavController(binding.rootView).navigate(action)
     }
 }

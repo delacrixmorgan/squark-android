@@ -9,9 +9,9 @@ import androidx.fragment.app.Fragment
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.launchPlayStore
 import com.delacrixmorgan.squark.common.performHapticContextClick
-import kotlinx.android.synthetic.main.fragment_support_list.*
+import com.delacrixmorgan.squark.databinding.FragmentSupportListBinding
 
-class SupportListFragment : Fragment() {
+class SupportListFragment : Fragment(R.layout.fragment_support_list) {
     companion object {
         private const val KINGS_CUP_PACKAGE_NAME = "com.delacrixmorgan.kingscup"
         private const val MAMIKA_PACKAGE_NAME = "com.delacrixmorgan.mamika"
@@ -19,35 +19,48 @@ class SupportListFragment : Fragment() {
         fun create() = SupportListFragment()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_support_list, container, false)
+    private val binding get() = requireNotNull(_binding)
+    private var _binding: FragmentSupportListBinding? = null
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentSupportListBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val packageName = view.context.packageName
 
-        this.starImageView.setOnClickListener {
-            this.starImageView.performHapticContextClick()
-            this.personImageView.setImageResource(R.drawable.ic_human_happy)
-            this.starImageView.setColorFilter(ContextCompat.getColor(view.context, R.color.colorAccent))
+        binding.starImageView.setOnClickListener {
+            binding.starImageView.performHapticContextClick()
+            binding.personImageView.setImageResource(R.drawable.ic_human_happy)
+            binding.starImageView.setColorFilter(ContextCompat.getColor(view.context, R.color.colorAccent))
 
             view.context.launchPlayStore(packageName)
         }
 
-        this.rateButton.setOnClickListener {
-            this.rateButton.performHapticContextClick()
-            this.personImageView.setImageResource(R.drawable.ic_human_happy)
+        binding.rateButton.setOnClickListener {
+            binding.rateButton.performHapticContextClick()
+            binding.personImageView.setImageResource(R.drawable.ic_human_happy)
             view.context.launchPlayStore(packageName)
         }
 
-        this.kingscupViewGroup.setOnClickListener {
-            this.kingscupViewGroup.performHapticContextClick()
+        binding.kingscupViewGroup.setOnClickListener {
+            binding.kingscupViewGroup.performHapticContextClick()
             view.context.launchPlayStore(KINGS_CUP_PACKAGE_NAME)
         }
 
-        this.mamikaViewGroup.setOnClickListener {
-            this.kingscupViewGroup.performHapticContextClick()
+        binding.mamikaViewGroup.setOnClickListener {
+            binding.kingscupViewGroup.performHapticContextClick()
             view.context.launchPlayStore(MAMIKA_PACKAGE_NAME)
         }
     }

@@ -20,5 +20,5 @@
         android:id="@+id/currencyNavigationFragment"
         android:name="com.delacrixmorgan.squark.ui.currency.CurrencyFragment"
         android:label="CurrencyNavigationFragment"
-        tools:layout="@layout/fragment_currency_navigation" />
+        tools:layout="@layout/fragment_currency" />
 </navigation>

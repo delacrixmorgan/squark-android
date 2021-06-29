@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        package="com.delacrixmorgan.squark">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.delacrixmorgan.squark">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-            android:name=".App"
-            android:allowBackup="true"
-            android:icon="@mipmap/ic_launcher"
-            android:label="${appLabel}"
-            android:roundIcon="@mipmap/ic_launcher_round"
-            android:supportsRtl="true"
-            android:theme="@style/AppTheme"
-            android:usesCleartextTraffic="true"
-            tools:targetApi="m">
+        android:name=".App"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="${appLabel}"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"
+        tools:targetApi="m">
         <activity
-                android:name=".MainActivity"
-                android:screenOrientation="portrait"
-                tools:ignore="LockedOrientationActivity">
+            android:name=".MainActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -31,18 +31,18 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                        android:host="hello"
-                        android:scheme="squark" />
+                    android:host="hello"
+                    android:scheme="squark" />
             </intent-filter>
         </activity>
         <activity
-                android:name="com.delacrixmorgan.squark.ui.preference.PreferenceNavigationActivity"
-                android:screenOrientation="portrait"
-                android:windowSoftInputMode="adjustPan"
-                tools:ignore="LockedOrientationActivity" />
+            android:name="com.delacrixmorgan.squark.ui.preference.PreferenceNavigationActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"
+            tools:ignore="LockedOrientationActivity" />
         <activity
-                android:name="com.delacrixmorgan.squark.ui.preference.credit.CreditActivity"
-                android:screenOrientation="portrait"
-                tools:ignore="LockedOrientationActivity" />
+            android:name="com.delacrixmorgan.squark.ui.preference.credit.CreditActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
     </application>
 </manifest>

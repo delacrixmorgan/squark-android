@@ -3,15 +3,15 @@ package com.delacrixmorgan.squark.ui.currency
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.view.GestureDetector
+import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.animation.AnimationUtils
 import android.widget.TableLayout
-import android.widget.TableRow
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.*
-import kotlinx.android.synthetic.main.cell_row.view.*
+import com.delacrixmorgan.squark.databinding.ItemRowBinding
 import kotlin.math.absoluteValue
 
 class CurrencyViewModel : ViewModel() {
@@ -27,7 +27,7 @@ class CurrencyViewModel : ViewModel() {
     fun setupTable(
         activity: Activity,
         tableLayout: TableLayout,
-        rowList: ArrayList<TableRow>,
+        rowList: ArrayList<ItemRowBinding>,
         listener: RowListener
     ) {
         val thresholdTranslationWidth = activity.resources.displayMetrics.widthPixels / 6F
@@ -36,10 +36,9 @@ class CurrencyViewModel : ViewModel() {
         val gestureDetector = GestureDetector(activity, SingleTapConfirm())
 
         for (index in 0..9) {
-            val tableRow = activity.layoutInflater.inflate(
-                R.layout.cell_row, tableLayout, false
-            ) as TableRow
-
+            val tableRow = ItemRowBinding.inflate(
+                LayoutInflater.from(activity), tableLayout, false
+            )
             tableRow.quantifierTextView.text = calculateRowQuantifier(multiplier, index)
             tableRow.resultTextView.text = calculateRowResult(
                 multiplier, index, conversionRate
@@ -55,11 +54,11 @@ class CurrencyViewModel : ViewModel() {
                 multiplier * 10, index, conversionRate
             )
 
-            tableRow.setOnTouchListener { _, event ->
+            tableRow.root.setOnTouchListener { _, event ->
                 if (gestureDetector.onTouchEvent(event)) {
                     listener.onRowClicked(index)
                     rowList.forEach {
-                        it.translationX = 0F
+                        it.root.translationX = 0F
                         it.quantifierTextView.alpha = 1F
                         it.resultTextView.alpha = 1F
 
@@ -70,10 +69,10 @@ class CurrencyViewModel : ViewModel() {
                         it.beforeResultTextView.alpha = 0F
                     }
                 } else {
-                    tableRow.onTouchEvent(event)
+                    tableRow.root.onTouchEvent(event)
                     when (event.action) {
                         MotionEvent.ACTION_UP -> {
-                            val currentPosition = rowList.firstOrNull()?.translationX ?: 0F
+                            val currentPosition = rowList.firstOrNull()?.root?.translationX ?: 0F
 
                             if (currentPosition.absoluteValue > thresholdSwipeWidth) {
                                 if (currentPosition < 0) {
@@ -90,7 +89,7 @@ class CurrencyViewModel : ViewModel() {
                             }
 
                             rowList.forEach {
-                                it.translationX = 0F
+                                it.root.translationX = 0F
                                 it.quantifierTextView.alpha = 1F
                                 it.resultTextView.alpha = 1F
 
@@ -108,7 +107,7 @@ class CurrencyViewModel : ViewModel() {
 
                                 val alpha = movingPixels.absoluteValue * alphaRatio
                                 rowList.forEach {
-                                    it.translationX = movingPixels
+                                    it.root.translationX = movingPixels
 
                                     it.quantifierTextView.alpha = (1F - alpha).roundUp()
                                     it.resultTextView.alpha = (1F - alpha).roundUp()
@@ -138,7 +137,7 @@ class CurrencyViewModel : ViewModel() {
                         }
 
                         MotionEvent.ACTION_DOWN -> {
-                            tableRow.performHapticContextClick()
+                            tableRow.root.performHapticContextClick()
                             anchorPosition = event.rawX
                         }
                     }
@@ -147,11 +146,11 @@ class CurrencyViewModel : ViewModel() {
             }
 
             rowList.add(tableRow)
-            tableLayout.addView(tableRow)
+            tableLayout.addView(tableRow.root)
         }
     }
 
-    fun updateTable(rowList: ArrayList<TableRow>) {
+    fun updateTable(rowList: ArrayList<ItemRowBinding>) {
         rowList.forEachIndexed { index, tableRow ->
             with(tableRow) {
                 quantifierTextView.text = calculateRowQuantifier(multiplier, index)
@@ -166,10 +165,10 @@ class CurrencyViewModel : ViewModel() {
                     calculateRowResult(multiplier * 10, index, conversionRate)
 
                 quantifierTextView.startAnimation(
-                    AnimationUtils.loadAnimation(context, R.anim.wobble)
+                    AnimationUtils.loadAnimation(root.context, R.anim.wobble)
                 )
                 resultTextView.startAnimation(
-                    AnimationUtils.loadAnimation(context, R.anim.wobble)
+                    AnimationUtils.loadAnimation(root.context, R.anim.wobble)
                 )
             }
         }
@@ -179,15 +178,15 @@ class CurrencyViewModel : ViewModel() {
         activity: Activity,
         tableLayout: TableLayout,
         expandQuantifier: Int,
-        expandedList: ArrayList<TableRow>,
+        expandedList: ArrayList<ItemRowBinding>,
         listener: RowListener
     ) {
         for (index in 1..9) {
-            val tableRow = activity.layoutInflater.inflate(
-                R.layout.cell_row, tableLayout, false
-            ) as TableRow
+            val tableRow = ItemRowBinding.inflate(
+                LayoutInflater.from(activity), tableLayout, false
+            )
 
-            tableRow.background = ContextCompat.getDrawable(
+            tableRow.root.background = ContextCompat.getDrawable(
                 activity,
                 R.drawable.shape_cell_light
             )
@@ -201,9 +200,9 @@ class CurrencyViewModel : ViewModel() {
                 conversionRate
             )
 
-            tableRow.setOnClickListener { listener.onRowClicked(index) }
+            tableRow.root.setOnClickListener { listener.onRowClicked(index) }
             expandedList.add(tableRow)
-            tableLayout.addView(tableRow, (expandQuantifier + index))
+            tableLayout.addView(tableRow.root, (expandQuantifier + index))
         }
     }
 

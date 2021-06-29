@@ -18,15 +18,15 @@ import com.delacrixmorgan.squark.data.dao.CountryDatabase
 import com.delacrixmorgan.squark.data.model.Country
 import com.delacrixmorgan.squark.data.model.Currency
 import com.delacrixmorgan.squark.data.service.SquarkService
+import com.delacrixmorgan.squark.databinding.FragmentCountryListBinding
 import com.delacrixmorgan.squark.ui.currency.CurrencyFragment
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.fragment_country_list.*
 import kotlinx.coroutines.launch
 import me.zhanghai.android.fastscroll.FastScrollerBuilder
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionExpandListener {
+class CountryListFragment : Fragment(R.layout.fragment_country_list), CountryListListener, MenuItem.OnActionExpandListener {
     companion object {
         fun create(countryCode: String? = null) = CountryListFragment().apply {
             arguments = bundleOf(Keys.Country.Code.name to countryCode)
@@ -51,37 +51,46 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
         countryCode = requireNotNull(arguments?.getString(Keys.Country.Code.name))
     }
 
+    private val binding get() = requireNotNull(_binding)
+    private var _binding: FragmentCountryListBinding? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_country_list, container, false)
+    ): View {
+        _binding = FragmentCountryListBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val activity = activity as AppCompatActivity
 
-        activity.setSupportActionBar(toolbar)
+        activity.setSupportActionBar(binding.toolbar)
         activity.supportActionBar?.let {
             it.setDisplayHomeAsUpEnabled(true)
             it.setHomeButtonEnabled(true)
             it.title = ""
         }
 
-        countryRecyclerView.adapter = countryAdapter
+        binding.countryRecyclerView.adapter = countryAdapter
 
-        FastScrollerBuilder(countryRecyclerView)
+        FastScrollerBuilder(binding.countryRecyclerView)
             .build()
 
-        swipeRefreshLayout.setColorSchemeColors(
+        binding.swipeRefreshLayout.setColorSchemeColors(
             R.color.colorAccent.compatColor(context),
             R.color.colorPrimary.compatColor(context)
         )
 
-        swipeRefreshLayout.setOnRefreshListener {
-            swipeRefreshLayout.performHapticContextClick()
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            binding.swipeRefreshLayout.performHapticContextClick()
             checkIsDataUpdated()
         }
 
@@ -96,11 +105,11 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
             updateCurrencyRates()
         } else {
             Snackbar.make(
-                mainContainer,
+                binding.mainContainer,
                 getString(R.string.fragment_country_list_title_everything_already_updated),
                 Snackbar.LENGTH_SHORT
             ).show()
-            swipeRefreshLayout.isRefreshing = false
+            binding.swipeRefreshLayout.isRefreshing = false
         }
     }
 
@@ -108,13 +117,13 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
         lifecycleScope.launch {
             when (val result = SquarkService.getCurrencies()) {
                 is SquarkResult.Success -> {
-                    swipeRefreshLayout.isRefreshing = false
+                    binding.swipeRefreshLayout.isRefreshing = false
                     updateCurrencies(result.value.currencies)
                 }
                 is SquarkResult.Failure -> {
-                    swipeRefreshLayout.isRefreshing = false
+                    binding.swipeRefreshLayout.isRefreshing = false
                     Snackbar.make(
-                        mainContainer,
+                        binding.mainContainer,
                         getString(R.string.error_api_countries),
                         Snackbar.LENGTH_SHORT
                     ).show()
@@ -143,7 +152,7 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
 
             if (isVisible) {
                 Snackbar.make(
-                    mainContainer,
+                    binding.mainContainer,
                     getString(R.string.fragment_country_list_title_updated),
                     Snackbar.LENGTH_SHORT
                 ).show()
@@ -166,7 +175,7 @@ class CountryListFragment : Fragment(), CountryListListener, MenuItem.OnActionEx
         countryAdapter.updateDataSet(filterCountries, searchMode)
 
         if (isVisible) {
-            emptyStateViewGroup.isVisible = filterCountries.isEmpty()
+            binding.emptyStateViewGroup.isVisible = filterCountries.isEmpty()
         }
     }
 
