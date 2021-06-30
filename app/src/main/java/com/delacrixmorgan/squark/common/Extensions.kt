@@ -13,7 +13,7 @@ import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.SharedPreferenceHelper.DEFAULT_BASE_CURRENCY_CODE
 import com.delacrixmorgan.squark.common.SharedPreferenceHelper.DEFAULT_QUOTE_CURRENCY_CODE
 import com.delacrixmorgan.squark.data.controller.CountryDataController
-import com.delacrixmorgan.squark.data.model.Country
+import com.delacrixmorgan.squark.models.Country
 import org.json.JSONObject
 import org.threeten.bp.DateTimeUtils
 import org.threeten.bp.Instant

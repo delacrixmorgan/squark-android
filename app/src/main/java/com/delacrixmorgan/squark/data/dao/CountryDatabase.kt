@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.delacrixmorgan.squark.data.model.Country
+import com.delacrixmorgan.squark.models.Country
 
 @Database(entities = [(Country::class)], version = 1, exportSchema = false)
 abstract class CountryDatabase : RoomDatabase() {

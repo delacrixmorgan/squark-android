@@ -12,13 +12,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.*
-import com.delacrixmorgan.squark.data.api.SquarkResult
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.dao.CountryDatabase
-import com.delacrixmorgan.squark.data.model.Country
-import com.delacrixmorgan.squark.data.model.Currency
-import com.delacrixmorgan.squark.data.service.SquarkService
-import com.delacrixmorgan.squark.databinding.FragmentCountryListBinding
+import com.delacrixmorgan.squark.models.Country
+import com.delacrixmorgan.squark.models.Currency
+import com.delacrixmorgan.squark.databinding.FragmentCountryBinding
 import com.delacrixmorgan.squark.ui.currency.CurrencyFragment
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
@@ -26,10 +24,10 @@ import me.zhanghai.android.fastscroll.FastScrollerBuilder
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class CountryListFragment : Fragment(R.layout.fragment_country_list), CountryListListener,
+class CountryFragment : Fragment(R.layout.fragment_country), CountryRecyclerViewAdapter.Listener,
     MenuItem.OnActionExpandListener {
     companion object {
-        fun create(countryCode: String? = null) = CountryListFragment().apply {
+        fun create(countryCode: String? = null) = CountryFragment().apply {
             arguments = bundleOf(Keys.Country.Code.name to countryCode)
         }
     }
@@ -45,14 +43,14 @@ class CountryListFragment : Fragment(R.layout.fragment_country_list), CountryLis
     }
 
     private val binding get() = requireNotNull(_binding)
-    private var _binding: FragmentCountryListBinding? = null
+    private var _binding: FragmentCountryBinding? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentCountryListBinding.inflate(inflater, container, false)
+        _binding = FragmentCountryBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -115,22 +113,22 @@ class CountryListFragment : Fragment(R.layout.fragment_country_list), CountryLis
     }
 
     private fun updateCurrencyRates() {
-        lifecycleScope.launch {
-            when (val result = SquarkService.getCurrencies(requireContext())) {
-                is SquarkResult.Success -> {
-                    binding.swipeRefreshLayout.isRefreshing = false
-                    updateCurrencies(result.value.currencies)
-                }
-                is SquarkResult.Failure -> {
-                    binding.swipeRefreshLayout.isRefreshing = false
-                    Snackbar.make(
-                        binding.mainContainer,
-                        getString(R.string.error_api_countries),
-                        Snackbar.LENGTH_SHORT
-                    ).show()
-                }
-            }
-        }
+//        lifecycleScope.launch {
+//            when (val result = SquarkService.getCurrencies(requireContext())) {
+//                is com.delacrixmorgan.squark.data.api.SquarkResult.Result.Success -> {
+//                    binding.swipeRefreshLayout.isRefreshing = false
+//                    updateCurrencies(result.value.currencies)
+//                }
+//                is com.delacrixmorgan.squark.data.api.SquarkResult.Result.Failure -> {
+//                    binding.swipeRefreshLayout.isRefreshing = false
+//                    Snackbar.make(
+//                        binding.mainContainer,
+//                        getString(R.string.error_api_countries),
+//                        Snackbar.LENGTH_SHORT
+//                    ).show()
+//                }
+//            }
+//        }
     }
 
     private fun updateCurrencies(currencies: List<Currency>) {

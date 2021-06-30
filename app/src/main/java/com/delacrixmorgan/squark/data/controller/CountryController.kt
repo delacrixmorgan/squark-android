@@ -3,8 +3,7 @@ package com.delacrixmorgan.squark.data.controller
 import com.delacrixmorgan.squark.App
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.getJsonMap
-import com.delacrixmorgan.squark.data.dao.CountryDatabase
-import com.delacrixmorgan.squark.data.model.Country
+import com.delacrixmorgan.squark.models.Country
 
 object CountryDataController {
     private var countries = listOf<Country>()

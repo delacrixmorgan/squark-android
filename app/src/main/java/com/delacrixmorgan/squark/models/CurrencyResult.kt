@@ -1,4 +1,4 @@
-package com.delacrixmorgan.squark.data.model
+package com.delacrixmorgan.squark.models
 
 class CurrencyResult(
     private val quotes: Map<String, Double> = mapOf()

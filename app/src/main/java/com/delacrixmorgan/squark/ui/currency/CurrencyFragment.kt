@@ -16,7 +16,7 @@ import com.delacrixmorgan.squark.common.SharedPreferenceHelper
 import com.delacrixmorgan.squark.common.getPreferenceCountry
 import com.delacrixmorgan.squark.common.performHapticContextClick
 import com.delacrixmorgan.squark.data.controller.CountryDataController
-import com.delacrixmorgan.squark.data.model.Country
+import com.delacrixmorgan.squark.models.Country
 import com.delacrixmorgan.squark.databinding.FragmentCurrencyBinding
 import com.delacrixmorgan.squark.databinding.ItemRowBinding
 import com.delacrixmorgan.squark.ui.preference.PreferenceNavigationActivity

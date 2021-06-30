@@ -10,23 +10,24 @@ import androidx.navigation.Navigation
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.SharedPreferenceHelper
 import com.delacrixmorgan.squark.common.getJsonMap
-import com.delacrixmorgan.squark.data.api.SquarkResult
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.dao.CountryDataDao
 import com.delacrixmorgan.squark.data.dao.CountryDatabase
-import com.delacrixmorgan.squark.data.model.Country
-import com.delacrixmorgan.squark.data.model.Currency
-import com.delacrixmorgan.squark.data.service.SquarkService
+import com.delacrixmorgan.squark.models.Country
+import com.delacrixmorgan.squark.models.Currency
 import com.delacrixmorgan.squark.databinding.FragmentLaunchBinding
+import com.delacrixmorgan.squark.services.network.Result
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
 class LaunchFragment : Fragment(R.layout.fragment_launch) {
-    private var countryDatabaseDao: CountryDataDao? = null
-
     private val binding get() = requireNotNull(_binding)
     private var _binding: FragmentLaunchBinding? = null
+
+    private var countryDatabaseDao: CountryDataDao? = null
+    private val viewModel: LaunchViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -69,17 +70,17 @@ class LaunchFragment : Fragment(R.layout.fragment_launch) {
     }
 
     private suspend fun fetchCurrencies(): List<Currency>? {
-        return when (val result = SquarkService.getCurrencies(requireContext())) {
-            is SquarkResult.Success -> {
-                result.value.currencies
-            }
-            is SquarkResult.Failure -> {
+        return when (val result = viewModel.fetchCurrencies(requireContext())) {
+            is Result.Failure -> {
                 Snackbar.make(
                     binding.mainContainer,
                     result.error.localizedMessage ?: "",
                     Snackbar.LENGTH_SHORT
                 ).show()
                 null
+            }
+            is Result.Success -> {
+                result.value.currencies
             }
         }
     }

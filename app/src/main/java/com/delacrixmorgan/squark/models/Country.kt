@@ -1,4 +1,4 @@
-package com.delacrixmorgan.squark.data.model
+package com.delacrixmorgan.squark.models
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

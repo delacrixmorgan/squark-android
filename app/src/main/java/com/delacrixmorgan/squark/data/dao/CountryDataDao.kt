@@ -1,7 +1,7 @@
 package com.delacrixmorgan.squark.data.dao
 
 import androidx.room.*
-import com.delacrixmorgan.squark.data.model.Country
+import com.delacrixmorgan.squark.models.Country
 
 @Dao
 interface CountryDataDao {

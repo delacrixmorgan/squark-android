@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.databinding.ActivityPreferenceNavigationBinding
-import com.delacrixmorgan.squark.ui.preference.country.CountryListFragment
+import com.delacrixmorgan.squark.ui.preference.country.CountryFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class PreferenceNavigationActivity : AppCompatActivity(),
@@ -49,10 +49,10 @@ class PreferenceNavigationActivity : AppCompatActivity(),
         val existingFragment =
             this.supportFragmentManager.findFragmentById(binding.contentContainer.id)
         val targetFragment: Fragment = when (menuItem.itemId) {
-            R.id.itemCountries -> CountryListFragment.create(this.countryCode)
+            R.id.itemCountries -> CountryFragment.create(this.countryCode)
             R.id.itemSupport -> SupportListFragment.create()
             R.id.itemSettings -> SettingsListFragment.create()
-            else -> CountryListFragment.create()
+            else -> CountryFragment.create()
         }
 
         if (existingFragment != null && existingFragment::class.java == targetFragment::class.java) {
