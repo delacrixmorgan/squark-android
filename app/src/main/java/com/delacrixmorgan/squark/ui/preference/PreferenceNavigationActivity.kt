@@ -35,6 +35,7 @@ class PreferenceNavigationActivity : AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPreferenceNavigationBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         if (this.intent.extras != null) {
             this.countryCode = this.intent.getStringExtra(EXTRA_RESULT_COUNTRY_CODE)

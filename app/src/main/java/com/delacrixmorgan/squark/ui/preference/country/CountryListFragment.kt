@@ -44,14 +44,6 @@ class CountryListFragment : Fragment(R.layout.fragment_country_list), CountryLis
         CountryRecyclerViewAdapter(listener = this)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-
-        database = CountryDatabase.getInstance(requireContext())
-        countryCode = requireNotNull(arguments?.getString(Keys.Country.Code.name))
-    }
-
     private val binding get() = requireNotNull(_binding)
     private var _binding: FragmentCountryListBinding? = null
 
@@ -62,6 +54,14 @@ class CountryListFragment : Fragment(R.layout.fragment_country_list), CountryLis
     ): View {
         _binding = FragmentCountryListBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+
+        database = CountryDatabase.getInstance(requireContext())
+        countryCode = requireNotNull(arguments?.getString(Keys.Country.Code.name))
     }
 
     override fun onDestroyView() {
