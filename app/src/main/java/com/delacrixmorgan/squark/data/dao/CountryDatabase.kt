@@ -6,7 +6,11 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.delacrixmorgan.squark.models.Country
 
-@Database(entities = [(Country::class)], version = 1, exportSchema = false)
+@Database(
+    entities = [(Country::class)],
+    version = 1,
+    exportSchema = false
+)
 abstract class CountryDatabase : RoomDatabase() {
     abstract fun countryDataDao(): CountryDataDao
 
@@ -17,10 +21,10 @@ abstract class CountryDatabase : RoomDatabase() {
             if (INSTANCE == null) {
                 synchronized(CountryDatabase::class) {
                     INSTANCE = Room.databaseBuilder(
-                            context.applicationContext,
-                            CountryDatabase::class.java,
-                            "country.db"
-                        )
+                        context.applicationContext,
+                        CountryDatabase::class.java,
+                        "country.db"
+                    )
                         .build()
                 }
             }
