@@ -1,4 +1,4 @@
-package com.delacrixmorgan.squark.data.model
+package com.delacrixmorgan.squark.models
 
 data class Currency(
     val code: String,

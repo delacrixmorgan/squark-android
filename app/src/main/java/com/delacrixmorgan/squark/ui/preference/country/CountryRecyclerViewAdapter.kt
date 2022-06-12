@@ -1,29 +1,29 @@
 package com.delacrixmorgan.squark.ui.preference.country
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.delacrixmorgan.squark.R
-import com.delacrixmorgan.squark.data.model.Country
-import kotlinx.android.synthetic.main.cell_country.view.*
+import com.delacrixmorgan.squark.models.Country
+import com.delacrixmorgan.squark.databinding.ItemCountryBinding
 import me.zhanghai.android.fastscroll.PopupTextProvider
 import java.util.*
 import kotlin.collections.ArrayList
 
-class CountryRecyclerViewAdapter(private val listener: CountryListListener) :
+class CountryRecyclerViewAdapter(private val listener: Listener) :
     RecyclerView.Adapter<CountryRecyclerViewAdapter.CountryViewHolder>(), PopupTextProvider {
+
+    interface Listener {
+        fun onCountrySelected(country: Country)
+    }
 
     private var countries: List<Country> = ArrayList()
     private var isSearchMode = false
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CountryViewHolder {
-        return CountryViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.cell_country, parent, false),
-            listener
-        )
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = CountryViewHolder(
+        ItemCountryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+    )
 
     override fun onBindViewHolder(holder: CountryViewHolder, position: Int) {
         val country = countries[position]
@@ -46,10 +46,12 @@ class CountryRecyclerViewAdapter(private val listener: CountryListListener) :
         }
     }
 
-    class CountryViewHolder(itemView: View, private val listener: CountryListListener) :
-        RecyclerView.ViewHolder(itemView) {
+    inner class CountryViewHolder(private val binding: ItemCountryBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(country: Country, position: Int, size: Int, searchMode: Boolean) = with(itemView) {
+        fun bind(country: Country, position: Int, size: Int, searchMode: Boolean) = with(binding) {
+            val context = root.context
+
             codeTextView.text = country.code
             descriptionTextView.text = country.name
             flagImageView.setImageResource(getFlagResource(country))

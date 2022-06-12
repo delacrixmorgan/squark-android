@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TableRow
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -17,11 +16,12 @@ import com.delacrixmorgan.squark.common.SharedPreferenceHelper
 import com.delacrixmorgan.squark.common.getPreferenceCountry
 import com.delacrixmorgan.squark.common.performHapticContextClick
 import com.delacrixmorgan.squark.data.controller.CountryDataController
-import com.delacrixmorgan.squark.data.model.Country
+import com.delacrixmorgan.squark.models.Country
+import com.delacrixmorgan.squark.databinding.FragmentCurrencyBinding
+import com.delacrixmorgan.squark.databinding.ItemRowBinding
 import com.delacrixmorgan.squark.ui.preference.PreferenceNavigationActivity
-import kotlinx.android.synthetic.main.fragment_currency_navigation.*
 
-class CurrencyFragment : Fragment(), RowListener {
+class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener {
 
     companion object {
         private const val REQUEST_BASE_COUNTRY = 1
@@ -30,12 +30,16 @@ class CurrencyFragment : Fragment(), RowListener {
         const val EXTRA_COUNTRY_CODE = "CurrencyNavigationFragment.countryCode"
     }
 
+    private val binding get() = requireNotNull(_binding)
+    private var _binding: FragmentCurrencyBinding? = null
+
     private var isExpanded = false
     private var baseCountry: Country? = null
+
     private var quoteCountry: Country? = null
 
-    private var rowList = arrayListOf<TableRow>()
-    private var expandedList = arrayListOf<TableRow>()
+    private var rowList = arrayListOf<ItemRowBinding>()
+    private var expandedList = arrayListOf<ItemRowBinding>()
 
     private lateinit var viewModel: CurrencyViewModel
 
@@ -48,8 +52,14 @@ class CurrencyFragment : Fragment(), RowListener {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_currency_navigation, container, false)
+    ): View {
+        _binding = FragmentCurrencyBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -61,12 +71,12 @@ class CurrencyFragment : Fragment(), RowListener {
 
         viewModel.setupTable(
             activity = requireActivity(),
-            tableLayout = currencyTableLayout,
+            tableLayout = binding.currencyTableLayout,
             rowList = rowList,
             listener = this
         )
 
-        baseCurrencyTextView.setOnClickListener {
+        binding.baseCurrencyTextView.setOnClickListener {
             val currencyIntent = PreferenceNavigationActivity.newLaunchIntent(
                 view.context,
                 countryCode = baseCountry?.code
@@ -77,7 +87,7 @@ class CurrencyFragment : Fragment(), RowListener {
             )
         }
 
-        quoteCurrencyTextView.setOnClickListener {
+        binding.quoteCurrencyTextView.setOnClickListener {
             val currencyIntent = PreferenceNavigationActivity.newLaunchIntent(
                 view.context,
                 countryCode = quoteCountry?.code
@@ -88,13 +98,13 @@ class CurrencyFragment : Fragment(), RowListener {
             )
         }
 
-        swapButton.setOnClickListener {
+        binding.swapButton.setOnClickListener {
             SharedPreferenceHelper.apply {
                 baseCurrency = quoteCountry?.code
                 quoteCurrency = baseCountry?.code
             }
 
-            swapButton.performHapticContextClick()
+            binding.swapButton.performHapticContextClick()
             updateTable()
         }
 
@@ -103,14 +113,14 @@ class CurrencyFragment : Fragment(), RowListener {
 
     private fun updateTable() {
         baseCountry = CountryDataController.getPreferenceCountry(
-            requireContext(), SharedPreferenceHelper.baseCurrency
+            SharedPreferenceHelper.baseCurrency
         )
         quoteCountry = CountryDataController.getPreferenceCountry(
-            requireContext(), SharedPreferenceHelper.quoteCurrency
+            SharedPreferenceHelper.quoteCurrency
         )
 
-        baseCurrencyTextView.text = baseCountry?.code
-        quoteCurrencyTextView.text = quoteCountry?.code
+        binding.baseCurrencyTextView.text = baseCountry?.code
+        binding.quoteCurrencyTextView.text = quoteCountry?.code
 
         if (baseCountry?.rate != 0.0 && quoteCountry?.rate != 0.0) {
             viewModel.updateConversionRate(baseCountry?.rate, quoteCountry?.rate)
@@ -142,12 +152,12 @@ class CurrencyFragment : Fragment(), RowListener {
     }
 
     private fun onRowExpand(selectedRow: Int) {
-        currencyTableLayout.performHapticContextClick()
+        binding.currencyTableLayout.performHapticContextClick()
         rowList.forEachIndexed { index, tableRow ->
             if (index != selectedRow && index != (selectedRow + 1)) {
-                tableRow.isVisible = false
+                tableRow.root.isVisible = false
             } else {
-                tableRow.setBackgroundColor(
+                tableRow.root.setBackgroundColor(
                     ContextCompat.getColor(
                         requireContext(),
                         R.color.colorAccent
@@ -158,7 +168,7 @@ class CurrencyFragment : Fragment(), RowListener {
 
         viewModel.expandTable(
             activity = requireActivity(),
-            tableLayout = currencyTableLayout,
+            tableLayout = binding.currencyTableLayout,
             expandQuantifier = selectedRow,
             expandedList = expandedList,
             listener = this
@@ -166,14 +176,15 @@ class CurrencyFragment : Fragment(), RowListener {
     }
 
     private fun onRowCollapse() {
-        currencyTableLayout.performHapticContextClick()
+        binding.currencyTableLayout.performHapticContextClick()
         expandedList.forEach {
-            currencyTableLayout.removeView(it)
+            binding.currencyTableLayout.removeView(it.root)
         }
 
         rowList.forEach {
-            it.isVisible = true
-            it.background = ContextCompat.getDrawable(requireContext(), R.drawable.shape_cell_dark)
+            it.root.isVisible = true
+            it.root.background =
+                ContextCompat.getDrawable(requireContext(), R.drawable.shape_cell_dark)
         }
     }
 
@@ -186,7 +197,7 @@ class CurrencyFragment : Fragment(), RowListener {
                 SharedPreferenceHelper.multiplier = multiplier.toInt()
             }
 
-            currencyTableLayout.performHapticContextClick()
+            binding.currencyTableLayout.performHapticContextClick()
             viewModel.updateTable(rowList)
         }
     }
@@ -197,7 +208,7 @@ class CurrencyFragment : Fragment(), RowListener {
                 SharedPreferenceHelper.multiplier = multiplier.toInt()
             }
 
-            currencyTableLayout.performHapticContextClick()
+            binding.currencyTableLayout.performHapticContextClick()
             viewModel.updateTable(rowList)
         }
     }

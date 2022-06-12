@@ -7,45 +7,54 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.launchWebsite
-import kotlinx.android.synthetic.main.fragment_credit_list.*
+import com.delacrixmorgan.squark.databinding.FragmentCreditListBinding
 
-class CreditListFragment : DialogFragment() {
+class CreditListFragment : DialogFragment(R.layout.fragment_credit_list) {
     companion object {
         fun create() = CreditListFragment()
     }
+
+    private val binding get() = requireNotNull(_binding)
+    private var _binding: FragmentCreditListBinding? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_credit_list, container, false)
+    ): View {
+        _binding = FragmentCreditListBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        spartanImageView.setOnClickListener {
+        binding.spartanImageView.setOnClickListener {
             launchWebsite("https://github.com/theleagueof/league-spartan")
         }
 
-        currencyLayerImageView.setOnClickListener {
+        binding.currencyLayerImageView.setOnClickListener {
             launchWebsite("https://github.com/apilayer/currencylayer-API")
         }
 
-        fastScrollImageView.setOnClickListener {
+        binding.fastScrollImageView.setOnClickListener {
             launchWebsite("https://github.com/zhanghai/AndroidFastScroll")
         }
 
-        dateTimeWhartonImageView.setOnClickListener {
+        binding.dateTimeWhartonImageView.setOnClickListener {
             launchWebsite("https://github.com/JakeWharton/ThreeTenABP")
         }
 
-        serializationWhartonImageView.setOnClickListener {
+        binding.serializationWhartonImageView.setOnClickListener {
             launchWebsite("https://github.com/JakeWharton/retrofit2-kotlinx-serialization-converter")
         }
 
-        doneButton.setOnClickListener {
+        binding.doneButton.setOnClickListener {
             activity?.finish()
         }
     }

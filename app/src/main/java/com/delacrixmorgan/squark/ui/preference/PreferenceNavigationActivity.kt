@@ -8,9 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.delacrixmorgan.squark.R
-import com.delacrixmorgan.squark.ui.preference.country.CountryListFragment
+import com.delacrixmorgan.squark.databinding.ActivityPreferenceNavigationBinding
+import com.delacrixmorgan.squark.ui.preference.country.CountryFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.android.synthetic.main.activity_preference_navigation.*
 
 class PreferenceNavigationActivity : AppCompatActivity(),
     BottomNavigationView.OnNavigationItemSelectedListener {
@@ -30,26 +30,29 @@ class PreferenceNavigationActivity : AppCompatActivity(),
 
     private var countryCode: String? = null
 
+    private lateinit var binding: ActivityPreferenceNavigationBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_preference_navigation)
+        binding = ActivityPreferenceNavigationBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         if (this.intent.extras != null) {
             this.countryCode = this.intent.getStringExtra(EXTRA_RESULT_COUNTRY_CODE)
         }
 
-        this.bottomNavigationView.setOnNavigationItemSelectedListener(this)
-        this.bottomNavigationView.selectedItemId = R.id.itemCountries
+        binding.bottomNavigationView.setOnNavigationItemSelectedListener(this)
+        binding.bottomNavigationView.selectedItemId = R.id.itemCountries
     }
 
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
         val existingFragment =
-            this.supportFragmentManager.findFragmentById(this.contentContainer.id)
+            this.supportFragmentManager.findFragmentById(binding.contentContainer.id)
         val targetFragment: Fragment = when (menuItem.itemId) {
-            R.id.itemCountries -> CountryListFragment.create(this.countryCode)
+            R.id.itemCountries -> CountryFragment.create(this.countryCode)
             R.id.itemSupport -> SupportListFragment.create()
             R.id.itemSettings -> SettingsListFragment.create()
-            else -> CountryListFragment.create()
+            else -> CountryFragment.create()
         }
 
         if (existingFragment != null && existingFragment::class.java == targetFragment::class.java) {
@@ -57,7 +60,7 @@ class PreferenceNavigationActivity : AppCompatActivity(),
         }
 
         supportFragmentManager.commit(allowStateLoss = true) {
-            replace(this@PreferenceNavigationActivity.contentContainer.id, targetFragment)
+            replace(binding.contentContainer.id, targetFragment)
         }
 
         return true

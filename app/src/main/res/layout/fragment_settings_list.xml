@@ -7,10 +7,6 @@
     <data>
 
         <import type="android.view.View" />
-
-        <variable
-            name="country"
-            type="com.delacrixmorgan.squark.data.model.Country" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -57,25 +53,25 @@
 
                     <include
                         android:id="@+id/multiplierViewGroup"
-                        layout="@layout/cell_settings"
+                        layout="@layout/item_settings"
                         app:switchEnabled="@{true}"
                         app:title='@{@string/fragment_support_settings_list_save_multiplier}' />
 
                     <include
                         android:id="@+id/creditsViewGroup"
-                        layout="@layout/cell_settings"
+                        layout="@layout/item_settings"
                         app:switchEnabled="@{false}"
                         app:title='@{@string/fragment_support_settings_list_credits}' />
 
                     <include
                         android:id="@+id/sourceCodeViewGroup"
-                        layout="@layout/cell_settings"
+                        layout="@layout/item_settings"
                         app:switchEnabled="@{false}"
                         app:title='@{@string/fragment_support_settings_list_source_code}' />
 
                     <include
                         android:id="@+id/shareViewGroup"
-                        layout="@layout/cell_settings"
+                        layout="@layout/item_settings"
                         app:switchEnabled="@{false}"
                         app:title='@{@string/fragment_support_settings_list_share}' />
                 </LinearLayout>
