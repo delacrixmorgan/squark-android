@@ -10,6 +10,7 @@ import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.launchPlayStore
 import com.delacrixmorgan.squark.common.performHapticContextClick
 import com.delacrixmorgan.squark.databinding.FragmentSupportListBinding
+import com.google.android.play.core.review.ReviewManagerFactory
 
 class SupportListFragment : Fragment(R.layout.fragment_support_list) {
     companion object {
@@ -43,15 +44,19 @@ class SupportListFragment : Fragment(R.layout.fragment_support_list) {
         binding.starImageView.setOnClickListener {
             binding.starImageView.performHapticContextClick()
             binding.personImageView.setImageResource(R.drawable.ic_human_happy)
-            binding.starImageView.setColorFilter(ContextCompat.getColor(view.context, R.color.colorAccent))
-
+            binding.starImageView.setColorFilter(
+                ContextCompat.getColor(
+                    view.context,
+                    R.color.colorAccent
+                )
+            )
             view.context.launchPlayStore(packageName)
         }
 
         binding.rateButton.setOnClickListener {
             binding.rateButton.performHapticContextClick()
             binding.personImageView.setImageResource(R.drawable.ic_human_happy)
-            view.context.launchPlayStore(packageName)
+            launchReviewSheet()
         }
 
         binding.kingscupViewGroup.setOnClickListener {
@@ -62,6 +67,23 @@ class SupportListFragment : Fragment(R.layout.fragment_support_list) {
         binding.mamikaViewGroup.setOnClickListener {
             binding.kingscupViewGroup.performHapticContextClick()
             view.context.launchPlayStore(MAMIKA_PACKAGE_NAME)
+        }
+    }
+
+    private fun launchReviewSheet() {
+        val reviewManager = ReviewManagerFactory.create(requireContext())
+        val requestReviewFlow = reviewManager.requestReviewFlow()
+
+        requestReviewFlow.addOnCompleteListener { task ->
+            try {
+                if (task.isSuccessful) {
+                    reviewManager.launchReviewFlow(requireActivity(), task.result)
+                } else {
+                    requireContext().launchPlayStore(requireContext().packageName)
+                }
+            } catch (exception: Exception) {
+                requireContext().launchPlayStore(requireContext().packageName)
+            }
         }
     }
 }
