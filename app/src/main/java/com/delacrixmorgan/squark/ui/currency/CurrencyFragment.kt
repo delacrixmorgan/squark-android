@@ -113,10 +113,10 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener {
 
     private fun updateTable() {
         baseCountry = CountryDataController.getPreferenceCountry(
-            requireContext(), SharedPreferenceHelper.baseCurrency
+            SharedPreferenceHelper.baseCurrency
         )
         quoteCountry = CountryDataController.getPreferenceCountry(
-            requireContext(), SharedPreferenceHelper.quoteCurrency
+            SharedPreferenceHelper.quoteCurrency
         )
 
         binding.baseCurrencyTextView.text = baseCountry?.code

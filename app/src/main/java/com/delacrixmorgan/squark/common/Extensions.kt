@@ -8,7 +8,6 @@ import android.view.HapticFeedbackConstants
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.preference.PreferenceManager
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.SharedPreferenceHelper.DEFAULT_BASE_CURRENCY_CODE
 import com.delacrixmorgan.squark.common.SharedPreferenceHelper.DEFAULT_QUOTE_CURRENCY_CODE
@@ -21,7 +20,6 @@ import org.threeten.bp.format.DateTimeFormatter
 import java.io.BufferedReader
 import java.math.BigDecimal
 import java.util.*
-import kotlin.collections.HashMap
 import kotlin.math.roundToInt
 
 /**
@@ -112,10 +110,8 @@ fun Context.getJsonMap(rawFile: Int, key: String): Map<String, String> {
  * CountryDataController
  */
 fun CountryDataController.getPreferenceCountry(
-    context: Context,
     preferenceCurrency: String?
 ): Country? {
-    val preferenceManager = PreferenceManager.getDefaultSharedPreferences(context)
     val fallbackCurrency = if (preferenceCurrency == SharedPreferenceHelper.baseCurrency) {
         DEFAULT_BASE_CURRENCY_CODE
     } else {
@@ -123,7 +119,7 @@ fun CountryDataController.getPreferenceCountry(
     }
 
     return getCountries().firstOrNull {
-        it.code == preferenceManager.getString(preferenceCurrency, fallbackCurrency)
+        it.code == (preferenceCurrency ?: fallbackCurrency)
     }
 }
 

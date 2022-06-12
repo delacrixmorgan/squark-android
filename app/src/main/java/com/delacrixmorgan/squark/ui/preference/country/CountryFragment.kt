@@ -13,14 +13,21 @@ import androidx.lifecycle.lifecycleScope
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.*
 import com.delacrixmorgan.squark.data.controller.CountryDataController
-import com.delacrixmorgan.squark.data.dao.AppDatabase
+import com.delacrixmorgan.squark.data.dao.CountryDataDao
 import com.delacrixmorgan.squark.databinding.FragmentCountryBinding
 import com.delacrixmorgan.squark.models.Country
 import com.delacrixmorgan.squark.models.Currency
+import com.delacrixmorgan.squark.services.network.Result
 import com.delacrixmorgan.squark.ui.currency.CurrencyFragment
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
 import me.zhanghai.android.fastscroll.FastScrollerBuilder
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -32,9 +39,11 @@ class CountryFragment : Fragment(R.layout.fragment_country), CountryRecyclerView
         }
     }
 
+    private val viewModel: CountryViewModel by viewModel()
+
     private var searchView: SearchView? = null
     private var searchMenuItem: MenuItem? = null
-    private var database: AppDatabase? = null
+    private val countryDatabaseDao: CountryDataDao by inject()
 
     private lateinit var countryCode: String
 
@@ -112,48 +121,50 @@ class CountryFragment : Fragment(R.layout.fragment_country), CountryRecyclerView
     }
 
     private fun updateCurrencyRates() {
-//        lifecycleScope.launch {
-//            when (val result = SquarkService.getCurrencies(requireContext())) {
-//                is com.delacrixmorgan.squark.data.api.SquarkResult.Result.Success -> {
-//                    binding.swipeRefreshLayout.isRefreshing = false
-//                    updateCurrencies(result.value.currencies)
-//                }
-//                is com.delacrixmorgan.squark.data.api.SquarkResult.Result.Failure -> {
-//                    binding.swipeRefreshLayout.isRefreshing = false
-//                    Snackbar.make(
-//                        binding.mainContainer,
-//                        getString(R.string.error_api_countries),
-//                        Snackbar.LENGTH_SHORT
-//                    ).show()
-//                }
-//            }
-//        }
+        lifecycleScope.launch {
+            when (val result = viewModel.fetchCurrencies()) {
+                is Result.Success -> {
+                    binding.swipeRefreshLayout.isRefreshing = false
+                    updateCurrencies(result.value.currencies)
+                }
+                is Result.Failure -> {
+                    binding.swipeRefreshLayout.isRefreshing = false
+                    Snackbar.make(
+                        binding.mainContainer,
+                        getString(R.string.error_api_countries),
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
     }
 
     private fun updateCurrencies(currencies: List<Currency>) {
-        lifecycleScope.launch {
-            val countries = database?.countryDataDao()?.getCountries()
-            countries?.forEach { country ->
-                val updateCurrency = currencies.find {
-                    it.code.contains(country.code)
+        CoroutineScope(Dispatchers.IO).launch {
+            countryDatabaseDao.getCountries().collect { countries ->
+                countries.forEach { country ->
+                    val updateCurrency = currencies.find {
+                        it.code.contains(country.code)
+                    }
+
+                    updateCurrency?.let {
+                        country.rate = it.rate
+                        countryDatabaseDao.updateCountry(country)
+                    }
+                }
+                countries.let {
+                    CountryDataController.updateDataSet(it)
+                    SharedPreferenceHelper.lastUpdatedDate = Date()
                 }
 
-                updateCurrency?.let {
-                    country.rate = it.rate
-                    database?.countryDataDao()?.updateCountry(country)
+                if (isVisible) {
+                    Snackbar.make(
+                        binding.mainContainer,
+                        getString(R.string.fragment_country_list_title_updated),
+                        Snackbar.LENGTH_SHORT
+                    ).show()
                 }
-            }
-            countries?.let {
-                CountryDataController.updateDataSet(it)
-                SharedPreferenceHelper.lastUpdatedDate = Date()
-            }
-
-            if (isVisible) {
-                Snackbar.make(
-                    binding.mainContainer,
-                    getString(R.string.fragment_country_list_title_updated),
-                    Snackbar.LENGTH_SHORT
-                ).show()
+                coroutineContext.job.cancel()
             }
         }
     }

@@ -1,4 +1,7 @@
 {
+  "success": true,
+  "timestamp": 1655027944,
+  "source": "USD",
   "quotes": {
     "USDAED": 3.673104,
     "USDAFN": 89.399125,
@@ -21,7 +24,7 @@
     "USDBOB": 6.934398,
     "USDBRL": 4.987385,
     "USDBSD": 1.007131,
-    "USDBTC": 3.6335396e-05,
+    "USDBTC": 3.6369518e-05,
     "USDBTN": 78.354725,
     "USDBWP": 12.156589,
     "USDBYN": 3.399791,
@@ -168,8 +171,5 @@
     "USDZMK": 9001.203593,
     "USDZMW": 17.046302,
     "USDZWL": 321.999592
-  },
-  "source": "USD",
-  "success": true,
-  "timestamp": 1655027463
+  }
 }

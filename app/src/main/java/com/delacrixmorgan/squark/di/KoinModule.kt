@@ -34,6 +34,8 @@ val apiModule = module {
     fun provideCountryDao(appDatabase: AppDatabase) = appDatabase.countryDataDao()
 
     single { provideCurrencyApi(get()) }
+    single { provideAppDatabase() }
+    single { provideCountryDao(get()) }
 }
 
 val networkModule = module {
