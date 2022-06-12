@@ -12,13 +12,13 @@ import com.delacrixmorgan.squark.common.SharedPreferenceHelper
 import com.delacrixmorgan.squark.common.getJsonMap
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.dao.CountryDataDao
-import com.delacrixmorgan.squark.data.dao.CountryDatabase
+import com.delacrixmorgan.squark.databinding.FragmentLaunchBinding
 import com.delacrixmorgan.squark.models.Country
 import com.delacrixmorgan.squark.models.Currency
-import com.delacrixmorgan.squark.databinding.FragmentLaunchBinding
 import com.delacrixmorgan.squark.services.network.Result
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
@@ -26,7 +26,7 @@ class LaunchFragment : Fragment(R.layout.fragment_launch) {
     private val binding get() = requireNotNull(_binding)
     private var _binding: FragmentLaunchBinding? = null
 
-    private var countryDatabaseDao: CountryDataDao? = null
+    private val countryDatabaseDao: CountryDataDao by inject()
     private val viewModel: LaunchViewModel by viewModel()
 
     override fun onCreateView(
@@ -46,20 +46,14 @@ class LaunchFragment : Fragment(R.layout.fragment_launch) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launch {
-            countryDatabaseDao = CountryDatabase.getInstance(requireContext())?.countryDataDao()
-            val countries = countryDatabaseDao?.getCountries()
-            if (!countries.isNullOrEmpty()) {
+            val countries = countryDatabaseDao.getCountries()
+            if (countries.isNotEmpty()) {
                 CountryDataController.updateDataSet(countries)
                 launchCurrencyNavigationFragment()
             } else {
                 fetchCountries()
             }
         }
-    }
-
-    override fun onDestroy() {
-        CountryDatabase.destroyInstance()
-        super.onDestroy()
     }
 
     private fun fetchCountries() {

@@ -10,6 +10,7 @@ class CurrencyRepository(
     private val networkRequestManager: NetworkRequestManager
 ) {
     suspend fun fetchCurrencies(context: Context) = networkRequestManager.apiRequest {
-        api.getCurrencies("usd", context.getString(R.string.currency_layer_api_key))
+        context.getString(R.string.currency_layer_api_key)
+        api.getCurrencies()
     }
 }

@@ -13,10 +13,10 @@ import androidx.lifecycle.lifecycleScope
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.*
 import com.delacrixmorgan.squark.data.controller.CountryDataController
-import com.delacrixmorgan.squark.data.dao.CountryDatabase
+import com.delacrixmorgan.squark.data.dao.AppDatabase
+import com.delacrixmorgan.squark.databinding.FragmentCountryBinding
 import com.delacrixmorgan.squark.models.Country
 import com.delacrixmorgan.squark.models.Currency
-import com.delacrixmorgan.squark.databinding.FragmentCountryBinding
 import com.delacrixmorgan.squark.ui.currency.CurrencyFragment
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
@@ -34,7 +34,7 @@ class CountryFragment : Fragment(R.layout.fragment_country), CountryRecyclerView
 
     private var searchView: SearchView? = null
     private var searchMenuItem: MenuItem? = null
-    private var database: CountryDatabase? = null
+    private var database: AppDatabase? = null
 
     private lateinit var countryCode: String
 
@@ -58,7 +58,6 @@ class CountryFragment : Fragment(R.layout.fragment_country), CountryRecyclerView
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
 
-        database = CountryDatabase.getInstance(requireContext())
         countryCode = requireNotNull(arguments?.getString(Keys.Country.Code.name))
     }
 
@@ -234,10 +233,5 @@ class CountryFragment : Fragment(R.layout.fragment_country), CountryRecyclerView
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    override fun onDestroy() {
-        CountryDatabase.destroyInstance()
-        super.onDestroy()
     }
 }
