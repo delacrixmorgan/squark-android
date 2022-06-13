@@ -6,7 +6,9 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
 import com.delacrixmorgan.squark.R
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class CreditActivity : AppCompatActivity() {
     companion object {
         fun newLaunchIntent(context: Context) = Intent(context, CreditActivity::class.java)

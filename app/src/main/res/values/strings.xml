@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Squark</string>
     <string name="app_name_debug">Squark Debug</string>
-    <string name="message_build_version_name">v%s #%d</string>
+    <string name="message_build_version_name" formatted="false">v%s #%d</string>
 
     <string name="fragment_country_list_title_updated">Successfully updated</string>
     <string name="fragment_country_list_title_everything_already_updated">Everything is already up to date..</string>

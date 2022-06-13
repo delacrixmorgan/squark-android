@@ -10,10 +10,12 @@ import androidx.fragment.app.commit
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.databinding.ActivityPreferenceNavigationBinding
 import com.delacrixmorgan.squark.ui.preference.country.CountryFragment
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationBarView
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class PreferenceNavigationActivity : AppCompatActivity(),
-    BottomNavigationView.OnNavigationItemSelectedListener {
+    NavigationBarView.OnItemSelectedListener {
     companion object {
         const val EXTRA_RESULT_COUNTRY_CODE = "countryCode"
 
@@ -41,7 +43,7 @@ class PreferenceNavigationActivity : AppCompatActivity(),
             this.countryCode = this.intent.getStringExtra(EXTRA_RESULT_COUNTRY_CODE)
         }
 
-        binding.bottomNavigationView.setOnNavigationItemSelectedListener(this)
+        binding.bottomNavigationView.setOnItemSelectedListener(this)
         binding.bottomNavigationView.selectedItemId = R.id.itemCountries
     }
 

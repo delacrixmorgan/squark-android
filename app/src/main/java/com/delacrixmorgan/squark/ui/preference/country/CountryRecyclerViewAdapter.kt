@@ -5,11 +5,10 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.delacrixmorgan.squark.R
-import com.delacrixmorgan.squark.models.Country
 import com.delacrixmorgan.squark.databinding.ItemCountryBinding
+import com.delacrixmorgan.squark.models.Country
 import me.zhanghai.android.fastscroll.PopupTextProvider
 import java.util.*
-import kotlin.collections.ArrayList
 
 class CountryRecyclerViewAdapter(private val listener: Listener) :
     RecyclerView.Adapter<CountryRecyclerViewAdapter.CountryViewHolder>(), PopupTextProvider {
@@ -87,7 +86,7 @@ class CountryRecyclerViewAdapter(private val listener: Listener) :
 
         private fun getFlagResource(country: Country): Int {
             val flagResource = itemView.context.resources.getIdentifier(
-                "ic_flag_${country.code.toLowerCase(Locale.US)}",
+                "ic_flag_${country.code.lowercase(Locale.US)}",
                 "drawable",
                 itemView.context.packageName
             )

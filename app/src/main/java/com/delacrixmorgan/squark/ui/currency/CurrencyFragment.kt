@@ -1,11 +1,11 @@
 package com.delacrixmorgan.squark.ui.currency
 
 import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -16,17 +16,14 @@ import com.delacrixmorgan.squark.common.SharedPreferenceHelper
 import com.delacrixmorgan.squark.common.getPreferenceCountry
 import com.delacrixmorgan.squark.common.performHapticContextClick
 import com.delacrixmorgan.squark.data.controller.CountryDataController
-import com.delacrixmorgan.squark.models.Country
 import com.delacrixmorgan.squark.databinding.FragmentCurrencyBinding
 import com.delacrixmorgan.squark.databinding.ItemRowBinding
+import com.delacrixmorgan.squark.models.Country
 import com.delacrixmorgan.squark.ui.preference.PreferenceNavigationActivity
 
 class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener {
 
     companion object {
-        private const val REQUEST_BASE_COUNTRY = 1
-        private const val REQUEST_QUOTE_COUNTRY = 2
-
         const val EXTRA_COUNTRY_CODE = "CurrencyNavigationFragment.countryCode"
     }
 
@@ -42,6 +39,26 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener {
     private var expandedList = arrayListOf<ItemRowBinding>()
 
     private lateinit var viewModel: CurrencyViewModel
+
+    private val requestBaseCountryLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val countryCode = result.data?.getStringExtra(EXTRA_COUNTRY_CODE)
+            SharedPreferenceHelper.baseCurrency = countryCode
+
+            if (isExpanded) onRowCollapse()
+            updateTable()
+        }
+    }
+
+    private val requestQuoteCountryLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val countryCode = result.data?.getStringExtra(EXTRA_COUNTRY_CODE)
+            SharedPreferenceHelper.quoteCurrency = countryCode
+
+            if (isExpanded) onRowCollapse()
+            updateTable()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,10 +98,7 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener {
                 view.context,
                 countryCode = baseCountry?.code
             )
-            startActivityForResult(
-                currencyIntent,
-                REQUEST_BASE_COUNTRY
-            )
+            requestBaseCountryLauncher.launch(currencyIntent)
         }
 
         binding.quoteCurrencyTextView.setOnClickListener {
@@ -92,10 +106,7 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener {
                 view.context,
                 countryCode = quoteCountry?.code
             )
-            startActivityForResult(
-                currencyIntent,
-                REQUEST_QUOTE_COUNTRY
-            )
+            requestQuoteCountryLauncher.launch(currencyIntent)
         }
 
         binding.swapButton.setOnClickListener {
@@ -125,29 +136,6 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener {
         if (baseCountry?.rate != 0.0 && quoteCountry?.rate != 0.0) {
             viewModel.updateConversionRate(baseCountry?.rate, quoteCountry?.rate)
             viewModel.updateTable(rowList)
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode != Activity.RESULT_OK) return
-
-        when (requestCode) {
-            REQUEST_BASE_COUNTRY -> {
-                val countryCode = data?.getStringExtra(EXTRA_COUNTRY_CODE)
-                SharedPreferenceHelper.baseCurrency = countryCode
-
-                if (isExpanded) onRowCollapse()
-                updateTable()
-            }
-
-            REQUEST_QUOTE_COUNTRY -> {
-                val countryCode = data?.getStringExtra(EXTRA_COUNTRY_CODE)
-                SharedPreferenceHelper.quoteCurrency = countryCode
-
-                if (isExpanded) onRowCollapse()
-                updateTable()
-            }
         }
     }
 

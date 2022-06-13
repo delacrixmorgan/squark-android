@@ -7,11 +7,13 @@ import com.delacrixmorgan.squark.di.networkModule
 import com.delacrixmorgan.squark.di.repositoryModule
 import com.delacrixmorgan.squark.di.viewModelModule
 import com.jakewharton.threetenabp.AndroidThreeTen
+import dagger.hilt.android.HiltAndroidApp
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
 
+@HiltAndroidApp
 class App : Application() {
     companion object {
         lateinit var appContext: Context
