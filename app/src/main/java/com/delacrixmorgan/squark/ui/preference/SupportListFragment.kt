@@ -39,18 +39,12 @@ class SupportListFragment : Fragment(R.layout.fragment_support_list) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val packageName = view.context.packageName
 
         binding.starImageView.setOnClickListener {
             binding.starImageView.performHapticContextClick()
             binding.personImageView.setImageResource(R.drawable.ic_human_happy)
-            binding.starImageView.setColorFilter(
-                ContextCompat.getColor(
-                    view.context,
-                    R.color.colorAccent
-                )
-            )
-            view.context.launchPlayStore(packageName)
+            binding.starImageView.setColorFilter(ContextCompat.getColor(view.context, R.color.colorAccent))
+            launchReviewSheet()
         }
 
         binding.rateButton.setOnClickListener {
