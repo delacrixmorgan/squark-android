@@ -14,11 +14,12 @@ import com.delacrixmorgan.squark.common.SharedPreferenceHelper.DEFAULT_QUOTE_CUR
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.models.Country
 import org.json.JSONObject
-import org.threeten.bp.DateTimeUtils
-import org.threeten.bp.Instant
-import org.threeten.bp.format.DateTimeFormatter
 import java.io.BufferedReader
 import java.math.BigDecimal
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.math.roundToInt
 
@@ -56,15 +57,16 @@ fun Fragment.launchWebsite(url: String) {
  */
 
 fun Date.toStringFormat(): String {
-    val calendar = Calendar.getInstance().apply { time = this@toStringFormat }
-    val zonedDateTime = DateTimeUtils.toZonedDateTime(calendar)
-
-    return DateTimeFormatter.ISO_INSTANT.format(zonedDateTime)
+    val localDateTime = LocalDateTime.ofInstant(
+        this.toInstant(),
+        ZoneOffset.UTC
+    )
+    return DateTimeFormatter.ISO_INSTANT.format(localDateTime)
 }
 
 fun String.toDateFormat(): Date {
-    val dateInstant = Instant.from(DateTimeFormatter.ISO_INSTANT.parse(this))
-    return DateTimeUtils.toDate(dateInstant)
+    val localDateTime = LocalDateTime.parse(this, DateTimeFormatter.ISO_INSTANT)
+    return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant())
 }
 
 /**

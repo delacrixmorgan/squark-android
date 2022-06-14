@@ -46,10 +46,6 @@ class CreditListFragment : DialogFragment(R.layout.fragment_credit_list) {
             launchWebsite("https://github.com/zhanghai/AndroidFastScroll")
         }
 
-        binding.dateTimeWhartonImageView.setOnClickListener {
-            launchWebsite("https://github.com/JakeWharton/ThreeTenABP")
-        }
-
         binding.serializationWhartonImageView.setOnClickListener {
             launchWebsite("https://github.com/JakeWharton/retrofit2-kotlinx-serialization-converter")
         }
