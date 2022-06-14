@@ -4,7 +4,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
-    id "androidx.navigation.safeargs"
+    id 'androidx.navigation.safeargs.kotlin'
 }
 
 android {
@@ -22,7 +22,7 @@ android {
     }
     buildTypes {
         release {
-            buildConfigField 'String', "BASE_URL", BASE_URL
+            buildConfigField 'String', "BASE_URL", '"https://api.apilayer.com/"'
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             manifestPlaceholders = [appLabel: "@string/app_name"]
         }
@@ -31,7 +31,7 @@ android {
             splits.abi.enable = false
             splits.density.enable = false
             ext.alwaysUpdateBuildId = false
-            buildConfigField 'String', "BASE_URL", BASE_URL
+            buildConfigField 'String', "BASE_URL", '"https://api.apilayer.com/"'
             manifestPlaceholders = [appLabel: "@string/app_name_debug"]
         }
     }
@@ -54,7 +54,7 @@ dependencies {
     implementation 'com.google.android.play:core-ktx:1.8.1'
 
     implementation "com.google.dagger:hilt-android:2.41"
-    kapt "com.google.dagger:hilt-compiler:2.38.1"
+    kapt "com.google.dagger:hilt-compiler:2.41"
 
     implementation "androidx.core:core-ktx:1.8.0"
     implementation "androidx.fragment:fragment-ktx:1.4.1"
