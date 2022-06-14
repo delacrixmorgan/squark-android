@@ -20,17 +20,18 @@ import com.delacrixmorgan.squark.models.Currency
 import com.delacrixmorgan.squark.services.network.Result
 import com.delacrixmorgan.squark.ui.currency.CurrencyFragment
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
 import me.zhanghai.android.fastscroll.FastScrollerBuilder
-import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class CountryFragment : Fragment(R.layout.fragment_country), CountryRecyclerViewAdapter.Listener,
     MenuItem.OnActionExpandListener {
     companion object {
@@ -39,11 +40,14 @@ class CountryFragment : Fragment(R.layout.fragment_country), CountryRecyclerView
         }
     }
 
-    private val viewModel: CountryViewModel by viewModel()
+    @Inject
+    lateinit var viewModel: CountryViewModel
+
+    @Inject
+    lateinit var countryDatabaseDao: CountryDataDao
 
     private var searchView: SearchView? = null
     private var searchMenuItem: MenuItem? = null
-    private val countryDatabaseDao: CountryDataDao by inject()
 
     private lateinit var countryCode: String
 

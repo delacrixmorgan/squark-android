@@ -17,21 +17,25 @@ import com.delacrixmorgan.squark.models.Country
 import com.delacrixmorgan.squark.models.Currency
 import com.delacrixmorgan.squark.services.network.Result
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
-import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class LaunchFragment : Fragment(R.layout.fragment_launch) {
     private val binding get() = requireNotNull(_binding)
     private var _binding: FragmentLaunchBinding? = null
 
-    private val countryDatabaseDao: CountryDataDao by inject()
-    private val viewModel: LaunchViewModel by viewModel()
+    @Inject
+    lateinit var countryDatabaseDao: CountryDataDao
+
+    @Inject
+    lateinit var viewModel: LaunchViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,

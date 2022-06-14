@@ -9,7 +9,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.RowListener
 import com.delacrixmorgan.squark.common.SharedPreferenceHelper
@@ -20,7 +19,10 @@ import com.delacrixmorgan.squark.databinding.FragmentCurrencyBinding
 import com.delacrixmorgan.squark.databinding.ItemRowBinding
 import com.delacrixmorgan.squark.models.Country
 import com.delacrixmorgan.squark.ui.preference.PreferenceNavigationActivity
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener {
 
     companion object {
@@ -38,7 +40,8 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener {
     private var rowList = arrayListOf<ItemRowBinding>()
     private var expandedList = arrayListOf<ItemRowBinding>()
 
-    private lateinit var viewModel: CurrencyViewModel
+    @Inject
+    lateinit var viewModel: CurrencyViewModel
 
     private val requestBaseCountryLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
@@ -58,11 +61,6 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener {
             if (isExpanded) onRowCollapse()
             updateTable()
         }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(CurrencyViewModel::class.java)
     }
 
     override fun onCreateView(
