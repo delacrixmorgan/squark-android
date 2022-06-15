@@ -3,15 +3,25 @@ package com.delacrixmorgan.squark.ui.preference.country
 import android.app.Activity
 import android.os.Bundle
 import android.text.InputType
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.delacrixmorgan.squark.R
-import com.delacrixmorgan.squark.common.*
+import com.delacrixmorgan.squark.common.Keys
+import com.delacrixmorgan.squark.common.SharedPreferenceHelper
+import com.delacrixmorgan.squark.common.compatColor
+import com.delacrixmorgan.squark.common.getFilteredCountries
+import com.delacrixmorgan.squark.common.performHapticContextClick
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.dao.CountryDataDao
 import com.delacrixmorgan.squark.databinding.FragmentCountryBinding
@@ -27,7 +37,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
 import me.zhanghai.android.fastscroll.FastScrollerBuilder
-import java.util.*
+import java.util.Date
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -40,8 +50,7 @@ class CountryFragment : Fragment(R.layout.fragment_country), CountryRecyclerView
         }
     }
 
-    @Inject
-    lateinit var viewModel: CountryViewModel
+    private val viewModel: CountryViewModel by viewModels()
 
     @Inject
     lateinit var countryDatabaseDao: CountryDataDao

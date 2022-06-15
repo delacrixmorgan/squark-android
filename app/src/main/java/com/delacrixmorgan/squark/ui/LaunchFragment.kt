@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.delacrixmorgan.squark.R
@@ -23,7 +24,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
-import java.util.*
+import java.util.Date
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -34,8 +35,7 @@ class LaunchFragment : Fragment(R.layout.fragment_launch) {
     @Inject
     lateinit var countryDatabaseDao: CountryDataDao
 
-    @Inject
-    lateinit var viewModel: LaunchViewModel
+    private val viewModel: LaunchViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
