@@ -1,7 +1,6 @@
 package com.delacrixmorgan.squark.di
 
 import com.delacrixmorgan.squark.services.api.CurrencyApi
-import com.delacrixmorgan.squark.services.network.NetworkRequestManager
 import com.delacrixmorgan.squark.services.repository.CurrencyRepository
 import dagger.Module
 import dagger.Provides
@@ -15,7 +14,6 @@ class RepositoryModule {
     @Singleton
     @Provides
     fun provideCurrencyRepository(
-        currencyApi: CurrencyApi,
-        networkRequestManager: NetworkRequestManager
-    ) = CurrencyRepository(currencyApi, networkRequestManager)
+        currencyApi: CurrencyApi
+    ) = CurrencyRepository(currencyApi)
 }

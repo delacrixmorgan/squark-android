@@ -23,23 +23,17 @@ import com.delacrixmorgan.squark.common.compatColor
 import com.delacrixmorgan.squark.common.getFilteredCountries
 import com.delacrixmorgan.squark.common.performHapticContextClick
 import com.delacrixmorgan.squark.data.controller.CountryDataController
-import com.delacrixmorgan.squark.data.dao.CountryDataDao
 import com.delacrixmorgan.squark.databinding.FragmentCountryBinding
 import com.delacrixmorgan.squark.models.Country
-import com.delacrixmorgan.squark.models.Currency
+import com.delacrixmorgan.squark.models.LegacyCurrency
 import com.delacrixmorgan.squark.services.network.Result
 import com.delacrixmorgan.squark.ui.currency.CurrencyFragment
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
 import me.zhanghai.android.fastscroll.FastScrollerBuilder
 import java.util.Date
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class CountryFragment : Fragment(R.layout.fragment_country), CountryRecyclerViewAdapter.Listener,
@@ -51,9 +45,6 @@ class CountryFragment : Fragment(R.layout.fragment_country), CountryRecyclerView
     }
 
     private val viewModel: CountryViewModel by viewModels()
-
-    @Inject
-    lateinit var countryDatabaseDao: CountryDataDao
 
     private var searchView: SearchView? = null
     private var searchMenuItem: MenuItem? = null
@@ -152,34 +143,34 @@ class CountryFragment : Fragment(R.layout.fragment_country), CountryRecyclerView
         }
     }
 
-    private fun updateCurrencies(currencies: List<Currency>) {
-        CoroutineScope(Dispatchers.IO).launch {
-            countryDatabaseDao.getCountries().collect { countries ->
-                countries.forEach { country ->
-                    val updateCurrency = currencies.find {
-                        it.code.contains(country.code)
-                    }
-
-                    updateCurrency?.let {
-                        country.rate = it.rate
-                        countryDatabaseDao.updateCountry(country)
-                    }
-                }
-                countries.let {
-                    CountryDataController.updateDataSet(it)
-                    SharedPreferenceHelper.lastUpdatedDate = Date()
-                }
-
-                if (isVisible) {
-                    Snackbar.make(
-                        binding.mainContainer,
-                        getString(R.string.fragment_country_list_title_updated),
-                        Snackbar.LENGTH_SHORT
-                    ).show()
-                }
-                coroutineContext.job.cancel()
-            }
-        }
+    private fun updateCurrencies(currencies: List<LegacyCurrency>) {
+//        CoroutineScope(Dispatchers.IO).launch {
+//            countryDatabaseDao.getCountries().collect { countries ->
+//                countries.forEach { country ->
+//                    val updateCurrency = currencies.find {
+//                        it.code.contains(country.code)
+//                    }
+//
+//                    updateCurrency?.let {
+//                        country.rate = it.rate
+//                        countryDatabaseDao.updateCountry(country)
+//                    }
+//                }
+//                countries.let {
+//                    CountryDataController.updateDataSet(it)
+//                    SharedPreferenceHelper.lastUpdatedDate = Date()
+//                }
+//
+//                if (isVisible) {
+//                    Snackbar.make(
+//                        binding.mainContainer,
+//                        getString(R.string.fragment_country_list_title_updated),
+//                        Snackbar.LENGTH_SHORT
+//                    ).show()
+//                }
+//                coroutineContext.job.cancel()
+//            }
+//        }
     }
 
     private fun updateDataSet(searchText: String? = null, searchMode: Boolean = false) {

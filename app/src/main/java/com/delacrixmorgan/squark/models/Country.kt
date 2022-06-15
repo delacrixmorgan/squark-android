@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "Country")
+@Deprecated("Using Currency")
 data class Country(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     @ColumnInfo(name = "code") val code: String,

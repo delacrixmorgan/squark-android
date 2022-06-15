@@ -13,7 +13,7 @@ object CountryDataController {
     var currencyMap = mapOf<String, String>()
 
     init {
-        countryMap = App.appContext.getJsonMap(R.raw.data_country, "currencies")
+        countryMap = App.appContext.getJsonMap(R.raw.data_currency_unit, "currencies")
         currencyMap = App.appContext.getJsonMap(R.raw.data_currency, "quotes")
     }
 

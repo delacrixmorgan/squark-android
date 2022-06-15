@@ -3,7 +3,6 @@ package com.delacrixmorgan.squark.di
 import android.content.Context
 import com.delacrixmorgan.squark.BuildConfig
 import com.delacrixmorgan.squark.services.api.HeaderInterceptor
-import com.delacrixmorgan.squark.services.network.NetworkRequestManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -80,8 +79,4 @@ internal class RemoteModule {
             .client(okHttpClient)
             .build()
     }
-
-    @Singleton
-    @Provides
-    fun provideNetworkRequestManager() = NetworkRequestManager()
 }

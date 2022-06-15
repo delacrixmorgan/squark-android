@@ -30,5 +30,5 @@ internal class LocalModule {
 
     @Singleton
     @Provides
-    fun provideCountryDao(appDatabase: AppDatabase) = appDatabase.countryDataDao()
+    fun provideCurrencyDao(appDatabase: AppDatabase) = appDatabase.currencyDao()
 }

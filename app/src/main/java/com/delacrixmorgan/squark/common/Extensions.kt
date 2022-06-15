@@ -13,6 +13,7 @@ import com.delacrixmorgan.squark.common.SharedPreferenceHelper.DEFAULT_BASE_CURR
 import com.delacrixmorgan.squark.common.SharedPreferenceHelper.DEFAULT_QUOTE_CURRENCY_CODE
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.models.Country
+import com.delacrixmorgan.squark.models.Currency
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.math.BigDecimal
@@ -111,7 +112,7 @@ fun Context.getJsonMap(rawFile: Int, key: String): Map<String, String> {
 /**
  * CountryDataController
  */
-fun CountryDataController.getPreferenceCountry(
+fun CountryDataController.getPreferenceCurrency(
     preferenceCurrency: String?
 ): Country? {
     val fallbackCurrency = if (preferenceCurrency == SharedPreferenceHelper.baseCurrency) {

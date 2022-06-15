@@ -4,15 +4,15 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.delacrixmorgan.squark.models.Country
+import com.delacrixmorgan.squark.models.Currency
 
 @Database(
-    entities = [(Country::class)],
+    entities = [(Currency::class)],
     version = 1,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun countryDataDao(): CountryDataDao
+    abstract fun currencyDao(): CurrencyDao
 
     companion object {
         fun getDatabase(

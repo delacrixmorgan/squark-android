@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.RowListener
 import com.delacrixmorgan.squark.common.SharedPreferenceHelper
-import com.delacrixmorgan.squark.common.getPreferenceCountry
+import com.delacrixmorgan.squark.common.getPreferenceCurrency
 import com.delacrixmorgan.squark.common.performHapticContextClick
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.databinding.FragmentCurrencyBinding
@@ -121,10 +121,10 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener {
     }
 
     private fun updateTable() {
-        baseCountry = CountryDataController.getPreferenceCountry(
+        baseCountry = CountryDataController.getPreferenceCurrency(
             SharedPreferenceHelper.baseCurrency
         )
-        quoteCountry = CountryDataController.getPreferenceCountry(
+        quoteCountry = CountryDataController.getPreferenceCurrency(
             SharedPreferenceHelper.quoteCurrency
         )
 

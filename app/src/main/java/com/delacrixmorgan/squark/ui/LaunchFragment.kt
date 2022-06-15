@@ -9,31 +9,20 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.delacrixmorgan.squark.R
-import com.delacrixmorgan.squark.common.SharedPreferenceHelper
 import com.delacrixmorgan.squark.common.getJsonMap
-import com.delacrixmorgan.squark.data.controller.CountryDataController
-import com.delacrixmorgan.squark.data.dao.CountryDataDao
 import com.delacrixmorgan.squark.databinding.FragmentLaunchBinding
-import com.delacrixmorgan.squark.models.Country
-import com.delacrixmorgan.squark.models.Currency
+import com.delacrixmorgan.squark.models.LegacyCurrency
 import com.delacrixmorgan.squark.services.network.Result
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
-import java.util.Date
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class LaunchFragment : Fragment(R.layout.fragment_launch) {
     private val binding get() = requireNotNull(_binding)
     private var _binding: FragmentLaunchBinding? = null
-
-    @Inject
-    lateinit var countryDatabaseDao: CountryDataDao
 
     private val viewModel: LaunchViewModel by viewModels()
 
@@ -53,17 +42,17 @@ class LaunchFragment : Fragment(R.layout.fragment_launch) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        CoroutineScope(Dispatchers.IO).launch {
-            countryDatabaseDao.getCountries().collect { countries ->
-                if (countries.isNotEmpty()) {
-                    CountryDataController.updateDataSet(countries)
-                    launchCurrencyNavigationFragment()
-                } else {
-                    fetchCountries()
-                }
-                coroutineContext.job.cancel()
-            }
-        }
+//        CoroutineScope(Dispatchers.IO).launch {
+//            countryDatabaseDao.getCountries().collect { countries ->
+//                if (countries.isNotEmpty()) {
+//                    CountryDataController.updateDataSet(countries)
+//                    launchCurrencyNavigationFragment()
+//                } else {
+//                    fetchCountries()
+//                }
+//                coroutineContext.job.cancel()
+//            }
+//        }
     }
 
     private fun fetchCountries() {
@@ -73,7 +62,7 @@ class LaunchFragment : Fragment(R.layout.fragment_launch) {
         }
     }
 
-    private suspend fun fetchCurrencies(): List<Currency> {
+    private suspend fun fetchCurrencies(): List<LegacyCurrency> {
         return when (val result = viewModel.fetchCurrencies()) {
             is Result.Success -> {
                 result.value.currencies
@@ -89,22 +78,22 @@ class LaunchFragment : Fragment(R.layout.fragment_launch) {
         }
     }
 
-    private fun fetchFallbackCurrencies(): List<Currency> {
+    private fun fetchFallbackCurrencies(): List<LegacyCurrency> {
         return requireContext().getJsonMap(R.raw.data_currency, "quotes")
-            .map { Currency(code = it.key, rate = it.value.toDouble()) }
+            .map { LegacyCurrency(code = it.key, rate = it.value.toDouble()) }
     }
 
-    private fun addCountryDatabase(currencies: List<Currency>) {
-        val countries = CountryDataController.countryMap.mapNotNull { country ->
-            val currency = currencies.firstOrNull { it.code == "USD${country.key}" }
-            Country(code = country.key, name = country.value, rate = currency?.rate ?: 0.0)
-        }
-
-        countries.forEach { countryDatabaseDao.insertCountry(it) }
-        CountryDataController.updateDataSet(countries)
-
-        SharedPreferenceHelper.lastUpdatedDate = Date()
-        launchCurrencyNavigationFragment()
+    private fun addCountryDatabase(currencies: List<LegacyCurrency>) {
+//        val countries = CountryDataController.countryMap.mapNotNull { country ->
+//            val currency = currencies.firstOrNull { it.code == "USD${country.key}" }
+//            Country(code = country.key, name = country.value, rate = currency?.rate ?: 0.0)
+//        }
+//
+//        countries.forEach { countryDatabaseDao.insertCountry(it) }
+//        CountryDataController.updateDataSet(countries)
+//
+//        SharedPreferenceHelper.lastUpdatedDate = Date()
+//        launchCurrencyNavigationFragment()
     }
 
     private fun launchCurrencyNavigationFragment() {
