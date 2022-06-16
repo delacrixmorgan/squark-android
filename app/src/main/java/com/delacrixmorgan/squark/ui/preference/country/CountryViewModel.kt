@@ -9,5 +9,5 @@ import javax.inject.Inject
 class CountryViewModel @Inject constructor(
     private val currencyRepository: CurrencyRepository
 ) : ViewModel() {
-    suspend fun fetchCurrencies() = currencyRepository.fetchCurrencies()
+//    suspend fun fetchCurrencies() = currencyRepository.fetchCurrencies()
 }

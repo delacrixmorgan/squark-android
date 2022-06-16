@@ -1,6 +1,6 @@
 package com.delacrixmorgan.squark.data.usecase
 
-import android.content.Context
+import com.delacrixmorgan.squark.App
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.getJsonMap
 import com.delacrixmorgan.squark.data.shared.NoParams
@@ -12,10 +12,10 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class GetCurrencyUnitsUseCase @Inject constructor(
-    private val appContext: Context
+
 ) : NoParamsFlowUseCase<List<CurrencyUnit>, Exception> {
-    override suspend fun invoke(params: NoParams): Flow<Result<List<CurrencyUnit>, Exception>> = flow {
-        val currencyUnits = appContext.getJsonMap(R.raw.data_currency_unit, "currencies").map {
+    override fun invoke(params: NoParams): Flow<Result<List<CurrencyUnit>, Exception>> = flow {
+        val currencyUnits = App.appContext.getJsonMap(R.raw.data_currency_unit, "currencies").map {
             CurrencyUnit(code = it.key.removePrefix("USD"), unit = it.value)
         }
         emit(Result.success(currencyUnits))

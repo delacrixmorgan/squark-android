@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 interface NoParamsFlowUseCase<out Type, out Error : Exception> :
     FlowUseCase<NoParams, Type, Error> {
 
-    suspend operator fun invoke(): Flow<Result<Type, Error>> = invoke(NoParams)
+    operator fun invoke(): Flow<Result<Type, Error>> = invoke(NoParams)
 }
 
 internal typealias NoParams = Unit

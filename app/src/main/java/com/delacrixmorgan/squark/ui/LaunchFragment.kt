@@ -57,26 +57,26 @@ class LaunchFragment : Fragment(R.layout.fragment_launch) {
 
     private fun fetchCountries() {
         CoroutineScope(Dispatchers.IO).launch {
-            val currencies = fetchCurrencies()
-            addCountryDatabase(currencies)
+//            val currencies = fetchCurrencies()
+//            addCountryDatabase(currencies)
         }
     }
 
-    private suspend fun fetchCurrencies(): List<LegacyCurrency> {
-        return when (val result = viewModel.fetchCurrencies()) {
-            is Result.Success -> {
-                result.value.currencies
-            }
-            is Result.Failure -> {
-                Snackbar.make(
-                    binding.mainContainer,
-                    result.error.localizedMessage ?: "",
-                    Snackbar.LENGTH_SHORT
-                ).show()
-                fetchFallbackCurrencies()
-            }
-        }
-    }
+//    private suspend fun fetchCurrencies(): List<LegacyCurrency> {
+//        return when (val result = viewModel.fetchCurrencies()) {
+//            is Result.Success -> {
+//                result.value.currencies
+//            }
+//            is Result.Failure -> {
+//                Snackbar.make(
+//                    binding.mainContainer,
+//                    result.error.localizedMessage ?: "",
+//                    Snackbar.LENGTH_SHORT
+//                ).show()
+//                fetchFallbackCurrencies()
+//            }
+//        }
+//    }
 
     private fun fetchFallbackCurrencies(): List<LegacyCurrency> {
         return requireContext().getJsonMap(R.raw.data_currency, "quotes")

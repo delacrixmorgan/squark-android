@@ -10,11 +10,20 @@ import android.widget.TableLayout
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import com.delacrixmorgan.squark.R
-import com.delacrixmorgan.squark.common.*
+import com.delacrixmorgan.squark.common.RowListener
+import com.delacrixmorgan.squark.common.calculateExpandQuantifier
+import com.delacrixmorgan.squark.common.calculateExpandResult
+import com.delacrixmorgan.squark.common.calculateRowQuantifier
+import com.delacrixmorgan.squark.common.calculateRowResult
+import com.delacrixmorgan.squark.common.performHapticContextClick
+import com.delacrixmorgan.squark.common.roundUp
 import com.delacrixmorgan.squark.databinding.ItemRowBinding
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlin.math.absoluteValue
 
-class CurrencyViewModel : ViewModel() {
+@HiltViewModel
+class CurrencyViewModel @Inject constructor() : ViewModel() {
     private var anchorPosition = 0F
     private var multiplier: Double = 1.0
     private var conversionRate: Double = 1.0

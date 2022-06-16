@@ -9,6 +9,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.RowListener
 import com.delacrixmorgan.squark.common.SharedPreferenceHelper
@@ -20,7 +21,6 @@ import com.delacrixmorgan.squark.databinding.ItemRowBinding
 import com.delacrixmorgan.squark.models.Country
 import com.delacrixmorgan.squark.ui.preference.PreferenceNavigationActivity
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener {
@@ -40,28 +40,29 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener {
     private var rowList = arrayListOf<ItemRowBinding>()
     private var expandedList = arrayListOf<ItemRowBinding>()
 
-    @Inject
-    lateinit var viewModel: CurrencyViewModel
+    private val viewModel: CurrencyViewModel by viewModels()
 
-    private val requestBaseCountryLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val countryCode = result.data?.getStringExtra(EXTRA_COUNTRY_CODE)
-            SharedPreferenceHelper.baseCurrency = countryCode
+    private val requestBaseCountryLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val countryCode = result.data?.getStringExtra(EXTRA_COUNTRY_CODE)
+                SharedPreferenceHelper.baseCurrency = countryCode
 
-            if (isExpanded) onRowCollapse()
-            updateTable()
+                if (isExpanded) onRowCollapse()
+                updateTable()
+            }
         }
-    }
 
-    private val requestQuoteCountryLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val countryCode = result.data?.getStringExtra(EXTRA_COUNTRY_CODE)
-            SharedPreferenceHelper.quoteCurrency = countryCode
+    private val requestQuoteCountryLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val countryCode = result.data?.getStringExtra(EXTRA_COUNTRY_CODE)
+                SharedPreferenceHelper.quoteCurrency = countryCode
 
-            if (isExpanded) onRowCollapse()
-            updateTable()
+                if (isExpanded) onRowCollapse()
+                updateTable()
+            }
         }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

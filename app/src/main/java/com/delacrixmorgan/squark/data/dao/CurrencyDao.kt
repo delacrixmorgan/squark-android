@@ -15,6 +15,9 @@ interface CurrencyDao {
     fun getCurrencies(): Flow<List<Country>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertCurrencies(currencies: List<Currency>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertCurrency(currency: Currency)
 
     @Update(onConflict = OnConflictStrategy.IGNORE)

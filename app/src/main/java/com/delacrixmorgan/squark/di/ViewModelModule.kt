@@ -10,23 +10,23 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-@Module
-@InstallIn(SingletonComponent::class)
-internal class ViewModelModule {
-    @Singleton
-    @Provides
-    fun provideLaunchViewModel(
-        currencyRepository: CurrencyRepository
-    ) = LaunchViewModel(currencyRepository)
-
-    @Singleton
-    @Provides
-    fun provideCurrencyViewModel(
-    ) = CurrencyViewModel()
-
-    @Singleton
-    @Provides
-    fun provideCountryViewModel(
-        currencyRepository: CurrencyRepository
-    ) = CountryViewModel(currencyRepository)
-}
+//@Module
+//@InstallIn(SingletonComponent::class)
+//internal class ViewModelModule {
+//    @Singleton
+//    @Provides
+//    fun provideLaunchViewModel(
+//        currencyRepository: CurrencyRepository
+//    ) = LaunchViewModel(currencyRepository)
+//
+//    @Singleton
+//    @Provides
+//    fun provideCurrencyViewModel(
+//    ) = CurrencyViewModel()
+//
+//    @Singleton
+//    @Provides
+//    fun provideCountryViewModel(
+//        currencyRepository: CurrencyRepository
+//    ) = CountryViewModel(currencyRepository)
+//}

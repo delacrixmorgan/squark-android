@@ -15,8 +15,8 @@ class CurrencyDtoToModelMapper @Inject constructor(
             val currencyUnit = currencyUnits.first { it.code == dto.key }
             Currency(
                 code = currencyUnit.code,
-                rate = dto.value,
                 name = currencyUnit.unit,
+                rate = dto.value,
             )
         }
     }

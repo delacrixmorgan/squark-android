@@ -113,7 +113,7 @@ class CountryFragment : Fragment(R.layout.fragment_country), CountryRecyclerView
         val currentDateTime = Date().time
 
         if (TimeUnit.MILLISECONDS.toDays(currentDateTime - lastUpdatedDateTime) >= 1) {
-            updateCurrencyRates()
+//            updateCurrencyRates()
         } else {
             Snackbar.make(
                 binding.mainContainer,
@@ -124,24 +124,24 @@ class CountryFragment : Fragment(R.layout.fragment_country), CountryRecyclerView
         }
     }
 
-    private fun updateCurrencyRates() {
-        lifecycleScope.launch {
-            when (val result = viewModel.fetchCurrencies()) {
-                is Result.Success -> {
-                    binding.swipeRefreshLayout.isRefreshing = false
-                    updateCurrencies(result.value.currencies)
-                }
-                is Result.Failure -> {
-                    binding.swipeRefreshLayout.isRefreshing = false
-                    Snackbar.make(
-                        binding.mainContainer,
-                        getString(R.string.error_api_countries),
-                        Snackbar.LENGTH_SHORT
-                    ).show()
-                }
-            }
-        }
-    }
+//    private fun updateCurrencyRates() {
+//        lifecycleScope.launch {
+//            when (val result = viewModel.fetchCurrencies()) {
+//                is Result.Success -> {
+//                    binding.swipeRefreshLayout.isRefreshing = false
+//                    updateCurrencies(result.value.currencies)
+//                }
+//                is Result.Failure -> {
+//                    binding.swipeRefreshLayout.isRefreshing = false
+//                    Snackbar.make(
+//                        binding.mainContainer,
+//                        getString(R.string.error_api_countries),
+//                        Snackbar.LENGTH_SHORT
+//                    ).show()
+//                }
+//            }
+//        }
+//    }
 
     private fun updateCurrencies(currencies: List<LegacyCurrency>) {
 //        CoroutineScope(Dispatchers.IO).launch {
