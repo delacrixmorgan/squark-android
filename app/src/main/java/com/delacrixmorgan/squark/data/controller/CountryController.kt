@@ -6,6 +6,7 @@ import com.delacrixmorgan.squark.common.getJsonMap
 import com.delacrixmorgan.squark.models.Country
 
 // TODO (Move to Country Repository)
+@Deprecated("To be removed.")
 object CountryDataController {
     private var countries = listOf<Country>()
 

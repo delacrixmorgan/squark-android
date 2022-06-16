@@ -1,10 +1,15 @@
 package com.delacrixmorgan.squark.ui.currency
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Bundle
+import android.view.GestureDetector
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
+import android.widget.TableLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -13,14 +18,20 @@ import androidx.fragment.app.viewModels
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.RowListener
 import com.delacrixmorgan.squark.common.SharedPreferenceHelper
+import com.delacrixmorgan.squark.common.calculateExpandQuantifier
+import com.delacrixmorgan.squark.common.calculateExpandResult
+import com.delacrixmorgan.squark.common.calculateRowQuantifier
+import com.delacrixmorgan.squark.common.calculateRowResult
 import com.delacrixmorgan.squark.common.getPreferenceCurrency
 import com.delacrixmorgan.squark.common.performHapticContextClick
+import com.delacrixmorgan.squark.common.roundUp
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.databinding.FragmentCurrencyBinding
 import com.delacrixmorgan.squark.databinding.ItemRowBinding
 import com.delacrixmorgan.squark.models.Country
 import com.delacrixmorgan.squark.ui.preference.PreferenceNavigationActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.math.absoluteValue
 
 @AndroidEntryPoint
 class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener {
@@ -34,7 +45,6 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener {
 
     private var isExpanded = false
     private var baseCountry: Country? = null
-
     private var quoteCountry: Country? = null
 
     private var rowList = arrayListOf<ItemRowBinding>()
@@ -82,10 +92,10 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener {
         super.onViewCreated(view, savedInstanceState)
 
         if (SharedPreferenceHelper.isPersistentMultiplierEnabled) {
-            viewModel.updateMultiplier(SharedPreferenceHelper.multiplier)
+            updateMultiplier(SharedPreferenceHelper.multiplier)
         }
 
-        viewModel.setupTable(
+        setupTable(
             activity = requireActivity(),
             tableLayout = binding.currencyTableLayout,
             rowList = rowList,
@@ -134,10 +144,11 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener {
 
         if (baseCountry?.rate != 0.0 && quoteCountry?.rate != 0.0) {
             viewModel.updateConversionRate(baseCountry?.rate, quoteCountry?.rate)
-            viewModel.updateTable(rowList)
+            updateTable(rowList)
         }
     }
 
+    // TODO (Move to Custom View)
     private fun onRowExpand(selectedRow: Int) {
         binding.currencyTableLayout.performHapticContextClick()
         rowList.forEachIndexed { index, tableRow ->
@@ -153,7 +164,7 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener {
             }
         }
 
-        viewModel.expandTable(
+        expandTable(
             activity = requireActivity(),
             tableLayout = binding.currencyTableLayout,
             expandQuantifier = selectedRow,
@@ -185,7 +196,7 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener {
             }
 
             binding.currencyTableLayout.performHapticContextClick()
-            viewModel.updateTable(rowList)
+            updateTable(rowList)
         }
     }
 
@@ -196,7 +207,7 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener {
             }
 
             binding.currencyTableLayout.performHapticContextClick()
-            viewModel.updateTable(rowList)
+            updateTable(rowList)
         }
     }
 
@@ -208,5 +219,200 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener {
         }
 
         isExpanded = !isExpanded
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    fun setupTable(
+        activity: Activity,
+        tableLayout: TableLayout,
+        rowList: ArrayList<ItemRowBinding>,
+        listener: RowListener
+    ) = with(viewModel) {
+        val thresholdTranslationWidth = activity.resources.displayMetrics.widthPixels / 6F
+        val thresholdSwipeWidth = thresholdTranslationWidth / 1.5F
+        val alphaRatio = 1F / thresholdTranslationWidth
+        val gestureDetector = GestureDetector(activity, SingleTapConfirm())
+
+        for (index in 0..9) {
+            val tableRow = ItemRowBinding.inflate(
+                LayoutInflater.from(activity), tableLayout, false
+            )
+            tableRow.quantifierTextView.text = calculateRowQuantifier(multiplier, index)
+            tableRow.resultTextView.text = calculateRowResult(
+                multiplier, index, conversionRate
+            )
+
+            tableRow.beforeQuantifierTextView.text = calculateRowQuantifier(multiplier / 10, index)
+            tableRow.beforeResultTextView.text = calculateRowResult(
+                multiplier / 10, index, conversionRate
+            )
+
+            tableRow.nextQuantifierTextView.text = calculateRowQuantifier(multiplier * 10, index)
+            tableRow.nextResultTextView.text = calculateRowResult(
+                multiplier * 10, index, conversionRate
+            )
+
+            tableRow.root.setOnTouchListener { _, event ->
+                if (gestureDetector.onTouchEvent(event)) {
+                    listener.onRowClicked(index)
+                    rowList.forEach {
+                        it.root.translationX = 0F
+                        it.quantifierTextView.alpha = 1F
+                        it.resultTextView.alpha = 1F
+
+                        it.nextQuantifierTextView.alpha = 0F
+                        it.nextResultTextView.alpha = 0F
+
+                        it.beforeQuantifierTextView.alpha = 0F
+                        it.beforeResultTextView.alpha = 0F
+                    }
+                } else {
+                    tableRow.root.onTouchEvent(event)
+                    when (event.action) {
+                        MotionEvent.ACTION_UP -> {
+                            val currentPosition = rowList.firstOrNull()?.root?.translationX ?: 0F
+
+                            if (currentPosition.absoluteValue > thresholdSwipeWidth) {
+                                if (currentPosition < 0) {
+                                    if (multiplier < 10000000000) {
+                                        multiplier *= 10
+                                    }
+                                    listener.onSwipeLeft(multiplier)
+                                } else {
+                                    if (multiplier > 0.1) {
+                                        multiplier /= 10
+                                    }
+                                    listener.onSwipeRight(multiplier)
+                                }
+                            }
+
+                            rowList.forEach {
+                                it.root.translationX = 0F
+                                it.quantifierTextView.alpha = 1F
+                                it.resultTextView.alpha = 1F
+
+                                it.nextQuantifierTextView.alpha = 0F
+                                it.nextResultTextView.alpha = 0F
+
+                                it.beforeQuantifierTextView.alpha = 0F
+                                it.beforeResultTextView.alpha = 0F
+                            }
+                        }
+
+                        MotionEvent.ACTION_MOVE -> {
+                            val movingPixels = event.rawX - anchorPosition
+                            if (movingPixels.absoluteValue < thresholdTranslationWidth) {
+
+                                val alpha = movingPixels.absoluteValue * alphaRatio
+                                rowList.forEach {
+                                    it.root.translationX = movingPixels
+
+                                    it.quantifierTextView.alpha = (1F - alpha).roundUp()
+                                    it.resultTextView.alpha = (1F - alpha).roundUp()
+
+                                    if (movingPixels > 0) {
+                                        it.nextQuantifierTextView.alpha = alpha.roundUp()
+                                        it.nextResultTextView.alpha = alpha.roundUp()
+                                    } else {
+                                        it.beforeQuantifierTextView.alpha = alpha.roundUp()
+                                        it.beforeResultTextView.alpha = alpha.roundUp()
+                                    }
+                                }
+                            } else {
+                                rowList.forEach {
+                                    it.quantifierTextView.alpha = 0F
+                                    it.resultTextView.alpha = 0F
+
+                                    if (movingPixels > 0) {
+                                        it.nextQuantifierTextView.alpha = 1F
+                                        it.nextResultTextView.alpha = 1F
+                                    } else {
+                                        it.beforeQuantifierTextView.alpha = 1F
+                                        it.beforeResultTextView.alpha = 1F
+                                    }
+                                }
+                            }
+                        }
+
+                        MotionEvent.ACTION_DOWN -> {
+                            tableRow.root.performHapticContextClick()
+                            anchorPosition = event.rawX
+                        }
+                    }
+                }
+                true
+            }
+
+            rowList.add(tableRow)
+            tableLayout.addView(tableRow.root)
+        }
+    }
+
+    private fun updateTable(
+        rowList: ArrayList<ItemRowBinding>
+    ) = with(viewModel) {
+        rowList.forEachIndexed { index, tableRow ->
+            with(tableRow) {
+                quantifierTextView.text = calculateRowQuantifier(multiplier, index)
+                resultTextView.text = calculateRowResult(multiplier, index, conversionRate)
+
+                nextQuantifierTextView.text = calculateRowQuantifier(multiplier / 10, index)
+                nextResultTextView.text =
+                    calculateRowResult(multiplier / 10, index, conversionRate)
+
+                beforeQuantifierTextView.text = calculateRowQuantifier(multiplier * 10, index)
+                beforeResultTextView.text =
+                    calculateRowResult(multiplier * 10, index, conversionRate)
+
+                quantifierTextView.startAnimation(
+                    AnimationUtils.loadAnimation(root.context, R.anim.wobble)
+                )
+                resultTextView.startAnimation(
+                    AnimationUtils.loadAnimation(root.context, R.anim.wobble)
+                )
+            }
+        }
+    }
+
+    private fun expandTable(
+        activity: Activity,
+        tableLayout: TableLayout,
+        expandQuantifier: Int,
+        expandedList: ArrayList<ItemRowBinding>,
+        listener: RowListener
+    ) = with(viewModel) {
+        for (index in 1..9) {
+            val tableRow = ItemRowBinding.inflate(
+                LayoutInflater.from(activity), tableLayout, false
+            )
+
+            tableRow.root.background = ContextCompat.getDrawable(
+                activity,
+                R.drawable.shape_cell_light
+            )
+
+            tableRow.quantifierTextView.text = calculateExpandQuantifier(
+                expandQuantifier, multiplier, index
+            )
+            tableRow.resultTextView.text = calculateExpandResult(
+                expandQuantifier,
+                multiplier, index,
+                conversionRate
+            )
+
+            tableRow.root.setOnClickListener { listener.onRowClicked(index) }
+            expandedList.add(tableRow)
+            tableLayout.addView(tableRow.root, (expandQuantifier + index))
+        }
+    }
+
+    private fun updateMultiplier(
+        multiplier: Int
+    ) = with(viewModel) {
+        this.multiplier = multiplier.toDouble()
+    }
+
+    private class SingleTapConfirm : GestureDetector.SimpleOnGestureListener() {
+        override fun onSingleTapUp(event: MotionEvent) = true
     }
 }
