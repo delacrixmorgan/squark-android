@@ -10,14 +10,16 @@ class CurrencyDtoToModelMapper @Inject constructor(
 ) : Mapper<CurrencyDto, List<Currency>> {
     override suspend fun invoke(input: CurrencyDto): List<Currency> {
         val currencyUnits = getCurrencyUnitsUseCase().first().get()
-
-        return input.quotes.map { dto ->
-            val currencyUnit = currencyUnits.first { it.code == dto.key }
-            Currency(
-                code = currencyUnit.code,
-                name = currencyUnit.unit,
-                rate = dto.value,
-            )
+        return input.quotes.mapNotNull { dto ->
+            currencyUnits
+                .firstOrNull { it.code == dto.key.removePrefix("USD") }
+                ?.let { currencyUnit ->
+                    Currency(
+                        code = currencyUnit.code,
+                        name = currencyUnit.unit,
+                        rate = dto.value,
+                    )
+                }
         }
     }
 }

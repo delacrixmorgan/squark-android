@@ -19,14 +19,18 @@ class GetCurrenciesFallbackUseCase @Inject constructor(
         val currencyUnits = getCurrencyUnitsUseCase().first().get()
 
         // TODO (Change to Use Firebase Remote Config)
-        val currencies = App.appContext.getJsonMap(R.raw.data_currency, "currencies").map { dto ->
-            val currencyUnit = currencyUnits.first { it.code == dto.key }
-            Currency(
-                code = currencyUnit.code,
-                name = currencyUnit.unit,
-                rate = dto.value.toDouble(),
-            )
-        }
+        val currencies =
+            App.appContext.getJsonMap(R.raw.data_currency, "quotes").mapNotNull { dto ->
+                currencyUnits
+                    .firstOrNull { it.code == dto.key.removePrefix("USD") }
+                    ?.let { currencyUnit ->
+                        Currency(
+                            code = currencyUnit.code,
+                            name = currencyUnit.unit,
+                            rate = dto.value.toDouble(),
+                        )
+                    }
+            }
         emit(Result.success(currencies))
     }
 }

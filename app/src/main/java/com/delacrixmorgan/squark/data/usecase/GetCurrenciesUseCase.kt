@@ -7,7 +7,6 @@ import com.delacrixmorgan.squark.services.network.Result
 import com.delacrixmorgan.squark.services.repository.CurrencyRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
@@ -16,19 +15,23 @@ class GetCurrenciesUseCase @Inject constructor(
     private val getCurrenciesFallbackUseCase: GetCurrenciesFallbackUseCase
 ) : NoParamsFlowUseCase<List<Currency>, Exception> {
     override fun invoke(params: NoParams): Flow<Result<List<Currency>, Exception>> {
-        return currencyRepository.getCurrencies()
-            .flatMapLatest { result: Result<List<Currency>, Exception> ->
-                result.fold(
-                    success = {
-                        flow { emit(result) }
-                    },
-                    failure = {
-                        flow {
-                            val fallbackCurrencies = getCurrenciesFallbackUseCase().first().get()
-                            emit(Result.success(fallbackCurrencies))
-                        }
-                    }
-                )
-            }
+        return flow {
+            val fallbackCurrencies = getCurrenciesFallbackUseCase().first().get()
+            emit(Result.success(fallbackCurrencies))
+        }
+//        return currencyRepository.getCurrencies()
+//            .flatMapLatest { result: Result<List<Currency>, Exception> ->
+//                result.fold(
+//                    success = {
+//                        flow { emit(result) }
+//                    },
+//                    failure = {
+//                        flow {
+//                            val fallbackCurrencies = getCurrenciesFallbackUseCase().first().get()
+//                            emit(Result.success(fallbackCurrencies))
+//                        }
+//                    }
+//                )
+//            }
     }
 }

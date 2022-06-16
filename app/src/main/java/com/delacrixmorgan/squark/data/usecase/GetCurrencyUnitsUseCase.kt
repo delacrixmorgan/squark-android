@@ -11,12 +11,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class GetCurrencyUnitsUseCase @Inject constructor(
-
-) : NoParamsFlowUseCase<List<CurrencyUnit>, Exception> {
+class GetCurrencyUnitsUseCase @Inject constructor() :
+    NoParamsFlowUseCase<List<CurrencyUnit>, Exception> {
     override fun invoke(params: NoParams): Flow<Result<List<CurrencyUnit>, Exception>> = flow {
         val currencyUnits = App.appContext.getJsonMap(R.raw.data_currency_unit, "currencies").map {
-            CurrencyUnit(code = it.key.removePrefix("USD"), unit = it.value)
+            CurrencyUnit(code = it.key, unit = it.value)
         }
         emit(Result.success(currencyUnits))
     }
