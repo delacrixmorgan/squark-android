@@ -67,17 +67,12 @@ class SupportListFragment : Fragment(R.layout.fragment_support_list) {
     private fun launchReviewSheet() {
         val reviewManager = ReviewManagerFactory.create(requireContext())
         val requestReviewFlow = reviewManager.requestReviewFlow()
-
-        requestReviewFlow.addOnCompleteListener { task ->
-            try {
-                if (task.isSuccessful) {
-                    reviewManager.launchReviewFlow(requireActivity(), task.result)
-                } else {
-                    requireContext().launchPlayStore(requireContext().packageName)
-                }
-            } catch (exception: Exception) {
+        
+        requestReviewFlow
+            .addOnSuccessListener {
+                reviewManager.launchReviewFlow(requireActivity(), it)
+            }.addOnFailureListener {
                 requireContext().launchPlayStore(requireContext().packageName)
             }
-        }
     }
 }
