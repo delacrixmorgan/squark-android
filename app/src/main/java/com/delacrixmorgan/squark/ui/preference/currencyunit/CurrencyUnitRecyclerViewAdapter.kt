@@ -1,4 +1,4 @@
-package com.delacrixmorgan.squark.ui.preference.country
+package com.delacrixmorgan.squark.ui.preference.currencyunit
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,18 +6,17 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.databinding.ItemCountryBinding
-import com.delacrixmorgan.squark.models.Country
+import com.delacrixmorgan.squark.models.Currency
 import me.zhanghai.android.fastscroll.PopupTextProvider
-import java.util.*
 
-class CountryRecyclerViewAdapter(private val listener: Listener) :
-    RecyclerView.Adapter<CountryRecyclerViewAdapter.CountryViewHolder>(), PopupTextProvider {
+class CurrencyUnitRecyclerViewAdapter(private val listener: Listener) :
+    RecyclerView.Adapter<CurrencyUnitRecyclerViewAdapter.CountryViewHolder>(), PopupTextProvider {
 
     interface Listener {
-        fun onCountrySelected(country: Country)
+        fun onCurrencySelected(currency: Currency)
     }
 
-    private var countries: List<Country> = ArrayList()
+    private var currencies: List<Currency> = ArrayList()
     private var isSearchMode = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = CountryViewHolder(
@@ -25,30 +24,30 @@ class CountryRecyclerViewAdapter(private val listener: Listener) :
     )
 
     override fun onBindViewHolder(holder: CountryViewHolder, position: Int) {
-        val country = countries[position]
-        holder.bind(country, position, countries.size, isSearchMode)
+        val country = currencies[position]
+        holder.bind(country, position, currencies.size, isSearchMode)
     }
 
-    override fun getItemCount() = countries.size
+    override fun getItemCount() = currencies.size
 
-    fun updateDataSet(countries: List<Country>, searchMode: Boolean) {
-        this.countries = countries
+    fun updateDataSet(countries: List<Currency>, searchMode: Boolean) {
+        this.currencies = countries
         isSearchMode = searchMode
         notifyDataSetChanged()
     }
 
     override fun getPopupText(position: Int): String {
         return if (position == 0) {
-            countries[position + 1].code[0].toString()
+            currencies[position + 1].code[0].toString()
         } else {
-            countries[position].code[0].toString()
+            currencies[position].code[0].toString()
         }
     }
 
     inner class CountryViewHolder(private val binding: ItemCountryBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(country: Country, position: Int, size: Int, searchMode: Boolean) = with(binding) {
+        fun bind(country: Currency, position: Int, size: Int, searchMode: Boolean) = with(binding) {
             val context = root.context
 
             codeTextView.text = country.code
@@ -80,13 +79,13 @@ class CountryRecyclerViewAdapter(private val listener: Listener) :
             }
 
             cellViewGroup.setOnClickListener {
-                listener.onCountrySelected(country)
+                listener.onCurrencySelected(country)
             }
         }
 
-        private fun getFlagResource(country: Country): Int {
+        private fun getFlagResource(currency: Currency): Int {
             val flagResource = itemView.context.resources.getIdentifier(
-                "ic_flag_${country.code.lowercase(Locale.US)}",
+                "ic_flag_${currency.code.lowercase()}",
                 "drawable",
                 itemView.context.packageName
             )

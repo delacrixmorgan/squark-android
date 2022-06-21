@@ -1,4 +1,4 @@
-package com.delacrixmorgan.squark.ui.preference.country
+package com.delacrixmorgan.squark.ui.preference.currencyunit
 
 import android.app.Activity
 import android.os.Bundle
@@ -18,60 +18,51 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.Keys
-import com.delacrixmorgan.squark.common.SharedPreferenceHelper
 import com.delacrixmorgan.squark.common.compatColor
-import com.delacrixmorgan.squark.common.getFilteredCountries
 import com.delacrixmorgan.squark.common.performHapticContextClick
-import com.delacrixmorgan.squark.data.controller.CountryDataController
-import com.delacrixmorgan.squark.databinding.FragmentCountryBinding
-import com.delacrixmorgan.squark.models.Country
-import com.delacrixmorgan.squark.models.LegacyCurrency
-import com.delacrixmorgan.squark.services.network.Result
+import com.delacrixmorgan.squark.databinding.FragmentCurrencyUnitBinding
+import com.delacrixmorgan.squark.models.Currency
+import com.delacrixmorgan.squark.models.toCurrency
 import com.delacrixmorgan.squark.ui.currency.CurrencyFragment
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import me.zhanghai.android.fastscroll.FastScrollerBuilder
-import java.util.Date
-import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
-class CountryFragment : Fragment(R.layout.fragment_country), CountryRecyclerViewAdapter.Listener,
+class CurrencyUnitFragment : Fragment(R.layout.fragment_currency_unit), CurrencyUnitRecyclerViewAdapter.Listener,
     MenuItem.OnActionExpandListener {
     companion object {
-        fun create(countryCode: String? = null) = CountryFragment().apply {
-            arguments = bundleOf(Keys.Country.Code.name to countryCode)
+        fun create(currency: Currency) = CurrencyUnitFragment().apply {
+            arguments = bundleOf(Keys.CurrencyUnit.Currency.name to currency.toString())
         }
     }
 
-    private val viewModel: CountryViewModel by viewModels()
+    private val binding get() = requireNotNull(_binding)
+    private var _binding: FragmentCurrencyUnitBinding? = null
+
+    private val viewModel: CurrencyUnitViewModel by viewModels()
+    private val adapter: CurrencyUnitRecyclerViewAdapter by lazy { CurrencyUnitRecyclerViewAdapter(listener = this) }
 
     private var searchView: SearchView? = null
     private var searchMenuItem: MenuItem? = null
-
-    private lateinit var countryCode: String
-
-    private val countryAdapter: CountryRecyclerViewAdapter by lazy {
-        CountryRecyclerViewAdapter(listener = this)
-    }
-
-    private val binding get() = requireNotNull(_binding)
-    private var _binding: FragmentCountryBinding? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentCountryBinding.inflate(inflater, container, false)
+        _binding = FragmentCurrencyUnitBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-
-        countryCode = requireNotNull(arguments?.getString(Keys.Country.Code.name))
+        viewModel.updateSelectedCurrency(
+            requireNotNull(arguments?.getString(Keys.CurrencyUnit.Currency.name)).toCurrency()
+        )
     }
 
     override fun onDestroyView() {
@@ -82,18 +73,14 @@ class CountryFragment : Fragment(R.layout.fragment_country), CountryRecyclerView
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val activity = activity as AppCompatActivity
-
         activity.setSupportActionBar(binding.toolbar)
         activity.supportActionBar?.let {
             it.setDisplayHomeAsUpEnabled(true)
             it.setHomeButtonEnabled(true)
             it.title = ""
         }
-
-        binding.countryRecyclerView.adapter = countryAdapter
-
-        FastScrollerBuilder(binding.countryRecyclerView)
-            .build()
+        
+        binding.countryRecyclerView.adapter = adapter
 
         binding.swipeRefreshLayout.setColorSchemeColors(
             R.color.colorAccent.compatColor(context),
@@ -102,26 +89,64 @@ class CountryFragment : Fragment(R.layout.fragment_country), CountryRecyclerView
 
         binding.swipeRefreshLayout.setOnRefreshListener {
             binding.swipeRefreshLayout.performHapticContextClick()
-            checkIsDataUpdated()
+            viewModel.refreshCurrencies()
         }
 
-        updateDataSet()
+        FastScrollerBuilder(binding.countryRecyclerView)
+            .build()
+
+        lifecycleScope.launch {
+            viewModel.uiState.collect {
+                when (it) {
+                    CurrencyUnitUiState.Start -> Unit
+                    CurrencyUnitUiState.Loading -> {
+                        toggleLoading(isRefreshing = true)
+                    }
+                    is CurrencyUnitUiState.Success -> {
+                        updateCurrencyUnitList(it.currencies)
+                    }
+                    is CurrencyUnitUiState.OnRefreshed -> {
+                        updateCurrencyUnitList(it.currencies, isUpdatedAlready = it.isUpdatedAlready)
+                    }
+                    is CurrencyUnitUiState.OnCurrencyFiltered -> {
+                        updateCurrencyUnitList(it.filteredCurrencies)
+                    }
+                    is CurrencyUnitUiState.Failure -> {
+                        showErrorMessage(it.exception)
+                    }
+                }
+            }
+        }
     }
 
-    private fun checkIsDataUpdated() {
-        val lastUpdatedDateTime = SharedPreferenceHelper.lastUpdatedDate.time
-        val currentDateTime = Date().time
+    private fun updateCurrencyUnitList(currencies: List<Currency>, isUpdatedAlready: Boolean = false) {
+//        val selectedCountry = filterCountries.firstOrNull { it.code == this.countryCode }
+//
+//        selectedCountry?.let { country ->
+//            filterCountries.remove(country)
+//            filterCountries.sortBy { it.code }
+//            filterCountries.add(0, country)
+//        }
+        toggleLoading(isRefreshing = false)
+        adapter.updateDataSet(currencies, false)
+        binding.emptyStateViewGroup.isVisible = currencies.isEmpty()
 
-        if (TimeUnit.MILLISECONDS.toDays(currentDateTime - lastUpdatedDateTime) >= 1) {
-//            updateCurrencyRates()
-        } else {
+        if (isUpdatedAlready) {
             Snackbar.make(
                 binding.mainContainer,
                 getString(R.string.fragment_country_list_title_everything_already_updated),
                 Snackbar.LENGTH_SHORT
             ).show()
-            binding.swipeRefreshLayout.isRefreshing = false
         }
+    }
+
+    private fun toggleLoading(isRefreshing: Boolean) {
+        binding.swipeRefreshLayout.isRefreshing = isRefreshing
+    }
+
+    private fun showErrorMessage(exception: Exception) {
+        toggleLoading(isRefreshing = false)
+        Snackbar.make(binding.mainContainer, exception.message ?: getString(R.string.error_api_countries), Snackbar.LENGTH_SHORT).show()
     }
 
 //    private fun updateCurrencyRates() {
@@ -143,7 +168,7 @@ class CountryFragment : Fragment(R.layout.fragment_country), CountryRecyclerView
 //        }
 //    }
 
-    private fun updateCurrencies(currencies: List<LegacyCurrency>) {
+//    private fun updateCurrencies(currencies: List<LegacyCurrency>) {
 //        CoroutineScope(Dispatchers.IO).launch {
 //            countryDatabaseDao.getCountries().collect { countries ->
 //                countries.forEach { country ->
@@ -171,36 +196,7 @@ class CountryFragment : Fragment(R.layout.fragment_country), CountryRecyclerView
 //                coroutineContext.job.cancel()
 //            }
 //        }
-    }
-
-    private fun updateDataSet(searchText: String? = null, searchMode: Boolean = false) {
-        val filterCountries = CountryDataController.getFilteredCountries(
-            searchText
-        ) as MutableList<Country>
-        val selectedCountry = filterCountries.firstOrNull { it.code == this.countryCode }
-
-        selectedCountry?.let { country ->
-            filterCountries.remove(country)
-            filterCountries.sortBy { it.code }
-            filterCountries.add(0, country)
-        }
-
-        countryAdapter.updateDataSet(filterCountries, searchMode)
-
-        if (isVisible) {
-            binding.emptyStateViewGroup.isVisible = filterCountries.isEmpty()
-        }
-    }
-
-    override fun onCountrySelected(country: Country) {
-        val activity = requireActivity()
-        val intent = activity.intent
-
-        intent.putExtra(CurrencyFragment.EXTRA_COUNTRY_CODE, country.code)
-
-        activity.setResult(Activity.RESULT_OK, intent)
-        activity.finish()
-    }
+//    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
@@ -216,12 +212,12 @@ class CountryFragment : Fragment(R.layout.fragment_country), CountryRecyclerView
     override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
         searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-                updateDataSet(query, true)
+                viewModel.filterCurrencies(query, isSearchMode = true)
                 return true
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-                updateDataSet(newText, true)
+                viewModel.filterCurrencies(newText, isSearchMode = true)
                 return true
             }
         })
@@ -229,8 +225,7 @@ class CountryFragment : Fragment(R.layout.fragment_country), CountryRecyclerView
     }
 
     override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
-        searchView?.setQuery("", false)
-        updateDataSet()
+        viewModel.filterCurrencies(isSearchMode = false)
         return true
     }
 
@@ -248,5 +243,15 @@ class CountryFragment : Fragment(R.layout.fragment_country), CountryRecyclerView
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onCurrencySelected(currency: Currency) {
+        val activity = requireActivity()
+        val intent = activity.intent
+
+        intent.putExtra(CurrencyFragment.EXTRA_CURRENCY, currency.code)
+
+        activity.setResult(Activity.RESULT_OK, intent)
+        activity.finish()
     }
 }

@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.RowListener
 import com.delacrixmorgan.squark.common.SharedPreferenceHelper
@@ -22,30 +23,26 @@ import com.delacrixmorgan.squark.common.calculateExpandQuantifier
 import com.delacrixmorgan.squark.common.calculateExpandResult
 import com.delacrixmorgan.squark.common.calculateRowQuantifier
 import com.delacrixmorgan.squark.common.calculateRowResult
-import com.delacrixmorgan.squark.common.getPreferenceCurrency
 import com.delacrixmorgan.squark.common.performHapticContextClick
 import com.delacrixmorgan.squark.common.roundUp
-import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.databinding.FragmentCurrencyBinding
 import com.delacrixmorgan.squark.databinding.ItemRowBinding
-import com.delacrixmorgan.squark.models.Country
 import com.delacrixmorgan.squark.ui.preference.PreferenceNavigationActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 
 @AndroidEntryPoint
 class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener {
 
     companion object {
-        const val EXTRA_COUNTRY_CODE = "CurrencyNavigationFragment.countryCode"
+        const val EXTRA_CURRENCY = "CurrencyFragment.currency"
     }
 
     private val binding get() = requireNotNull(_binding)
     private var _binding: FragmentCurrencyBinding? = null
 
     private var isExpanded = false
-    private var baseCountry: Country? = null
-    private var quoteCountry: Country? = null
 
     private var rowList = arrayListOf<ItemRowBinding>()
     private var expandedList = arrayListOf<ItemRowBinding>()
@@ -55,7 +52,7 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener {
     private val requestBaseCountryLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                val countryCode = result.data?.getStringExtra(EXTRA_COUNTRY_CODE)
+                val countryCode = result.data?.getStringExtra(EXTRA_CURRENCY)
                 SharedPreferenceHelper.baseCurrency = countryCode
 
                 if (isExpanded) onRowCollapse()
@@ -66,7 +63,7 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener {
     private val requestQuoteCountryLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                val countryCode = result.data?.getStringExtra(EXTRA_COUNTRY_CODE)
+                val countryCode = result.data?.getStringExtra(EXTRA_CURRENCY)
                 SharedPreferenceHelper.quoteCurrency = countryCode
 
                 if (isExpanded) onRowCollapse()
@@ -104,46 +101,46 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener {
 
         binding.baseCurrencyTextView.setOnClickListener {
             val currencyIntent = PreferenceNavigationActivity.newLaunchIntent(
-                view.context,
-                countryCode = baseCountry?.code
+                view.context, requireNotNull(viewModel.baseCurrency)
             )
             requestBaseCountryLauncher.launch(currencyIntent)
         }
 
         binding.quoteCurrencyTextView.setOnClickListener {
             val currencyIntent = PreferenceNavigationActivity.newLaunchIntent(
-                view.context,
-                countryCode = quoteCountry?.code
+                view.context, requireNotNull(viewModel.quoteCurrency)
             )
             requestQuoteCountryLauncher.launch(currencyIntent)
         }
 
         binding.swapButton.setOnClickListener {
             SharedPreferenceHelper.apply {
-                baseCurrency = quoteCountry?.code
-                quoteCurrency = baseCountry?.code
+                baseCurrency = viewModel.quoteCurrency?.code
+                quoteCurrency = viewModel.baseCurrency?.code
             }
 
             binding.swapButton.performHapticContextClick()
             updateTable()
         }
 
-        updateTable()
+        lifecycleScope.launch {
+            when (viewModel.uiState.value) {
+                CurrencyUiState.Start -> Unit
+                is CurrencyUiState.Success -> {
+                    updateTable()
+                }
+                is CurrencyUiState.Failure -> Unit
+            }
+        }
+
     }
 
     private fun updateTable() {
-        baseCountry = CountryDataController.getPreferenceCurrency(
-            SharedPreferenceHelper.baseCurrency
-        )
-        quoteCountry = CountryDataController.getPreferenceCurrency(
-            SharedPreferenceHelper.quoteCurrency
-        )
+        binding.baseCurrencyTextView.text = viewModel.baseCurrency?.code
+        binding.quoteCurrencyTextView.text = viewModel.quoteCurrency?.code
 
-        binding.baseCurrencyTextView.text = baseCountry?.code
-        binding.quoteCurrencyTextView.text = quoteCountry?.code
-
-        if (baseCountry?.rate != 0.0 && quoteCountry?.rate != 0.0) {
-            viewModel.updateConversionRate(baseCountry?.rate, quoteCountry?.rate)
+        if (viewModel.baseCurrency?.rate != 0.0 && viewModel.quoteCurrency?.rate != 0.0) {
+            viewModel.updateConversionRate(viewModel.baseCurrency?.rate, viewModel.quoteCurrency?.rate)
             updateTable(rowList)
         }
     }
