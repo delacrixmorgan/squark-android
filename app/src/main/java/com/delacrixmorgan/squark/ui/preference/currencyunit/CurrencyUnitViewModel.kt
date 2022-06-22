@@ -7,8 +7,8 @@ import com.delacrixmorgan.squark.models.Currency
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -17,30 +17,29 @@ import javax.inject.Inject
 class CurrencyUnitViewModel @Inject constructor(
     private val getCurrencyUseCase: GetCurrenciesUseCase
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow<CurrencyUnitUiState>(CurrencyUnitUiState.Start)
-    val uiState: StateFlow<CurrencyUnitUiState> get() = _uiState
+    private val _uiState = MutableSharedFlow<CurrencyUnitUiState>()
+    val uiState: SharedFlow<CurrencyUnitUiState> get() = _uiState
 
-    private var selectedCountry: Currency? = null
+    var selectedCurrency: Currency? = null
     private var currencies = listOf<Currency>()
     private var filterJob: Job? = null
 
-    fun updateSelectedCurrency(currency: Currency) {
+    fun onStart() {
         viewModelScope.launch {
-            selectedCountry = currency
             fetchCurrencies()
         }
     }
 
     private suspend fun fetchCurrencies() {
-        _uiState.value = CurrencyUnitUiState.Loading
+        _uiState.emit(CurrencyUnitUiState.Loading)
         getCurrencyUseCase().collect { result ->
             result.fold(
-                success = {
-                    currencies = it
-                    _uiState.value = CurrencyUnitUiState.Success(it)
+                success = { resultCurrencies ->
+                    currencies = resultCurrencies.filter { it.code != selectedCurrency?.code }
+                    _uiState.emit(CurrencyUnitUiState.Success(currencies))
                 },
                 failure = {
-                    _uiState.value = CurrencyUnitUiState.Failure(it)
+                    _uiState.emit(CurrencyUnitUiState.Failure(it))
                 }
             )
         }
@@ -54,27 +53,28 @@ class CurrencyUnitViewModel @Inject constructor(
 //        if (TimeUnit.MILLISECONDS.toDays(currentDateTime - lastUpdatedDateTime) >= 1) {
 ////            updateCurrencyRates()
 //        }
-        _uiState.value = CurrencyUnitUiState.OnRefreshed(currencies, isUpdatedAlready = true)
+        viewModelScope.launch {
+            _uiState.emit(CurrencyUnitUiState.OnRefreshed(currencies, isUpdatedAlready = true))
+        }
     }
 
-    fun filterCurrencies(query: String? = null, isSearchMode: Boolean) {
+    fun filterCurrencies(query: String? = null) {
         filterJob?.cancel()
         filterJob = viewModelScope.launch {
             delay(300)
             val filteredCurrencies = currencies.filter { currency ->
                 if (!query.isNullOrBlank()) {
-                    currency.name.lowercase().contains(query) || currency.code.lowercase().contains(query)
+                    currency.name.contains(query, ignoreCase = true) || currency.code.contains(query, ignoreCase = true)
                 } else {
                     true
                 }
             }
-            _uiState.value = CurrencyUnitUiState.OnCurrencyFiltered(filteredCurrencies)
+            _uiState.emit(CurrencyUnitUiState.OnCurrencyFiltered(filteredCurrencies))
         }
     }
 }
 
 sealed class CurrencyUnitUiState {
-    object Start : CurrencyUnitUiState()
     object Loading : CurrencyUnitUiState()
     data class Success(val currencies: List<Currency>) : CurrencyUnitUiState()
     data class OnRefreshed(val currencies: List<Currency>, val isUpdatedAlready: Boolean) : CurrencyUnitUiState()

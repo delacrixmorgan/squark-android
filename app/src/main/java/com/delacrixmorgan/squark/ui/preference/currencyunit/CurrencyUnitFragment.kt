@@ -3,6 +3,7 @@ package com.delacrixmorgan.squark.ui.preference.currencyunit
 import android.app.Activity
 import android.os.Bundle
 import android.text.InputType
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -16,6 +17,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.ConcatAdapter
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.Keys
 import com.delacrixmorgan.squark.common.compatColor
@@ -31,7 +33,7 @@ import kotlinx.coroutines.launch
 import me.zhanghai.android.fastscroll.FastScrollerBuilder
 
 @AndroidEntryPoint
-class CurrencyUnitFragment : Fragment(R.layout.fragment_currency_unit), CurrencyUnitRecyclerViewAdapter.Listener,
+class CurrencyUnitFragment : Fragment(R.layout.fragment_currency_unit), CurrencyUnitAdapter.Listener,
     MenuItem.OnActionExpandListener {
     companion object {
         fun create(currency: Currency) = CurrencyUnitFragment().apply {
@@ -43,7 +45,9 @@ class CurrencyUnitFragment : Fragment(R.layout.fragment_currency_unit), Currency
     private var _binding: FragmentCurrencyUnitBinding? = null
 
     private val viewModel: CurrencyUnitViewModel by viewModels()
-    private val adapter: CurrencyUnitRecyclerViewAdapter by lazy { CurrencyUnitRecyclerViewAdapter(listener = this) }
+    private val adapter: CurrencyUnitAdapter by lazy { CurrencyUnitAdapter(listener = this) }
+    private val selectedHeaderAdapter: HeaderAdapter by lazy { HeaderAdapter() }
+    private val remainingHeaderAdapter: HeaderAdapter by lazy { HeaderAdapter() }
 
     private var searchView: SearchView? = null
     private var searchMenuItem: MenuItem? = null
@@ -60,9 +64,7 @@ class CurrencyUnitFragment : Fragment(R.layout.fragment_currency_unit), Currency
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        viewModel.updateSelectedCurrency(
-            requireNotNull(arguments?.getString(Keys.CurrencyUnit.Currency.name)).toCurrency()
-        )
+        viewModel.selectedCurrency = requireNotNull(arguments?.getString(Keys.CurrencyUnit.Currency.name)).toCurrency()
     }
 
     override fun onDestroyView() {
@@ -79,6 +81,11 @@ class CurrencyUnitFragment : Fragment(R.layout.fragment_currency_unit), Currency
             it.setHomeButtonEnabled(true)
             it.title = ""
         }
+
+        val concatAdapter = ConcatAdapter(
+            selectedHeaderAdapter,
+            adapter
+        )
         
         binding.countryRecyclerView.adapter = adapter
 
@@ -96,9 +103,10 @@ class CurrencyUnitFragment : Fragment(R.layout.fragment_currency_unit), Currency
             .build()
 
         lifecycleScope.launch {
+            viewModel.onStart()
             viewModel.uiState.collect {
+                Log.d("CurrencyUnitFragment", "State: ${it.javaClass.simpleName}")
                 when (it) {
-                    CurrencyUnitUiState.Start -> Unit
                     CurrencyUnitUiState.Loading -> {
                         toggleLoading(isRefreshing = true)
                     }
@@ -127,6 +135,11 @@ class CurrencyUnitFragment : Fragment(R.layout.fragment_currency_unit), Currency
 //            filterCountries.sortBy { it.code }
 //            filterCountries.add(0, country)
 //        }
+
+        viewModel.selectedCurrency
+
+
+        binding.swipeRefreshLayout.isEnabled = false
         toggleLoading(isRefreshing = false)
         adapter.updateDataSet(currencies, false)
         binding.emptyStateViewGroup.isVisible = currencies.isEmpty()
@@ -212,12 +225,12 @@ class CurrencyUnitFragment : Fragment(R.layout.fragment_currency_unit), Currency
     override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
         searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-                viewModel.filterCurrencies(query, isSearchMode = true)
+                viewModel.filterCurrencies(query)
                 return true
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-                viewModel.filterCurrencies(newText, isSearchMode = true)
+                viewModel.filterCurrencies(newText)
                 return true
             }
         })
@@ -225,7 +238,7 @@ class CurrencyUnitFragment : Fragment(R.layout.fragment_currency_unit), Currency
     }
 
     override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
-        viewModel.filterCurrencies(isSearchMode = false)
+        binding.swipeRefreshLayout.isEnabled = true
         return true
     }
 

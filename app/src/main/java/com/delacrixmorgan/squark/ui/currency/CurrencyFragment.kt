@@ -133,6 +133,11 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener {
             }
         }
 
+        // TODO (Remove when ready)
+        val currencyIntent = PreferenceNavigationActivity.newLaunchIntent(
+            view.context, requireNotNull(viewModel.quoteCurrency)
+        )
+        requestQuoteCountryLauncher.launch(currencyIntent)
     }
 
     private fun updateTable() {

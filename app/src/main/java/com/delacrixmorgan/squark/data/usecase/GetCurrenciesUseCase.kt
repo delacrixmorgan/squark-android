@@ -17,7 +17,7 @@ class GetCurrenciesUseCase @Inject constructor(
     override fun invoke(params: NoParams): Flow<Result<List<Currency>, Exception>> {
         // TODO (Use Fallback Until Overhaul is Completed)
         return flow {
-            val fallbackCurrencies = getCurrenciesFallbackUseCase().first().get()
+            val fallbackCurrencies = getCurrenciesFallbackUseCase().first().get().sortedBy { it.name }
             emit(Result.success(fallbackCurrencies))
         }
 //        return currencyRepository.getCurrencies()

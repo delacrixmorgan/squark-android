@@ -9,8 +9,8 @@ import com.delacrixmorgan.squark.databinding.ItemCountryBinding
 import com.delacrixmorgan.squark.models.Currency
 import me.zhanghai.android.fastscroll.PopupTextProvider
 
-class CurrencyUnitRecyclerViewAdapter(private val listener: Listener) :
-    RecyclerView.Adapter<CurrencyUnitRecyclerViewAdapter.CountryViewHolder>(), PopupTextProvider {
+class CurrencyUnitAdapter(private val listener: Listener) :
+    RecyclerView.Adapter<CurrencyUnitAdapter.CountryViewHolder>(), PopupTextProvider {
 
     interface Listener {
         fun onCurrencySelected(currency: Currency)
