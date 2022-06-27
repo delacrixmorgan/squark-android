@@ -121,7 +121,7 @@ class CurrencyUnitFragment : Fragment(R.layout.fragment_currency_unit), Currency
                         updateCurrencyUnitList(it.currencies, isUpdatedAlready = it.isUpdatedAlready)
                     }
                     is CurrencyUnitUiState.OnCurrencyFiltered -> {
-                        updateCurrencyUnitList(it.filteredCurrencies)
+                        updateCurrencyUnitList(it.filteredCurrencies, isSearchMode = it.isSearchMode)
                     }
                     is CurrencyUnitUiState.Failure -> {
                         showErrorMessage(it.exception)
@@ -131,9 +131,9 @@ class CurrencyUnitFragment : Fragment(R.layout.fragment_currency_unit), Currency
         }
     }
 
-    private fun updateCurrencyUnitList(currencies: List<Currency>, isUpdatedAlready: Boolean = false) {
-        toggleLoading(isRefreshing = false)
-        adapter.updateDataSet(viewModel.selectedCurrency, currencies, false)
+    private fun updateCurrencyUnitList(currencies: List<Currency>, isUpdatedAlready: Boolean = false, isSearchMode: Boolean = false) {
+        toggleLoading(isRefreshing = false, isSearchMode = isSearchMode)
+        adapter.updateDataSet(viewModel.selectedCurrency, currencies, isSearchMode)
         binding.emptyStateViewGroup.isVisible = currencies.isEmpty()
 
         if (isUpdatedAlready) {
@@ -145,63 +145,15 @@ class CurrencyUnitFragment : Fragment(R.layout.fragment_currency_unit), Currency
         }
     }
 
-    private fun toggleLoading(isRefreshing: Boolean) {
+    private fun toggleLoading(isRefreshing: Boolean, isSearchMode: Boolean = false) {
         binding.swipeRefreshLayout.isRefreshing = isRefreshing
+        binding.swipeRefreshLayout.isEnabled = !isSearchMode
     }
 
     private fun showErrorMessage(exception: Exception) {
         toggleLoading(isRefreshing = false)
         Snackbar.make(binding.mainContainer, exception.message ?: getString(R.string.error_api_countries), Snackbar.LENGTH_SHORT).show()
     }
-
-//    private fun updateCurrencyRates() {
-//        lifecycleScope.launch {
-//            when (val result = viewModel.fetchCurrencies()) {
-//                is Result.Success -> {
-//                    binding.swipeRefreshLayout.isRefreshing = false
-//                    updateCurrencies(result.value.currencies)
-//                }
-//                is Result.Failure -> {
-//                    binding.swipeRefreshLayout.isRefreshing = false
-//                    Snackbar.make(
-//                        binding.mainContainer,
-//                        getString(R.string.error_api_countries),
-//                        Snackbar.LENGTH_SHORT
-//                    ).show()
-//                }
-//            }
-//        }
-//    }
-
-//    private fun updateCurrencies(currencies: List<LegacyCurrency>) {
-//        CoroutineScope(Dispatchers.IO).launch {
-//            countryDatabaseDao.getCountries().collect { countries ->
-//                countries.forEach { country ->
-//                    val updateCurrency = currencies.find {
-//                        it.code.contains(country.code)
-//                    }
-//
-//                    updateCurrency?.let {
-//                        country.rate = it.rate
-//                        countryDatabaseDao.updateCountry(country)
-//                    }
-//                }
-//                countries.let {
-//                    CountryDataController.updateDataSet(it)
-//                    SharedPreferenceHelper.lastUpdatedDate = Date()
-//                }
-//
-//                if (isVisible) {
-//                    Snackbar.make(
-//                        binding.mainContainer,
-//                        getString(R.string.fragment_country_list_title_updated),
-//                        Snackbar.LENGTH_SHORT
-//                    ).show()
-//                }
-//                coroutineContext.job.cancel()
-//            }
-//        }
-//    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
@@ -230,7 +182,7 @@ class CurrencyUnitFragment : Fragment(R.layout.fragment_currency_unit), Currency
     }
 
     override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
-        binding.swipeRefreshLayout.isEnabled = true
+        toggleLoading(false, isSearchMode = false)
         return true
     }
 

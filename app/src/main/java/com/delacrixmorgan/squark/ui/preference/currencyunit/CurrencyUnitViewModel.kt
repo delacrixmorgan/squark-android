@@ -69,7 +69,7 @@ class CurrencyUnitViewModel @Inject constructor(
                     true
                 }
             }
-            _uiState.emit(CurrencyUnitUiState.OnCurrencyFiltered(filteredCurrencies))
+            _uiState.emit(CurrencyUnitUiState.OnCurrencyFiltered(filteredCurrencies, isSearchMode = true))
         }
     }
 }
@@ -78,6 +78,6 @@ sealed class CurrencyUnitUiState {
     object Loading : CurrencyUnitUiState()
     data class Success(val currencies: List<Currency>) : CurrencyUnitUiState()
     data class OnRefreshed(val currencies: List<Currency>, val isUpdatedAlready: Boolean) : CurrencyUnitUiState()
-    data class OnCurrencyFiltered(val filteredCurrencies: List<Currency>) : CurrencyUnitUiState()
+    data class OnCurrencyFiltered(val filteredCurrencies: List<Currency>, val isSearchMode: Boolean) : CurrencyUnitUiState()
     data class Failure(val exception: Exception) : CurrencyUnitUiState()
 }

@@ -34,12 +34,13 @@ class CurrencyUnitAdapter(private val listener: Listener) :
 
     fun updateDataSet(selectedCurrency: Currency?, countries: List<Currency>, searchMode: Boolean) {
         val filteredCurrencies = countries.toMutableList()
-        selectedCurrency?.let { country ->
-            filteredCurrencies.remove(country)
-            filteredCurrencies.sortBy { it.code }
-            filteredCurrencies.add(0, country)
+        if (!isSearchMode) {
+            selectedCurrency?.let { currency ->
+                filteredCurrencies.remove(currency)
+                filteredCurrencies.sortBy { it.code }
+                filteredCurrencies.add(0, currency)
+            }
         }
-
         this.currencies = filteredCurrencies
         isSearchMode = searchMode
         notifyDataSetChanged()
@@ -56,7 +57,7 @@ class CurrencyUnitAdapter(private val listener: Listener) :
     inner class CurrencyViewHolder(private val binding: ItemCurrencyBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(currency: Currency, position: Int, searchMode: Boolean) = with(binding) {
+        fun bind(currency: Currency, position: Int, isSearchMode: Boolean) = with(binding) {
             val context = root.context
 
             codeTextView.text = currency.code
@@ -66,17 +67,13 @@ class CurrencyUnitAdapter(private val listener: Listener) :
             when (position) {
                 0 -> {
                     headerTextView.text = context.getString(R.string.fragment_country_list_title_header_selected_currency)
-                    headerTextView.isVisible = true
+                    headerTextView.isVisible = true && !isSearchMode
                 }
                 1 -> {
                     headerTextView.text = context.resources.getQuantityString(R.plurals.number_of_currencies, currencies.size, currencies.size)
-                    headerTextView.isVisible = true
+                    headerTextView.isVisible = true && !isSearchMode
                 }
                 else -> headerTextView.isVisible = false
-            }
-
-            if (searchMode) {
-                headerTextView.isVisible = false
             }
 
             root.setOnClickListener {
