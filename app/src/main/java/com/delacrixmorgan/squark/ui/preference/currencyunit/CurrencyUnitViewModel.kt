@@ -34,8 +34,8 @@ class CurrencyUnitViewModel @Inject constructor(
         _uiState.emit(CurrencyUnitUiState.Loading)
         getCurrencyUseCase().collect { result ->
             result.fold(
-                success = { resultCurrencies ->
-                    currencies = resultCurrencies.filter { it.code != selectedCurrency?.code }
+                success = {
+                    currencies = it
                     _uiState.emit(CurrencyUnitUiState.Success(currencies))
                 },
                 failure = {

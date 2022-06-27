@@ -5,10 +5,12 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.delacrixmorgan.squark.R
-import com.delacrixmorgan.squark.databinding.ItemCountryBinding
+import com.delacrixmorgan.squark.databinding.ItemCurrencyBinding
 import com.delacrixmorgan.squark.models.Currency
 import me.zhanghai.android.fastscroll.PopupTextProvider
 
+// TODO (Try ListAdapter)
+//https://github.com/google-developer-training/android-kotlin-fundamentals-apps/blob/master/RecyclerViewHeaders/app/src/main/java/com/example/android/trackmysleepquality/sleeptracker/SleepNightAdapter.kt
 class CurrencyUnitAdapter(private val listener: Listener) :
     RecyclerView.Adapter<CurrencyUnitAdapter.CountryViewHolder>(), PopupTextProvider {
 
@@ -20,18 +22,25 @@ class CurrencyUnitAdapter(private val listener: Listener) :
     private var isSearchMode = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = CountryViewHolder(
-        ItemCountryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        ItemCurrencyBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     )
 
     override fun onBindViewHolder(holder: CountryViewHolder, position: Int) {
         val country = currencies[position]
-        holder.bind(country, position, currencies.size, isSearchMode)
+        holder.bind(country, position, isSearchMode)
     }
 
     override fun getItemCount() = currencies.size
 
-    fun updateDataSet(countries: List<Currency>, searchMode: Boolean) {
-        this.currencies = countries
+    fun updateDataSet(selectedCurrency: Currency?, countries: List<Currency>, searchMode: Boolean) {
+        val filteredCurrencies = countries.toMutableList()
+        selectedCurrency?.let { country ->
+            filteredCurrencies.remove(country)
+            filteredCurrencies.sortBy { it.code }
+            filteredCurrencies.add(0, country)
+        }
+
+        this.currencies = filteredCurrencies
         isSearchMode = searchMode
         notifyDataSetChanged()
     }
@@ -44,10 +53,10 @@ class CurrencyUnitAdapter(private val listener: Listener) :
         }
     }
 
-    inner class CountryViewHolder(private val binding: ItemCountryBinding) :
+    inner class CountryViewHolder(private val binding: ItemCurrencyBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(country: Currency, position: Int, size: Int, searchMode: Boolean) = with(binding) {
+        fun bind(country: Currency, position: Int, searchMode: Boolean) = with(binding) {
             val context = root.context
 
             codeTextView.text = country.code
@@ -56,18 +65,12 @@ class CurrencyUnitAdapter(private val listener: Listener) :
 
             when (position) {
                 0 -> {
-                    headerTextView.text = context.getString(
-                        R.string.fragment_country_list_title_header_selected_currency
-                    )
+                    headerTextView.text = context.getString(R.string.fragment_country_list_title_header_selected_currency)
                     headerTextView.isVisible = true
                 }
 
                 1 -> {
-                    headerTextView.text = context.resources.getQuantityString(
-                        R.plurals.number_of_currencies,
-                        size,
-                        size
-                    )
+                    headerTextView.text = context.resources.getQuantityString(R.plurals.number_of_currencies, currencies.size, currencies.size)
                     headerTextView.isVisible = true
                 }
 

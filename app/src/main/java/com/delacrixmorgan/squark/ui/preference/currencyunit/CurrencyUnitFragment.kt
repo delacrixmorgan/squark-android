@@ -17,7 +17,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.ConcatAdapter
+import androidx.recyclerview.widget.DividerItemDecoration
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.Keys
 import com.delacrixmorgan.squark.common.compatColor
@@ -46,8 +46,6 @@ class CurrencyUnitFragment : Fragment(R.layout.fragment_currency_unit), Currency
 
     private val viewModel: CurrencyUnitViewModel by viewModels()
     private val adapter: CurrencyUnitAdapter by lazy { CurrencyUnitAdapter(listener = this) }
-    private val selectedHeaderAdapter: HeaderAdapter by lazy { HeaderAdapter() }
-    private val remainingHeaderAdapter: HeaderAdapter by lazy { HeaderAdapter() }
 
     private var searchView: SearchView? = null
     private var searchMenuItem: MenuItem? = null
@@ -82,12 +80,12 @@ class CurrencyUnitFragment : Fragment(R.layout.fragment_currency_unit), Currency
             it.title = ""
         }
 
-        val concatAdapter = ConcatAdapter(
-            selectedHeaderAdapter,
-            adapter
+        val dividerItemDecoration = DividerItemDecoration(
+            binding.recyclerView.context,
+            DividerItemDecoration.VERTICAL
         )
-        
-        binding.countryRecyclerView.adapter = adapter
+        binding.recyclerView.addItemDecoration(dividerItemDecoration)
+        binding.recyclerView.adapter = adapter
 
         binding.swipeRefreshLayout.setColorSchemeColors(
             R.color.colorAccent.compatColor(context),
@@ -99,7 +97,7 @@ class CurrencyUnitFragment : Fragment(R.layout.fragment_currency_unit), Currency
             viewModel.refreshCurrencies()
         }
 
-        FastScrollerBuilder(binding.countryRecyclerView)
+        FastScrollerBuilder(binding.recyclerView)
             .build()
 
         lifecycleScope.launch {
@@ -128,20 +126,8 @@ class CurrencyUnitFragment : Fragment(R.layout.fragment_currency_unit), Currency
     }
 
     private fun updateCurrencyUnitList(currencies: List<Currency>, isUpdatedAlready: Boolean = false) {
-//        val selectedCountry = filterCountries.firstOrNull { it.code == this.countryCode }
-//
-//        selectedCountry?.let { country ->
-//            filterCountries.remove(country)
-//            filterCountries.sortBy { it.code }
-//            filterCountries.add(0, country)
-//        }
-
-        viewModel.selectedCurrency
-
-
-        binding.swipeRefreshLayout.isEnabled = false
         toggleLoading(isRefreshing = false)
-        adapter.updateDataSet(currencies, false)
+        adapter.updateDataSet(viewModel.selectedCurrency, currencies, false)
         binding.emptyStateViewGroup.isVisible = currencies.isEmpty()
 
         if (isUpdatedAlready) {
