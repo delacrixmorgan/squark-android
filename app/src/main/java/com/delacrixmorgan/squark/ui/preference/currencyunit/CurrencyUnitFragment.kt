@@ -26,6 +26,7 @@ import com.delacrixmorgan.squark.databinding.FragmentCurrencyUnitBinding
 import com.delacrixmorgan.squark.models.Currency
 import com.delacrixmorgan.squark.models.toCurrency
 import com.delacrixmorgan.squark.ui.currency.CurrencyFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -78,6 +79,11 @@ class CurrencyUnitFragment : Fragment(R.layout.fragment_currency_unit), Currency
             it.setDisplayHomeAsUpEnabled(true)
             it.setHomeButtonEnabled(true)
             it.title = ""
+        }
+
+        val bottomNavigationView = activity.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        bottomNavigationView.setOnItemReselectedListener {
+            binding.recyclerView.smoothScrollToPosition(0)
         }
 
         val dividerItemDecoration = DividerItemDecoration(

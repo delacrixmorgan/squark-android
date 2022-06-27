@@ -36,7 +36,7 @@ class PreferenceNavigationActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         binding = ActivityPreferenceNavigationBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        
+
         if (this.intent.extras != null) {
             this.intent.getStringExtra(EXTRA_RESULT_CURRENCY)?.let {
                 currency = it.toCurrency()
