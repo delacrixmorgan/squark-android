@@ -44,7 +44,7 @@ class SupportListFragment : Fragment(R.layout.fragment_support_list) {
             binding.starImageView.performHapticContextClick()
             binding.personImageView.setImageResource(R.drawable.ic_human_happy)
             binding.starImageView.setColorFilter(ContextCompat.getColor(view.context, R.color.colorAccent))
-            launchReviewSheet()
+            launchPlayStore()
         }
 
         binding.rateButton.setOnClickListener {
@@ -64,15 +64,19 @@ class SupportListFragment : Fragment(R.layout.fragment_support_list) {
         }
     }
 
+    private fun launchPlayStore() {
+        requireContext().launchPlayStore(requireContext().packageName)
+    }
+
     private fun launchReviewSheet() {
         val reviewManager = ReviewManagerFactory.create(requireContext())
         val requestReviewFlow = reviewManager.requestReviewFlow()
-        
+
         requestReviewFlow
             .addOnSuccessListener {
                 reviewManager.launchReviewFlow(requireActivity(), it)
             }.addOnFailureListener {
-                requireContext().launchPlayStore(requireContext().packageName)
+                launchPlayStore()
             }
     }
 }
