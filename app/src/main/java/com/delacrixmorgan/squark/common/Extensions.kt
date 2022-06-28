@@ -13,15 +13,12 @@ import com.delacrixmorgan.squark.common.SharedPreferenceHelper.DEFAULT_BASE_CURR
 import com.delacrixmorgan.squark.common.SharedPreferenceHelper.DEFAULT_QUOTE_CURRENCY_CODE
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.models.Country
-import com.delacrixmorgan.squark.models.Currency
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.math.BigDecimal
 import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
-import java.util.*
+import java.time.temporal.ChronoUnit
 import kotlin.math.roundToInt
 
 /**
@@ -57,18 +54,20 @@ fun Fragment.launchWebsite(url: String) {
  * Date
  */
 
-fun Date.toStringFormat(): String {
-    val localDateTime = LocalDateTime.ofInstant(
-        this.toInstant(),
-        ZoneOffset.UTC
-    )
-    return DateTimeFormatter.ISO_INSTANT.format(localDateTime)
+val ISO_8601 = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+
+fun LocalDateTime.toStringFormat(): String {
+    return DateTimeFormatter.ofPattern(ISO_8601).format(this)
 }
 
-fun String.toDateFormat(): Date {
-    val localDateTime = LocalDateTime.parse(this, DateTimeFormatter.ISO_INSTANT)
-    return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant())
+fun String.toLocalDateTime(): LocalDateTime {
+    return LocalDateTime.parse(this, DateTimeFormatter.ofPattern(ISO_8601))
 }
+
+fun LocalDateTime.isMoreThanADay(to: LocalDateTime?): Boolean {
+    return ChronoUnit.DAYS.between(this, to) > 1
+}
+
 
 /**
  * Context

@@ -5,14 +5,13 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.delacrixmorgan.squark.models.Country
 import com.delacrixmorgan.squark.models.Currency
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CurrencyDao {
     @Query("SELECT * from Currency")
-    fun getCurrencies(): Flow<List<Country>>
+    fun getCurrencies(): Flow<List<Currency>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertCurrencies(currencies: List<Currency>)

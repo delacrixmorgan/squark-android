@@ -6,7 +6,8 @@ import androidx.core.os.ConfigurationCompat
 import androidx.preference.PreferenceManager
 import com.delacrixmorgan.squark.App
 import com.delacrixmorgan.squark.data.controller.CountryDataController
-import java.util.*
+import java.time.LocalDateTime
+import java.util.Currency
 
 object SharedPreferenceHelper {
 
@@ -50,15 +51,14 @@ object SharedPreferenceHelper {
             ?: DEFAULT_QUOTE_CURRENCY_CODE
         set(value) = sharedPreferences.edit { putString(Keys.QuoteCurrency.name, value) }
 
-    var lastUpdatedDate: Date
+    var lastUpdatedDate: LocalDateTime?
         get() {
-            return sharedPreferences.getString(Keys.LastUpdatedDate.name, null)?.toDateFormat()
-                ?: Date()
+            return sharedPreferences.getString(Keys.LastUpdatedDate.name, null)?.toLocalDateTime()
         }
         set(value) = sharedPreferences.edit {
             putString(
                 Keys.LastUpdatedDate.name,
-                value.toStringFormat()
+                value?.toStringFormat()
             )
         }
 

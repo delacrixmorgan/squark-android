@@ -30,7 +30,7 @@ class CurrencyViewModel @Inject constructor(
     var multiplier: Double = 1.0
     var conversionRate: Double = 1.0
 
-    init {
+    fun onStart() {
         viewModelScope.launch {
             fetchCurrencies()
         }

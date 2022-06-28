@@ -1,6 +1,7 @@
 package com.delacrixmorgan.squark.services.repository
 
 import android.util.Log
+import com.delacrixmorgan.squark.common.SharedPreferenceHelper
 import com.delacrixmorgan.squark.data.dao.CurrencyDao
 import com.delacrixmorgan.squark.models.Currency
 import com.delacrixmorgan.squark.models.CurrencyDtoToModelMapper
@@ -12,6 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 class CurrencyRepository @Inject constructor(
@@ -26,6 +28,7 @@ class CurrencyRepository @Inject constructor(
             }.fold(
                 success = {
                     currencyDao.insertCurrencies(it)
+                    SharedPreferenceHelper.lastUpdatedDate = LocalDateTime.now()
                     emit(Result.success(it))
                 },
                 failure = {

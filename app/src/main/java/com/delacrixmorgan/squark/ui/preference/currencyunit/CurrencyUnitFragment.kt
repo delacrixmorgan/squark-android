@@ -3,7 +3,6 @@ package com.delacrixmorgan.squark.ui.preference.currencyunit
 import android.app.Activity
 import android.os.Bundle
 import android.text.InputType
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -100,7 +99,8 @@ class CurrencyUnitFragment : Fragment(R.layout.fragment_currency_unit), Currency
 
         binding.swipeRefreshLayout.setOnRefreshListener {
             binding.swipeRefreshLayout.performHapticContextClick()
-            viewModel.refreshCurrencies()
+            viewModel.fetchCurrencies()
+            Snackbar.make(binding.mainContainer, getString(R.string.fragment_country_list_title_everything_already_updated), Snackbar.LENGTH_SHORT).show()
         }
 
         FastScrollerBuilder(binding.recyclerView)
@@ -109,19 +109,15 @@ class CurrencyUnitFragment : Fragment(R.layout.fragment_currency_unit), Currency
         lifecycleScope.launch {
             viewModel.onStart()
             viewModel.uiState.collect {
-                Log.d("CurrencyUnitFragment", "State: ${it.javaClass.simpleName}")
                 when (it) {
                     CurrencyUnitUiState.Loading -> {
-                        toggleLoading(isRefreshing = true)
+                        binding.swipeRefreshLayout.isRefreshing = true
                     }
                     is CurrencyUnitUiState.Success -> {
                         updateCurrencyUnitList(it.currencies)
                     }
-                    is CurrencyUnitUiState.OnRefreshed -> {
-                        updateCurrencyUnitList(it.currencies, isUpdatedAlready = it.isUpdatedAlready)
-                    }
                     is CurrencyUnitUiState.OnCurrencyFiltered -> {
-                        updateCurrencyUnitList(it.filteredCurrencies, isSearchMode = it.isSearchMode)
+                        updateCurrencyUnitList(it.filteredCurrencies, isSearchMode = true)
                     }
                     is CurrencyUnitUiState.Failure -> {
                         showErrorMessage(it.exception)
@@ -131,27 +127,14 @@ class CurrencyUnitFragment : Fragment(R.layout.fragment_currency_unit), Currency
         }
     }
 
-    private fun updateCurrencyUnitList(currencies: List<Currency>, isUpdatedAlready: Boolean = false, isSearchMode: Boolean = false) {
-        toggleLoading(isRefreshing = false, isSearchMode = isSearchMode)
-        adapter.updateDataSet(viewModel.selectedCurrency, currencies, isSearchMode)
+    private fun updateCurrencyUnitList(currencies: List<Currency>, isSearchMode: Boolean = false) {
+        binding.swipeRefreshLayout.isRefreshing = false
         binding.emptyStateViewGroup.isVisible = currencies.isEmpty()
-
-        if (isUpdatedAlready) {
-            Snackbar.make(
-                binding.mainContainer,
-                getString(R.string.fragment_country_list_title_everything_already_updated),
-                Snackbar.LENGTH_SHORT
-            ).show()
-        }
-    }
-
-    private fun toggleLoading(isRefreshing: Boolean, isSearchMode: Boolean = false) {
-        binding.swipeRefreshLayout.isRefreshing = isRefreshing
-        binding.swipeRefreshLayout.isEnabled = !isSearchMode
+        adapter.updateDataSet(viewModel.selectedCurrency, currencies, isSearchMode)
     }
 
     private fun showErrorMessage(exception: Exception) {
-        toggleLoading(isRefreshing = false)
+        binding.swipeRefreshLayout.isRefreshing = false
         Snackbar.make(binding.mainContainer, exception.message ?: getString(R.string.error_api_countries), Snackbar.LENGTH_SHORT).show()
     }
 
@@ -182,7 +165,6 @@ class CurrencyUnitFragment : Fragment(R.layout.fragment_currency_unit), Currency
     }
 
     override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
-        toggleLoading(false, isSearchMode = false)
         return true
     }
 

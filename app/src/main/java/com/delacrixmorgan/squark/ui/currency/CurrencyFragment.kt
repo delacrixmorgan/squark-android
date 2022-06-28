@@ -29,6 +29,7 @@ import com.delacrixmorgan.squark.databinding.FragmentCurrencyBinding
 import com.delacrixmorgan.squark.databinding.ItemRowBinding
 import com.delacrixmorgan.squark.ui.preference.PreferenceNavigationActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 
@@ -87,9 +88,8 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         if (SharedPreferenceHelper.isPersistentMultiplierEnabled) {
-            updateMultiplier(SharedPreferenceHelper.multiplier)
+            viewModel.multiplier = SharedPreferenceHelper.multiplier.toDouble()
         }
 
         setupTable(
@@ -114,30 +114,26 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener {
         }
 
         binding.swapButton.setOnClickListener {
-            SharedPreferenceHelper.apply {
-                baseCurrency = viewModel.quoteCurrency?.code
-                quoteCurrency = viewModel.baseCurrency?.code
-            }
+            val baseCurrencyCode = viewModel.baseCurrency?.code
+            val quoteCurrencyCode = viewModel.quoteCurrency?.code
+
+            SharedPreferenceHelper.baseCurrency = quoteCurrencyCode
+            SharedPreferenceHelper.quoteCurrency = baseCurrencyCode
 
             binding.swapButton.performHapticContextClick()
             updateTable()
         }
 
         lifecycleScope.launch {
-            when (viewModel.uiState.value) {
-                CurrencyUiState.Start -> Unit
-                is CurrencyUiState.Success -> {
-                    updateTable()
+            viewModel.onStart()
+            viewModel.uiState.collect {
+                when (it) {
+                    CurrencyUiState.Start -> Unit
+                    is CurrencyUiState.Success -> updateTable()
+                    is CurrencyUiState.Failure -> Unit
                 }
-                is CurrencyUiState.Failure -> Unit
             }
         }
-
-        // TODO (Remove when ready)
-        val currencyIntent = PreferenceNavigationActivity.newLaunchIntent(
-            view.context, requireNotNull(viewModel.quoteCurrency)
-        )
-        requestQuoteCountryLauncher.launch(currencyIntent)
     }
 
     private fun updateTable() {
@@ -406,12 +402,6 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener {
             expandedList.add(tableRow)
             tableLayout.addView(tableRow.root, (expandQuantifier + index))
         }
-    }
-
-    private fun updateMultiplier(
-        multiplier: Int
-    ) = with(viewModel) {
-        this.multiplier = multiplier.toDouble()
     }
 
     private class SingleTapConfirm : GestureDetector.SimpleOnGestureListener() {

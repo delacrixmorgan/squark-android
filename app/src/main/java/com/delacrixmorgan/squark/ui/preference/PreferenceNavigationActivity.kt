@@ -19,7 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class PreferenceNavigationActivity : AppCompatActivity(),
     NavigationBarView.OnItemSelectedListener {
     companion object {
-        const val EXTRA_RESULT_CURRENCY = "currency"
+        const val EXTRA_RESULT_CURRENCY = "PreferenceNavigationActivity.currency"
 
         fun newLaunchIntent(context: Context, currency: Currency): Intent {
             val launchIntent = Intent(context, PreferenceNavigationActivity::class.java)
