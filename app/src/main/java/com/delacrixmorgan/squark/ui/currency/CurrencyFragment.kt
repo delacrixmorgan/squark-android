@@ -29,7 +29,6 @@ import com.delacrixmorgan.squark.databinding.FragmentCurrencyBinding
 import com.delacrixmorgan.squark.databinding.ItemRowBinding
 import com.delacrixmorgan.squark.ui.preference.PreferenceNavigationActivity
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 
@@ -107,10 +106,11 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener {
         }
 
         binding.quoteCurrencyTextView.setOnClickListener {
-            val currencyIntent = PreferenceNavigationActivity.newLaunchIntent(
-                view.context, requireNotNull(viewModel.quoteCurrency)
-            )
-            requestQuoteCountryLauncher.launch(currencyIntent)
+//            val currencyIntent = PreferenceNavigationActivity.newLaunchIntent(
+//                view.context, requireNotNull(viewModel.quoteCurrency)
+//            )
+//            requestQuoteCountryLauncher.launch(currencyIntent)
+            CurrencyBottomSheetDialogFragment.show(requireActivity().supportFragmentManager)
         }
 
         binding.swapButton.setOnClickListener {

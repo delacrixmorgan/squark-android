@@ -12,13 +12,12 @@ import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.databinding.FragmentLaunchBinding
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class LaunchFragment : Fragment(R.layout.fragment_launch) {
-    private val binding get() = requireNotNull(_binding)
     private var _binding: FragmentLaunchBinding? = null
+    private val binding get() = _binding!!
 
     private val viewModel: LaunchViewModel by viewModels()
 

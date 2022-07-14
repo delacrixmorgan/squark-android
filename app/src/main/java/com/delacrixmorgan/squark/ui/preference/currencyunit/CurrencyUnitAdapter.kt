@@ -32,16 +32,12 @@ class CurrencyUnitAdapter(private val listener: Listener) :
 
     override fun getItemCount() = currencies.size
 
-    fun updateDataSet(selectedCurrency: Currency?, countries: List<Currency>, searchMode: Boolean) {
-        val filteredCurrencies = countries.toMutableList()
-        if (!isSearchMode) {
-            selectedCurrency?.let { currency ->
-                filteredCurrencies.remove(currency)
-                filteredCurrencies.sortBy { it.code }
-                filteredCurrencies.add(0, currency)
-            }
+    fun updateDataSet(selectedCurrency: Currency?, filteredCurrencies: List<Currency>, searchMode: Boolean) {
+        if (!isSearchMode && selectedCurrency != null) {
+            this.currencies = filteredCurrencies.sortedWith(compareBy({ it.code != selectedCurrency.code }, { it.code }))
+        } else {
+            this.currencies = filteredCurrencies
         }
-        this.currencies = filteredCurrencies
         isSearchMode = searchMode
         notifyDataSetChanged()
     }

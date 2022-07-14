@@ -41,6 +41,7 @@ captures/
 # IntelliJ
 *.iml
 .idea/
+.DS_Store
 app/src/.DS_Store
 
 # Keystore files

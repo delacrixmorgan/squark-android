@@ -50,7 +50,7 @@ class SupportListFragment : Fragment(R.layout.fragment_support_list) {
         binding.rateButton.setOnClickListener {
             binding.rateButton.performHapticContextClick()
             binding.personImageView.setImageResource(R.drawable.ic_human_happy)
-            launchReviewSheet()
+            launchPlayStore()
         }
 
         binding.kingscupViewGroup.setOnClickListener {
@@ -62,6 +62,8 @@ class SupportListFragment : Fragment(R.layout.fragment_support_list) {
             binding.kingscupViewGroup.performHapticContextClick()
             view.context.launchPlayStore(MAMIKA_PACKAGE_NAME)
         }
+
+        launchReviewSheet()
     }
 
     private fun launchPlayStore() {
@@ -71,12 +73,9 @@ class SupportListFragment : Fragment(R.layout.fragment_support_list) {
     private fun launchReviewSheet() {
         val reviewManager = ReviewManagerFactory.create(requireContext())
         val requestReviewFlow = reviewManager.requestReviewFlow()
-
-        requestReviewFlow
-            .addOnSuccessListener {
-                reviewManager.launchReviewFlow(requireActivity(), it)
-            }.addOnFailureListener {
-                launchPlayStore()
-            }
+        
+        requestReviewFlow.addOnSuccessListener {
+            reviewManager.launchReviewFlow(requireActivity(), it)
+        }
     }
 }
