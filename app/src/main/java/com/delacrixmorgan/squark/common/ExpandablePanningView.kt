@@ -25,7 +25,8 @@ class ExpandablePanningView @JvmOverloads constructor(
     private var rowList = mutableListOf<ItemRowBinding>()
     private var expandedList = mutableListOf<ItemRowBinding>()
 
-    var isExpanded = false
+    private var isExpanded = false
+    private var listener: RowListener? = null
 
     init {
         LayoutInflater.from(context).inflate(R.layout.cv_expandable_panning, this, true)
@@ -40,6 +41,7 @@ class ExpandablePanningView @JvmOverloads constructor(
         val thresholdSwipeWidth = thresholdTranslationWidth / 1.5F
         val alphaRatio = 1F / thresholdTranslationWidth
         val gestureDetector = GestureDetector(context, SingleTapConfirm())
+        this.listener = listener
         this.config = config
 
         for (index in 0..9) {
@@ -56,7 +58,7 @@ class ExpandablePanningView @JvmOverloads constructor(
 
             tableRow.root.setOnTouchListener { _, event ->
                 if (gestureDetector.onTouchEvent(event)) {
-                    listener.onRowClicked(index)
+                    onRowClicked(index)
                     rowList.forEach {
                         it.root.translationX = 0F
                         it.quantifierTextView.alpha = 1F
@@ -79,12 +81,12 @@ class ExpandablePanningView @JvmOverloads constructor(
                                     if (config.multiplier < 10000000000) {
                                         config.multiplier *= 10
                                     }
-                                    listener.onSwipeLeft(config.multiplier)
+                                    onSwipeLeft(config.multiplier)
                                 } else {
                                     if (config.multiplier > 0.1) {
                                         config.multiplier /= 10
                                     }
-                                    listener.onSwipeRight(config.multiplier)
+                                    onSwipeRight(config.multiplier)
                                 }
                             }
 
@@ -175,12 +177,8 @@ class ExpandablePanningView @JvmOverloads constructor(
         config: ExpandablePanningViewConfig
     ) {
         for (index in 1..9) {
-            val tableRow = ItemRowBinding.inflate(
-                LayoutInflater.from(context), tableLayout, false
-            )
-
+            val tableRow = ItemRowBinding.inflate(LayoutInflater.from(context), tableLayout, false)
             tableRow.root.background = ContextCompat.getDrawable(context, R.drawable.shape_cell_light)
-
             tableRow.quantifierTextView.text = calculateExpandQuantifier(
                 expandQuantifier, config.multiplier, index
             )
@@ -189,8 +187,7 @@ class ExpandablePanningView @JvmOverloads constructor(
                 config.multiplier, index,
                 config.conversionRate
             )
-
-            tableRow.root.setOnClickListener { listener.onRowClicked(index) }
+            tableRow.root.setOnClickListener { onRowClicked(index) }
             expandedList.add(tableRow)
             tableLayout.addView(tableRow.root, (expandQuantifier + index))
         }
@@ -208,7 +205,6 @@ class ExpandablePanningView @JvmOverloads constructor(
                 tableRow.root.setBackgroundColor(ContextCompat.getColor(context, R.color.colorAccent))
             }
         }
-
         expandTable(
             expandQuantifier = selectedRow,
             listener = listener,
@@ -217,12 +213,47 @@ class ExpandablePanningView @JvmOverloads constructor(
     }
 
     fun onRowCollapse() {
+        if (!isExpanded) return
         performHapticContextClick()
         expandedList.forEach { tableLayout.removeView(it.root) }
         rowList.forEach {
             it.root.isVisible = true
             it.root.background = ContextCompat.getDrawable(context, R.drawable.shape_cell_dark)
         }
+    }
+
+    private fun onSwipeLeft(multiplier: Double) {
+        if (!isExpanded) {
+            config.multiplier = multiplier
+            if (SharedPreferenceHelper.isPersistentMultiplierEnabled) {
+                SharedPreferenceHelper.multiplier = config.multiplier.toInt()
+            }
+            updateTable(config)
+            listener?.onSwiped(config.multiplier)
+        }
+    }
+
+    private fun onSwipeRight(multiplier: Double) {
+        if (!isExpanded) {
+            config.multiplier = multiplier
+            if (SharedPreferenceHelper.isPersistentMultiplierEnabled) {
+                SharedPreferenceHelper.multiplier = config.multiplier.toInt()
+            }
+            updateTable(config)
+            listener?.onSwiped(config.multiplier)
+        }
+    }
+
+    private fun onRowClicked(position: Int) {
+        if (isExpanded) {
+            onRowCollapse()
+        } else {
+            onRowExpand(
+                selectedRow = position,
+                listener = requireNotNull(listener)
+            )
+        }
+        isExpanded = !isExpanded
     }
 
     private class SingleTapConfirm : GestureDetector.SimpleOnGestureListener() {

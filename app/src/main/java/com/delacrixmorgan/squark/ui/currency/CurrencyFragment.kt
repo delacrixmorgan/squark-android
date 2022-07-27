@@ -35,7 +35,7 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener {
                 val countryCode = result.data?.getStringExtra(EXTRA_CURRENCY)
                 SharedPreferenceHelper.baseCurrency = countryCode
 
-                if (binding.currencyTableLayout.isExpanded) binding.currencyTableLayout.onRowCollapse()
+                binding.currencyTableLayout.onRowCollapse()
                 updateTable()
             }
         }
@@ -46,7 +46,7 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener {
                 val countryCode = result.data?.getStringExtra(EXTRA_CURRENCY)
                 SharedPreferenceHelper.quoteCurrency = countryCode
 
-                if (binding.currencyTableLayout.isExpanded) binding.currencyTableLayout.onRowCollapse()
+                binding.currencyTableLayout.onRowCollapse()
                 updateTable()
             }
         }
@@ -130,38 +130,7 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener {
         }
     }
 
-    /**
-     * RowListener
-     */
-    override fun onSwipeLeft(multiplier: Double) {
-        if (!binding.currencyTableLayout.isExpanded) {
-            if (SharedPreferenceHelper.isPersistentMultiplierEnabled) {
-                SharedPreferenceHelper.multiplier = multiplier.toInt()
-            }
-            viewModel.multiplier = multiplier
-            binding.currencyTableLayout.updateTable(viewModel.expandablePanningViewConfig)
-        }
-    }
-
-    override fun onSwipeRight(multiplier: Double) {
-        if (!binding.currencyTableLayout.isExpanded) {
-            if (SharedPreferenceHelper.isPersistentMultiplierEnabled) {
-                SharedPreferenceHelper.multiplier = multiplier.toInt()
-            }
-            viewModel.multiplier = multiplier
-            binding.currencyTableLayout.updateTable(viewModel.expandablePanningViewConfig)
-        }
-    }
-
-    override fun onRowClicked(position: Int) {
-        if (binding.currencyTableLayout.isExpanded) {
-            binding.currencyTableLayout.onRowCollapse()
-        } else {
-            binding.currencyTableLayout.onRowExpand(
-                selectedRow = position,
-                listener = this
-            )
-        }
-        binding.currencyTableLayout.isExpanded = !binding.currencyTableLayout.isExpanded
+    override fun onSwiped(multiplier: Double) {
+        viewModel.multiplier = multiplier
     }
 }
