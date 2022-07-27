@@ -109,34 +109,6 @@ fun Context.getJsonMap(rawFile: Int, key: String): Map<String, String> {
 }
 
 /**
- * CountryDataController
- */
-fun CountryDataController.getPreferenceCurrency(
-    preferenceCurrency: String?
-): Country? {
-    val fallbackCurrency = if (preferenceCurrency == SharedPreferenceHelper.baseCurrency) {
-        DEFAULT_BASE_CURRENCY_CODE
-    } else {
-        DEFAULT_QUOTE_CURRENCY_CODE
-    }
-
-    return getCountries().firstOrNull {
-        it.code == (preferenceCurrency ?: fallbackCurrency)
-    }
-}
-
-fun CountryDataController.getFilteredCountries(
-    searchText: String?
-) = if (searchText.isNullOrBlank()) {
-    getCountries()
-} else {
-    val text: String = searchText.lowercase()
-    getCountries().filter {
-        it.name.lowercase().contains(text) || it.code.lowercase().contains(text)
-    }
-}
-
-/**
  * CalculationQuantifier, CalculationResult
  */
 fun calculateRowQuantifier(multiplier: Double, position: Int): String {

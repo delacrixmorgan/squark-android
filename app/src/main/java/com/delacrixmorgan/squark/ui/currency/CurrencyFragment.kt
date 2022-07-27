@@ -106,12 +106,17 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener {
         }
 
         binding.quoteCurrencyTextView.setOnClickListener {
-//            val currencyIntent = PreferenceNavigationActivity.newLaunchIntent(
-//                view.context, requireNotNull(viewModel.quoteCurrency)
-//            )
-//            requestQuoteCountryLauncher.launch(currencyIntent)
-            CurrencyBottomSheetDialogFragment.show(requireActivity().supportFragmentManager)
+            val currencyIntent = PreferenceNavigationActivity.newLaunchIntent(
+                view.context, requireNotNull(viewModel.quoteCurrency)
+            )
+            requestQuoteCountryLauncher.launch(currencyIntent)
+//            CurrencyBottomSheetDialogFragment.show(requireActivity().supportFragmentManager)
         }
+
+        // TODO (Remove When Ready)
+//        requireActivity().supportFragmentManager.commit {
+//            replace(android.R.id.content, WallpaperFragment.create())
+//        }
 
         binding.swapButton.setOnClickListener {
             val baseCurrencyCode = viewModel.baseCurrency?.code

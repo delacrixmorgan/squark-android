@@ -5,7 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.commit
 import com.delacrixmorgan.squark.databinding.FragmentCurrencyBottomSheetDialogBinding
+import com.delacrixmorgan.squark.ui.wallpaper.WallpaperFragment
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -46,6 +48,9 @@ class CurrencyBottomSheetDialogFragment : BottomSheetDialogFragment() {
             dismiss()
         }
         binding.setWallpaperLayout.setOnClickListener {
+            requireActivity().supportFragmentManager.commit {
+                replace(android.R.id.content, WallpaperFragment.create())
+            }
             dismiss()
         }
         binding.unlockFeaturesLayout.setOnClickListener {

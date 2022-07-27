@@ -64,15 +64,15 @@ dependencies {
     kapt "com.google.dagger:hilt-compiler:2.42"
 
     implementation "androidx.core:core-ktx:1.8.0"
-    implementation "androidx.fragment:fragment-ktx:1.5.0"
+    implementation "androidx.fragment:fragment-ktx:1.5.1"
     implementation "androidx.appcompat:appcompat:1.4.2"
     implementation "androidx.constraintlayout:constraintlayout:2.1.4"
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 
-    implementation "androidx.navigation:navigation-ui-ktx:2.5.0"
-    implementation "androidx.navigation:navigation-fragment-ktx:2.5.0"
+    implementation "androidx.navigation:navigation-ui-ktx:2.5.1"
+    implementation "androidx.navigation:navigation-fragment-ktx:2.5.1"
     implementation "androidx.preference:preference-ktx:1.2.0"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.0"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"
 
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3"
 
@@ -87,6 +87,7 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
 
     implementation 'me.zhanghai.android.fastscroll:library:1.1.7'
+    implementation 'io.coil-kt:coil:2.1.0'
 
     androidTestImplementation 'androidx.test:runner:1.4.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
