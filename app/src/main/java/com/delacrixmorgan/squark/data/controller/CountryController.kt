@@ -19,8 +19,4 @@ object CountryDataController {
     }
 
     fun getCountries() = countries
-
-    fun updateDataSet(countries: List<Country>) {
-        this.countries = countries
-    }
 }

@@ -2,13 +2,13 @@ package com.delacrixmorgan.squark.ui.currency
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.delacrixmorgan.squark.common.ExpandablePanningViewConfig
 import com.delacrixmorgan.squark.common.SharedPreferenceHelper
 import com.delacrixmorgan.squark.data.usecase.GetCurrenciesUseCase
 import com.delacrixmorgan.squark.models.Currency
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,9 +26,14 @@ class CurrencyViewModel @Inject constructor(
     val quoteCurrency: Currency?
         get() = currencies.firstOrNull { it.code == SharedPreferenceHelper.quoteCurrency }
 
-    var anchorPosition = 0F
     var multiplier: Double = 1.0
     var conversionRate: Double = 1.0
+    var anchorPosition = 0F
+
+    val expandablePanningViewConfig: ExpandablePanningViewConfig
+        get() = ExpandablePanningViewConfig(
+            multiplier, conversionRate, anchorPosition
+        )
 
     fun onStart() {
         viewModelScope.launch {
