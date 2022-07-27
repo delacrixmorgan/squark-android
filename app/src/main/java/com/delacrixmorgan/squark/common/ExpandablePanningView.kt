@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.databinding.ItemRowBinding
+import java.math.BigDecimal
 import kotlin.math.absoluteValue
 
 class ExpandablePanningView @JvmOverloads constructor(
@@ -173,7 +174,6 @@ class ExpandablePanningView @JvmOverloads constructor(
 
     private fun expandTable(
         expandQuantifier: Int,
-        listener: RowListener,
         config: ExpandablePanningViewConfig
     ) {
         for (index in 1..9) {
@@ -193,9 +193,8 @@ class ExpandablePanningView @JvmOverloads constructor(
         }
     }
 
-    fun onRowExpand(
-        selectedRow: Int,
-        listener: RowListener
+    private fun onRowExpand(
+        selectedRow: Int
     ) {
         performHapticContextClick()
         rowList.forEachIndexed { index, tableRow ->
@@ -207,7 +206,6 @@ class ExpandablePanningView @JvmOverloads constructor(
         }
         expandTable(
             expandQuantifier = selectedRow,
-            listener = listener,
             config = config
         )
     }
@@ -248,16 +246,71 @@ class ExpandablePanningView @JvmOverloads constructor(
         if (isExpanded) {
             onRowCollapse()
         } else {
-            onRowExpand(
-                selectedRow = position,
-                listener = requireNotNull(listener)
-            )
+            onRowExpand(selectedRow = position)
         }
         isExpanded = !isExpanded
     }
 
-    private class SingleTapConfirm : GestureDetector.SimpleOnGestureListener() {
-        override fun onSingleTapUp(event: MotionEvent) = true
+    private fun calculateRowQuantifier(multiplier: Double, position: Int): String {
+        val quantifier = (multiplier * (position + 1))
+        val bigDecimal = BigDecimal(quantifier).setScale(2, BigDecimal.ROUND_HALF_UP)
+
+        return getNumberFormatType(bigDecimal)
+    }
+
+    private fun calculateRowResult(multiplier: Double, position: Int, conversionRate: Double): String {
+        val quantifier = (multiplier * (position + 1))
+        val result = quantifier * conversionRate
+        val bigDecimal = BigDecimal(result).setScale(2, BigDecimal.ROUND_HALF_UP)
+
+        return getNumberFormatType(bigDecimal)
+    }
+
+    private fun calculateExpandQuantifier(expandQuantifier: Int, multiplier: Double, position: Int): String {
+        val quantifier = (expandQuantifier + 1) * multiplier + (multiplier / 10 * position)
+        val bigDecimal = BigDecimal(quantifier).setScale(2, BigDecimal.ROUND_HALF_UP)
+
+        return getNumberFormatType(bigDecimal)
+    }
+
+    private fun calculateExpandResult(
+        expandQuantifier: Int,
+        multiplier: Double,
+        position: Int,
+        conversionRate: Double
+    ): String {
+        val quantifier = (expandQuantifier + 1) * multiplier + (multiplier / 10 * position)
+        val result = quantifier * conversionRate
+        val bigDecimal = BigDecimal(result).setScale(2, BigDecimal.ROUND_HALF_UP)
+
+        return getNumberFormatType(bigDecimal)
+    }
+
+    private fun getNumberFormatType(bigDecimal: BigDecimal): String {
+        val roundedBigDecimal = bigDecimal.setScale(0, BigDecimal.ROUND_HALF_UP).precision()
+        return when {
+            roundedBigDecimal >= 16 -> NumberFormatTypes.QUADRILLIONTH.decimal.format(
+                bigDecimal.movePointLeft(
+                    15
+                )
+            )
+            roundedBigDecimal >= 13 -> NumberFormatTypes.TRILLIONTH.decimal.format(
+                bigDecimal.movePointLeft(
+                    12
+                )
+            )
+            roundedBigDecimal >= 10 -> NumberFormatTypes.BILLIONTH.decimal.format(
+                bigDecimal.movePointLeft(
+                    9
+                )
+            )
+            roundedBigDecimal >= 7 -> NumberFormatTypes.MILLIONTH.decimal.format(
+                bigDecimal.movePointLeft(
+                    6
+                )
+            )
+            else -> NumberFormatTypes.HUNDREDTH.decimal.format(bigDecimal)
+        }
     }
 }
 
@@ -266,3 +319,7 @@ class ExpandablePanningViewConfig(
     var conversionRate: Double = 1.0,
     var anchorPosition: Float = 0F
 )
+
+private class SingleTapConfirm : GestureDetector.SimpleOnGestureListener() {
+    override fun onSingleTapUp(event: MotionEvent) = true
+}

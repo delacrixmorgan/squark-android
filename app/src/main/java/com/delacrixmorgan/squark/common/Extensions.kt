@@ -9,13 +9,8 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.delacrixmorgan.squark.R
-import com.delacrixmorgan.squark.common.SharedPreferenceHelper.DEFAULT_BASE_CURRENCY_CODE
-import com.delacrixmorgan.squark.common.SharedPreferenceHelper.DEFAULT_QUOTE_CURRENCY_CODE
-import com.delacrixmorgan.squark.data.controller.CountryDataController
-import com.delacrixmorgan.squark.models.Country
 import org.json.JSONObject
 import java.io.BufferedReader
-import java.math.BigDecimal
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
@@ -106,69 +101,4 @@ fun Context.getJsonMap(rawFile: Int, key: String): Map<String, String> {
     }
 
     return map
-}
-
-/**
- * CalculationQuantifier, CalculationResult
- */
-fun calculateRowQuantifier(multiplier: Double, position: Int): String {
-    val quantifier = (multiplier * (position + 1))
-    val bigDecimal = BigDecimal(quantifier).setScale(2, BigDecimal.ROUND_HALF_UP)
-
-    return getNumberFormatType(bigDecimal)
-}
-
-fun calculateRowResult(multiplier: Double, position: Int, conversionRate: Double): String {
-    val quantifier = (multiplier * (position + 1))
-    val result = quantifier * conversionRate
-    val bigDecimal = BigDecimal(result).setScale(2, BigDecimal.ROUND_HALF_UP)
-
-    return getNumberFormatType(bigDecimal)
-}
-
-fun calculateExpandQuantifier(expandQuantifier: Int, multiplier: Double, position: Int): String {
-    val quantifier = (expandQuantifier + 1) * multiplier + (multiplier / 10 * position)
-    val bigDecimal = BigDecimal(quantifier).setScale(2, BigDecimal.ROUND_HALF_UP)
-
-    return getNumberFormatType(bigDecimal)
-}
-
-fun calculateExpandResult(
-    expandQuantifier: Int,
-    multiplier: Double,
-    position: Int,
-    conversionRate: Double
-): String {
-    val quantifier = (expandQuantifier + 1) * multiplier + (multiplier / 10 * position)
-    val result = quantifier * conversionRate
-    val bigDecimal = BigDecimal(result).setScale(2, BigDecimal.ROUND_HALF_UP)
-
-    return getNumberFormatType(bigDecimal)
-}
-
-fun getNumberFormatType(bigDecimal: BigDecimal): String {
-    val roundedBigDecimal = bigDecimal.setScale(0, BigDecimal.ROUND_HALF_UP).precision()
-    return when {
-        roundedBigDecimal >= 16 -> NumberFormatTypes.QUADRILLIONTH.decimal.format(
-            bigDecimal.movePointLeft(
-                15
-            )
-        )
-        roundedBigDecimal >= 13 -> NumberFormatTypes.TRILLIONTH.decimal.format(
-            bigDecimal.movePointLeft(
-                12
-            )
-        )
-        roundedBigDecimal >= 10 -> NumberFormatTypes.BILLIONTH.decimal.format(
-            bigDecimal.movePointLeft(
-                9
-            )
-        )
-        roundedBigDecimal >= 7 -> NumberFormatTypes.MILLIONTH.decimal.format(
-            bigDecimal.movePointLeft(
-                6
-            )
-        )
-        else -> NumberFormatTypes.HUNDREDTH.decimal.format(bigDecimal)
-    }
 }

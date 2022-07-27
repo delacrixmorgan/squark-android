@@ -1,62 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/baseCurrencyTextView"
+        android:layout_width="0dp"
         android:layout_height="100dp"
-        android:background="@color/colorPrimary">
+        android:background="?attr/selectableItemBackground"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@id/quoteCurrencyTextView"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="USD" />
 
-        <Button
-            android:id="@+id/baseCurrencyTextView"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:background="?attr/selectableItemBackground"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/quoteCurrencyTextView"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="USD" />
+    <Button
+        android:id="@+id/quoteCurrencyTextView"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:background="?attr/selectableItemBackground"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@+id/baseCurrencyTextView"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="MYR" />
 
-        <Button
-            android:id="@+id/quoteCurrencyTextView"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:background="?attr/selectableItemBackground"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toEndOf="@+id/baseCurrencyTextView"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="MYR" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/swapButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/content_description_swap_currency_button"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_swap"
+        android:tint="@color/colorPrimary"
+        app:backgroundTint="@android:color/white"
+        app:elevation="6dp"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toBottomOf="@id/baseCurrencyTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/baseCurrencyTextView" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/swapButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_swap"
-            android:tint="@color/colorPrimary"
-            app:backgroundTint="@android:color/white"
-            app:elevation="6dp"
-            app:fabSize="normal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="@id/baseCurrencyTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/baseCurrencyTextView" />
 
     <com.delacrixmorgan.squark.common.ExpandablePanningView
         android:id="@+id/currencyTableLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</LinearLayout>
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/baseCurrencyTextView" />
+</androidx.constraintlayout.widget.ConstraintLayout>

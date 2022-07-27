@@ -21,4 +21,6 @@
     <string name="fragment_support_settings_list_share">Tell a Travelling Mate</string>
     <string name="fragment_support_settings_list_source_code">Source Code</string>
     <string name="fragment_rate_title_mamika">Mamika</string>
+    
+    <string name="content_description_swap_currency_button">Swap the base and quote currencies</string>
 </resources>
