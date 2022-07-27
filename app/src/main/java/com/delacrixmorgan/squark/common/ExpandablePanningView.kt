@@ -1,7 +1,6 @@
 package com.delacrixmorgan.squark.common
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.util.AttributeSet
 import android.view.GestureDetector
@@ -20,11 +19,13 @@ class ExpandablePanningView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
-
     private val tableLayout: TableLayout by lazy { findViewById(R.id.tableLayout) }
+    private lateinit var config: ExpandablePanningViewConfig
 
-    private var rowList = arrayListOf<ItemRowBinding>()
-    private var expandedList = arrayListOf<ItemRowBinding>()
+    private var rowList = mutableListOf<ItemRowBinding>()
+    private var expandedList = mutableListOf<ItemRowBinding>()
+
+    var isExpanded = false
 
     init {
         LayoutInflater.from(context).inflate(R.layout.cv_expandable_panning, this, true)
@@ -32,33 +33,26 @@ class ExpandablePanningView @JvmOverloads constructor(
 
     @SuppressLint("ClickableViewAccessibility")
     fun setupTable(
-        activity: Activity,
+        thresholdTranslationWidth: Float,
         listener: RowListener,
         config: ExpandablePanningViewConfig
     ) {
-        val thresholdTranslationWidth = activity.resources.displayMetrics.widthPixels / 6F
         val thresholdSwipeWidth = thresholdTranslationWidth / 1.5F
         val alphaRatio = 1F / thresholdTranslationWidth
-        val gestureDetector = GestureDetector(activity, SingleTapConfirm())
+        val gestureDetector = GestureDetector(context, SingleTapConfirm())
+        this.config = config
 
         for (index in 0..9) {
-            val tableRow = ItemRowBinding.inflate(
-                LayoutInflater.from(activity), tableLayout, false
-            )
+            val tableRow = ItemRowBinding.inflate(LayoutInflater.from(context), tableLayout, false)
+
             tableRow.quantifierTextView.text = calculateRowQuantifier(config.multiplier, index)
-            tableRow.resultTextView.text = calculateRowResult(
-                config.multiplier, index, config.conversionRate
-            )
+            tableRow.resultTextView.text = calculateRowResult(config.multiplier, index, config.conversionRate)
 
             tableRow.beforeQuantifierTextView.text = calculateRowQuantifier(config.multiplier / 10, index)
-            tableRow.beforeResultTextView.text = calculateRowResult(
-                config.multiplier / 10, index, config.conversionRate
-            )
+            tableRow.beforeResultTextView.text = calculateRowResult(config.multiplier / 10, index, config.conversionRate)
 
             tableRow.nextQuantifierTextView.text = calculateRowQuantifier(config.multiplier * 10, index)
-            tableRow.nextResultTextView.text = calculateRowResult(
-                config.multiplier * 10, index, config.conversionRate
-            )
+            tableRow.nextResultTextView.text = calculateRowResult(config.multiplier * 10, index, config.conversionRate)
 
             tableRow.root.setOnTouchListener { _, event ->
                 if (gestureDetector.onTouchEvent(event)) {
@@ -141,8 +135,7 @@ class ExpandablePanningView @JvmOverloads constructor(
                                 }
                             }
                         }
-
-                        android.view.MotionEvent.ACTION_DOWN -> {
+                        MotionEvent.ACTION_DOWN -> {
                             tableRow.root.performHapticContextClick()
                             config.anchorPosition = event.rawX
                         }
@@ -156,45 +149,37 @@ class ExpandablePanningView @JvmOverloads constructor(
         }
     }
 
-    fun updateTable(
-        config: ExpandablePanningViewConfig
-    ) {
+    fun updateTable(config: ExpandablePanningViewConfig) {
         performHapticContextClick()
+        this.config = config
         rowList.forEachIndexed { index, tableRow ->
             with(tableRow) {
                 quantifierTextView.text = calculateRowQuantifier(config.multiplier, index)
                 resultTextView.text = calculateRowResult(config.multiplier, index, config.conversionRate)
 
                 nextQuantifierTextView.text = calculateRowQuantifier(config.multiplier / 10, index)
-                nextResultTextView.text =
-                    calculateRowResult(config.multiplier / 10, index, config.conversionRate)
+                nextResultTextView.text = calculateRowResult(config.multiplier / 10, index, config.conversionRate)
 
                 beforeQuantifierTextView.text = calculateRowQuantifier(config.multiplier * 10, index)
-                beforeResultTextView.text =
-                    calculateRowResult(config.multiplier * 10, index, config.conversionRate)
+                beforeResultTextView.text = calculateRowResult(config.multiplier * 10, index, config.conversionRate)
 
-                quantifierTextView.startAnimation(
-                    android.view.animation.AnimationUtils.loadAnimation(root.context, com.delacrixmorgan.squark.R.anim.wobble)
-                )
-                resultTextView.startAnimation(
-                    android.view.animation.AnimationUtils.loadAnimation(root.context, com.delacrixmorgan.squark.R.anim.wobble)
-                )
+                quantifierTextView.startAnimation(android.view.animation.AnimationUtils.loadAnimation(root.context, R.anim.wobble))
+                resultTextView.startAnimation(android.view.animation.AnimationUtils.loadAnimation(root.context, R.anim.wobble))
             }
         }
     }
 
-    fun expandTable(
-        activity: Activity,
+    private fun expandTable(
         expandQuantifier: Int,
         listener: RowListener,
         config: ExpandablePanningViewConfig
     ) {
         for (index in 1..9) {
             val tableRow = ItemRowBinding.inflate(
-                LayoutInflater.from(activity), tableLayout, false
+                LayoutInflater.from(context), tableLayout, false
             )
 
-            tableRow.root.background = ContextCompat.getDrawable(activity, R.drawable.shape_cell_light)
+            tableRow.root.background = ContextCompat.getDrawable(context, R.drawable.shape_cell_light)
 
             tableRow.quantifierTextView.text = calculateExpandQuantifier(
                 expandQuantifier, config.multiplier, index
@@ -212,10 +197,8 @@ class ExpandablePanningView @JvmOverloads constructor(
     }
 
     fun onRowExpand(
-        activity: Activity,
         selectedRow: Int,
-        listener: RowListener,
-        config: ExpandablePanningViewConfig
+        listener: RowListener
     ) {
         performHapticContextClick()
         rowList.forEachIndexed { index, tableRow ->
@@ -227,7 +210,6 @@ class ExpandablePanningView @JvmOverloads constructor(
         }
 
         expandTable(
-            activity = activity,
             expandQuantifier = selectedRow,
             listener = listener,
             config = config

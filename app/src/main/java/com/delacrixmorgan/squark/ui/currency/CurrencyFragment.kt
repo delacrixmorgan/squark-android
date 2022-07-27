@@ -20,15 +20,12 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener {
-
     companion object {
         const val EXTRA_CURRENCY = "CurrencyFragment.currency"
     }
 
     private val binding get() = requireNotNull(_binding)
     private var _binding: FragmentCurrencyBinding? = null
-
-    private var isExpanded = false
 
     private val viewModel: CurrencyViewModel by viewModels()
 
@@ -38,7 +35,7 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener {
                 val countryCode = result.data?.getStringExtra(EXTRA_CURRENCY)
                 SharedPreferenceHelper.baseCurrency = countryCode
 
-                if (isExpanded) binding.currencyTableLayout.onRowCollapse()
+                if (binding.currencyTableLayout.isExpanded) binding.currencyTableLayout.onRowCollapse()
                 updateTable()
             }
         }
@@ -49,7 +46,7 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener {
                 val countryCode = result.data?.getStringExtra(EXTRA_CURRENCY)
                 SharedPreferenceHelper.quoteCurrency = countryCode
 
-                if (isExpanded) binding.currencyTableLayout.onRowCollapse()
+                if (binding.currencyTableLayout.isExpanded) binding.currencyTableLayout.onRowCollapse()
                 updateTable()
             }
         }
@@ -75,7 +72,9 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener {
         }
 
         binding.currencyTableLayout.setupTable(
-            requireActivity(), this, viewModel.expandablePanningViewConfig
+            thresholdTranslationWidth = requireActivity().resources.displayMetrics.widthPixels / 6F,
+            listener = this,
+            config = viewModel.expandablePanningViewConfig
         )
 
         binding.baseCurrencyTextView.setOnClickListener {
@@ -135,34 +134,34 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener {
      * RowListener
      */
     override fun onSwipeLeft(multiplier: Double) {
-        if (!isExpanded) {
+        if (!binding.currencyTableLayout.isExpanded) {
             if (SharedPreferenceHelper.isPersistentMultiplierEnabled) {
                 SharedPreferenceHelper.multiplier = multiplier.toInt()
             }
+            viewModel.multiplier = multiplier
             binding.currencyTableLayout.updateTable(viewModel.expandablePanningViewConfig)
         }
     }
 
     override fun onSwipeRight(multiplier: Double) {
-        if (!isExpanded) {
+        if (!binding.currencyTableLayout.isExpanded) {
             if (SharedPreferenceHelper.isPersistentMultiplierEnabled) {
                 SharedPreferenceHelper.multiplier = multiplier.toInt()
             }
+            viewModel.multiplier = multiplier
             binding.currencyTableLayout.updateTable(viewModel.expandablePanningViewConfig)
         }
     }
 
     override fun onRowClicked(position: Int) {
-        if (isExpanded) {
+        if (binding.currencyTableLayout.isExpanded) {
             binding.currencyTableLayout.onRowCollapse()
         } else {
             binding.currencyTableLayout.onRowExpand(
-                activity = requireActivity(),
                 selectedRow = position,
-                listener = this,
-                config = viewModel.expandablePanningViewConfig
+                listener = this
             )
         }
-        isExpanded = !isExpanded
+        binding.currencyTableLayout.isExpanded = !binding.currencyTableLayout.isExpanded
     }
 }
