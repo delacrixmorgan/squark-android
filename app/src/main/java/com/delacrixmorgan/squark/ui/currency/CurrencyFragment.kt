@@ -7,7 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.RowListener
@@ -15,6 +16,7 @@ import com.delacrixmorgan.squark.common.SharedPreferenceHelper
 import com.delacrixmorgan.squark.common.performHapticContextClick
 import com.delacrixmorgan.squark.databinding.FragmentCurrencyBinding
 import com.delacrixmorgan.squark.ui.preference.PreferenceNavigationActivity
+import com.delacrixmorgan.squark.ui.wallpaper.WallpaperFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -27,7 +29,7 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener {
     private val binding get() = requireNotNull(_binding)
     private var _binding: FragmentCurrencyBinding? = null
 
-    private val viewModel: CurrencyViewModel by viewModels()
+    private val viewModel: CurrencyViewModel by activityViewModels()
 
     private val requestBaseCountryLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
