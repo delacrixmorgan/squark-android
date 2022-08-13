@@ -9,8 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.databinding.ActivityPreferenceNavigationBinding
-import com.delacrixmorgan.squark.model.Currency
-import com.delacrixmorgan.squark.model.toCurrency
+import com.delacrixmorgan.squark.model.currency.Currency
+import com.delacrixmorgan.squark.model.currency.toCurrency
 import com.delacrixmorgan.squark.ui.preference.currencyunit.CurrencyUnitFragment
 import com.google.android.material.navigation.NavigationBarView
 import dagger.hilt.android.AndroidEntryPoint

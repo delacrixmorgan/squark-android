@@ -3,7 +3,7 @@ package com.delacrixmorgan.squark.ui.preference.currencyunit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.delacrixmorgan.squark.data.usecase.GetCurrenciesUseCase
-import com.delacrixmorgan.squark.model.Currency
+import com.delacrixmorgan.squark.model.currency.Currency
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay

@@ -22,8 +22,8 @@ import com.delacrixmorgan.squark.common.Keys
 import com.delacrixmorgan.squark.common.compatColor
 import com.delacrixmorgan.squark.common.performHapticContextClick
 import com.delacrixmorgan.squark.databinding.FragmentCurrencyUnitBinding
-import com.delacrixmorgan.squark.model.Currency
-import com.delacrixmorgan.squark.model.toCurrency
+import com.delacrixmorgan.squark.model.currency.Currency
+import com.delacrixmorgan.squark.model.currency.toCurrency
 import com.delacrixmorgan.squark.ui.currency.CurrencyFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar

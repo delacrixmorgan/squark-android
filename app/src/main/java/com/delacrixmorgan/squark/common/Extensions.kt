@@ -9,6 +9,8 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.delacrixmorgan.squark.R
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.time.LocalDateTime
@@ -102,3 +104,6 @@ fun Context.getJsonMap(rawFile: Int, key: String): Map<String, String> {
 
     return map
 }
+
+inline fun <reified T> Gson.fromJson(json: String): T =
+    fromJson<T>(json, object : TypeToken<T>() {}.type)

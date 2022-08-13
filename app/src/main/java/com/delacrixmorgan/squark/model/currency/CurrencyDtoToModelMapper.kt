@@ -1,4 +1,4 @@
-package com.delacrixmorgan.squark.model
+package com.delacrixmorgan.squark.model.currency
 
 import com.delacrixmorgan.squark.data.shared.Mapper
 import com.delacrixmorgan.squark.data.usecase.GetCurrencyUnitsUseCase
@@ -10,7 +10,7 @@ class CurrencyDtoToModelMapper @Inject constructor(
 ) : Mapper<CurrencyDto, List<Currency>> {
     override suspend fun invoke(input: CurrencyDto): List<Currency> {
         val currencyUnits = getCurrencyUnitsUseCase().first().get()
-        return input.quotes.mapNotNull { dto ->
+        val currencies = input.quotes.mapNotNull { dto ->
             currencyUnits
                 .firstOrNull { it.code == dto.key.removePrefix("USD") }
                 ?.let { currencyUnit ->
@@ -20,6 +20,16 @@ class CurrencyDtoToModelMapper @Inject constructor(
                         rate = dto.value,
                     )
                 }
+        }.toMutableList()
+        if (currencies.firstOrNull { it.code == "USD" } == null) {
+            currencies.add(
+                Currency(
+                    rate = 1.0,
+                    code = "USD",
+                    name = "United States Dollar"
+                )
+            )
         }
+        return currencies
     }
 }

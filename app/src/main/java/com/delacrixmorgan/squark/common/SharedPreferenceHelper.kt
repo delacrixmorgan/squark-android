@@ -5,7 +5,6 @@ import androidx.core.content.edit
 import androidx.core.os.ConfigurationCompat
 import androidx.preference.PreferenceManager
 import com.delacrixmorgan.squark.App
-import com.delacrixmorgan.squark.data.controller.CountryDataController
 import java.time.LocalDateTime
 import java.util.Currency
 
@@ -20,7 +19,7 @@ object SharedPreferenceHelper {
     }
 
     private const val DEFAULT_BASE_CURRENCY_CODE = "USD"
-    private const val DEFAULT_QUOTE_FALLBACK_CURRENCY_CODE = "MYR"
+    private const val DEFAULT_QUOTE_FALLBACK_CURRENCY_CODE = "GBP"
 
     private val DEFAULT_QUOTE_CURRENCY_CODE: String
         get() {
@@ -28,10 +27,8 @@ object SharedPreferenceHelper {
                 App.appContext.resources.configuration
             )[0]
             val localeCountryCode = Currency.getInstance(currentLocale).currencyCode
-            val localeCountry = CountryDataController.getCountries().firstOrNull {
-                it.code == localeCountryCode
-            }
-            return if (localeCountryCode != DEFAULT_BASE_CURRENCY_CODE && localeCountry != null) {
+
+            return if (localeCountryCode != DEFAULT_BASE_CURRENCY_CODE) {
                 localeCountryCode
             } else {
                 DEFAULT_QUOTE_FALLBACK_CURRENCY_CODE
@@ -43,12 +40,10 @@ object SharedPreferenceHelper {
 
     var baseCurrency: String?
         get() = sharedPreferences.getString(Keys.BaseCurrency.name, DEFAULT_BASE_CURRENCY_CODE)
-            ?: DEFAULT_BASE_CURRENCY_CODE
         set(value) = sharedPreferences.edit { putString(Keys.BaseCurrency.name, value) }
 
     var quoteCurrency: String?
         get() = sharedPreferences.getString(Keys.QuoteCurrency.name, DEFAULT_QUOTE_CURRENCY_CODE)
-            ?: DEFAULT_QUOTE_CURRENCY_CODE
         set(value) = sharedPreferences.edit { putString(Keys.QuoteCurrency.name, value) }
 
     var lastUpdatedDate: LocalDateTime?

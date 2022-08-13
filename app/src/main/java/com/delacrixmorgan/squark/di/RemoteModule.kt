@@ -3,6 +3,9 @@ package com.delacrixmorgan.squark.di
 import android.content.Context
 import com.delacrixmorgan.squark.BuildConfig
 import com.delacrixmorgan.squark.service.api.HeaderInterceptor
+import com.delacrixmorgan.squark.service.remoteconfig.FirebaseRemoteConfigManager
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -78,5 +81,17 @@ internal class RemoteModule {
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
             .build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideFirebaseRemoteConfigManager(): FirebaseRemoteConfigManager {
+        return FirebaseRemoteConfigManager()
+    }
+
+    @Singleton
+    @Provides
+    fun provideGson(): Gson {
+        return GsonBuilder().setLenient().create()
     }
 }

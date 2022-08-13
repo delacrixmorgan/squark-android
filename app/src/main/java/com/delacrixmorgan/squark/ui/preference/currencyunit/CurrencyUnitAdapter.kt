@@ -6,7 +6,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.databinding.ItemCurrencyBinding
-import com.delacrixmorgan.squark.model.Currency
+import com.delacrixmorgan.squark.model.currency.Currency
 import me.zhanghai.android.fastscroll.PopupTextProvider
 
 // TODO (Try ListAdapter)

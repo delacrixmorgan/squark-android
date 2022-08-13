@@ -3,8 +3,8 @@ package com.delacrixmorgan.squark.service.repository
 import android.util.Log
 import com.delacrixmorgan.squark.common.SharedPreferenceHelper
 import com.delacrixmorgan.squark.data.dao.CurrencyDao
-import com.delacrixmorgan.squark.model.Currency
-import com.delacrixmorgan.squark.model.CurrencyDtoToModelMapper
+import com.delacrixmorgan.squark.model.currency.Currency
+import com.delacrixmorgan.squark.model.currency.CurrencyDtoToModelMapper
 import com.delacrixmorgan.squark.service.api.CurrencyApi
 import com.delacrixmorgan.squark.service.network.Result
 import com.delacrixmorgan.squark.service.network.apiRequest
@@ -28,15 +28,6 @@ class CurrencyRepository @Inject constructor(
             }.fold(
                 success = { currencies ->
                     currencyDao.insertCurrencies(currencies)
-                    if (currencies.firstOrNull { it.code == "USD" } == null) {
-                        currencyDao.insertCurrency(
-                            Currency(
-                                code = "USD",
-                                name = "United States Dollar",
-                                rate = 1.0
-                            )
-                        )
-                    }
                     SharedPreferenceHelper.lastUpdatedDate = LocalDateTime.now()
                     emit(Result.success(currencies))
                 },

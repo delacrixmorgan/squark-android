@@ -1,4 +1,4 @@
-package com.delacrixmorgan.squark.model
+package com.delacrixmorgan.squark.model.currency
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

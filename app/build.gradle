@@ -17,7 +17,7 @@ android {
         applicationId "com.delacrixmorgan.squark"
         minSdkVersion 22
         targetSdkVersion 32
-        versionCode 17
+        versionCode 19
         versionName "2.5.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
@@ -60,8 +60,12 @@ dependencies {
     // Upgrading to v1.2.0 will have D8 and R8 Build Error
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.6")
 
-    implementation "com.google.firebase:firebase-core:21.1.0"
-    implementation "com.google.firebase:firebase-perf:20.1.0"
+    implementation platform('com.google.firebase:firebase-bom:30.3.1')
+
+    implementation 'com.google.firebase:firebase-perf-ktx'
+    implementation 'com.google.firebase:firebase-config-ktx'
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+
     implementation "com.google.android.material:material:1.6.1"
     implementation 'com.google.android.play:core-ktx:1.8.1'
     implementation "com.google.code.gson:gson:2.9.0"

@@ -1,36 +1,27 @@
 package com.delacrixmorgan.squark.data.usecase
 
-import com.delacrixmorgan.squark.App
-import com.delacrixmorgan.squark.R
-import com.delacrixmorgan.squark.common.getJsonMap
+import com.delacrixmorgan.squark.common.fromJson
 import com.delacrixmorgan.squark.data.shared.NoParams
 import com.delacrixmorgan.squark.data.shared.NoParamsFlowUseCase
-import com.delacrixmorgan.squark.model.Currency
+import com.delacrixmorgan.squark.model.currency.Currency
+import com.delacrixmorgan.squark.model.currency.CurrencyDtoToModelMapper
 import com.delacrixmorgan.squark.service.network.Result
+import com.delacrixmorgan.squark.service.remoteconfig.FirebaseRemoteConfigManager
+import com.delacrixmorgan.squark.service.remoteconfig.RemoteConfigKeys
+import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class GetCurrenciesFallbackUseCase @Inject constructor(
-    private val getCurrencyUnitsUseCase: GetCurrencyUnitsUseCase
+    private val gson: Gson,
+    private val remoteConfigManager: FirebaseRemoteConfigManager,
+    private val currencyDtoToModelMapper: CurrencyDtoToModelMapper
 ) : NoParamsFlowUseCase<List<Currency>, Exception> {
     override fun invoke(params: NoParams): Flow<Result<List<Currency>, Exception>> = flow {
-        val currencyUnits = getCurrencyUnitsUseCase().first().get()
-
-        // TODO (Change to Use Firebase Remote Config)
-        val currencies =
-            App.appContext.getJsonMap(R.raw.data_currency, "quotes").mapNotNull { dto ->
-                currencyUnits
-                    .firstOrNull { it.code == dto.key.removePrefix("USD") }
-                    ?.let { currencyUnit ->
-                        Currency(
-                            code = currencyUnit.code,
-                            name = currencyUnit.unit,
-                            rate = dto.value.toDouble(),
-                        )
-                    }
-            }
+        val currencies = currencyDtoToModelMapper.invoke(
+            gson.fromJson(remoteConfigManager.getString(RemoteConfigKeys.DataCurrency.key))
+        )
         emit(Result.success(currencies))
     }
 }
