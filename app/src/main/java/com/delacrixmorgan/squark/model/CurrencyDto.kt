@@ -1,4 +1,4 @@
-package com.delacrixmorgan.squark.models
+package com.delacrixmorgan.squark.model
 
 data class CurrencyDto(
     val quotes: Map<String, Double>

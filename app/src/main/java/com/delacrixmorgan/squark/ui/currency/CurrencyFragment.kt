@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -15,13 +16,14 @@ import com.delacrixmorgan.squark.common.RowListener
 import com.delacrixmorgan.squark.common.SharedPreferenceHelper
 import com.delacrixmorgan.squark.common.performHapticContextClick
 import com.delacrixmorgan.squark.databinding.FragmentCurrencyBinding
+import com.delacrixmorgan.squark.model.ConvertType
 import com.delacrixmorgan.squark.ui.preference.PreferenceNavigationActivity
 import com.delacrixmorgan.squark.ui.wallpaper.WallpaperFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener {
+class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener, CurrencyBottomSheetDialogFragment.Listener {
     companion object {
         const val EXTRA_CURRENCY = "CurrencyFragment.currency"
     }
@@ -91,7 +93,11 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener {
                 view.context, requireNotNull(viewModel.quoteCurrency)
             )
             requestQuoteCountryLauncher.launch(currencyIntent)
-//            CurrencyBottomSheetDialogFragment.show(requireActivity().supportFragmentManager)
+//            CurrencyBottomSheetDialogFragment.show(
+//                requireActivity().supportFragmentManager,
+//                listener = this,
+//                convertType = ConvertType.Quote
+//            )
         }
 
         // TODO (Remove When Ready)
@@ -134,5 +140,24 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener {
 
     override fun onSwiped(multiplier: Double) {
         viewModel.multiplier = multiplier
+    }
+
+    override fun onChangeCurrency(convertType: ConvertType) {
+        val currency = when (convertType) {
+            ConvertType.Base -> viewModel.baseCurrency
+            ConvertType.Quote -> viewModel.quoteCurrency
+        }
+        val currencyIntent = PreferenceNavigationActivity.newLaunchIntent(requireContext(), requireNotNull(currency))
+        requestBaseCountryLauncher.launch(currencyIntent)
+    }
+
+    override fun onChangeWallpaper() {
+        requireActivity().supportFragmentManager.commit {
+            replace(android.R.id.content, WallpaperFragment.create())
+        }
+    }
+
+    override fun onUnlockFeatures() {
+        Toast.makeText(requireContext(), "Unlock Features", Toast.LENGTH_SHORT).show()
     }
 }

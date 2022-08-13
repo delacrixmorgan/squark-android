@@ -1,4 +1,4 @@
-package com.delacrixmorgan.squark.models
+package com.delacrixmorgan.squark.model
 
 import com.delacrixmorgan.squark.data.shared.Mapper
 import com.delacrixmorgan.squark.data.usecase.GetCurrencyUnitsUseCase

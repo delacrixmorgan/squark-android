@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.delacrixmorgan.squark.common.ExpandablePanningViewConfig
 import com.delacrixmorgan.squark.common.SharedPreferenceHelper
 import com.delacrixmorgan.squark.data.usecase.GetCurrenciesUseCase
-import com.delacrixmorgan.squark.models.Currency
+import com.delacrixmorgan.squark.model.Currency
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

@@ -5,9 +5,9 @@ import com.delacrixmorgan.squark.common.isMoreThanADay
 import com.delacrixmorgan.squark.data.dao.CurrencyDao
 import com.delacrixmorgan.squark.data.shared.NoParams
 import com.delacrixmorgan.squark.data.shared.NoParamsFlowUseCase
-import com.delacrixmorgan.squark.models.Currency
-import com.delacrixmorgan.squark.services.network.Result
-import com.delacrixmorgan.squark.services.repository.CurrencyRepository
+import com.delacrixmorgan.squark.model.Currency
+import com.delacrixmorgan.squark.service.network.Result
+import com.delacrixmorgan.squark.service.repository.CurrencyRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest

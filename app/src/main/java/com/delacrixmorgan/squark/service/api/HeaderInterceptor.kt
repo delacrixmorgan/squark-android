@@ -1,4 +1,4 @@
-package com.delacrixmorgan.squark.services.api
+package com.delacrixmorgan.squark.service.api
 
 import android.content.Context
 import com.delacrixmorgan.squark.R

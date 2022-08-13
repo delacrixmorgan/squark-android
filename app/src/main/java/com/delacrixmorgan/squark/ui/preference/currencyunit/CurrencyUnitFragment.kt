@@ -22,13 +22,12 @@ import com.delacrixmorgan.squark.common.Keys
 import com.delacrixmorgan.squark.common.compatColor
 import com.delacrixmorgan.squark.common.performHapticContextClick
 import com.delacrixmorgan.squark.databinding.FragmentCurrencyUnitBinding
-import com.delacrixmorgan.squark.models.Currency
-import com.delacrixmorgan.squark.models.toCurrency
+import com.delacrixmorgan.squark.model.Currency
+import com.delacrixmorgan.squark.model.toCurrency
 import com.delacrixmorgan.squark.ui.currency.CurrencyFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import me.zhanghai.android.fastscroll.FastScrollerBuilder
 

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
 import com.delacrixmorgan.squark.databinding.FragmentCurrencyBottomSheetDialogBinding
+import com.delacrixmorgan.squark.model.ConvertType
 import com.delacrixmorgan.squark.ui.wallpaper.WallpaperFragment
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -14,14 +15,28 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class CurrencyBottomSheetDialogFragment : BottomSheetDialogFragment() {
     companion object {
-        fun show(supportFragmentManager: FragmentManager) = CurrencyBottomSheetDialogFragment().apply {
+        fun show(
+            supportFragmentManager: FragmentManager,
+            listener: Listener,
+            convertType: ConvertType
+        ) = CurrencyBottomSheetDialogFragment().apply {
+            this.listener = listener
+            this.convertType = convertType
             show(supportFragmentManager, CurrencyBottomSheetDialogFragment::class.java.simpleName)
         }
+    }
+
+    interface Listener {
+        fun onChangeCurrency(convertType: ConvertType)
+        fun onChangeWallpaper()
+        fun onUnlockFeatures()
     }
 
     private var _binding: FragmentCurrencyBottomSheetDialogBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var listener: Listener
+    private lateinit var convertType: ConvertType
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,10 +56,7 @@ class CurrencyBottomSheetDialogFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.changeCurrencyLayout.setOnClickListener {
-//            val currencyIntent = PreferenceNavigationActivity.newLaunchIntent(
-//                view.context, requireNotNull(viewModel.quoteCurrency)
-//            )
-//            requestQuoteCountryLauncher.launch(currencyIntent)
+            listener.onChangeCurrency(convertType)
             dismiss()
         }
         binding.setWallpaperLayout.setOnClickListener {

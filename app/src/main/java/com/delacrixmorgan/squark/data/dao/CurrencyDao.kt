@@ -5,7 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.delacrixmorgan.squark.models.Currency
+import com.delacrixmorgan.squark.model.Currency
 import kotlinx.coroutines.flow.Flow
 
 @Dao

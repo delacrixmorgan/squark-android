@@ -3,13 +3,12 @@ package com.delacrixmorgan.squark.ui.preference.currencyunit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.delacrixmorgan.squark.data.usecase.GetCurrenciesUseCase
-import com.delacrixmorgan.squark.models.Currency
+import com.delacrixmorgan.squark.model.Currency
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

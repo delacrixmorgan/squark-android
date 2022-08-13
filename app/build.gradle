@@ -57,7 +57,8 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
+    // Upgrading to v1.2.0 will have D8 and R8 Build Error
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.6")
 
     implementation "com.google.firebase:firebase-core:21.1.0"
     implementation "com.google.firebase:firebase-perf:20.1.0"
@@ -68,8 +69,8 @@ dependencies {
     kapt "com.google.dagger:hilt-compiler:2.42"
 
     implementation "androidx.core:core-ktx:1.8.0"
-    implementation "androidx.fragment:fragment-ktx:1.5.1"
-    implementation "androidx.appcompat:appcompat:1.4.2"
+    implementation "androidx.fragment:fragment-ktx:1.5.2"
+    implementation "androidx.appcompat:appcompat:1.5.0"
     implementation "androidx.constraintlayout:constraintlayout:2.1.4"
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 

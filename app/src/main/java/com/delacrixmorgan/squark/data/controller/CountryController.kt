@@ -3,7 +3,7 @@ package com.delacrixmorgan.squark.data.controller
 import com.delacrixmorgan.squark.App
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.getJsonMap
-import com.delacrixmorgan.squark.models.Country
+import com.delacrixmorgan.squark.model.Country
 
 // TODO (Move to Country Repository)
 @Deprecated("To be removed.")

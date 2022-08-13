@@ -1,14 +1,14 @@
-package com.delacrixmorgan.squark.services.repository
+package com.delacrixmorgan.squark.service.repository
 
 import android.util.Log
 import com.delacrixmorgan.squark.common.SharedPreferenceHelper
 import com.delacrixmorgan.squark.data.dao.CurrencyDao
-import com.delacrixmorgan.squark.models.Currency
-import com.delacrixmorgan.squark.models.CurrencyDtoToModelMapper
-import com.delacrixmorgan.squark.services.api.CurrencyApi
-import com.delacrixmorgan.squark.services.network.Result
-import com.delacrixmorgan.squark.services.network.apiRequest
-import com.delacrixmorgan.squark.services.network.map
+import com.delacrixmorgan.squark.model.Currency
+import com.delacrixmorgan.squark.model.CurrencyDtoToModelMapper
+import com.delacrixmorgan.squark.service.api.CurrencyApi
+import com.delacrixmorgan.squark.service.network.Result
+import com.delacrixmorgan.squark.service.network.apiRequest
+import com.delacrixmorgan.squark.service.network.map
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

@@ -1,6 +1,6 @@
 package com.delacrixmorgan.squark.data.shared
 
-import com.delacrixmorgan.squark.services.network.Result
+import com.delacrixmorgan.squark.service.network.Result
 import kotlinx.coroutines.flow.Flow
 
 interface NoParamsFlowUseCase<out Type, out Error : Exception> :

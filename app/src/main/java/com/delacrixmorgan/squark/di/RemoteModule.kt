@@ -2,7 +2,7 @@ package com.delacrixmorgan.squark.di
 
 import android.content.Context
 import com.delacrixmorgan.squark.BuildConfig
-import com.delacrixmorgan.squark.services.api.HeaderInterceptor
+import com.delacrixmorgan.squark.service.api.HeaderInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

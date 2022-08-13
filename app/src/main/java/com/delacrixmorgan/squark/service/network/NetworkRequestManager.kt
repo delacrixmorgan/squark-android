@@ -1,4 +1,4 @@
-package com.delacrixmorgan.squark.services.network
+package com.delacrixmorgan.squark.service.network
 
 import retrofit2.Response
 

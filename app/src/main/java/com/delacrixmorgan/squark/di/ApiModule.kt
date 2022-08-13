@@ -1,6 +1,6 @@
 package com.delacrixmorgan.squark.di
 
-import com.delacrixmorgan.squark.services.api.CurrencyApi
+import com.delacrixmorgan.squark.service.api.CurrencyApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
