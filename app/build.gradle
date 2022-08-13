@@ -23,18 +23,19 @@ android {
         multiDexEnabled true
     }
     buildTypes {
-        release {
-            buildConfigField 'String', "BASE_URL", '"https://api.apilayer.com/"'
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            manifestPlaceholders = [appLabel: "@string/app_name"]
-        }
-
         debug {
             splits.abi.enable = false
             splits.density.enable = false
             ext.alwaysUpdateBuildId = false
             buildConfigField 'String', "BASE_URL", '"https://api.apilayer.com/"'
             manifestPlaceholders = [appLabel: "@string/app_name_debug"]
+        }
+        release {
+            buildConfigField 'String', "BASE_URL", '"https://api.apilayer.com/"'
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            manifestPlaceholders = [appLabel: "@string/app_name"]
         }
     }
     compileOptions {
