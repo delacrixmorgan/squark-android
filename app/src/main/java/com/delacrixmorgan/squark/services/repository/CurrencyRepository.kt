@@ -26,10 +26,19 @@ class CurrencyRepository @Inject constructor(
             apiRequest { api.getCurrencies() }.map {
                 currencyDtoToModelMapper.invoke(it)
             }.fold(
-                success = {
-                    currencyDao.insertCurrencies(it)
+                success = { currencies ->
+                    currencyDao.insertCurrencies(currencies)
+                    if (currencies.firstOrNull { it.code == "USD" } == null) {
+                        currencyDao.insertCurrency(
+                            Currency(
+                                code = "USD",
+                                name = "United States Dollar",
+                                rate = 1.0
+                            )
+                        )
+                    }
                     SharedPreferenceHelper.lastUpdatedDate = LocalDateTime.now()
-                    emit(Result.success(it))
+                    emit(Result.success(currencies))
                 },
                 failure = {
                     Log.e("CurrencyRepository", "getCurrencies: ${it.message}")
