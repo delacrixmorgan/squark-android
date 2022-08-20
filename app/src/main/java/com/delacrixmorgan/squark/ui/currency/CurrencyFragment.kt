@@ -2,6 +2,7 @@ package com.delacrixmorgan.squark.ui.currency
 
 import android.app.Activity
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,11 +15,12 @@ import androidx.lifecycle.lifecycleScope
 import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.common.RowListener
 import com.delacrixmorgan.squark.common.SharedPreferenceHelper
+import com.delacrixmorgan.squark.common.Style
 import com.delacrixmorgan.squark.common.performHapticContextClick
 import com.delacrixmorgan.squark.databinding.FragmentCurrencyBinding
 import com.delacrixmorgan.squark.model.ConvertType
 import com.delacrixmorgan.squark.ui.preference.PreferenceNavigationActivity
-import com.delacrixmorgan.squark.ui.wallpaper.WallpaperFragment
+import com.delacrixmorgan.squark.ui.wallpaper.WallpaperPreviewFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -32,6 +34,7 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener, Curr
     private var _binding: FragmentCurrencyBinding? = null
 
     private val viewModel: CurrencyViewModel by activityViewModels()
+    private val style = Style.Full
 
     private val requestBaseCountryLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -75,34 +78,30 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener, Curr
             viewModel.multiplier = SharedPreferenceHelper.multiplier.toDouble()
         }
 
+        binding.baseCurrencyTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, style.textFont)
+        binding.quoteCurrencyTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, style.textFont)
         binding.currencyTableLayout.setupTable(
+            style = Style.Full,
             thresholdTranslationWidth = requireActivity().resources.displayMetrics.widthPixels / 6F,
             listener = this,
             config = viewModel.expandablePanningViewConfig
         )
 
         binding.baseCurrencyTextView.setOnClickListener {
-            onChangeCurrency(convertType = ConvertType.Base)
-//            CurrencyBottomSheetDialogFragment.show(
-//                requireActivity().supportFragmentManager,
-//                listener = this,
-//                convertType = ConvertType.Base
-//            )
+            CurrencyBottomSheetDialogFragment.show(
+                requireActivity().supportFragmentManager,
+                listener = this,
+                convertType = ConvertType.Base
+            )
         }
 
         binding.quoteCurrencyTextView.setOnClickListener {
-            onChangeCurrency(convertType = ConvertType.Quote)
-//            CurrencyBottomSheetDialogFragment.show(
-//                requireActivity().supportFragmentManager,
-//                listener = this,
-//                convertType = ConvertType.Quote
-//            )
+            CurrencyBottomSheetDialogFragment.show(
+                requireActivity().supportFragmentManager,
+                listener = this,
+                convertType = ConvertType.Quote
+            )
         }
-
-        // TODO (Remove When Ready)
-//        requireActivity().supportFragmentManager.commit {
-//            replace(android.R.id.content, WallpaperFragment.create())
-//        }
 
         binding.swapButton.setOnClickListener {
             val baseCurrencyCode = viewModel.baseCurrency?.code
@@ -114,6 +113,13 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener, Curr
             binding.swapButton.performHapticContextClick()
             updateTable()
         }
+
+        // TODO (Remove When Ready)
+//        requireActivity().supportFragmentManager.commit {
+//            replace(android.R.id.content, WallpaperConfirmFragment.create())
+//            addToBackStack(WallpaperConfirmFragment::class.simpleName)
+//        }
+//        return
 
         lifecycleScope.launch {
             viewModel.onStart()
@@ -154,7 +160,7 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener, Curr
 
     override fun onChangeWallpaper() {
         requireActivity().supportFragmentManager.commit {
-            replace(android.R.id.content, WallpaperFragment.create())
+            replace(android.R.id.content, WallpaperPreviewFragment.create())
         }
     }
 

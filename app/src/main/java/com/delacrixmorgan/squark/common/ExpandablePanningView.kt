@@ -3,6 +3,7 @@ package com.delacrixmorgan.squark.common
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.GestureDetector
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -14,6 +15,11 @@ import com.delacrixmorgan.squark.R
 import com.delacrixmorgan.squark.databinding.ItemRowBinding
 import java.math.BigDecimal
 import kotlin.math.absoluteValue
+
+enum class Style(val textFont: Float) {
+    Full(18F),
+    Wallpaper(12F)
+}
 
 class ExpandablePanningView @JvmOverloads constructor(
     context: Context,
@@ -29,12 +35,15 @@ class ExpandablePanningView @JvmOverloads constructor(
     private var isExpanded = false
     private var listener: RowListener? = null
 
+    private var style: Style = Style.Full
+
     init {
         LayoutInflater.from(context).inflate(R.layout.cv_expandable_panning, this, true)
     }
 
     @SuppressLint("ClickableViewAccessibility")
     fun setupTable(
+        style: Style,
         thresholdTranslationWidth: Float,
         listener: RowListener,
         config: ExpandablePanningViewConfig
@@ -42,11 +51,13 @@ class ExpandablePanningView @JvmOverloads constructor(
         val thresholdSwipeWidth = thresholdTranslationWidth / 1.5F
         val alphaRatio = 1F / thresholdTranslationWidth
         val gestureDetector = GestureDetector(context, SingleTapConfirm())
+        this.style = style
         this.listener = listener
         this.config = config
 
         for (index in 0..9) {
             val tableRow = ItemRowBinding.inflate(LayoutInflater.from(context), tableLayout, false)
+            setupTableStyles(tableRow)
 
             tableRow.quantifierTextView.text = calculateRowQuantifier(config.multiplier, index)
             tableRow.resultTextView.text = calculateRowResult(config.multiplier, index, config.conversionRate)
@@ -152,6 +163,16 @@ class ExpandablePanningView @JvmOverloads constructor(
         }
     }
 
+    private fun setupTableStyles(tableRow: ItemRowBinding) = with(tableRow) {
+        beforeQuantifierTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, style.textFont)
+        quantifierTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, style.textFont)
+        nextQuantifierTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, style.textFont)
+
+        beforeResultTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, style.textFont)
+        resultTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, style.textFont)
+        nextResultTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, style.textFont)
+    }
+
     fun updateTable(config: ExpandablePanningViewConfig) {
         performHapticContextClick()
         this.config = config
@@ -178,6 +199,7 @@ class ExpandablePanningView @JvmOverloads constructor(
     ) {
         for (index in 1..9) {
             val tableRow = ItemRowBinding.inflate(LayoutInflater.from(context), tableLayout, false)
+            setupTableStyles(tableRow)
             tableRow.root.background = ContextCompat.getDrawable(context, R.drawable.shape_cell_light)
             tableRow.quantifierTextView.text = calculateExpandQuantifier(
                 expandQuantifier, config.multiplier, index

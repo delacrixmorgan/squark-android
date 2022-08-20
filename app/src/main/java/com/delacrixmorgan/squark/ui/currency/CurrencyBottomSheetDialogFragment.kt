@@ -8,7 +8,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
 import com.delacrixmorgan.squark.databinding.FragmentCurrencyBottomSheetDialogBinding
 import com.delacrixmorgan.squark.model.ConvertType
-import com.delacrixmorgan.squark.ui.wallpaper.WallpaperFragment
+import com.delacrixmorgan.squark.ui.wallpaper.WallpaperPreviewFragment
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -61,7 +61,7 @@ class CurrencyBottomSheetDialogFragment : BottomSheetDialogFragment() {
         }
         binding.setWallpaperLayout.setOnClickListener {
             requireActivity().supportFragmentManager.commit {
-                replace(android.R.id.content, WallpaperFragment.create())
+                replace(android.R.id.content, WallpaperPreviewFragment.create())
             }
             dismiss()
         }
