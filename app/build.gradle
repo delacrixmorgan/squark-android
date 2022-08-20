@@ -17,8 +17,8 @@ android {
         applicationId "com.delacrixmorgan.squark"
         minSdkVersion 22
         targetSdkVersion 32
-        versionCode 19
-        versionName "2.5.1"
+        versionCode 20
+        versionName "2.5.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -105,7 +105,7 @@ dependencies {
     androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0-beta02', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1'
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4'
     testImplementation 'junit:junit:4.13.2'
 }
 

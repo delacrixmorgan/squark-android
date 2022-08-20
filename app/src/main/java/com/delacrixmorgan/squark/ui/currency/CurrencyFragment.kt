@@ -82,17 +82,16 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener, Curr
         )
 
         binding.baseCurrencyTextView.setOnClickListener {
-            val currencyIntent = PreferenceNavigationActivity.newLaunchIntent(
-                view.context, requireNotNull(viewModel.baseCurrency)
-            )
-            requestBaseCountryLauncher.launch(currencyIntent)
+            onChangeCurrency(convertType = ConvertType.Base)
+//            CurrencyBottomSheetDialogFragment.show(
+//                requireActivity().supportFragmentManager,
+//                listener = this,
+//                convertType = ConvertType.Base
+//            )
         }
 
         binding.quoteCurrencyTextView.setOnClickListener {
-            val currencyIntent = PreferenceNavigationActivity.newLaunchIntent(
-                view.context, requireNotNull(viewModel.quoteCurrency)
-            )
-            requestQuoteCountryLauncher.launch(currencyIntent)
+            onChangeCurrency(convertType = ConvertType.Quote)
 //            CurrencyBottomSheetDialogFragment.show(
 //                requireActivity().supportFragmentManager,
 //                listener = this,
@@ -142,13 +141,15 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener, Curr
         viewModel.multiplier = multiplier
     }
 
-    override fun onChangeCurrency(convertType: ConvertType) {
-        val currency = when (convertType) {
-            ConvertType.Base -> viewModel.baseCurrency
-            ConvertType.Quote -> viewModel.quoteCurrency
+    override fun onChangeCurrency(convertType: ConvertType) = when (convertType) {
+        ConvertType.Base -> {
+            val intent = PreferenceNavigationActivity.newLaunchIntent(requireContext(), requireNotNull(viewModel.baseCurrency))
+            requestBaseCountryLauncher.launch(intent)
         }
-        val currencyIntent = PreferenceNavigationActivity.newLaunchIntent(requireContext(), requireNotNull(currency))
-        requestBaseCountryLauncher.launch(currencyIntent)
+        ConvertType.Quote -> {
+            val intent = PreferenceNavigationActivity.newLaunchIntent(requireContext(), requireNotNull(viewModel.quoteCurrency))
+            requestQuoteCountryLauncher.launch(intent)
+        }
     }
 
     override fun onChangeWallpaper() {

@@ -9,8 +9,7 @@ import kotlinx.serialization.json.Json
 @Entity(tableName = "Currency")
 @Serializable
 data class Currency(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    @ColumnInfo(name = "code") val code: String,
+    @PrimaryKey val code: String,
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "rate") var rate: Double
 ) {
