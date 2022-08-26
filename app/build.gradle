@@ -19,7 +19,7 @@ android {
         applicationId "com.delacrixmorgan.squark"
         minSdkVersion 22
         targetSdkVersion 33
-        versionCode 21
+        versionCode 22
         versionName "2.5.3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
@@ -34,8 +34,6 @@ android {
         }
         release {
             buildConfigField 'String', "BASE_URL", '"https://api.apilayer.com/"'
-            minifyEnabled true
-            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             manifestPlaceholders = [appLabel: "@string/app_name"]
         }
