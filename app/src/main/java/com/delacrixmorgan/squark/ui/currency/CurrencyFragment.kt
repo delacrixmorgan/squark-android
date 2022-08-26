@@ -88,19 +88,21 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency), RowListener, Curr
         )
 
         binding.baseCurrencyTextView.setOnClickListener {
-            CurrencyBottomSheetDialogFragment.show(
-                requireActivity().supportFragmentManager,
-                listener = this,
-                convertType = ConvertType.Base
-            )
+            onChangeCurrency(ConvertType.Base)
+//            CurrencyBottomSheetDialogFragment.show(
+//                requireActivity().supportFragmentManager,
+//                listener = this,
+//                convertType = ConvertType.Base
+//            )
         }
 
         binding.quoteCurrencyTextView.setOnClickListener {
-            CurrencyBottomSheetDialogFragment.show(
-                requireActivity().supportFragmentManager,
-                listener = this,
-                convertType = ConvertType.Quote
-            )
+            onChangeCurrency(ConvertType.Quote)
+//            CurrencyBottomSheetDialogFragment.show(
+//                requireActivity().supportFragmentManager,
+//                listener = this,
+//                convertType = ConvertType.Quote
+//            )
         }
 
         binding.swapButton.setOnClickListener {

@@ -148,7 +148,7 @@ class CurrencyUnitFragment : Fragment(R.layout.fragment_currency_unit), Currency
         searchView?.inputType = InputType.TYPE_TEXT_FLAG_CAP_WORDS
     }
 
-    override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
+    override fun onMenuItemActionExpand(item: MenuItem): Boolean {
         searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 viewModel.filterCurrencies(query)
@@ -163,7 +163,7 @@ class CurrencyUnitFragment : Fragment(R.layout.fragment_currency_unit), Currency
         return true
     }
 
-    override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
+    override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
         return true
     }
 
