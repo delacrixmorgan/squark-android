@@ -19,8 +19,8 @@ android {
         applicationId "com.delacrixmorgan.squark"
         minSdkVersion 22
         targetSdkVersion 33
-        versionCode 22
-        versionName "2.5.3"
+        versionCode 23
+        versionName "2.5.4"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
