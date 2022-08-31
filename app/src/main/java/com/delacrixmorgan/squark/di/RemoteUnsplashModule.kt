@@ -2,10 +2,7 @@ package com.delacrixmorgan.squark.di
 
 import android.content.Context
 import com.delacrixmorgan.squark.BuildConfig
-import com.delacrixmorgan.squark.service.api.HeaderCurrencyLayerInterceptor
-import com.delacrixmorgan.squark.service.remoteconfig.FirebaseRemoteConfigManager
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
+import com.delacrixmorgan.squark.service.api.HeaderUnsplashInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,35 +18,35 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-internal class RemoteModule {
+internal class RemoteUnsplashModule {
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
-    annotation class RetrofitClient
+    annotation class RetrofitUnsplashClient
 
     @Qualifier
     @Retention(AnnotationRetention.RUNTIME)
-    annotation class BaseURL
+    annotation class BaseUnsplashURL
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
-    annotation class OkHttpBaseClient
+    annotation class OkHttpUnsplashClient
 
     @Singleton
-    @BaseURL
+    @BaseUnsplashURL
     @Provides
-    fun provideBaseURL(): String = BuildConfig.BASE_URL
+    fun provideBaseUnsplashURL(): String = BuildConfig.BASE_UNSPLASH_URL
 
     @Singleton
     @Provides
-    fun provideHeaderCurrencyLayerInterceptor(
+    fun provideHeaderUnsplashInterceptor(
         @ApplicationContext appContext: Context
-    ): HeaderCurrencyLayerInterceptor = HeaderCurrencyLayerInterceptor(appContext)
+    ): HeaderUnsplashInterceptor = HeaderUnsplashInterceptor(appContext)
 
-    @OkHttpBaseClient
+    @OkHttpUnsplashClient
     @Provides
-    fun provideOkHttpCurrencyLayerClient(
-        interceptor: HeaderCurrencyLayerInterceptor
+    fun provideOkHttpUnsplashClient(
+        interceptor: HeaderUnsplashInterceptor
     ): OkHttpClient {
         val okHttpClientBuilder = OkHttpClient.Builder()
         val connectTimeout: Long = 60
@@ -67,33 +64,20 @@ internal class RemoteModule {
             .readTimeout(readTimeout, TimeUnit.SECONDS)
 
         okHttpClientBuilder.addInterceptor(interceptor)
-
         return okHttpClientBuilder.build()
     }
 
     @Singleton
     @Provides
-    @RetrofitClient
-    fun provideRetrofit(
-        @OkHttpBaseClient okHttpClient: OkHttpClient,
-        @BaseURL baseUrl: String
+    @RetrofitUnsplashClient
+    fun provideUnsplashRetrofit(
+        @OkHttpUnsplashClient okHttpClient: OkHttpClient,
+        @BaseUnsplashURL baseUrl: String
     ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
             .build()
-    }
-
-    @Singleton
-    @Provides
-    fun provideFirebaseRemoteConfigManager(): FirebaseRemoteConfigManager {
-        return FirebaseRemoteConfigManager()
-    }
-
-    @Singleton
-    @Provides
-    fun provideGson(): Gson {
-        return GsonBuilder().setLenient().create()
     }
 }
