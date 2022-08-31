@@ -23,10 +23,13 @@ object SharedPreferenceHelper {
 
     private val DEFAULT_QUOTE_CURRENCY_CODE: String
         get() {
-            val currentLocale = ConfigurationCompat.getLocales(
-                App.appContext.resources.configuration
-            )[0]
-            val localeCountryCode = Currency.getInstance(currentLocale).currencyCode
+            val currentLocale = ConfigurationCompat.getLocales(App.appContext.resources.configuration)[0]
+            
+            val localeCountryCode: String = try {
+                Currency.getInstance(currentLocale).currencyCode
+            } catch (exception: Exception) {
+                DEFAULT_QUOTE_FALLBACK_CURRENCY_CODE
+            }
 
             return if (localeCountryCode != DEFAULT_BASE_CURRENCY_CODE) {
                 localeCountryCode
