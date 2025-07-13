@@ -1,6 +1,7 @@
 package com.delacrixmorgan.squark.ui.preference.country
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
@@ -38,7 +39,7 @@ class CountryRecyclerViewAdapter(private val listener: Listener) :
         notifyDataSetChanged()
     }
 
-    override fun getPopupText(position: Int): String {
+    override fun getPopupText(view: View, position: Int): CharSequence {
         return if (position == 0) {
             countries[position + 1].code[0].toString()
         } else {
@@ -87,7 +88,7 @@ class CountryRecyclerViewAdapter(private val listener: Listener) :
 
         private fun getFlagResource(country: Country): Int {
             val flagResource = itemView.context.resources.getIdentifier(
-                "ic_flag_${country.code.toLowerCase(Locale.US)}",
+                "ic_flag_${country.code.lowercase(Locale.US)}",
                 "drawable",
                 itemView.context.packageName
             )

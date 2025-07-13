@@ -128,9 +128,9 @@ fun CountryDataController.getFilteredCountries(
 ) = if (searchText.isNullOrBlank()) {
     getCountries()
 } else {
-    val text: String = searchText.toLowerCase()
+    val text: String = searchText.lowercase()
     getCountries().filter {
-        it.name.toLowerCase().contains(text) || it.code.toLowerCase().contains(text)
+        it.name.lowercase().contains(text) || it.code.lowercase().contains(text)
     }
 }
 

@@ -3,7 +3,12 @@ package com.delacrixmorgan.squark.ui.preference.country
 import android.app.Activity
 import android.os.Bundle
 import android.text.InputType
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
@@ -11,7 +16,11 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.delacrixmorgan.squark.R
-import com.delacrixmorgan.squark.common.*
+import com.delacrixmorgan.squark.common.Keys
+import com.delacrixmorgan.squark.common.SharedPreferenceHelper
+import com.delacrixmorgan.squark.common.compatColor
+import com.delacrixmorgan.squark.common.getFilteredCountries
+import com.delacrixmorgan.squark.common.performHapticContextClick
 import com.delacrixmorgan.squark.data.controller.CountryDataController
 import com.delacrixmorgan.squark.data.dao.CountryDataDao
 import com.delacrixmorgan.squark.databinding.FragmentCountryBinding
@@ -22,13 +31,12 @@ import com.delacrixmorgan.squark.ui.currency.CurrencyFragment
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
 import me.zhanghai.android.fastscroll.FastScrollerBuilder
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.*
+import java.util.Date
 import java.util.concurrent.TimeUnit
 
 class CountryFragment : Fragment(R.layout.fragment_country), CountryRecyclerViewAdapter.Listener,
@@ -127,6 +135,7 @@ class CountryFragment : Fragment(R.layout.fragment_country), CountryRecyclerView
                     binding.swipeRefreshLayout.isRefreshing = false
                     updateCurrencies(result.value.currencies)
                 }
+
                 is Result.Failure -> {
                     binding.swipeRefreshLayout.isRefreshing = false
                     Snackbar.make(
@@ -209,7 +218,7 @@ class CountryFragment : Fragment(R.layout.fragment_country), CountryRecyclerView
         searchView?.inputType = InputType.TYPE_TEXT_FLAG_CAP_WORDS
     }
 
-    override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
+    override fun onMenuItemActionExpand(p0: MenuItem): Boolean {
         searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 updateDataSet(query, true)
@@ -224,7 +233,7 @@ class CountryFragment : Fragment(R.layout.fragment_country), CountryRecyclerView
         return true
     }
 
-    override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
+    override fun onMenuItemActionCollapse(p0: MenuItem): Boolean {
         searchView?.setQuery("", false)
         updateDataSet()
         return true
@@ -242,6 +251,7 @@ class CountryFragment : Fragment(R.layout.fragment_country), CountryRecyclerView
                 }
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }

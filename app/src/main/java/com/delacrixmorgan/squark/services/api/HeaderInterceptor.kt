@@ -8,7 +8,7 @@ import okhttp3.Response
 class HeaderInterceptor(private val context: Context) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val requestBuilder = chain.request().newBuilder()
-        requestBuilder.header("apikey", context.getString(R.string.currency_layer_api_key))
+        requestBuilder.header("apikey", "")
         return chain.proceed(requestBuilder.build())
     }
 }
