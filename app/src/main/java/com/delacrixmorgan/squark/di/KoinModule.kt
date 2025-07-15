@@ -4,7 +4,6 @@ import com.delacrixmorgan.squark.App
 import com.delacrixmorgan.squark.BuildConfig
 import com.delacrixmorgan.squark.data.dao.AppDatabase
 import com.delacrixmorgan.squark.services.api.CurrencyApi
-import com.delacrixmorgan.squark.services.api.HeaderInterceptor
 import com.delacrixmorgan.squark.services.network.NetworkRequestManager
 import com.delacrixmorgan.squark.services.repository.CountryRepository
 import com.delacrixmorgan.squark.services.repository.CurrencyRepository
@@ -46,10 +45,6 @@ val networkModule = module {
         val okHttpClientBuilder = OkHttpClient.Builder()
             .connectTimeout(connectTimeout, TimeUnit.SECONDS)
             .readTimeout(readTimeout, TimeUnit.SECONDS)
-
-        okHttpClientBuilder.addInterceptor(
-            HeaderInterceptor(App.appContext)
-        )
 
         if (BuildConfig.DEBUG) {
             val httpLoggingInterceptor = HttpLoggingInterceptor().apply {

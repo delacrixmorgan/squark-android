@@ -18,8 +18,8 @@ android {
         applicationId "com.delacrixmorgan.squark"
         minSdkVersion 22
         targetSdkVersion 36
-        versionCode 18
-        versionName "2.5.0"
+        versionCode 25
+        versionName "2025.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -37,11 +37,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = 18
-        targetCompatibility = 18
+        sourceCompatibility = 21
+        targetCompatibility = 21
     }
     kotlinOptions {
-        jvmTarget = 18
+        jvmTarget = 21
     }
 }
 

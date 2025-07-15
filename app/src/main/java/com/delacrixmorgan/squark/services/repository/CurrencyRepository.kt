@@ -7,5 +7,6 @@ class CurrencyRepository(
     private val api: CurrencyApi,
     private val networkRequestManager: NetworkRequestManager
 ) {
-    suspend fun fetchCurrencies() = networkRequestManager.apiRequest { api.getCurrencies() }
+    suspend fun fetchCurrencies() =
+        networkRequestManager.apiRequest { api.getCurrencies(accessKey = "") }
 }
